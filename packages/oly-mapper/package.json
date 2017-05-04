@@ -1,0 +1,34 @@
+{
+  "name": "oly-mapper",
+  "description": "Atom Heart Mother",
+  "version": "0.9.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "mapper",
+    "ajv"
+  ],
+  "dependencies": {
+    "ajv": "4.11.6"
+  },
+  "devDependencies": {
+    "ajv-i18n": "1.7.0",
+    "oly-core": "^0.9.0"
+  },
+  "peerDependencies": {
+    "oly-core": "^0.9.0"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest-preset.json",
+    "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+  }
+}

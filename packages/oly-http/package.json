@@ -1,0 +1,42 @@
+{
+  "name": "oly-http",
+  "description": "Obscured by Clouds",
+  "version": "0.9.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "browser": "lib/index.browser.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "koa",
+    "axios"
+  ],
+  "dependencies": {
+    "@types/koa": "2.0.39",
+    "axios": "0.16.1",
+    "http-shutdown": "1.2.0",
+    "kcors": "2.2.0",
+    "koa": "2.2.0",
+    "koa-compress": "2.0.0",
+    "koa-helmet": "3.1.0",
+    "koa-mount": "2.0.0",
+    "koa-static": "3.0.0"
+  },
+  "devDependencies": {
+    "oly-core": "^0.9.0"
+  },
+  "peerDependencies": {
+    "oly-core": "^0.9.0"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest-preset.json",
+    "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+  }
+}

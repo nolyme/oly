@@ -1,0 +1,23 @@
+{
+  "testRegex": "(Test)\\.(ts|tsx)$",
+  "testEnvironment": "node",
+  "testResultsProcessor": "<rootDir>/../../node_modules/ts-jest/coverageprocessor.js",
+  "transform": {
+    ".(ts|tsx)": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+  },
+  "moduleFileExtensions": [
+    "js",
+    "jsx",
+    "json",
+    "ts",
+    "tsx"
+  ],
+  "collectCoverageFrom": [
+    "src/**/*.{ts,tsx}"
+  ],
+  "coverageReporters": [
+    "html",
+    "json"
+  ],
+  "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+}

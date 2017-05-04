@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "outDir": "lib",
+    "declaration": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "jsx": "react",
+    "lib": [
+      "es2015.promise",
+      "es5",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

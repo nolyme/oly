@@ -1,0 +1,47 @@
+{
+  "name": "oly-react",
+  "description": "The Piper at the Gates of Dawn",
+  "version": "0.9.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "browser": "lib/index.browser.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "react"
+  ],
+  "dependencies": {
+    "@types/react-dom": "0.14.23",
+    "@types/react-helmet": "5.0.0",
+    "@types/react-router": "3.0.10",
+    "cheerio": "0.22.0",
+    "prop-types": "15.5.8",
+    "react-dom": "15.5.4",
+    "react-helmet": "5.0.3",
+    "react-router": "3.0.5"
+  },
+  "devDependencies": {
+    "@types/cheerio": "0.22.1",
+    "@types/jest": "19.2.2",
+    "@types/react": "15.0.21",
+    "oly-core": "^0.9.0",
+    "oly-http": "^0.9.0",
+    "react": "15.5.4"
+  },
+  "peerDependencies": {
+    "oly-core": "^0.9.0",
+    "oly-http": "^0.9.0",
+    "react": "^15.5.4"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest-preset.json",
+    "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+  }
+}

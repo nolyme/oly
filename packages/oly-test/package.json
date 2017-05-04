@@ -1,0 +1,34 @@
+{
+  "name": "oly-test",
+  "description": "Test test test test",
+  "version": "0.9.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "test",
+    "jest"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "oly-core": "^0.9.0"
+  },
+  "peerDependencies": {
+    "@types/jest": "^19.2.2",
+    "jest": "^19.0.2",
+    "oly-core": "^0.9.0",
+    "ts-jest": "^19.0.14"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest-preset.json",
+    "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+  }
+}

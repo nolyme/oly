@@ -1,0 +1,31 @@
+import { IAnyFunction, Logger } from "oly-core";
+import { IKoaContext, KoaMiddleware } from "oly-http";
+import { JwtAuthService } from "../services/JwtAuthService";
+
+/**
+ *
+ */
+export const parseToken = (): KoaMiddleware => {
+  return async function parseTokenMiddleware(ctx: IKoaContext, next: IAnyFunction) {
+
+    const authorization = ctx.request.header.authorization;
+    const tokenName = ctx.kernel.env("OLY_PIXIE_COOKIE");
+    const logger = ctx.kernel.get(Logger).as("parseToken");
+
+    if (typeof authorization === "string") {
+
+      logger.trace("bearer token detected");
+
+      const token = authorization.replace("Bearer ", "");
+
+      ctx.kernel.get(JwtAuthService).checkToken(token);
+    } else if (!!tokenName && !!ctx.cookies.get(tokenName)) {
+
+      logger.trace("cookie token detected");
+
+      ctx.kernel.get(JwtAuthService).checkToken(ctx.cookies.get(tokenName));
+    }
+
+    await next();
+  };
+};

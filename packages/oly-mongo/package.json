@@ -1,0 +1,36 @@
+{
+  "name": "oly-mongo",
+  "description": "The Final Cut",
+  "version": "0.9.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "browser": "lib/index.browser.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "mongodb"
+  ],
+  "dependencies": {
+    "@types/mongodb": "2.1.43",
+    "mongodb": "2.2.25"
+  },
+  "devDependencies": {
+    "oly-core": "^0.9.0",
+    "oly-mapper": "^0.9.0"
+  },
+  "peerDependencies": {
+    "oly-core": "^0.9.0",
+    "oly-mapper": "^0.9.0"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest-preset.json",
+    "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+  }
+}

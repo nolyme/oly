@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "19.2.2",
+    "@types/node": "7.0.16",
+    "jest": "19.0.2",
+    "lerna": "2.0.0-rc.4",
+    "rimraf": "2.6.1",
+    "ts-jest": "19.0.14",
+    "tslint": "5.2.0",
+    "tslint-react": "3.0.0",
+    "typescript": "2.3.2"
+  },
+  "scripts": {
+    "all": "lerna run clean; lerna bootstrap; lerna run build; lerna run test",
+    "clean": "lerna run clean",
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "watch": "lerna --concurrency 14 --ignore oly-tools --no-sort exec -- npm run build -- -w",
+    "publish": "lerna publish --force-publish=*"
+  }
+}
