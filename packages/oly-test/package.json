@@ -12,7 +12,9 @@
     "test",
     "jest"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "jsdom": "^10.1.0"
+  },
   "devDependencies": {
     "oly-core": "^0.9.0"
   },

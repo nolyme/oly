@@ -1,8 +1,8 @@
 {
   "private": true,
   "devDependencies": {
-    "@types/jest": "19.2.2",
-    "@types/node": "7.0.16",
+    "@types/jest": "19.2.3",
+    "@types/node": "7.0.18",
     "jest": "19.0.2",
     "lerna": "2.0.0-rc.4",
     "rimraf": "2.6.1",

@@ -101,14 +101,14 @@ export class ComponentInjector {
         return data;
       };
       const reject = (e: Error) => {
-        logger.error(`action ${action} has failed`, e);
+        logger.warn(`action ${action} has failed`, e);
         const actionResult: IActionResultError = {
           action,
           component: definition,
           error: e,
         };
         this.kernel.emit(ACTIONS_ERROR, actionResult);
-        throw e;
+        // throw e; TODO: Should i throw or not ?
       };
       instance[propertyKey + "$$copy"] = instance[propertyKey];
       instance[propertyKey] = function actionWrapper() {

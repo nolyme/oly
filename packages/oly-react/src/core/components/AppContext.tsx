@@ -35,6 +35,9 @@ export class AppContext extends React.Component<IAppContextProps, {}> {
    * Render children
    */
   public render() {
+    if (!this.props.children) {
+      return <div/>;
+    }
     if (Array.isArray(this.props.children)) {
       return <div>{this.props.children}</div>;
     }
