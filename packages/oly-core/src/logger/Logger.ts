@@ -3,6 +3,7 @@ import { env } from "../decorators/env";
 import { injectable } from "../decorators/injectable";
 import { IClass } from "../interfaces/types";
 import { Kernel } from "../Kernel";
+import { LoggerUtil } from "./LoggerUtil";
 import { LogLevels } from "./LogLevels";
 
 /**
@@ -23,7 +24,7 @@ export class Logger {
    * Used by chalk.
    */
   public static colors = {
-    DEBUG: "cyan",
+    DEBUG: "blue",
     ERROR: "red",
     INFO: "green",
     TRACE: "magenta",
@@ -132,7 +133,7 @@ export class Logger {
     if (LogLevels[this.logLevel] <= LogLevels.ERROR) {
       if (data && data instanceof Error) {
         this.appender(this.format("ERROR", message));
-        this.appender("\n " + chalk.red(data.stack || "?") + " \n");
+        this.appender("\n " + chalk.red(data.stack || "?") + " \n\n");
       } else {
         this.appender(this.format("ERROR", message, data));
       }
@@ -145,6 +146,10 @@ export class Logger {
    * @param text
    */
   protected appender(text: string): void {
+    if (typeof window !== "undefined") {
+      LoggerUtil.logStyles(LoggerUtil.toHtml(text));
+      return;
+    }
     console.log(text); // tslint:disable-line
   }
 
@@ -162,8 +167,8 @@ export class Logger {
       + chalk[Logger.colors[type]](type) + " "
       + chalk.bold(this.appName + "(") + ""
       + this.contextId + chalk.bold(")") + " "
-      + chalk.bold.dim(this.componentName + ":") + " "
-      + chalk.italic('"' + message + '" ')
-      + chalk.dim(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
+      + chalk.bold(this.componentName + ":") + " "
+      + ('"' + message + '" ')
+      + chalk.gray(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
 }

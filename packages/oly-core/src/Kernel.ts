@@ -206,7 +206,7 @@ export class Kernel {
         }),
       ),
     ).then(() => {
-      this.getLogger().info("kernel has been successfully started");
+      this.getLogger().debug("kernel has been successfully started");
       return this;
     });
   }
