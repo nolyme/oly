@@ -11,7 +11,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {
   LoaderOptionsPlugin,
   DefinePlugin,
@@ -57,7 +56,6 @@ module.exports = {
  * @param options.dist          {string}          dist directory
  * @param options.assets        {string}          assets directory
  * @param options.template      {string}          index.html absolute path
- * @param options.favicon       {string}          favicon.png path
  * @param options.typescriptLoader      {object}  override current loader
  * @param options.fontLoader            {object}  override current loader
  * @param options.imageLoader           {object}  override current loader
@@ -157,12 +155,6 @@ function createConfiguration(options) {
       new CopyPlugin([{
         from: options.assets, to: './'
       }])
-    );
-  }
-
-  if (options.favicon) {
-    config.plugins.push(
-      new FaviconsWebpackPlugin(options.favicon)
     );
   }
 
