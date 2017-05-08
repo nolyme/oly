@@ -1,4 +1,4 @@
-import { IClass, Kernel } from "oly-core";
+import { IClass, IStore, Kernel } from "oly-core";
 
 const setContext = (target: any, kernelInstance?: Kernel) => {
   const kernel = kernelInstance || Kernel.create();
@@ -8,7 +8,7 @@ const setContext = (target: any, kernelInstance?: Kernel) => {
   kernel.with(target);
   target.__kernel__ = kernel;
   beforeAll(() => kernel.start());
-  afterAll(() => kernel.start());
+  afterAll(() => kernel.stop());
 };
 
 /**
@@ -16,8 +16,12 @@ const setContext = (target: any, kernelInstance?: Kernel) => {
  *
  * @param kernel    Kernel to use
  */
-export const run = (kernel: Kernel) => (target: IClass) => {
-  return setContext(target, kernel);
+export const run = (kernel: Kernel | IStore) => (target: IClass) => {
+  if (kernel instanceof Kernel) {
+    return setContext(target, kernel);
+  } else {
+    return setContext(target, Kernel.create(kernel));
+  }
 };
 
 /**

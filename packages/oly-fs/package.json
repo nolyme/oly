@@ -13,12 +13,12 @@
     "fs"
   ],
   "dependencies": {
-    "@types/fs-extra": "2.0.0",
-    "@types/mz": "0.0.31",
-    "fs-promise": "2.0.2"
+    "@types/fs-extra": "3.0.0",
+    "fs-extra": "3.0.1"
   },
   "devDependencies": {
-    "oly-core": "^0.9.1"
+    "oly-core": "^0.9.1",
+    "oly-test": "^0.9.1"
   },
   "peerDependencies": {
     "oly-core": "^0.9.1"

@@ -1,4 +1,3 @@
-import { mkdirp, remove } from "fs-promise";
 import { _, env, inject, Logger } from "oly-core";
 import { join, resolve } from "path";
 import { FileService } from "./FileService";
@@ -39,6 +38,15 @@ export class WorkspaceProvider {
   protected file: FileService;
 
   /**
+   * Absolute path of tmp directory.
+   *
+   * @return {string}
+   */
+  get tmpDirectory() {
+    return this.join(this.tmp) + "/";
+  }
+
+  /**
    * Get the absolute path of a workspace active.
    *
    * @param filename    Filename or path replace to the workspace
@@ -56,7 +64,7 @@ export class WorkspaceProvider {
    * @return Random filepath
    */
   public rand(ext = ""): string {
-    return this.join(resolve(this.tmp, _.shortid() + ext));
+    return resolve(this.tmpDirectory, _.shortid() + ext);
   }
 
   /**
@@ -64,17 +72,20 @@ export class WorkspaceProvider {
    */
   protected async onStart(): Promise<void> {
     if (this.reset) {
-      await remove(this.directory);
+      await this.file.remove(this.directory);
     }
-    await mkdirp(this.directory);
-    await remove(this.join(this.tmp));
-    await mkdirp(this.join(this.tmp));
+    await this.file.mkdirp(this.directory);
+    await this.file.remove(this.tmpDirectory);
+    await this.file.mkdirp(this.tmpDirectory);
   }
 
   /**
    *
    */
   protected async onStop(): Promise<void> {
-    await remove(this.join(this.tmp));
+    await this.file.remove(this.tmpDirectory);
+    if (this.reset) {
+      await this.file.remove(this.directory);
+    }
   }
 }
