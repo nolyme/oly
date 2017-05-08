@@ -1,20 +1,8 @@
-import { state } from "oly-core";
-import { action, attach } from "oly-react";
+import { attach } from "oly-react";
 import * as React from "react";
 
 @attach
 export class Header extends React.Component<{}, {}> {
-
-  @state("THEME") private theme: string = "pt-dark";
-
-  @action
-  public onChangeTheme() {
-    if (this.theme === "pt-light") {
-      this.theme = "pt-dark";
-    } else {
-      this.theme = "pt-light";
-    }
-  }
 
   public render() {
     return (
@@ -46,8 +34,6 @@ export class Header extends React.Component<{}, {}> {
             >
               Github
             </a>
-            <span className="pt-navbar-divider"/>
-            <button onClick={this.onChangeTheme} className="pt-button pt-minimal pt-icon-cog"/>
           </div>
         </div>
       </nav>

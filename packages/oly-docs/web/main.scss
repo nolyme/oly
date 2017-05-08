@@ -1,8 +1,9 @@
 @import "~@blueprintjs/core/dist/variables";
 
 $icon-font-path: "~@blueprintjs/core/resources/icons";
-$pt-app-background-color: whitesmoke;
+$pt-app-background-color: $white;
 $pt-dark-app-background-color: $dark-gray1;
+$pt-border-radius: 0;
 
 @import "~@blueprintjs/core/src/blueprint";
 @import "~highlight.js/styles/railscasts";
@@ -14,9 +15,6 @@ html, body, #app {
 
 body {
   background-color: $pt-app-background-color;
-  &.pt-dark {
-    background-color: $pt-dark-app-background-color;
-  }
 }
 
 .oly-title {
@@ -26,8 +24,7 @@ body {
 }
 
 .container {
-  width: 1024px;
-  margin: auto;
+  margin: 0 40px;
 }
 
 .flex {

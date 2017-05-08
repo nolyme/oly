@@ -6,7 +6,7 @@ import * as React from "react";
 export class Breadcrumbs extends React.Component<{}, {}> {
 
   @inject private router: Router;
-  @state private steps: string[];
+  private steps: string[];
   @state private stepsAllowed: string[];
 
   private blackList = [
@@ -16,7 +16,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   private transforms: { [key: string]: (before: string) => string } = {
     decorator: (decorator) => `@${decorator}`,
     method: (method) => `#${method}()`,
-    module: (module) => module.replace("oly-", "").toUpperCase(),
+    module: (module) => module.replace("oly-", ""),
   };
 
   public componentWillMount() {
@@ -43,10 +43,10 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   }
 
   public build() {
+    console.log("BUILD");
     this.steps = this.router.current.pathname.split("/").filter((s) => !!s);
     this.stepsAllowed = this.steps
       .filter((s) => this.blackList.indexOf(s) === -1);
-    console.log(this.stepsAllowed, this.router);
   }
 
   public chain(item: any): string {
@@ -54,10 +54,11 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   }
 
   public render() {
+    console.log("RENDER");
     return (
       <div>
         <ul className="pt-breadcrumbs">
-          <li><Go className="pt-breadcrumb" to="/">root</Go></li>
+          <li><Go className="pt-breadcrumb" to="/">oly</Go></li>
           {
             this.stepsAllowed.map((s, index) => (
               <li key={s}>

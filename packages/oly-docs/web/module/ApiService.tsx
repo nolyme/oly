@@ -13,7 +13,7 @@ export class ApiService extends React.Component<{ module: IModuleContent; servic
         {
           this.props.service.methods.map((s) => (
             <div key={s.name}>
-              <Go to={`/m/${this.props.module.name}/services/${this.props.service.name}/${s.name}`}>
+              <Go to={`/m/${this.props.module.name}/s/${this.props.service.name}/${s.name}`}>
                 {this.props.service.name}#{s.name}()
               </Go>
             </div>

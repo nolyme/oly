@@ -13,7 +13,6 @@ export class Module extends React.Component<{ module: IModuleContent }, {}> {
   public render() {
     return (
       <div className="pt-card">
-        Module {this.props.module.name}
         <div className="flex">
           <ModuleMenu module={this.props.module}/>
           <div className="flex-full">

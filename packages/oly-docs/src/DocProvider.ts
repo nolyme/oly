@@ -75,7 +75,11 @@ export class DocProvider {
     return declarations
       .map((i) => i.children[i.children.length - 1])
       .map((i) => i.signatures[0])
-      .map((i) => this.parser.mapDecorators(i));
+      .map((i) => this.parser.mapDecorators(i))
+      .map((i) => {
+        this.logger.info(`push ${i.name}`);
+        return i;
+      });
   }
 
   private generateService(app: Application, path: string, results: string[]): IDocService[] {
@@ -84,7 +88,11 @@ export class DocProvider {
     this.logger.debug(`write services (${declarations.length})`);
     return declarations
       .map((i) => i.children[i.children.length - 1])
-      .map((i) => this.parser.mapService(i));
+      .map((i) => this.parser.mapService(i))
+      .map((i) => {
+        this.logger.info(`push ${i.name}`);
+        return i;
+      });
   }
 
   private generateEnv(app: Application, path: string, results: string[], isCore = false): IDocEnv[] {
@@ -98,7 +106,11 @@ export class DocProvider {
         .map((i) => i.children[0]);
     if (env[0]) {
       return env[0].children
-        .map((i) => this.parser.mapEnv(i));
+        .map((i) => this.parser.mapEnv(i))
+        .map((i) => {
+          this.logger.info(`push ${i.name}`);
+          return i;
+        });
     }
     this.logger.debug("env is empty");
     return [];

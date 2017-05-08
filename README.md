@@ -5,8 +5,6 @@ The set is based on known projects, such as [Koa](https://github.com/koajs/koa) 
 
 o *l* y is not a framework nor boilerplate and you should probably stay away from it.
 
----- 
-
 ```typescript
 import { Kernel } from "oly-core";
 

@@ -24,7 +24,6 @@ Add oly-router, used by oly-api
 
 Depend on oly-router, not oly-api
 
-# Queue
+# Amqp
 
-rename oly-queue to oly-amqp
 add more swap configuration

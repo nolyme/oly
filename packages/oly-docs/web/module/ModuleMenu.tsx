@@ -9,31 +9,51 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
     return `/m/${this.props.module.name}/${path}`;
   }
 
-  public render() {
+  public renderServices() {
+    if (this.props.module.services.length === 0) {
+      return;
+    }
     return (
-      <div style={{width: "200px"}}>
-        <div><Go to={this.rel()}>General</Go></div>
-        <span>Services</span>
+      <div>
+        <div>Services</div>
         {this.props.module.services.map((s) => (
           <div key={s.name}>
             <Go to={this.rel(`s/${s.name}`)}>{s.name}</Go>
-            {s.methods.map((m) => (
-              <div key={m.name} style={{paddingLeft: "10px", fontSize: "12px"}}>
-                {
-                  m.static
-                    ? <Go to={this.rel(`s/${s.name}/${m.name}`)}>.{m.name}()</Go>
-                    : <Go to={this.rel(`s/${s.name}/${m.name}`)}>#{m.name}()</Go>
-                }
-              </div>
-            ))}
+            {
+              s.methods.map((m) => (
+                <div key={m.name} style={{paddingLeft: "10px", fontSize: "12px"}}>
+                  <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
+                </div>
+              ))
+            }
           </div>
         ))}
-        <span>Decorators</span>
+      </div>
+    );
+  }
+
+  public renderDecorators() {
+    if (this.props.module.decorators.length === 0) {
+      return;
+    }
+    return (
+      <div>
+        <div>Decorators</div>
         {this.props.module.decorators.map((s) => (
           <div key={s.name}>
             <Go to={this.rel(`@/${s.name}`)}>{"@" + s.name}</Go>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  public render() {
+    return (
+      <div style={{width: "200px"}}>
+        <div><Go to={this.rel()}>General</Go></div>
+        {this.renderServices()}
+        {this.renderDecorators()}
       </div>
     );
   }
