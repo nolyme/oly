@@ -1,14 +1,12 @@
 import * as cheerio from "cheerio";
 import { env, IDeclarations, inject, Kernel, Logger, state } from "oly-core";
 import { HttpError, HttpServerProvider, IKoaContext, KoaMiddleware, mount } from "oly-http";
+import { IPageDefinition, RouterBuilder, RouterHooks } from "oly-react";
 import { join } from "path";
 import { match, RouteConfig, RouterState } from "react-router";
-import { IPageDefinition } from "../interfaces";
 import { ReactProxyService } from "../services/ReactProxyService";
 import { ReactServerRenderer } from "../services/ReactServerRenderer";
 import { ReactStaticService } from "../services/ReactStaticService";
-import { RouterBuilder } from "../services/RouterBuilder";
-import { RouterHooks } from "../services/RouterHooks";
 
 /**
  *

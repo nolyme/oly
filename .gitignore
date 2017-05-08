@@ -14,4 +14,4 @@
 /packages/oly/**/*.js.map
 /packages/oly/**/*.d.ts
 /docs
-modules.json
+doc.json

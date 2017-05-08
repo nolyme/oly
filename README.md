@@ -1,11 +1,3 @@
-<p align="center"> o *l* y </p>
-=
-
-*<p align="center"> 01101111 01101100 01111001 </p>*
-
-**<p align="right">v0.8.12</p>**
-
-----
 
 Set of libraries to create well-written [TypeScript](https://github.com/Microsoft/TypeScript) applications with [Node](https://nodejs.org/en/) and/or Browser.
 
@@ -50,27 +42,3 @@ tsc --init
 That's it.
 
 > There's more stuffs about TypeScript [here](https://www.typescriptlang.org/docs/tutorial.html).
-
-# Family
-
-Yup, most of packages are just wrappers.
-
-| Name | Description | Behind | Browser | 
-|-----|----------|---------|-------------|
-| [**oly-core**](https://github.com/nolyme/oly/) | di, store, logger  | - | *YES*  |
-| [**oly-mapper**](https://github.com/nolyme/oly/) | map, validate, sanitize  | [ajv](https://github.com/epoberezkin/ajv) | *YES*  |
-| [**oly-http**](https://github.com/nolyme/oly/) | http client and server providers  | [axios](https://github.com/mzabriskie/axios), [koa](https://github.com/koajs/koa) | *YES*  |
-| [**oly-api**](https://github.com/nolyme/oly/) | (REST) api provider | [koa](https://github.com/koajs/koa) | -  |
-| [**oly-security**](https://github.com/nolyme/oly/) | api security extension | [bcrypt](https://github.com/kelektiv/node.bcrypt.js), [jwt](https://github.com/auth0/node-jsonwebtoken) | *YES*  |
-| [**oly-swagger**](https://github.com/nolyme/oly/) | api swagger extension | - | -  |
-| [**oly-orm**](https://github.com/nolyme/oly/) | typeorm provider | [typeorm](https://github.com/typeorm/typeorm) | -  |
-| [**oly-queue**](https://github.com/nolyme/oly/) | amqp provider | [amqp.node](https://github.com/squaremo/amqp.node) | -  |
-| [**oly-react**](https://github.com/nolyme/oly/) | react client and server provider | [react](https://github.com/facebook/react) | *YES*  |
-| [**oly-mongo**](https://github.com/nolyme/oly/) | mongodb provider | [mongodb](https://github.com/mongodb/node-mongodb-native) | -  |
-
-DevDependencies.
-
-| Name | Description | Behind | Browser | 
-|-----|----------|---------|-------------|
-| [**oly-tools**](https://github.com/nolyme/oly/) | webpack config, tsconfig  | [webpack](https://github.com/webpack/webpack) | -  |
-| [**oly-test**](https://github.com/nolyme/oly/) | jest class interface  | [jest](https://github.com/facebook/jest) | -  |

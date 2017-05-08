@@ -1,9 +1,9 @@
 import * as cheerio from "cheerio";
 import { Kernel } from "oly-core";
 import { HttpClient, HttpServerProvider } from "oly-http";
+import { page } from "oly-react";
 import * as React from "react";
-import { page } from "../../src/router/decorators/page";
-import { ReactServerProvider } from "../../src/router/providers/ReactServerProvider";
+import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 /**
  *

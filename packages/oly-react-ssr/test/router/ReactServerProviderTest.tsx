@@ -2,16 +2,15 @@ import { equal } from "assert";
 import * as cheerio from "cheerio";
 import { IAnyFunction, IClass, inject, Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
+import { attach, page, page404, page500, RouterState } from "oly-react";
 import * as React from "react";
-import { RouterState } from "react-router";
-import { attach } from "../../src/core/decorators/attach";
-import { page, page404, page500 } from "../../src/router/decorators/page";
-import { ReactServerProvider } from "../../src/router/providers/ReactServerProvider";
+import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 describe("ReactServerProvider", () => {
 
   interface IAppTest {
     kernel: Kernel;
+
     open(url: string): Promise<{
       html: string;
       $: CheerioStatic
@@ -92,7 +91,8 @@ describe("ReactServerProvider", () => {
 
     @page("/about") about = () => About;
 
-    @page("/fail") crazyAction() {
+    @page("/fail")
+    crazyAction() {
       const wat = true;
       if (wat) {
         throw new Error("LOL");
@@ -100,11 +100,13 @@ describe("ReactServerProvider", () => {
       return <div>never</div>;
     }
 
-    @page404 notFound() {
+    @page404
+    notFound() {
       return <div>notFound</div>;
     }
 
-    @page500 errorHandler(state: RouterState, replace: IAnyFunction, error: Error) {
+    @page500
+    errorHandler(state: RouterState, replace: IAnyFunction, error: Error) {
       return <div>snap,{error.message}</div>;
     }
   }
@@ -116,28 +118,28 @@ describe("ReactServerProvider", () => {
 
   it("should render component", async () => {
     const {$} = await app.open("/about");
-    equal($('div[id="app"] div').text(), "about");
+    equal($("div[id=\"app\"] div").text(), "about");
   });
 
   it("should render nested view", async () => {
     const {$} = await app.open("/");
-    equal($('div[id="app"] div').text(), "homeAA");
-    equal($('div[id="app"] div div').text(), "A");
+    equal($("div[id=\"app\"] div").text(), "homeAA");
+    equal($("div[id=\"app\"] div div").text(), "A");
   });
 
   it("should render nested routing view", async () => {
     const {$} = await app.open("/b");
-    equal($('div[id="app"] div').text(), "homehomeemohhomeemoh");
-    equal($('div[id="app"] div div').text(), "homeemoh");
+    equal($("div[id=\"app\"] div").text(), "homehomeemohhomeemoh");
+    equal($("div[id=\"app\"] div div").text(), "homeemoh");
   });
 
   it("should render not-found", async () => {
     const {$} = await app.open("/c");
-    equal($('div[id="app"] div').text(), "notFound");
+    equal($("div[id=\"app\"] div").text(), "notFound");
   });
 
   it("should handle error", async () => {
     const {$} = await app.open("/fail");
-    equal($('div[id="app"] div').text(), "snap,LOL");
+    equal($("div[id=\"app\"] div").text(), "snap,LOL");
   });
 });

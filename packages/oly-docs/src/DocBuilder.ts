@@ -9,9 +9,9 @@ export class DocBuilder {
 
   public async build(output: string, doc: IDoc) {
     process.env.NODE_ENV = "production";
-
     const compiler = webpack(this.createWebpackConfiguration(output, doc));
     await new Promise((resolve, reject) => {
+      this.logger.info("run webpack");
       compiler.run((err, stats) => {
         if (err) {
           return reject(err);
@@ -19,11 +19,11 @@ export class DocBuilder {
         resolve(stats);
       });
     });
+    this.logger.debug("webpack compilation is over");
   }
 
   private createWebpackConfiguration(output: string, doc: IDoc): object {
-    this.logger.info("run webpack");
-
+    this.logger.debug("create webpack config");
     const tools = require("oly-tools");
     const config = tools.createConfiguration({
       dist: output,

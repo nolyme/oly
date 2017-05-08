@@ -55,6 +55,7 @@ export class DocParser {
       parameters: this.getParameters(data),
       returnDescription: this.getReturnsTypeDescription(data.signatures[0]),
       returnType: this.getType(data.signatures[0].type),
+      static: !!data.flags.isStatic,
     };
   }
 
@@ -75,8 +76,22 @@ export class DocParser {
     }
 
     return declaration.children
-      .filter((c) => c.kindString === "Method" && c.flags.isPublic)
+      .filter((c) =>
+        c.kindString === "Method" &&
+        c.flags.isPublic &&
+        !this.isInternal(c),
+      )
       .map((m) => this.mapMethod(m));
+  }
+
+  public isInternal(declaration: DeclarationReflection | Reflection): boolean {
+    if (declaration instanceof DeclarationReflection && declaration.signatures[0]) {
+      return this.isInternal(declaration.signatures[0]);
+    }
+    if (!declaration.comment) {
+      return false;
+    }
+    return declaration.comment.hasTag("internal");
   }
 
   public getParameters(data: DeclarationReflection): IDocParameter[] {

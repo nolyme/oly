@@ -4,8 +4,8 @@ import { HttpClient } from "oly-http";
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import { HelmetServerProvider } from "../../src/helmet/HelmetServerProvider";
-import { page } from "../../src/router/decorators/page";
-import { ReactServerProvider } from "../../src/router/providers/ReactServerProvider";
+import { page } from "oly-react";
+import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 describe("HelmetServiceProvider", () => {
 

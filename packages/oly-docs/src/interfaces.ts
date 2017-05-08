@@ -4,6 +4,7 @@ export interface IDocMethod {
   parameters: IDocParameter[];
   returnType: string;
   returnDescription: string;
+  static: boolean;
 }
 
 export interface IDocService {

@@ -1,32 +1,41 @@
 {
-  "name": "oly-react",
-  "description": "The Piper at the Gates of Dawn",
+  "name": "oly-react-ssr",
+  "description": "The Piper at the Gates of Dawn (ssr)",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",
+  "browser": "lib/index.browser.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "keywords": [
     "oly",
     "typescript",
-    "react"
+    "react",
+    "ssr"
   ],
   "dependencies": {
     "@types/react-dom": "15.5.0",
+    "@types/react-helmet": "5.0.2",
     "@types/react-router": "3.0.10",
-    "prop-types": "15.5.8",
+    "cheerio": "0.22.0",
     "react-dom": "15.5.4",
+    "react-helmet": "5.0.3",
     "react-router": "3.0.5"
   },
   "devDependencies": {
+    "@types/cheerio": "0.22.1",
     "@types/react": "15.0.21",
     "jsdom": "10.1.0",
     "oly-core": "^0.9.0",
     "oly-test": "^0.9.0",
+    "oly-http": "^0.9.0",
+    "oly-react": "^0.9.0",
     "react": "15.5.4"
   },
   "peerDependencies": {
     "oly-core": "^0.9.0",
+    "oly-http": "^0.9.0",
+    "oly-react": "^0.9.0",
     "react": "^15.5.4"
   },
   "scripts": {

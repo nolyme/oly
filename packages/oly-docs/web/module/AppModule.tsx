@@ -5,6 +5,7 @@ import { IModuleContent } from "../../src/interfaces";
 import { NotFound } from "../layout/NotFound";
 import { ApiDecorator } from "./ApiDecorator";
 import { ApiService } from "./ApiService";
+import { ApiServiceMethod } from "./ApiServiceMethod";
 import { ModuleIndex } from "./ModuleIndex";
 
 export class AppModule {
@@ -32,5 +33,19 @@ export class AppModule {
       return NotFound;
     }
     return <ApiService module={this.module} service={service}/>;
+  }
+
+  @page("/s/:service/:method")
+  public serviceMethod(@path("service") serviceName: string,
+                       @path("method") methodName: string) {
+    const service = this.module.services.filter((s) => s.name === serviceName)[0];
+    if (!service) {
+      return NotFound;
+    }
+    const method = service.methods.filter((m) => m.name === methodName)[0];
+    if (!method) {
+      return NotFound;
+    }
+    return <ApiServiceMethod service={service} method={method}/>;
   }
 }

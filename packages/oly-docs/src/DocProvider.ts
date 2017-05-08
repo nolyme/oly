@@ -30,6 +30,7 @@ export class DocProvider {
     const modules: IModuleContent[] = [];
     for (const m of config.modules) {
       modules.push(this.create(resolve(this.cwd, this.root, m.name), m));
+      this.logger.debug(`module ${m.name} is created`);
     }
     const doc: IDoc = {
       home: this.parser.mark(readFileSync(resolve(this.cwd, config.home), "UTF-8")),
@@ -38,10 +39,13 @@ export class DocProvider {
       version: config.version,
     };
     if (this.json) {
+      this.logger.debug(`write as json`);
       writeFileSync(resolve(output, "doc.json"), JSON.stringify(doc), "UTF-8");
     } else {
+      this.logger.debug(`write docs with webpack`);
       await this.builder.build(output, doc);
     }
+    this.logger.debug(`everything is great, have a nice day`);
   }
 
   private create(project: string, m: ModuleConfiguration): IModuleContent {
@@ -65,6 +69,7 @@ export class DocProvider {
   }
 
   private generateDecorator(app: Application, path: string, results: string[]): IDocDecorator[] {
+    this.logger.debug("check decorators");
     const declarations = this.generateDeclarations(app, path, results);
     this.logger.debug(`write decorators (${declarations.length})`);
     return declarations
@@ -74,6 +79,7 @@ export class DocProvider {
   }
 
   private generateService(app: Application, path: string, results: string[]): IDocService[] {
+    this.logger.debug("check services");
     const declarations = this.generateDeclarations(app, path, results);
     this.logger.debug(`write services (${declarations.length})`);
     return declarations
@@ -82,6 +88,7 @@ export class DocProvider {
   }
 
   private generateEnv(app: Application, path: string, results: string[], isCore = false): IDocEnv[] {
+    this.logger.debug("check env");
     const declarations = this.generateDeclarations(app, path, results);
     this.logger.debug(`write env (${declarations.length})`);
     const env = isCore
@@ -89,8 +96,12 @@ export class DocProvider {
       : declarations
         .map((i) => i.children[0])
         .map((i) => i.children[0]);
-    return env[0].children
-      .map((i) => this.parser.mapEnv(i));
+    if (env[0]) {
+      return env[0].children
+        .map((i) => this.parser.mapEnv(i));
+    }
+    this.logger.debug("env is empty");
+    return [];
   }
 
   private generateDeclarations(app: Application, path: string, results: string[]): DeclarationReflection[] {

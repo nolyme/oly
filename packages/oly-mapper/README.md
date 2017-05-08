@@ -15,9 +15,3 @@ oly.parse(Credentials, dat);   // -> Data { text: "Hello"; }
 oly.validate(Credentials, {}); // -> BOOM!
 
 ```
-
-## Installation
-
-```bash
-$ npm install oly-core oly-mapper
-```

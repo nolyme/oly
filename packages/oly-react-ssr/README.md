@@ -1,10 +1,11 @@
-# o*l*y react
+# o*l*y react ssr
 
 ```tsx
 import "oly-core/polyfill";
 import * as React from "react";
 import { Kernel } from "oly-core";
-import { page, ReactBrowserProvider } from "oly-react";
+import { page } from "oly-react";
+import { ReactServerProvider } from "oly-react-ssr";
 
 class App {
   @page("/") index() {
@@ -13,6 +14,6 @@ class App {
 }
 
 new Kernel()
-  .with(App, ReactBrowserProvider)
+  .with(App, ReactServerProvider)
   .start()
 ```

@@ -1,6 +1,6 @@
 import { _, inject } from "oly-core";
-import { ReactServerProvider } from "../../router/providers/ReactServerProvider";
-import { ReactServerRenderer } from "../../router/services/ReactServerRenderer";
+import { ReactServerProvider } from "../../server/providers/ReactServerProvider";
+import { ReactServerRenderer } from "../../server/services/ReactServerRenderer";
 import { Pixie } from "../services/Pixie";
 import { PixieHttp } from "../services/PixieHttp";
 import { PixieSession } from "../services/PixieSession";

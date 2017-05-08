@@ -1,9 +1,9 @@
 import { inject, Kernel, state } from "oly-core";
 import { IKoaContext } from "oly-http";
+import { AppContext } from "oly-react";
 import * as React from "react";
 import { renderToString } from "react-dom/server";
 import { RouterContext, RouterState } from "react-router";
-import { AppContext } from "../../core/components/AppContext";
 
 export class ReactServerRenderer {
 

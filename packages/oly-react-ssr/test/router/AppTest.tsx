@@ -1,20 +1,20 @@
 import * as cheerio from "cheerio";
 import { Kernel } from "oly-core";
 import { HttpClient, HttpServerProvider } from "oly-http";
+import { page, path, query } from "oly-react";
 import * as React from "react";
-import { page } from "../../src/router/decorators/page";
-import { path } from "../../src/router/decorators/path";
-import { query } from "../../src/router/decorators/query";
-import { ReactServerProvider } from "../../src/router/providers/ReactServerProvider";
+import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 describe("App", () => {
 
   class App {
-    @page("/") index(@query("name") name: string = "World") {
+    @page("/")
+    index(@query("name") name: string = "World") {
       return <div>Hello {name}</div>;
     }
 
-    @page("/p/:name") hi(@path("name") name: string) {
+    @page("/p/:name")
+    hi(@path("name") name: string) {
       return <div>Hi {name}</div>;
     }
   }

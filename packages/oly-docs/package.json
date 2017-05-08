@@ -9,21 +9,21 @@
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@blueprintjs/core": "^1.16.0",
+    "@blueprintjs/core": "1.16.0",
     "@types/react": "15.0.24",
-    "@types/webpack": "^2.2.15",
-    "bourbon": "^4.3.4",
-    "highlight.js": "^9.11.0",
-    "marked": "^0.3.6",
-    "node-sass": "^4.5.2",
+    "@types/webpack": "2.2.15",
+    "bourbon": "4.3.4",
+    "highlight.js": "9.11.0",
+    "marked": "0.3.6",
+    "node-sass": "4.5.2",
     "oly-core": "^0.9.0",
     "oly-http": "^0.9.0",
     "oly-mapper": "^0.9.0",
     "oly-react": "^0.9.0",
     "oly-tools": "^0.9.0",
     "react": "15.5.4",
-    "react-addons-css-transition-group": "^15.5.2",
-    "sass-loader": "^6.0.3",
+    "react-addons-css-transition-group": "15.5.2",
+    "sass-loader": "6.0.3",
     "source-map-support": "0.4.15",
     "typedoc": "0.6.0",
     "webpack": "2.5.1"
@@ -36,7 +36,7 @@
     "start": "webpack-dev-server",
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
-    "test": "jest"
+    "test": "echo"
   },
   "jest": {
     "preset": "../../jest-preset.json",

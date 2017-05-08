@@ -24,7 +24,7 @@ export class Logger {
    * Used by chalk.
    */
   public static colors = {
-    DEBUG: "blue",
+    DEBUG: "cyan",
     ERROR: "red",
     INFO: "green",
     TRACE: "magenta",

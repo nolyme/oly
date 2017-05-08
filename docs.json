@@ -41,10 +41,28 @@
     },
     {
       "home": "README.md",
+      "name": "oly-mapper",
+      "dependencies": [
+        "oly-core"
+      ],
+      "decorators": [
+        "decorators/array.ts",
+        "decorators/field.ts"
+      ],
+      "services": [
+        "ObjectMapper.ts"
+      ],
+      "env": [
+
+      ]
+    },
+    {
+      "home": "README.md",
       "name": "oly-api",
       "dependencies": [
         "oly-core",
-        "oly-http"
+        "oly-http",
+        "oly-mapper"
       ],
       "decorators": [
         "decorators/router",
@@ -62,6 +80,28 @@
       ],
       "services": [
         "providers/ApiProvider.ts"
+      ]
+    },
+    {
+      "home": "README.md",
+      "name": "oly-react",
+      "dependencies": [
+        "oly-core"
+      ],
+      "decorators": [
+        "core/decorators/action",
+        "core/decorators/attach",
+        "router/decorators/page",
+        "router/decorators/query",
+        "router/decorators/path"
+      ],
+      "env": [
+        "index.ts"
+      ],
+      "services": [
+        "router/providers/ReactBrowserProvider.ts",
+        "router/providers/Browser.ts",
+        "router/providers/Router.ts"
       ]
     }
   ]

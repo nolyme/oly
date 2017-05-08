@@ -7,10 +7,17 @@ export class Breadcrumbs extends React.Component<{}, {}> {
 
   @inject private router: Router;
   @state private steps: string[];
+  @state private stepsAllowed: string[];
 
   private blackList = [
     "m", "s", "@",
   ];
+
+  private transforms: { [key: string]: (before: string) => string } = {
+    decorator: (decorator) => `@${decorator}`,
+    method: (method) => `#${method}()`,
+    module: (module) => module.replace("oly-", "").toUpperCase(),
+  };
 
   public componentWillMount() {
     this.build();
@@ -21,10 +28,25 @@ export class Breadcrumbs extends React.Component<{}, {}> {
     this.build();
   }
 
+  public transform(value: string): string {
+    const history: any = this.router.history;
+    const kvs = Object.keys(history.params).map((key) => ({key, value: history.params[key]}));
+    const match = kvs.filter((kv) => kv.value === value)[0];
+    if (!match) {
+      return value;
+    }
+    const transform = this.transforms[match.key];
+    if (!transform) {
+      return value;
+    }
+    return transform(value);
+  }
+
   public build() {
-    this.steps = this.router.current.pathname
-      .split("/")
-      .filter((s) => !!s);
+    this.steps = this.router.current.pathname.split("/").filter((s) => !!s);
+    this.stepsAllowed = this.steps
+      .filter((s) => this.blackList.indexOf(s) === -1);
+    console.log(this.stepsAllowed, this.router);
   }
 
   public chain(item: any): string {
@@ -36,9 +58,17 @@ export class Breadcrumbs extends React.Component<{}, {}> {
       <div>
         <ul className="pt-breadcrumbs">
           <li><Go className="pt-breadcrumb" to="/">root</Go></li>
-          {this.steps.filter((s) => this.blackList.indexOf(s) === -1).map((s) => (
-            <li key={s}><Go className="pt-breadcrumb" to={`/${this.chain(s)}`}>{s}</Go></li>
-          ))}
+          {
+            this.stepsAllowed.map((s, index) => (
+              <li key={s}>
+                {
+                  (index === this.stepsAllowed.length - 1)
+                    ? <span className="pt-breadcrumb pt-breadcrumb-current">{this.transform(s)}</span>
+                    : <Go className="pt-breadcrumb" to={`/${this.chain(s)}`}>{this.transform(s)}</Go>
+                }
+              </li>
+            ))
+          }
         </ul>
       </div>
     );

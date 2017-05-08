@@ -21,6 +21,7 @@ export class Home extends React.Component<{}, {}> {
     return (
       <div className="pt-card">
         {this.doc.modules.map((m) => this.renderModule(m))}
+        <div dangerouslySetInnerHTML={{__html: this.doc.home}}/>
       </div>
     );
   }

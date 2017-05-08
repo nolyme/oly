@@ -7,7 +7,7 @@ export class ApiServiceMethod extends React.Component<{ service: IDocService; me
 
   public render() {
     return (
-      <div className="pt-card">
+      <div>
         <div>Service {this.props.service.name}</div>
         <div>
           PROPERTY # {this.props.method.name}

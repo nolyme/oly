@@ -1,7 +1,7 @@
 import { inject } from "oly-core";
 import { Helmet } from "react-helmet";
-import { ReactServerProvider } from "../router/providers/ReactServerProvider";
-import { ReactServerRenderer } from "../router/services/ReactServerRenderer";
+import { ReactServerProvider } from "../server/providers/ReactServerProvider";
+import { ReactServerRenderer } from "../server/services/ReactServerRenderer";
 
 /**
  *

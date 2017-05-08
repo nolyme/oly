@@ -1,5 +1,5 @@
 import { inject, Logger } from "oly-core";
-import { Browser } from "../../router/services/Browser";
+import { Browser } from "oly-react";
 import { Pixie } from "../services/Pixie";
 import { PixieHttp } from "../services/PixieHttp";
 import { PixieSession } from "../services/PixieSession";

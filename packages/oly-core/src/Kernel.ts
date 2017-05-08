@@ -58,6 +58,7 @@ export class Kernel {
    * This is a simple kernel factory.
    * Useful if you don't want see any 'new' keyword in your app.
    *
+   * @internal
    * @param store         Map of key-value. {@see Kernel.store}
    */
   public static create(store?: IStore) {
@@ -409,11 +410,11 @@ export class Kernel {
             }
           }
           return _.promise(action(data)).catch((e) => {
-            this.getLogger().error(`handle event['${key}'] error`, e);
+            this.getLogger().warn(`handle event['${key}'] error`, e);
             return e;
           });
         } catch (e) {
-          this.getLogger().error(`handle event['${key}'] error`, e);
+          this.getLogger().warn(`handle event['${key}'] error`, e);
           return Promise.resolve(e);
         }
       });
@@ -428,6 +429,7 @@ export class Kernel {
   /**
    * Check if NODE_ENV of store (not process.env) equal production.
    *
+   * @internal
    * @return true if store['NODE_ENV'] === 'production'
    */
   public isProduction() {
