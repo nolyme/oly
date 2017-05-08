@@ -19,7 +19,8 @@ describe("ApiProvider", () => {
 
       @get("/") index = () => "Hello World";
 
-      @get("/:name") byName(@path("name") name: string) {
+      @get("/:name")
+      byName(@path("name") name: string) {
         return `Hello ${name}`;
       }
     }
@@ -45,6 +46,7 @@ describe("ApiProvider", () => {
       equal((await client.request({url: "/hello/jean"})).data, "Hello jean");
     });
   });
+
   describe("@post()", () => {
 
     class DataCheck {
@@ -63,19 +65,23 @@ describe("ApiProvider", () => {
     }
 
     class MyController {
-      @post("/") index(@body() data: Data) {
+      @post("/")
+      index(@body() data: Data) {
         return data.username;
       }
 
-      @post("/check") check(@body(DataCheck) data: DataCheck) {
+      @post("/check")
+      check(@body(DataCheck) data: DataCheck) {
         return data.username;
       }
 
-      @post("/without") without(@body() data: IData) {
+      @post("/without")
+      without(@body() data: IData) {
         return data.username;
       }
 
-      @del("/") remove() {
+      @del("/")
+      remove() {
         return null;
       }
     }
@@ -90,9 +96,11 @@ describe("ApiProvider", () => {
     beforeAll(async () => {
       await kernel.start();
     });
+
     afterAll(async () => {
       await kernel.stop();
     });
+
     it("should work with data fields", async () => {
       equal((await client.request({
         data: {
@@ -103,6 +111,7 @@ describe("ApiProvider", () => {
         url: "/check",
       })).data, "Toto");
     });
+
     it("should work with interface", async () => {
       equal((await client.request({
         data: {
@@ -113,6 +122,7 @@ describe("ApiProvider", () => {
         url: "/without",
       })).data, "Toto");
     });
+
     it("should work with class", async () => {
       equal((await client.request({
         data: {
@@ -123,6 +133,7 @@ describe("ApiProvider", () => {
         url: "/",
       })).data, "Toto");
     });
+
     it("should work for delete", async () => {
       equal((await client.request({
         method: "DELETE",
