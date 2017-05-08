@@ -7,7 +7,7 @@ import { LoggerUtil } from "./LoggerUtil";
 import { LogLevels } from "./LogLevels";
 
 /**
- *
+ * Main oly logger
  */
 @injectable({
   singleton: false,
@@ -168,7 +168,7 @@ export class Logger {
       + chalk.bold(this.appName + "(") + ""
       + this.contextId + chalk.bold(")") + " "
       + chalk.bold(this.componentName + ":") + " "
-      + ('"' + message + '" ')
+      + ("\"" + message + "\" ")
       + chalk.gray(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
 }

@@ -7,5 +7,6 @@ export * from "./components/Go";
 export * from "./providers/ReactBrowserProvider";
 export * from "./services/Browser";
 export * from "./services/BrowserMock";
+export * from "./services/HashBrowser";
 export * from "./services/Router";
 export * from "./services/RouterBuilder";

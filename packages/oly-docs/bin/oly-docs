@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+"use strict";
+
+require("oly-core/polyfill");
+require("source-map-support/register");
+require("ts-node/register");
+require("../lib").main(process.env);

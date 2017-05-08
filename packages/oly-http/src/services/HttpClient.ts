@@ -1,26 +1,7 @@
-import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, default as axiosInstance } from "axios";
+import { AxiosError, AxiosInstance, AxiosRequestConfig, default as axiosInstance } from "axios";
 import { inject, Logger } from "oly-core";
 import { HttpError } from "../helpers/HttpError";
-
-/**
- * Wrap AxiosResponse with template.
- * Add template.
- * @alias
- */
-export interface IHttpResponse<T> extends AxiosResponse {
-  data: T;
-}
-
-/**
- * Wrap AxiosRequest.
- * @alias
- */
-export type IHttpRequest = AxiosRequestConfig;
-
-/**
- * Export default axios instance.
- */
-export const axios: AxiosInstance = axiosInstance;
+import { IHttpRequest, IHttpResponse } from "../interfaces";
 
 /**
  * Simple wrapper of Axios.

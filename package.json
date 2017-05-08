@@ -12,12 +12,12 @@
     "typescript": "2.3.2"
   },
   "scripts": {
+    "docs": "node packages/oly-docs/bin/oly-docs",
     "all": "lerna run clean; lerna bootstrap; lerna run build; lerna run test",
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
     "test": "lerna run test",
-    "watch": "lerna --concurrency 14 --ignore oly-tools --no-sort exec -- npm run build -- -w",
     "publish": "lerna publish --force-publish=*"
   }
 }

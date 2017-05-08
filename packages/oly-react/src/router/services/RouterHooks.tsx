@@ -42,7 +42,7 @@ export class RouterHooks {
    */
   public $start(state: RouterState): void {
     if (this.stack <= 0) {
-      this.kernel.emit(TRANSITION_BEGIN, {state});
+      this.kernel.emit(TRANSITION_BEGIN, state);
       this.stack = 1;
     } else {
       this.stack += 1;
@@ -56,7 +56,9 @@ export class RouterHooks {
   public $end(state: RouterState): void {
     this.stack -= 1;
     if (this.stack === 0) {
-      this.kernel.emit(TRANSITION_FINISH, {state});
+      setTimeout(() => {
+        this.kernel.emit(TRANSITION_FINISH, state);
+      });
     }
   }
 }

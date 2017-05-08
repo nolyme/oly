@@ -3,12 +3,15 @@
 /packages/*/node_modules
 /packages/*/lib
 /packages/*/coverage
+/packages/*/out
 /.idea
 *.log
 *.iml
 *.cache
 *.lock
-/docs
+/manuals
 /packages/oly/**/*.js
 /packages/oly/**/*.js.map
 /packages/oly/**/*.d.ts
+/docs
+modules.json

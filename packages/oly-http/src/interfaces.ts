@@ -1,3 +1,4 @@
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import * as Koa from "koa";
 import { IAnyFunction, Kernel } from "oly-core";
 import { ZlibOptions } from "zlib";
@@ -71,3 +72,18 @@ export interface ICorsOptions {
   //  Add set headers to `err.header` if an error is thrown
   keepHeadersOnError?: boolean;
 }
+
+/**
+ * Wrap AxiosResponse with template.
+ * Add template.
+ * @alias
+ */
+export interface IHttpResponse<T> extends AxiosResponse {
+  data: T;
+}
+
+/**
+ * Wrap AxiosRequest.
+ * @alias
+ */
+export type IHttpRequest = AxiosRequestConfig;

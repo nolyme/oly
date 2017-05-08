@@ -21,15 +21,14 @@ import { MetadataUtil } from "../utils/MetadataUtil";
  * @param propertyKey     ~
  */
 export const inject = (type?: IClass | object, propertyKey?: string): any => {
+
   if (!!propertyKey && typeof type === "object") {
     return $inject()(type, propertyKey);
   }
+
   return $inject(type as IClass);
 };
 
-/**
- * @internal
- */
 const $inject = (type?: IClass): PropertyDecorator => (target: object, propertyKey: string): void => {
   const injections: IDependencyMetadataMap = MetadataUtil.get(lyDependencies, target.constructor);
 

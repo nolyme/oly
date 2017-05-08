@@ -14,7 +14,7 @@ describe("App", () => {
       return <div>Hello {name}</div>;
     }
 
-    @page("/:name") hi(@path("name") name: string) {
+    @page("/p/:name") hi(@path("name") name: string) {
       return <div>Hi {name}</div>;
     }
   }
@@ -46,6 +46,6 @@ describe("App", () => {
       const $ = cheerio.load(data);
       return $("#app").text();
     };
-    expect(await contentOf("/Patrick")).toBe("Hi Patrick");
+    expect(await contentOf("/p/Patrick")).toBe("Hi Patrick");
   });
 });

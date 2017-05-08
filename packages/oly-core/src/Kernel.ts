@@ -7,7 +7,7 @@ import {
   IEventReference,
   IKernelEmitOptions,
   IKernelOnOptions,
-  IObserver
+  IObserver,
 } from "./interfaces/events";
 import {
   IAnyDeclaration,
@@ -17,7 +17,7 @@ import {
   IDefinition,
   IDefinitionMetadata,
   IDependencyMetadataMap,
-  IKernelGetOptions
+  IKernelGetOptions,
 } from "./interfaces/relations";
 import { IStateMutate, IStore, IVirtualStateMetadataMap } from "./interfaces/store";
 import { IAnyFunction, IClass, IFactoryOf } from "./interfaces/types";
@@ -44,7 +44,7 @@ import { MetadataUtil } from "./utils/MetadataUtil";
  * Vice versa, Kernel#stop() unlock the kernel.
  *
  * The kernel can be forked to create multi child-context with Kernel#fork().
- * The child keep all the declaration but without any data (instance, store, ...).
+ * The child keep all the declarations but without any data (instances, store, ...).
  * No #start() nor #stop() are triggered. We assume that's already done by the parent.
  *
  * ```ts
@@ -408,8 +408,12 @@ export class Kernel {
               action = event.action.instance[event.action.propertyKey].bind(event.action.instance);
             }
           }
-          return _.promise(action(data));
+          return _.promise(action(data)).catch((e) => {
+            this.getLogger().error(`handle event['${key}'] error`, e);
+            return e;
+          });
         } catch (e) {
+          this.getLogger().error(`handle event['${key}'] error`, e);
           return Promise.resolve(e);
         }
       });

@@ -1,0 +1,68 @@
+{
+  "name": "oly",
+  "version": "0.9.0",
+  "home": "README.md",
+  "manuals": [
+    "manuals/concepts.md"
+  ],
+  "modules": [
+    {
+      "home": "README.md",
+      "name": "oly-core",
+      "dependencies": [],
+      "decorators": [
+        "decorators/env",
+        "decorators/inject",
+        "decorators/on",
+        "decorators/state"
+      ],
+      "env": [
+        "env.ts"
+      ],
+      "services": [
+        "Kernel.ts",
+        "logger/Logger.ts"
+      ]
+    },
+    {
+      "home": "README.md",
+      "name": "oly-http",
+      "dependencies": [
+        "oly-core"
+      ],
+      "decorators": [],
+      "env": [
+        "index.ts"
+      ],
+      "services": [
+        "providers/HttpServerProvider.ts",
+        "services/HttpClient.ts"
+      ]
+    },
+    {
+      "home": "README.md",
+      "name": "oly-api",
+      "dependencies": [
+        "oly-core",
+        "oly-http"
+      ],
+      "decorators": [
+        "decorators/router",
+        "decorators/get",
+        "decorators/put",
+        "decorators/post",
+        "decorators/del",
+        "decorators/path",
+        "decorators/query",
+        "decorators/body",
+        "decorators/use"
+      ],
+      "env": [
+        "index.ts"
+      ],
+      "services": [
+        "providers/ApiProvider.ts"
+      ]
+    }
+  ]
+}
