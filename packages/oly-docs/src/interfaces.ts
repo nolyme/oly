@@ -32,6 +32,7 @@ export interface IDocEnv {
   description: string;
   default?: string;
   optional: boolean;
+  target?: string;
   type: string;
 }
 

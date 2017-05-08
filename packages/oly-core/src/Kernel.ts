@@ -337,15 +337,7 @@ export class Kernel {
     }
 
     if (typeof newValue !== "undefined") {
-      if (typeof newValue === "string") {
-        if (newValue === "true") {
-          newValue = true;
-        } else if (newValue === "false") {
-          newValue = false;
-        } else if (!isNaN(newValue as any)) {
-          newValue = Number(newValue);
-        }
-      }
+      newValue = _.parseNumberAndBoolean(newValue);
 
       if (this.store[identifier] !== newValue) {
         const mutation: IStateMutate = {key: identifier, newValue, oldValue: this.store[identifier]};

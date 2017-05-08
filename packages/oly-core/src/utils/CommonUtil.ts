@@ -1,4 +1,5 @@
 import { IClass } from "../interfaces/types";
+
 /**
  * Collection of internal utils.
  */
@@ -106,6 +107,25 @@ export class CommonUtil {
       return "" + type1 === "" + type2;
     }
     return false;
+  }
+
+  /**
+   * Try to convert string into number/boolean.
+   *
+   * @param value
+   * @return {any}
+   */
+  public static parseNumberAndBoolean(value: any): any {
+    if (typeof value === "string") {
+      if (value === "true") {
+        return true;
+      } else if (value === "false") {
+        return false;
+      } else if (!isNaN(value as any)) {
+        return Number(value);
+      }
+    }
+    return value;
   }
 
   /**

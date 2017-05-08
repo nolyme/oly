@@ -1,5 +1,5 @@
 import * as KoaRouter from "koa-router";
-import { IClass } from "oly-core";
+import { _, IClass } from "oly-core";
 import { HttpError, IKoaContext } from "oly-http";
 import { FieldMetadataUtil, ObjectMapper } from "oly-mapper";
 import { IRoute, IUploadedFile } from "../interfaces";
@@ -72,11 +72,12 @@ export class KoaRouterBuilder {
       } else if (!!arg.query) {
 
         // @query
-        return ctx.request.query[arg.query];
+        const value = ctx.request.query[arg.query];
+        return _.parseNumberAndBoolean(value);
 
       } else if (!!arg.upload) {
 
-        // @upload (multer use-case)
+        // @upload (multer)
         return ctx.req[arg.upload] as IUploadedFile;
 
       } else if (!!arg.body) {

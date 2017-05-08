@@ -65,6 +65,7 @@ export class DocParser {
       description: this.getDescription(env),
       name: env.name,
       optional: this.getIsOptional(env),
+      target: this.getTag(env, "target"),
       type: this.getType(env.type).replace("undefined | ", ""),
     };
   }
@@ -131,7 +132,21 @@ export class DocParser {
 
     const tag = declaration.comment.tags.filter((t) => t.tagName === "default")[0];
     if (tag) {
-      return this.mark(tag.text);
+      return this.sanitize(tag.text);
+    }
+
+    return undefined;
+  }
+
+  public getTag(declaration: DeclarationReflection, tagName: string): string | undefined {
+
+    if (!declaration.comment || !declaration.comment.tags) {
+      return undefined;
+    }
+
+    const tag = declaration.comment.tags.filter((t) => t.tagName === tagName)[0];
+    if (tag) {
+      return this.sanitize(tag.text);
     }
 
     return undefined;
@@ -154,8 +169,13 @@ export class DocParser {
     return type.toString();
   }
 
+  public sanitize(text: string): string {
+
+    return text.replace(/\n$/mgi, "").trim();
+  }
+
   public mark(text: string): string {
 
-    return marked(text).replace(/\n$/mgi, "").trim();
+    return this.sanitize(marked(text));
   }
 }

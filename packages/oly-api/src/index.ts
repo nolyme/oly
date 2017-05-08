@@ -1,11 +1,11 @@
-/**
- *
- */
 declare module "oly-core/lib/env" {
   interface IEnv {
+
     /**
-     * Set a global prefix for api routing.
-     * Sometimes, you will use '/api'.
+     * Define a global namespace to your path api.
+     *
+     * @target    ApiProvider
+     * @default   "/api"
      */
     OLY_API_PREFIX?: string;
   }
