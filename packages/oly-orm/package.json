@@ -1,6 +1,6 @@
 {
   "name": "oly-orm",
-  "description": "A Momentary Lapse of Reason",
+  "description": "oly-orm",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",

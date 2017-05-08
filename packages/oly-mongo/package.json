@@ -1,6 +1,6 @@
 {
   "name": "oly-mongo",
-  "description": "The Final Cut",
+  "description": "oly-mongo",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",

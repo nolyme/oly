@@ -1,6 +1,6 @@
 {
   "name": "oly-react-ssr",
-  "description": "The Piper at the Gates of Dawn (ssr)",
+  "description": "oly-react-ssr",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",

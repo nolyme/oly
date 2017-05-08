@@ -1,6 +1,6 @@
 {
   "name": "oly-api",
-  "description": "A Saucerful of Secrets",
+  "description": "oly-api",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",

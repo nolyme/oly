@@ -1,6 +1,6 @@
 {
   "name": "oly-react",
-  "description": "The Piper at the Gates of Dawn",
+  "description": "oly-react",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",

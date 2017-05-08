@@ -1,6 +1,6 @@
 {
   "name": "oly-cron",
-  "description": "Meddle",
+  "description": "oly-cron",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "oly-swagger",
-  "description": "The Division Bell",
+  "description": "oly-swagger",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",

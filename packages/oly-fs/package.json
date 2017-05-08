@@ -1,6 +1,6 @@
 {
   "name": "oly-fs",
-  "description": "Comfortably Numb",
+  "description": "oly-fs",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",
