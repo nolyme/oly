@@ -8,6 +8,7 @@ export * from "./utils/CommonUtil";
 export * from "./utils/MetadataUtil";
 export * from "./constants/keys";
 export * from "./constants/errors";
+export * from "./constants/events";
 export * from "./configuration";
 export * from "./interfaces/events";
 export * from "./interfaces/relations";

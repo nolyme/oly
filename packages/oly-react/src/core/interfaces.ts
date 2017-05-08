@@ -25,3 +25,17 @@ export interface IActionResult<T> {
   action: string;
   data: T;
 }
+
+/**
+ *
+ */
+export interface IActionMetadata {
+  name: string;
+}
+
+/**
+ *
+ */
+export interface IActionMetadataMap {
+  [key: string]: IActionMetadata;
+}

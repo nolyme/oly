@@ -1,6 +1,7 @@
 import {
   _,
   IAnyDefinition,
+  IClass,
   IEventMetadataMap,
   inject,
   IStateMutate,
@@ -9,10 +10,11 @@ import {
   Logger,
   lyEvents,
   lyStates,
-  MetadataUtil
+  MetadataUtil,
+  STATE_MUTATE,
 } from "oly-core";
 import { ACTIONS_ERROR, ACTIONS_SUCCESS, lyActions } from "../constants";
-import { IActionResult, IActionResultError } from "../interfaces";
+import { IActionMetadata, IActionMetadataMap, IActionResult, IActionResultError } from "../interfaces";
 
 /**
  * It is an extension of the Kernel.
@@ -46,11 +48,11 @@ export class ComponentInjector {
     this.processStates(definition, instance);
 
     // just make a processing, skip registration and instantiation
-    // NEVER REGISTER A REACT COMPONENT INSIDE THE KERNEL, NEVER
+    // NEVER REGISTER A REACT COMPONENT INSIDE THE KERNEL, NEVER; gygnygguuygnkuguyn
     this.kernel.get(definition, {instance});
 
     // process actions
-    this.processAction(definition, instance);
+    this.processActions(definition, instance);
   }
 
   /**
@@ -62,20 +64,22 @@ export class ComponentInjector {
   public processStates(definition: IAnyDefinition, instance: object) {
     const states: IVirtualStateMetadataMap = MetadataUtil.get(lyStates, definition, {});
     const keys = Object.keys(states);
+
     for (const propertyKey of keys) {
       const state = states[propertyKey];
-      if (!state.readonly) {
-        const events: IEventMetadataMap = MetadataUtil.get(lyEvents, instance.constructor);
-        events[propertyKey + "$$refresh"] = {
-          name: "state:mutate",
-        };
-        MetadataUtil.set(lyEvents, events, instance.constructor);
-        instance[propertyKey + "$$refresh"] = function refreshHandler(this: any, event: IStateMutate) {
-          if (event.key === (state.name || _.targetToString(definition, propertyKey))) {
-            this.setState({[event.key]: event.newValue});
-          }
-        };
+      if (state.readonly) {
+        continue;
       }
+
+      const events: IEventMetadataMap = MetadataUtil.get(lyEvents, instance.constructor);
+      events[propertyKey + "$$refresh"] = {name: STATE_MUTATE};
+      MetadataUtil.set(lyEvents, events, instance.constructor);
+
+      instance[propertyKey + "$$refresh"] = function refreshHandler(this: any, event: IStateMutate) {
+        if (event.key === (state.name || _.targetToString(definition, propertyKey))) {
+          this.setState({[event.key]: event.newValue});
+        }
+      };
     }
   }
 
@@ -85,35 +89,19 @@ export class ComponentInjector {
    * @param definition    React component
    * @param instance      Instance
    */
-  public processAction(definition: IAnyDefinition, instance: object) {
-    const actions = MetadataUtil.get(lyActions, definition, {});
+  public processActions(definition: IAnyDefinition, instance: object) {
+    const actions: IActionMetadataMap = MetadataUtil.get(lyActions, definition, {});
     const logger = this.kernel.get(Logger).as("Actions");
+
     for (const propertyKey of Object.keys(actions)) {
-      const action: string = actions[propertyKey];
-      const resolve = (data: any) => {
-        logger.debug(`action ${action} is done`);
-        const actionResult: IActionResult<any> = {
-          action,
-          component: definition,
-          data,
-        };
-        this.kernel.emit(ACTIONS_SUCCESS, actionResult);
-        return data;
-      };
-      const reject = (e: Error) => {
-        logger.warn(`action ${action} has failed`, e);
-        const actionResult: IActionResultError = {
-          action,
-          component: definition,
-          error: e,
-        };
-        this.kernel.emit(ACTIONS_ERROR, actionResult);
-        // throw e; TODO: Should i throw or not ?
-      };
+      const action = actions[propertyKey];
+      const resolve = this.actionResolveFactory(logger, definition, action);
+      const reject = this.actionRejectFactory(logger, definition, action);
+
       instance[propertyKey + "$$copy"] = instance[propertyKey];
-      instance[propertyKey] = function actionWrapper() {
+      instance[propertyKey] = function actionWrapper(event: any) {
         try {
-          logger.trace(`run ${action}`);
+          logger.trace(`run ${action.name}`);
           const data = instance[propertyKey + "$$copy"].apply(instance, arguments);
           if (!!data && !!data.then && !!data.catch) {
             return data.then(resolve).catch(reject);
@@ -135,5 +123,55 @@ export class ComponentInjector {
     if (typeof instance.__free__ === "function") {
       instance.__free__();
     }
+  }
+
+  /**
+   *
+   * @param logger
+   * @param definition
+   * @param action
+   * @return {(data:any)=>any}
+   */
+  protected actionResolveFactory(logger: Logger, definition: IClass, action: IActionMetadata) {
+    return (data: any) => {
+
+      logger.debug(`action ${action.name} is done`);
+
+      const actionResult: IActionResult<any> = {
+        action: action.name,
+        component: definition,
+        data,
+      };
+
+      this.kernel.emit(ACTIONS_SUCCESS, actionResult);
+
+      // you should't returns data, this is useless
+      // -> catch data with emitter
+      return data;
+    };
+  }
+
+  /**
+   *
+   * @param logger
+   * @param definition
+   * @param action
+   * @return {(e:Error)=>undefined}
+   */
+  protected actionRejectFactory(logger: Logger, definition: IClass, action: IActionMetadata) {
+    return (e: Error) => {
+
+      logger.warn(`action ${action.name} has failed`, e);
+
+      const actionResult: IActionResultError = {
+        action: action.name,
+        component: definition,
+        error: e,
+      };
+
+      this.kernel.emit(ACTIONS_ERROR, actionResult);
+
+      // do not throw the error, this is useless
+    };
   }
 }
