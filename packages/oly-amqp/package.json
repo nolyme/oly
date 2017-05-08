@@ -1,6 +1,6 @@
 {
-  "name": "oly-queue",
-  "description": "oly-queue",
+  "name": "oly-amqp",
+  "description": "oly-amqp",
   "version": "0.9.0",
   "license": "MIT",
   "main": "lib/index.js",
