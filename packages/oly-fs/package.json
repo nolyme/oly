@@ -1,7 +1,7 @@
 {
   "name": "oly-fs",
   "description": "oly-fs",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -18,10 +18,10 @@
     "fs-promise": "2.0.2"
   },
   "devDependencies": {
-    "oly-core": "^0.9.0"
+    "oly-core": "^0.9.1"
   },
   "peerDependencies": {
-    "oly-core": "^0.9.0"
+    "oly-core": "^0.9.1"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
