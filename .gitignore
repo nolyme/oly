@@ -3,7 +3,6 @@
 /node_modules
 /packages/*/node_modules
 /packages/*/lib
-/packages/*/coverage
 /packages/*/out
 /.idea
 *.log
@@ -16,3 +15,4 @@
 /packages/oly/**/*.d.ts
 /docs
 doc.json
+coverage

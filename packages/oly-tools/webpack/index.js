@@ -109,6 +109,13 @@ function createConfiguration(options) {
     ]
   };
 
+  config.resolveLoader = {
+    modules: [
+      path.join(root, 'node_modules'),
+      path.join(__dirname, '../node_modules')
+    ]
+  };
+
   config.output = {
     path: options.dist,
     filename: isProduction ? '[name].[hash].js' : '[name].js'
