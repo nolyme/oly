@@ -1,6 +1,5 @@
 import { copy, exists, mkdirp, move, readFile, remove, writeFile } from "fs-extra";
 import { inject, Logger } from "oly-core";
-import { dirname } from "path";
 
 /**
  *
