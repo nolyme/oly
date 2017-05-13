@@ -1,7 +1,7 @@
 {
   "name": "oly-amqp",
   "description": "oly-amqp",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -17,11 +17,11 @@
     "amqplib": "0.5.1"
   },
   "devDependencies": {
-    "oly-core": "^0.9.1",
-    "oly-test": "^0.9.1"
+    "oly-core": "^0.9.2",
+    "oly-test": "^0.9.2"
   },
   "peerDependencies": {
-    "oly-core": "^0.9.1"
+    "oly-core": "^0.9.2"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
