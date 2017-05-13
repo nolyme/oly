@@ -1,23 +1,16 @@
 {
   "name": "oly",
-  "version": "0.9.0",
-  "home": "README.md",
   "manuals": [
     "manuals/concepts.md"
   ],
   "modules": [
     {
-      "home": "README.md",
       "name": "oly-core",
-      "dependencies": [],
       "decorators": [
         "decorators/env",
         "decorators/inject",
         "decorators/on",
         "decorators/state"
-      ],
-      "env": [
-
       ],
       "services": [
         "Kernel.ts",
@@ -25,44 +18,25 @@
       ]
     },
     {
-      "home": "README.md",
       "name": "oly-http",
-      "dependencies": [
-        "oly-core"
-      ],
       "decorators": [],
-      "env": [
-
-      ],
       "services": [
         "providers/HttpServerProvider.ts",
         "services/HttpClient.ts"
       ]
     },
     {
-      "home": "README.md",
       "name": "oly-mapper",
-      "dependencies": [
-        "oly-core"
-      ],
       "decorators": [
         "decorators/array.ts",
         "decorators/field.ts"
       ],
       "services": [
         "ObjectMapper.ts"
-      ],
-      "env": [
       ]
     },
     {
-      "home": "README.md",
       "name": "oly-api",
-      "dependencies": [
-        "oly-core",
-        "oly-http",
-        "oly-mapper"
-      ],
       "decorators": [
         "decorators/router",
         "decorators/get",
@@ -74,19 +48,12 @@
         "decorators/body",
         "decorators/use"
       ],
-      "env": [
-
-      ],
       "services": [
         "providers/ApiProvider.ts"
       ]
     },
     {
-      "home": "README.md",
       "name": "oly-react",
-      "dependencies": [
-        "oly-core"
-      ],
       "decorators": [
         "core/decorators/action",
         "core/decorators/attach",
@@ -96,9 +63,6 @@
         "router/decorators/pageLayout",
         "router/decorators/query",
         "router/decorators/path"
-      ],
-      "env": [
-        "index.ts"
       ],
       "services": [
         "router/providers/ReactBrowserProvider.ts",

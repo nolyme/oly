@@ -22,23 +22,13 @@
     "publish": "lerna publish --force-publish=*"
   },
   "jest": {
-    "testEnvironment": "node",
-    "testRegex": "(Test)\\.(ts|tsx)$",
+    "preset": "./jest-preset.json",
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "ts",
-      "tsx"
-    ],
-    "mapCoverage": true,
     "collectCoverageFrom": [
       "packages/**/src/**/*.{ts,tsx}"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/packages/oly-core/polyfill",
     "globals": {
       "__TS_CONFIG__": "packages/oly-core/test/tsconfig.json"
     }
