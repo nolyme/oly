@@ -1,6 +1,5 @@
-import { Channel, connect, Connection, Message, Options, Replies } from "amqplib";
+import { Channel, connect, Connection, Options, Replies } from "amqplib";
 import { env, inject, Kernel, Logger, state } from "oly-core";
-import { ITaskData } from "../interfaces";
 import PurgeQueue = Replies.PurgeQueue;
 
 /**
@@ -8,10 +7,10 @@ import PurgeQueue = Replies.PurgeQueue;
  */
 export class AmqpProvider {
 
-  @env("OLY_QUEUE_CONCURRENCY")
-  public readonly concurrency: number = 1;
-
-  @env("OLY_QUEUE_URL")
+  /**
+   *
+   */
+  @env("OLY_AMQP_URL")
   public readonly url: string = "amqp://localhost";
 
   @state()
@@ -34,22 +33,12 @@ export class AmqpProvider {
    * @param payload     Custom data
    * @param options     Amqp publish options
    */
-  public publish(queue: string, payload: object = {}, options: Options.Publish = {}): boolean {
-    this.logger.debug(`publish into ${queue}`, payload);
-    return this.channel.sendToQueue(queue, new Buffer(JSON.stringify({
-      attempts: 0,
-      id: this.kernel.id,
-      payload,
-    })), options);
-  }
+  public publish(queue: string, payload: string = "", options: Options.Publish = {}): boolean {
+    this.logger.debug(`publish into ${queue}`);
 
-  /**
-   * Parse message content.
-   *
-   * @param message  Amqp message
-   */
-  public extract(message: Message): ITaskData {
-    return JSON.parse(message.content.toString());
+    options.correlationId = this.kernel.id;
+
+    return this.channel.sendToQueue(queue, new Buffer(payload), options);
   }
 
   /**
@@ -65,7 +54,6 @@ export class AmqpProvider {
     this.logger.info(`connect to ${this.url}`);
     this.connection = await connect(this.url);
     this.channel = await this.connection.createChannel();
-    await this.channel.prefetch(this.concurrency);
   }
 
   protected async onStop() {
