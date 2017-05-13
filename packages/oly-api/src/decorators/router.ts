@@ -1,30 +1,14 @@
-import { CommonUtil, IClass, injectable } from "oly-core";
-import { IRouterOptions } from "../interfaces";
-import { RouterMetadataUtil } from "../utils/KoaRouterUtil";
+import { router as $router } from "oly-router";
 
 /**
- * Controller/Router options.
+ * Example of router decorator.
  *
  * ```typescript
- *  @router({prefix: '/'})
+ *  @router("/")
  * class A {}
  * ```
  *
- * @param options     Define a prefix
+ * @decorator         Class
+ * @param prefix      Define a prefix before each route of the router
  */
-export const router =
-  (options?: IRouterOptions | string): ClassDecorator =>
-    (target: IClass): IClass => {
-
-      const props = typeof options === "string"
-        ? {prefix: options}
-        : options;
-
-      const routerMetadata = RouterMetadataUtil.getRouter(target);
-
-      if (!!props) {
-        RouterMetadataUtil.setRouter(target, CommonUtil.assign({}, routerMetadata, props));
-      }
-
-      return injectable()(target);
-    };
+export const router = $router;

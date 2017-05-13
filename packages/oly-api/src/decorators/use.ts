@@ -1,9 +1,11 @@
 import { KoaMiddleware } from "oly-http";
-import { RouterMetadataUtil } from "../utils/KoaRouterUtil";
+import { RouterMetadataUtil } from "oly-router";
 
 /**
  * It's like Koa#use() but with decorators.
- * This is action scoped only for now. TODO: controller scope.
+ * This is action scoped only for now.
+ *
+ * TODO: same for ClassDecorator
  *
  * ```typescript
  * class A {

@@ -1,5 +1,5 @@
 import { MetadataUtil } from "oly-core";
-import { arg } from "./arg";
+import { arg } from "oly-router";
 
 /**
  * Annotate parameter as request query with a name.

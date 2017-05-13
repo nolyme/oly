@@ -24,8 +24,17 @@ export class RouterMetadataUtil {
    * @param target    Class
    * @param router    Router metadata
    */
-  public static setRouter(target: IClass | IAnyFunction, router: IRouterMetadata) {
+  public static setRouter(target: IClass | IAnyFunction, router: IRouterMetadata): void {
     MetadataUtil.set(lyRouter, router, target);
+  }
+
+  /**
+   * Has metadata.
+   *
+   * @param target    Class
+   */
+  public static hasRouter(target: IClass | IAnyFunction): boolean {
+    return MetadataUtil.has(lyRouter, target);
   }
 
   /**

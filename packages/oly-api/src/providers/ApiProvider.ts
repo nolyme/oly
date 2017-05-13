@@ -1,7 +1,7 @@
 import * as koaBodyParser from "koa-bodyparser";
-import { env, IAnyDeclaration, IDeclarations, inject, Logger, MetadataUtil } from "oly-core";
+import { env, IClass, IDeclarations, inject, Logger } from "oly-core";
 import { HttpError, HttpServerProvider, KoaMiddleware, mount } from "oly-http";
-import { lyRouter } from "../constants";
+import { RouterMetadataUtil } from "oly-router";
 import { IKoaRouter } from "../interfaces";
 import { root } from "../middlewares/root";
 import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
@@ -11,6 +11,9 @@ import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
  */
 export class ApiProvider {
 
+  /**
+   * Define a global namespace to your path api.
+   */
   @env("OLY_API_PREFIX")
   public prefix: string = "/api";
 
@@ -47,6 +50,30 @@ export class ApiProvider {
   }
 
   /**
+   * Transform controller to KoaRouter and push it to Koa.
+   *
+   * @param definition   Class with Router Metadata
+   */
+  public register(definition: IClass): void {
+    const router = this.koaRouterBuilder.createFromDefinition(definition);
+    this.logRouter(router, definition);
+    this.mountRouter(router);
+  }
+
+  /**
+   * Auto create controllers.
+   *
+   * @param declarations    List of declaration (kernel dependencies)
+   */
+  public scan(declarations: IDeclarations): void {
+    for (const declaration of declarations) {
+      if (RouterMetadataUtil.hasRouter(declaration.definition)) {
+        this.register(declaration.definition);
+      }
+    }
+  }
+
+  /**
    * Default koa body parser.
    */
   protected useBodyParser() {
@@ -59,18 +86,10 @@ export class ApiProvider {
    * @param declarations
    */
   protected async onStart(declarations: IDeclarations) {
-
     this.useBodyParser();
     this.use(root());
     this.logger.info(`prefix api with ${this.prefix}`);
-
-    for (const declaration of declarations) {
-      if (MetadataUtil.has(lyRouter, declaration.definition)) {
-        const router = this.koaRouterBuilder.createFromDefinition(declaration.definition);
-        this.logRouter(router, declaration);
-        this.mountRouter(router);
-      }
-    }
+    this.scan(declarations);
   }
 
   /**
@@ -91,14 +110,14 @@ export class ApiProvider {
    * Show routes on start up.
    *
    * @param router         Koa router instance
-   * @param declaration    Dependency used with this router
+   * @param definition     Dependency definition used with this router
    */
-  protected logRouter(router: IKoaRouter, declaration: IAnyDeclaration) {
-    this.logger.trace(`prepare ${declaration.definition.name}`);
+  protected logRouter(router: IKoaRouter, definition: IClass) {
+    this.logger.trace(`prepare ${definition.name}`);
     for (const layer of router.stack) {
       const method = layer.methods[layer.methods.length - 1];
       const path = (this.prefix + layer.path).replace(/\/\//, "/");
-      this.logger.debug(`mount ${method} ${path} -> ${declaration.definition.name}#${(layer as any).propertyKey}()`);
+      this.logger.debug(`mount ${method} ${path} -> ${definition.name}#${(layer as any).propertyKey}()`);
     }
   }
 }

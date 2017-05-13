@@ -2,9 +2,9 @@ import * as KoaRouter from "koa-router";
 import { _, IClass } from "oly-core";
 import { HttpError, IKoaContext } from "oly-http";
 import { FieldMetadataUtil, ObjectMapper } from "oly-mapper";
+import { RouterMetadataUtil } from "oly-router";
 import { IRoute, IUploadedFile } from "../interfaces";
 import { end } from "../middlewares/end";
-import { RouterMetadataUtil } from "../utils/KoaRouterUtil";
 
 /**
  * koa-router build based on metadata.

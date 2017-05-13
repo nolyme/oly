@@ -1,11 +1,9 @@
-import { IEnv } from "../env";
-
 /**
  * Global store interface.
  */
-export type IStore = IEnv & {
+export interface IStore {
   [key: string]: any;
-};
+}
 
 /**
  * Virtual state metadata.
@@ -13,6 +11,7 @@ export type IStore = IEnv & {
 export interface IVirtualStateMetadata {
   name?: string;
   readonly: boolean;
+  type: any;
 }
 
 /**

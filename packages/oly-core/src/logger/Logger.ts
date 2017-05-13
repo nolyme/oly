@@ -31,9 +31,15 @@ export class Logger {
     WARN: "yellow",
   };
 
+  /**
+   * Set a name to your app.
+   */
   @env("OLY_APP_NAME")
   protected appName = "MyApp";
 
+  /**
+   * Set the level of your logger.
+   */
   @env("OLY_LOGGER_LEVEL")
   protected logLevel = "INFO";
 

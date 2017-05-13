@@ -337,8 +337,6 @@ export class Kernel {
     }
 
     if (typeof newValue !== "undefined") {
-      newValue = _.parseNumberAndBoolean(newValue);
-
       if (this.store[identifier] !== newValue) {
         const mutation: IStateMutate = {key: identifier, newValue, oldValue: this.store[identifier]};
         this.store[identifier] = newValue;
@@ -357,7 +355,8 @@ export class Kernel {
    * @param key   Identifier as string who defined the value
    */
   public env(key: string): any {
-    return this.state(key);
+    const value = this.state(key);
+    return _.parseNumberAndBoolean(value);
   }
 
   /**
@@ -594,24 +593,22 @@ export class Kernel {
         }
       }
 
-      const attributes: PropertyDescriptor = {
-        get: () => {
-          return this.state(chunkName);
-        },
-      };
-
       if (chunk.readonly !== true) {
         // state can be updated
-        attributes.set = (newValue) => {
-          return this.state(chunkName, newValue);
-        };
-      } else if (typeof this.state(chunkName) === "undefined") {
-        // when readonly + no default value, env is useless so we throw an error
-        // for avoiding this, you need to set env = null
-        throw errors.envNotDefined(chunkName);
+        Object.defineProperty(instance, propertyKey, {
+          get: () => this.env(chunkName),
+          set: (newValue) => this.state(chunkName, newValue),
+        });
+      } else {
+        if (typeof this.state(chunkName) === "undefined") {
+          // when readonly + no default value, env is useless so we throw an error
+          // for avoiding this, you need to set env = null
+          throw errors.envNotDefined(chunkName);
+        }
+        Object.defineProperty(instance, propertyKey, {
+          get: () => this.env(chunkName),
+        });
       }
-
-      Object.defineProperty(instance, propertyKey, attributes);
     }
 
     return instance;

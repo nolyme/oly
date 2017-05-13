@@ -1,4 +1,3 @@
-export * from "./env";
 export * from "./decorators/state";
 export * from "./decorators/env";
 export * from "./decorators/inject";

@@ -1,4 +1,4 @@
-import { route } from "./route";
+import { route } from "oly-router";
 
 /**
  * Create a POST route.

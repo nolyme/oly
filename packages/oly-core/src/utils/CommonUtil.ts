@@ -129,10 +129,10 @@ export class CommonUtil {
   }
 
   /**
-   *
+   * Class A { b() {} } -> "A.b".
    */
   public static targetToString(target: IClass, propertyKey: string): string {
-    return `${target.name || _.shortid()}#${propertyKey}`;
+    return `${target.name}.${propertyKey}`;
   }
 
   /**

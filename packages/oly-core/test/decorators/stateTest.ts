@@ -12,7 +12,7 @@ describe("@state", () => {
 
     deepEqual(
       MetadataUtil.get(lyStates, A),
-      {b: {readonly: false, name: "B"}},
+      {b: {readonly: false, name: "B", type: String}},
     );
   });
   it("should allow no-name", () => {
@@ -23,7 +23,7 @@ describe("@state", () => {
 
     deepEqual(
       MetadataUtil.get(lyStates, A),
-      {b: {readonly: false, name: undefined}},
+      {b: {readonly: false, name: undefined, type: String}},
     );
   });
 });

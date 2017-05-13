@@ -18,7 +18,8 @@
     "@types/koa-router": "7.0.22",
     "koa-bodyparser": "3.2.0",
     "koa-multer": "1.0.1",
-    "koa-router": "7.1.1"
+    "koa-router": "7.1.1",
+    "oly-router": "^0.9.1"
   },
   "devDependencies": {
     "oly-core": "^0.9.1",

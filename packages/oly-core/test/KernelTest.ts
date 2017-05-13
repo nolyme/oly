@@ -154,24 +154,29 @@ describe("Kernel", () => {
         onStart = () => stack.push("A");
         onStop = () => stack.push("H");
       }
+
       class B {
         @inject a: A;
         onStart = () => stack.push("B");
       }
+
       class C {
         @inject a: A;
         onStart = () => stack.push("C");
       }
+
       class D {
         @inject b: B;
         @inject c: C;
         onStart = () => stack.push("D");
       }
+
       class E {
         @inject d: D;
         @inject c: D;
         onStart = () => stack.push("E");
       }
+
       class F {
         @inject e: E;
         @inject a: A;
@@ -189,11 +194,13 @@ describe("Kernel", () => {
     });
     it("should handle error", async () => {
       const ef = () => new Error("FAIL");
+
       class A {
         onStart() {
           throw ef();
         }
       }
+
       await equalException(() => createKernel().with(A).start(), ef());
     });
   });
@@ -220,7 +227,7 @@ describe("Kernel", () => {
         @state() data = "SECRET";
       }
 
-      equal(createKernel().with(A).state("A#data"), "SECRET");
+      equal(createKernel().with(A).state(_.targetToString(A, "data")), "SECRET");
     });
 
     it("should use NODE_ENV", () => {
@@ -228,12 +235,15 @@ describe("Kernel", () => {
     });
 
     it("should parse boolean", () => {
-      equal(createKernel({ok: "true"}).state("ok"), true);
-      equal(createKernel({ok: "false"}).state("ok"), false);
+      equal(createKernel({ok: "true"}).env("ok"), true);
+      equal(createKernel({ok: "true"}).state("ok"), "true");
+      equal(createKernel({ok: "false"}).env("ok"), false);
+      equal(createKernel({ok: "false"}).state("ok"), "false");
     });
 
     it("should parse number", () => {
-      equal(createKernel({port: "8080"}).state("port"), 8080);
+      equal(createKernel({port: "8080"}).env("port"), 8080);
+      equal(createKernel({port: "8080"}).state("port"), "8080");
     });
 
     it("should define a name to anonymous states", () => {
@@ -241,13 +251,15 @@ describe("Kernel", () => {
       class A {
         @state("X") x = "y";
         @state() w = "z";
-        @state m = "l";
+        @state m = "1";
       }
+
       const k = createKernel().with(A);
       equal(k.state("X"), "y");
       equal(k.state("Y"), null);
-      equal(k.state("A#w"), "z");
-      equal(k.state("A#m"), "l");
+      equal(k.state(_.targetToString(A, "w")), "z");
+      equal(k.state(_.targetToString(A, "m")), "1");
+      equal(k.env(_.targetToString(A, "m")), 1);
     });
 
     it("should reject undefined readonly state", async () => {
@@ -267,6 +279,7 @@ describe("Kernel", () => {
     class A {
       data = "a";
     }
+
     class B {
       @state() data = "a";
     }
@@ -304,6 +317,7 @@ describe("Kernel", () => {
       class C {
         @state() data: string;
       }
+
       const parent = new Kernel().with(C);
       const child = parent.fork();
       child.get(C).data = "c";
@@ -345,26 +359,38 @@ describe("Kernel", () => {
     });
   });
 
-  describe("implicit swapping", () => {
+  describe("#swap()", () => {
 
-    class B {
-      c = "C";
-    }
+    it("should swap 'provide' with 'use'", () => {
+      class B {
+        c = "C";
+      }
 
-    class BMock {
-      c = "MOCK";
-    }
+      class BMock {
+        c = "MOCK";
+      }
 
-    class A {
-      @inject b: B;
-    }
+      class A {
+        @inject b: B;
+      }
 
-    it("should use the mock", () => {
       const kernel = createKernel().with({provide: B, use: BMock}, A);
       equal(kernel.get(A).b.c, "MOCK");
     });
 
-    it("should reject mocking (too late)", () => {
+    it("should reject mocking when it's too late", () => {
+      class B {
+        c = "C";
+      }
+
+      class BMock {
+        c = "MOCK";
+      }
+
+      class A {
+        @inject b: B;
+      }
+
       try {
         createKernel().with(A).with({provide: B, use: BMock});
         throw new Error("");
@@ -373,11 +399,12 @@ describe("Kernel", () => {
       }
     });
 
-    it("should register swapping as correct identity", () => {
+    it("should register swapping with identity", () => {
 
       class A {
         b = "c";
       }
+
       class A2 {
         b = "d";
       }
@@ -395,55 +422,54 @@ describe("Kernel", () => {
       // you can break the rule with lambda
       const k2 = createKernel();
       const a2 = k2.get({provide: A, use: (k) => k.get(A2, {register: false})}); // this is allowed
+
       // but now, 'use' cannot be a research criteria
       equal(a2.b, "d");
       a2.b = "e";
       equal(k2.get(A2).b, "d");
     });
-  });
-  describe("explicit swapping", () => {
-
-    const stack: string[] = [];
-
-    class A {
-      b = () => "c";
-    }
-
-    class A2 extends A {
-      b = () => "d";
-    }
-
-    class A3 extends A2 {
-      b = () => "e";
-    }
-
-    @injectable({
-      provide: A,
-    })
-    class A4 extends A2 {
-      b = () => "f";
-    }
-
-    class A5 extends A4 {
-      b = () => "g";
-    }
-
-    @injectable({
-      provide: A4,
-    })
-    class A6 extends A4 {
-      b = () => "h";
-    }
-
-    class B {
-      @inject a: A;
-
-      onStart() {
-        stack.push(this.a.b());
-      }
-    }
 
     it("should respect explicit swapping", async () => {
+
+      const stack: string[] = [];
+
+      class A {
+        b = () => "c";
+      }
+
+      class A2 extends A {
+        b = () => "d";
+      }
+
+      class A3 extends A2 {
+        b = () => "e";
+      }
+
+      @injectable({
+        provide: A,
+      })
+      class A4 extends A2 {
+        b = () => "f";
+      }
+
+      class A5 extends A4 {
+        b = () => "g";
+      }
+
+      @injectable({
+        provide: A4,
+      })
+      class A6 extends A4 {
+        b = () => "h";
+      }
+
+      class B {
+        @inject a: A;
+
+        onStart() {
+          stack.push(this.a.b());
+        }
+      }
 
       await createKernel().with({provide: A, use: A3}, B).start();
       await createKernel().with(A3, B).start();
@@ -465,6 +491,7 @@ describe("Kernel", () => {
       equal(stack.join(""), "eccfcggh");
     });
   });
+
   describe("#emit()", () => {
 
     it("should wait event", async () => {
@@ -477,7 +504,8 @@ describe("Kernel", () => {
       class App {
         @state("counter") counter = 0;
 
-        @on("inc") inc() {
+        @on("inc")
+        inc() {
           this.counter += 1;
         }
       }
@@ -531,18 +559,19 @@ describe("Kernel", () => {
       expect(inc).toBe(1);
     });
 
-    it("should fork", async () => {
+    it("should fork kernel with events", async () => {
 
       class A {
         @inject k: Kernel;
 
-        @on b() {
+        @on
+        b() {
           return this.k.id;
         }
       }
 
       const kernel = createKernel().with(A);
-      const [id] = await kernel.emit("A#b", null, {fork: true});
+      const [id] = await kernel.emit(_.targetToString(A, "b"), null, {fork: true});
       expect(id.length).toBe(25); // 12 + 1 + 12
     });
   });

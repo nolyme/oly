@@ -1,4 +1,4 @@
-import { arg } from "./arg";
+import { arg } from "oly-router";
 import { use } from "./use";
 
 export const multer: any = require("koa-multer"); // tslint:disable-line
