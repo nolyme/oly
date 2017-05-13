@@ -1,13 +1,9 @@
-import { env } from "oly-core";
 import { attach, Go } from "oly-react";
 import * as React from "react";
 import { IDoc, IModuleContent } from "../../src/interfaces";
 
 @attach
-export class Home extends React.Component<{}, {}> {
-
-  @env("DOC")
-  private doc: IDoc;
+export class Home extends React.Component<{ doc: IDoc }, {}> {
 
   public renderModule(m: IModuleContent) {
     return (
@@ -20,8 +16,7 @@ export class Home extends React.Component<{}, {}> {
   public render() {
     return (
       <div className="pt-card">
-        {this.doc.modules.map((m) => this.renderModule(m))}
-        <div dangerouslySetInnerHTML={{__html: this.doc.home}}/>
+        <div dangerouslySetInnerHTML={{__html: this.props.doc.home}}/>
       </div>
     );
   }

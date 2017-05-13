@@ -1,8 +1,11 @@
+import { FocusStyleManager } from "@blueprintjs/core";
 import { Kernel, USE_NODE_ENV } from "oly-core";
 import { Browser, ReactBrowserProvider } from "oly-react";
 import { HashBrowser } from "oly-react/lib/router/services/HashBrowser";
 import { App } from "./App";
 import { AppModule } from "./module/AppModule";
+
+FocusStyleManager.onlyShowFocusOnTabs();
 
 new Kernel({
   DOC: process.env.DOC,

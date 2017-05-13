@@ -1,13 +1,14 @@
-import { inject, on, state } from "oly-core";
-import { attach, Go, Router, TRANSITION_FINISH } from "oly-react";
+import { inject } from "oly-core";
+import { attach, Go, Router, styles } from "oly-react";
 import * as React from "react";
 
 @attach
+@styles(() => require("./Breadcrumbs.scss"))
 export class Breadcrumbs extends React.Component<{}, {}> {
 
   @inject private router: Router;
   private steps: string[];
-  @state private stepsAllowed: string[];
+  private stepsAllowed: string[];
 
   private blackList = [
     "m", "s", "@",
@@ -18,15 +19,6 @@ export class Breadcrumbs extends React.Component<{}, {}> {
     method: (method) => `#${method}()`,
     module: (module) => module.replace("oly-", ""),
   };
-
-  public componentWillMount() {
-    this.build();
-  }
-
-  @on(TRANSITION_FINISH)
-  public transition() {
-    this.build();
-  }
 
   public transform(value: string): string {
     const history: any = this.router.history;
@@ -43,10 +35,8 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   }
 
   public build() {
-    console.log("BUILD");
     this.steps = this.router.current.pathname.split("/").filter((s) => !!s);
-    this.stepsAllowed = this.steps
-      .filter((s) => this.blackList.indexOf(s) === -1);
+    this.stepsAllowed = this.steps.filter((s) => this.blackList.indexOf(s) === -1);
   }
 
   public chain(item: any): string {
@@ -54,23 +44,25 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   }
 
   public render() {
-    console.log("RENDER");
+    this.build();
     return (
-      <div>
+      <div className="breadcrumbs">
+        {this.stepsAllowed.length > 0 &&
         <ul className="pt-breadcrumbs">
-          <li><Go className="pt-breadcrumb" to="/">oly</Go></li>
-          {
-            this.stepsAllowed.map((s, index) => (
-              <li key={s}>
-                {
-                  (index === this.stepsAllowed.length - 1)
-                    ? <span className="pt-breadcrumb pt-breadcrumb-current">{this.transform(s)}</span>
-                    : <Go className="pt-breadcrumb" to={`/${this.chain(s)}`}>{this.transform(s)}</Go>
-                }
-              </li>
-            ))
-          }
+          <li>
+            <Go className="pt-breadcrumb" to="/">
+              <span className="pt-icon-standard pt-icon-home breadcrumb-icon"/>
+            </Go>
+          </li>
+          {this.stepsAllowed.map((s, index) => (
+            <li key={s}>
+              {(index === this.stepsAllowed.length - 1)
+                ? <span className="pt-breadcrumb pt-breadcrumb-current">{this.transform(s)}</span>
+                : <Go className="pt-breadcrumb" to={`/${this.chain(s)}`}>{this.transform(s)}</Go>}
+            </li>
+          ))}
         </ul>
+        }
       </div>
     );
   }

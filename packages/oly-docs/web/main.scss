@@ -1,30 +1,59 @@
-@import "~@blueprintjs/core/dist/variables";
-
-$icon-font-path: "~@blueprintjs/core/resources/icons";
-$pt-app-background-color: $white;
-$pt-dark-app-background-color: $dark-gray1;
-$pt-border-radius: 0;
-
+@import "variables";
 @import "~@blueprintjs/core/src/blueprint";
 @import "~highlight.js/styles/railscasts";
+@import "~lato-font/scss/lato-font";
 
 html, body, #app {
   margin: 0;
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
-  background-color: $pt-app-background-color;
+  background-color: whitesmoke;
+  padding-top: $pt-navbar-height;
 }
 
-.oly-title {
-  font-weight: 300;
-  padding-left: 10px;
-  padding-right: 10px;
+.pt-navbar.pt-dark {
+  top: 0;
+  position: fixed;
+  width: 100%;
+  background: linear-gradient(to bottom, $pt-intent-primary, darken($pt-intent-primary, 10%));
+  border-bottom: 1px solid $white;
+  .pt-tab {
+    padding: 0;
+    width: 64px;
+    text-align: center;
+    margin-right: 0;
+    &.title {
+      height: 50px;
+      font-weight: 200;
+      font-size: 24px;
+      line-height: 46px;
+    }
+    &.with-icon {
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+  }
+  .pt-tab[aria-selected="true"], .pt-tab:not([aria-disabled="true"]):hover {
+    color: $white;
+    background: rgba($white, .1);
+  }
+  .pt-tab-indicator {
+    background-color: $white;
+  }
+}
+
+.readme {
+  background-color: $white;
+  padding: 20px;
+  margin: 40px;
+  border: 2px solid $light-gray2;
 }
 
 .container {
-  margin: 0 40px;
+  width: 1040px;
+  margin: auto;
 }
 
 .flex {

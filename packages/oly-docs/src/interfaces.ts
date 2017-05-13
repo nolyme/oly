@@ -38,6 +38,7 @@ export interface IDocEnv {
 
 export interface IModuleContent {
   name: string;
+  icon?: string;
   home: string;
   dependencies: string[];
   services: IDocService[];

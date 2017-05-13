@@ -1,0 +1,12 @@
+@import "~@blueprintjs/core/dist/variables";
+@import "~lato-font/scss/internal/variables";
+
+$icon-font-path: "~@blueprintjs/core/resources/icons";
+$lato-font-path: "~lato-font/fonts";
+$pt-app-background-color: $white;
+$pt-dark-app-background-color: $dark-gray1;
+$pt-border-radius: 0;
+$pt-intent-primary: $indigo2;
+$pt-link-color: $indigo3;
+$pt-font-family: "Lato";
+$dark-popover-background-color: darken($pt-intent-primary, 20%);

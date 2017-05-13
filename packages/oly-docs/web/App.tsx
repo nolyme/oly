@@ -2,11 +2,11 @@ import { env, state } from "oly-core";
 import { page, page404, pageLayout, path } from "oly-react";
 import * as React from "react";
 import { IDoc, IModuleContent } from "../src/interfaces";
-import { AppModule } from "./module/AppModule";
-import { Module } from "./module/Module";
 import { Home } from "./layout/Home";
 import { Layout } from "./layout/Layout";
 import { NotFound } from "./layout/NotFound";
+import { AppModule } from "./module/AppModule";
+import { Module } from "./module/Module";
 
 export class App {
 
@@ -17,12 +17,12 @@ export class App {
 
   @pageLayout
   public layout() {
-    return Layout;
+    return (props: any) => <Layout doc={this.doc} {...props}/>;
   }
 
   @page("/")
   public index() {
-    return Home;
+    return <Home doc={this.doc}/>;
   }
 
   @page("/m/:module", {
