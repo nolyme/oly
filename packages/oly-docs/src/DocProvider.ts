@@ -36,7 +36,7 @@ export class DocProvider {
     }
 
     const doc: IDoc = {
-      home: this.parser.mark(readFileSync(resolve(this.cwd, config.home), "UTF-8")),
+      home: this.parser.mark(readFileSync(resolve(this.cwd, config.home || "README.md"), "UTF-8")),
       modules,
       name: config.name,
       version: config.version || pkg.version,
@@ -66,7 +66,7 @@ export class DocProvider {
       decorators: this.generateDecorator(app, sources, m.decorators),
       dependencies: m.dependencies,
       env: this.generateEnv(app, sources, m.services),
-      home: this.parser.mark(readFileSync(resolve(project, m.home), "UTF-8")),
+      home: this.parser.mark(readFileSync(resolve(project, m.home || "README.md"), "UTF-8")),
       name: m.name,
       services: this.generateService(app, sources, m.services),
     };
@@ -78,6 +78,7 @@ export class DocProvider {
     this.logger.debug(`write decorators (${declarations.length})`);
     return declarations
       .map((i) => i.children[i.children.length - 1])
+      .filter((i) => i.signatures)
       .map((i) => i.signatures[0])
       .map((i) => this.parser.mapDecorators(i))
       .map((i) => {
@@ -102,23 +103,21 @@ export class DocProvider {
   private generateEnv(app: Application, path: string, results: string[]): IDocEnv[] {
     this.logger.debug("check env");
     const declarations = this.generateDeclarations(app, path, results);
-    console.log(declarations[2].children);
-    // this.logger.debug(`write env (${declarations.length})`);
-    // const env = isCore
-    //   ? declarations.map((i) => i.children[0])
-    //   : declarations
-    //     .map((i) => i.children[0])
-    //     .map((i) => i.children[0]);
-    // if (env[0]) {
-    //   return env[0].children
-    //     .map((i) => this.parser.mapEnv(i))
-    //     .map((i) => {
-    //       this.logger.info(`push ${i.name}`);
-    //       return i;
-    //     });
-    // }
-    // this.logger.debug("env is empty");
-    return [];
+    return declarations.reduce<IDocEnv[]>((env, d) => env
+      .concat(d.children[0].children
+        .filter((m) => m.decorators && m.decorators[0].name === "env")
+        .map((m) => ({
+          default: m.defaultValue,
+          description: this.parser.getDescription(m),
+          name: m.decorators[0].arguments.name,
+          optional: m.defaultValue !== undefined,
+          target: m.parent.name,
+          type: this.parser.getType(m.type),
+        }))), [])
+      .map((i) => {
+        this.logger.info(`push ${i.name}`);
+        return i;
+      });
   }
 
   private generateDeclarations(app: Application, path: string, results: string[]): DeclarationReflection[] {

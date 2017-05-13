@@ -46,8 +46,9 @@ export class ObjectMapper {
       data = JSON.parse(data);
     }
 
-    return this.map(type, this.validate(type,
-      this.sanitize(type, data)));
+    return this.map(type,
+      this.validate(type,
+        this.sanitize(type, data)));
   }
 
   /**
@@ -112,7 +113,7 @@ export class ObjectMapper {
    * Ajv factory.
    */
   protected createAjv(): ajv.Ajv {
-    return new ajv();
+    return new ajv({ useDefaults: true });
   }
 
   /**

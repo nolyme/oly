@@ -512,11 +512,23 @@ export class Kernel {
    * @param definition      Class definition
    */
   protected isProvider(definition: IClass) {
-    return (
+
+    if (
       !!definition.prototype.onConfigure ||
       !!definition.prototype.onStart ||
       !!definition.prototype.onStop
-    );
+    ) {
+      return true;
+    }
+
+    const states: IVirtualStateMetadataMap = MetadataUtil.deep(lyStates, definition, {});
+    for (const propertyKey of Object.keys(states)) {
+      if (!states[propertyKey].readonly) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**

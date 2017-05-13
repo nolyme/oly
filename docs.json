@@ -38,7 +38,6 @@
     {
       "name": "oly-api",
       "decorators": [
-        "decorators/router",
         "decorators/get",
         "decorators/put",
         "decorators/post",
