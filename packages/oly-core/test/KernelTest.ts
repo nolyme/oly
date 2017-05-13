@@ -231,7 +231,10 @@ describe("Kernel", () => {
     });
 
     it("should use NODE_ENV", () => {
-      equal(createKernel({NODE_ENV: "production"}).isProduction(), true);
+      process.env.NODE_ENV = "production";
+      equal(createKernel().isProduction(), true);
+      process.env.NODE_ENV = "test";
+      equal(createKernel().isProduction(), false);
     });
 
     it("should parse boolean", () => {
@@ -242,8 +245,8 @@ describe("Kernel", () => {
     });
 
     it("should parse number", () => {
-      equal(createKernel({port: "8080"}).env("port"), 8080);
-      equal(createKernel({port: "8080"}).state("port"), "8080");
+      expect(createKernel({port: "8080"}).env("port")).toBe(8080);
+      expect(createKernel({port: "8080"}).state("port")).toBe("8080");
     });
 
     it("should define a name to anonymous states", () => {
