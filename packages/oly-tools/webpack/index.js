@@ -104,6 +104,7 @@ function createConfiguration(options) {
     // i have added ts and tsx for our typescript project
     extensions: ['.webpack.js', '.js', '.web.js', '.ts', '.tsx'],
     modules: [
+      "node_modules",
       path.join(root, 'node_modules'),
       path.join(__dirname, '../node_modules')
     ]
@@ -111,6 +112,7 @@ function createConfiguration(options) {
 
   config.resolveLoader = {
     modules: [
+      "node_modules",
       path.join(root, 'node_modules'),
       path.join(__dirname, '../node_modules')
     ]
