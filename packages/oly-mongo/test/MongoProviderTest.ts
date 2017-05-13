@@ -1,7 +1,24 @@
-import { equal } from "assert";
+import { field } from "oly-mapper";
+import { attachKernel } from "oly-test";
+import { Repository } from "../src/Repository";
 
 describe("MongoProvider", () => {
-  it("should be ok", () => {
-    equal(true, true);
+
+  class MyModel {
+    @field() name: string;
+  }
+
+  class MyRepository extends Repository.of(MyModel) {
+  }
+
+  const kernel = attachKernel();
+  const myRepository = kernel.get(MyRepository);
+
+  it("should save data", async () => {
+    await myRepository.clear();
+    expect(await myRepository.count()).toBe(0);
+    await myRepository.save({name: "Hello"});
+    expect(await myRepository.count()).toBe(1);
+    await myRepository.clear();
   });
 });

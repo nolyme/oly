@@ -1,6 +1,6 @@
 import { inject } from "oly-core";
 import { check, run } from "oly-test";
-import { FileService } from "../src/FileService";
+import { FileService } from "../src";
 import { WorkspaceProvider } from "../src/WorkspaceProvider";
 
 @run({

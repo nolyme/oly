@@ -1,5 +1,5 @@
 import { _, inject, Kernel } from "oly-core";
-import { cron } from "../src";
+import { cron } from "../src/annotations";
 import { CronProvider } from "../src/CronProvider";
 
 describe("CronProvider", () => {

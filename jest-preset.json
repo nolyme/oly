@@ -12,10 +12,6 @@
     "tsx"
   ],
   "mapCoverage": true,
-  "collectCoverageFrom": [
-    "src/**/*.{ts,tsx}"
-  ],
-  "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill",
   "globals": {
     "__TS_CONFIG__": "test/tsconfig.json"
   }

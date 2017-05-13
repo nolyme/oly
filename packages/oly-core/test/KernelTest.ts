@@ -10,7 +10,7 @@ import { IAnyFunction } from "../src/interfaces/types";
 import { Kernel } from "../src/Kernel";
 
 const createKernel = (options: object = {}) => {
-  return Kernel.create(_.assign({}, {OLY_LOGGER_LEVEL: "ERROR"}, options));
+  return Kernel.create(_.assign({}, {OLY_LOGGER_LEVEL: "ERROR"}, options, process.env));
 };
 
 const equalException = async (run: IAnyFunction, error: Error) => {

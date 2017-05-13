@@ -18,7 +18,8 @@
   },
   "devDependencies": {
     "oly-core": "^0.9.1",
-    "oly-mapper": "^0.9.1"
+    "oly-mapper": "^0.9.1",
+    "oly-test": "^0.9.1"
   },
   "peerDependencies": {
     "oly-core": "^0.9.1",

@@ -83,8 +83,8 @@ export abstract class Repository<T extends IDocument> {
       object = JSON.parse(object);
     }
 
-    if (typeof object['_id'] === "object") { // tslint:disable-line
-      object['_id'] = object['_id'].toString(); // tslint:disable-line
+    if (typeof object["_id"] === "object") { // tslint:disable-line
+      object["_id"] = object["_id"].toString(); // tslint:disable-line
     }
 
     if (this.type) {
@@ -210,6 +210,10 @@ export abstract class Repository<T extends IDocument> {
    */
   public count(query: object = {}): Promise<number> {
     return this.collection.count(query);
+  }
+
+  public async clear() {
+    await this.collection.deleteMany({});
   }
 
   /**
