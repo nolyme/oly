@@ -1,0 +1,31 @@
+{
+  "name": "oly-router",
+  "description": "oly-router",
+  "version": "0.9.1",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "router"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "oly-core": "^0.9.1"
+  },
+  "peerDependencies": {
+    "oly-core": "^0.9.1"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest-preset.json",
+    "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+  }
+}
