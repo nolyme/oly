@@ -20,6 +20,7 @@ describe("RouterMetadataUtil", () => {
       prefix: "/",
       routes: {
         a: {
+          api: {},
           args: {0: "body"},
           method: "GET",
           middlewares: [],
