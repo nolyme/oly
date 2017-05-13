@@ -47,7 +47,7 @@ import { MetadataUtil } from "./utils/MetadataUtil";
  * The child keep all the declarations but without any data (instances, store, ...).
  * No #start() nor #stop() are triggered. We assume that's already done by the parent.
  *
- * ```ts
+ * ```typescript
  * const kernel = new Kernel(store).with(...definitions);
  * await kernel.start();
  * ```
@@ -314,12 +314,10 @@ export class Kernel {
   /**
    * Getter/Setter for store and parent's store.
    *
-   * Immutability;
-   * References can be updated. This is the power of @state, everybody has the same value at the same time.
-   * However, it's dangerous and should be avoid on application layer.
+   * If key doesn't exists on this kernel, we will check on the parent.
    *
-   * Finally, even if you block the mutation with @env and the keyword "readonly",
-   * do not forget that you can always update the fields of an object.
+   * References can be updated. This is the power of @state, everybody has the same value at the same time.
+   * An event is fired on each mutation: "state:mutate" {@see IStateMutate}.
    *
    * @param identifier   Identifier as string who defined the value
    * @param newValue     Optional new value (setter mode)
@@ -349,8 +347,17 @@ export class Kernel {
 
   /**
    * Same as state, but "readonly".
-   * This is fake "readonly" if you set objects.
-   * You have to use only primitives (string, number, ...) for "env" to have true "readonly".
+   * This is fake "readonly" if you set objects!!!
+   * You have to use only primitives (string, number, ...) as "env" to have true "readonly".
+   * This is the under-the-hood of `@env()`.
+   *
+   * String numeric value are parsed to Number.
+   * String boolean are parsed to Boolean.
+   * ```typescript
+   * kernel = Kernel.create({a: "true"});
+   * kernel.env("a"); // true
+   * kernel.state("a"); // "true"
+   * ```
    *
    * @param key   Identifier as string who defined the value
    */
@@ -360,10 +367,17 @@ export class Kernel {
   }
 
   /**
+   * Register an event with a key (identifier) and an action.
+   * This is the under-the-hood of `@on()`.
    *
-   * @param key
-   * @param action
-   * @param options
+   * ```typescript
+   * kernel.on("wat", () => console.log("Hi!"));
+   * ```
+   *
+   * @param key             Event name
+   * @param action          What to do
+   * @param options         Listener options
+   * @param options.unique  If yes, event will be deleted on the first call
    */
   public on(key: string, action: IEventCallback | IEventReference, options: IKernelOnOptions = {}): IObserver {
     const unique = options.unique === true;
@@ -376,10 +390,13 @@ export class Kernel {
   }
 
   /**
+   * Fire an event.
    *
-   * @param key
-   * @param data
-   * @param options
+   * @param key               Event name
+   * @param data              Event data (parameters)
+   * @param options           Emitter options
+   * @param options.parent    If yes, event is sent to parent too
+   * @param options.fork      If yes, kernel is forked for each call
    */
   public emit(key: string, data?: any, options: IKernelEmitOptions = {}): Promise<any> {
     const promises = this.events
@@ -491,27 +508,15 @@ export class Kernel {
 
   /**
    * Check if a definition can be named as IProvider.
-   * Providers have mutable centralized state and hooks
-   * but they can't be injected after #start().
    *
    * @param definition      Class definition
    */
   protected isProvider(definition: IClass) {
-
-    if (!!definition.prototype.onConfigure ||
+    return (
+      !!definition.prototype.onConfigure ||
       !!definition.prototype.onStart ||
-      !!definition.prototype.onStop) {
-      return true;
-    }
-
-    const states: IVirtualStateMetadataMap = MetadataUtil.deep(lyStates, definition, {});
-    for (const propertyKey of Object.keys(states)) {
-      if (!states[propertyKey].readonly) {
-        return true;
-      }
-    }
-
-    return false;
+      !!definition.prototype.onStop
+    );
   }
 
   /**

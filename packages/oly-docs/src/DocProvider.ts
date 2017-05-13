@@ -28,16 +28,20 @@ export class DocProvider {
     const config = this.objectMapper.parse(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
+    const pkg = require(resolve(this.cwd, "package.json"));
+
     for (const m of config.modules) {
       modules.push(this.create(resolve(this.cwd, this.root, m.name), m));
       this.logger.debug(`module ${m.name} is created`);
     }
+
     const doc: IDoc = {
       home: this.parser.mark(readFileSync(resolve(this.cwd, config.home), "UTF-8")),
       modules,
       name: config.name,
-      version: config.version,
+      version: config.version || pkg.version,
     };
+
     if (this.json) {
       this.logger.debug(`write as json`);
       writeFileSync(resolve(output, "doc.json"), JSON.stringify(doc), "UTF-8");
@@ -61,7 +65,7 @@ export class DocProvider {
     return {
       decorators: this.generateDecorator(app, sources, m.decorators),
       dependencies: m.dependencies,
-      env: this.generateEnv(app, sources, m.env, m.name === "oly-core"),
+      env: this.generateEnv(app, sources, m.services),
       home: this.parser.mark(readFileSync(resolve(project, m.home), "UTF-8")),
       name: m.name,
       services: this.generateService(app, sources, m.services),
@@ -95,24 +99,25 @@ export class DocProvider {
       });
   }
 
-  private generateEnv(app: Application, path: string, results: string[], isCore = false): IDocEnv[] {
+  private generateEnv(app: Application, path: string, results: string[]): IDocEnv[] {
     this.logger.debug("check env");
     const declarations = this.generateDeclarations(app, path, results);
-    this.logger.debug(`write env (${declarations.length})`);
-    const env = isCore
-      ? declarations.map((i) => i.children[0])
-      : declarations
-        .map((i) => i.children[0])
-        .map((i) => i.children[0]);
-    if (env[0]) {
-      return env[0].children
-        .map((i) => this.parser.mapEnv(i))
-        .map((i) => {
-          this.logger.info(`push ${i.name}`);
-          return i;
-        });
-    }
-    this.logger.debug("env is empty");
+    console.log(declarations[2].children);
+    // this.logger.debug(`write env (${declarations.length})`);
+    // const env = isCore
+    //   ? declarations.map((i) => i.children[0])
+    //   : declarations
+    //     .map((i) => i.children[0])
+    //     .map((i) => i.children[0]);
+    // if (env[0]) {
+    //   return env[0].children
+    //     .map((i) => this.parser.mapEnv(i))
+    //     .map((i) => {
+    //       this.logger.info(`push ${i.name}`);
+    //       return i;
+    //     });
+    // }
+    // this.logger.debug("env is empty");
     return [];
   }
 

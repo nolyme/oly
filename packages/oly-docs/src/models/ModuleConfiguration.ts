@@ -1,10 +1,19 @@
 import { array, field } from "oly-mapper";
 
 export class ModuleConfiguration {
-  @field() public name: string;
-  @field() public home: string;
-  @array({of: String}) public decorators: string[];
-  @array({of: String}) public env: string[];
-  @array({of: String}) public services: string[];
-  @array({of: String}) public dependencies: string[];
+
+  @field()
+  public name: string;
+
+  @field({required: false})
+  public home?: string;
+
+  @array({of: String, default: []})
+  public decorators: string[];
+
+  @array({of: String, default: []})
+  public services: string[];
+
+  @array({of: String, default: []})
+  public dependencies: string[];
 }

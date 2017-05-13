@@ -2,9 +2,13 @@ import { array, field } from "oly-mapper";
 import { ModuleConfiguration } from "./ModuleConfiguration";
 
 export class Configuration {
+
   @field() public name: string;
-  @field() public home: string;
-  @field() public version: string;
+
+  @field({required: false}) public home?: string;
+
+  @field({required: false}) public version?: string;
+
   @array({
     of: ModuleConfiguration,
   })
