@@ -1,4 +1,4 @@
-import { lyStates } from "../constants/keys";
+import { designType, lyStates } from "../constants/keys";
 import { IVirtualStateMetadataMap } from "../interfaces/store";
 import { MetadataUtil } from "../utils/MetadataUtil";
 
@@ -19,6 +19,7 @@ export const env = (name: string): PropertyDecorator => (target: object, propert
   states[propertyKey] = {
     readonly: true,
     name,
+    type: MetadataUtil.getProp(designType, target, propertyKey),
   };
 
   MetadataUtil.set(lyStates, states, target.constructor);
