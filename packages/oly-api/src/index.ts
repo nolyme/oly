@@ -1,6 +1,4 @@
-export * from "./constants";
 export * from "./interfaces";
-export * from "./services/KoaRouterBuilder";
 export * from "./decorators/body";
 export * from "./decorators/del";
 export * from "./decorators/get";
@@ -13,4 +11,5 @@ export * from "./decorators/use";
 export * from "./decorators/upload";
 export * from "./middlewares/end";
 export * from "./middlewares/root";
+export * from "./services/KoaRouterBuilder";
 export * from "./providers/ApiProvider";

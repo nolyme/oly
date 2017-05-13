@@ -1,23 +1,16 @@
 # o*l*y test
 
-Helpers for oly+jest.
-
 ```typescript
+// DummyTest.ts
 import { Logger, inject } from "oly-core";
-import { test } from "oly-test";
+import { check } from "oly-test";
 
-export class AppTest {
+export class DummyTest {
   @inject logger: Logger;
   
-  @test something() {
-    this.logger.info("say something");
-    expect(true).toBe(true);
+  @check typeOfLoggerInfo() {
+    expect(typeof this.logger.info)
+      .toBe("function");
   }
 }
-```
-
-## Installation
-
-```bash
-$ npm install oly-core oly-test
 ```

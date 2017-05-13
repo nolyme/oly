@@ -1,4 +1,4 @@
-import { RouterMetadataUtil } from "oly-api";
+import { RouterMetadataUtil } from "oly-router";
 import { IRouteApi } from "../interfaces";
 
 /**

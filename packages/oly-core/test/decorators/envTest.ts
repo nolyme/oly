@@ -12,7 +12,7 @@ describe("@env", () => {
 
     deepEqual(
       MetadataUtil.get(lyStates, A),
-      {b: {readonly: true, name: "B"}},
+      {b: {readonly: true, name: "B", type: String}},
     );
   });
 });

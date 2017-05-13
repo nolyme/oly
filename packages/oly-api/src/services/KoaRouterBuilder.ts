@@ -2,8 +2,8 @@ import * as KoaRouter from "koa-router";
 import { _, IClass } from "oly-core";
 import { HttpError, IKoaContext } from "oly-http";
 import { FieldMetadataUtil, ObjectMapper } from "oly-mapper";
-import { RouterMetadataUtil } from "oly-router";
-import { IRoute, IUploadedFile } from "../interfaces";
+import { IRouteMetadata, RouterMetadataUtil } from "oly-router";
+import { IUploadedFile } from "../interfaces";
 import { end } from "../middlewares/end";
 
 /**
@@ -50,12 +50,10 @@ export class KoaRouterBuilder {
    * - current koa context (IKoaContext) which represents the incomming request
    * - router metadata (IRoute)
    *
-   * It's just a mapping.
-   *
    * @param ctx     Koa context
    * @param route   Route metadata
    */
-  public parseParamTypes(ctx: IKoaContext, route: IRoute): any[] {
+  public parseParamTypes(ctx: IKoaContext, route: IRouteMetadata): any[] {
     return Object.keys(route.args).map((index) => {
 
       if (!route.args) {

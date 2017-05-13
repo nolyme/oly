@@ -4,6 +4,7 @@
 /packages/*/node_modules
 /packages/*/lib
 /packages/*/out
+/packages/*/coverage
 /.idea
 *.log
 *.iml
@@ -14,5 +15,6 @@
 /packages/oly/**/*.js.map
 /packages/oly/**/*.d.ts
 /docs
+/lib
+/coverage
 doc.json
-coverage

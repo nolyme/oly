@@ -52,6 +52,7 @@ export class RouterMetadataUtil {
     }, router.routes[propertyKey], route, {
       args: _.assign({}, router.routes[propertyKey].args || {}, route.args || {}),
     });
+    router.routes[propertyKey].api = router.routes[propertyKey].api || {};
     router.routes[propertyKey].middlewares = router.routes[propertyKey].middlewares || [];
     return router.routes[propertyKey];
   }

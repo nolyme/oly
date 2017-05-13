@@ -17,7 +17,7 @@
         "decorators/state"
       ],
       "env": [
-        "env.ts"
+
       ],
       "services": [
         "Kernel.ts",
@@ -32,7 +32,7 @@
       ],
       "decorators": [],
       "env": [
-        "index.ts"
+
       ],
       "services": [
         "providers/HttpServerProvider.ts",
@@ -75,7 +75,7 @@
         "decorators/use"
       ],
       "env": [
-        "index.ts"
+
       ],
       "services": [
         "providers/ApiProvider.ts"

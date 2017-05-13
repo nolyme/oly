@@ -1,7 +1,8 @@
-import { ApiProvider, KoaRouterBuilder, lyRouter } from "oly-api";
-import { _, IDeclarations, inject, Kernel, Logger, MetadataUtil } from "oly-core";
+import { ApiProvider, KoaRouterBuilder } from "oly-api";
+import { _, IDeclarations, inject, Kernel, Logger } from "oly-core";
 import { HttpServerProvider, serve } from "oly-http";
 import { ObjectMapper } from "oly-mapper";
+import { RouterMetadataUtil } from "oly-router";
 import { join } from "path";
 
 /**
@@ -57,7 +58,7 @@ export class SwaggerProvider {
     };
 
     for (const dep of deps) {
-      if (MetadataUtil.has(lyRouter, dep.definition)) {
+      if (RouterMetadataUtil.hasRouter(dep.definition)) {
 
         const router = this.koaRouterBuilder.createFromDefinition(dep.definition);
 
@@ -166,7 +167,7 @@ export class SwaggerProvider {
    */
   private getRouteByLayer(Type: any, layer: any): any {
 
-    const router = MetadataUtil.deep(lyRouter, Type) as any;
+    const router = RouterMetadataUtil.getRouter(Type);
 
     for (const propertyKey of Object.keys(router.routes)) {
       const r = router.routes[propertyKey];

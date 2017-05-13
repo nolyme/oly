@@ -15,6 +15,7 @@ describe("RouterMetadataUtil", () => {
     }
 
     const routerMetadata = RouterMetadataUtil.getRouter(MyRouter);
+    expect(RouterMetadataUtil.hasRouter(MyRouter)).toBeTruthy();
     expect(routerMetadata).toEqual({
       prefix: "/",
       routes: {

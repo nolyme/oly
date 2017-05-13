@@ -12,7 +12,9 @@
     "typescript",
     "swagger"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "oly-router": "^0.9.1"
+  },
   "devDependencies": {
     "oly-api": "^0.9.1",
     "oly-core": "^0.9.1",

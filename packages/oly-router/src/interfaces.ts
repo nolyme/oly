@@ -10,6 +10,7 @@ export interface IRouteMetadata {
   method: IMethods;
   path: string;
   middlewares: any[];
+  api: any;
   args: {
     [key: number]: {
       body?: any;
