@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/cheerio": "0.22.1",
-    "@types/react": "15.0.21",
+    "@types/react": "15.0.24",
     "jsdom": "10.1.0",
     "oly-core": "^0.9.1",
     "oly-http": "^0.9.1",

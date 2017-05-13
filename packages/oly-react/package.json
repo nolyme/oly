@@ -14,12 +14,12 @@
   "dependencies": {
     "@types/react-dom": "15.5.0",
     "@types/react-router": "3.0.10",
-    "prop-types": "15.5.8",
+    "prop-types": "15.5.10",
     "react-dom": "15.5.4",
     "react-router": "3.0.5"
   },
   "devDependencies": {
-    "@types/react": "15.0.21",
+    "@types/react": "15.0.24",
     "jsdom": "10.1.0",
     "oly-core": "^0.9.1",
     "oly-test": "^0.9.1",

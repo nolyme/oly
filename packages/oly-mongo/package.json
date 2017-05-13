@@ -13,8 +13,8 @@
     "mongodb"
   ],
   "dependencies": {
-    "@types/mongodb": "2.1.43",
-    "mongodb": "2.2.25"
+    "@types/mongodb": "2.2.2",
+    "mongodb": "2.2.26"
   },
   "devDependencies": {
     "oly-core": "^0.9.1",
