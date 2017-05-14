@@ -1,6 +1,6 @@
 import { _ } from "oly-core";
 import { attachKernel } from "oly-test";
-import { task } from "../src/decorators/task";
+import { task } from "../src";
 import { IMessage } from "../src/interfaces";
 import { AmqpProvider } from "../src/providers/AmqpProvider";
 import { WorkerProvider } from "../src/providers/WorkerProvider";
@@ -10,6 +10,9 @@ class Tasks {
 
   @task("abc.queue")
   abc(message: IMessage) {
+    if (Tasks.stack.length === 1) {
+      throw new Error("boom");
+    }
     Tasks.stack.push(message);
   }
 }
@@ -20,6 +23,7 @@ describe("AmqpProvider", () => {
 
   it("should publish a message", async () => {
     await amqp.purge("abc.queue");
+    await amqp.publish("abc.queue", "Hello");
     await amqp.publish("abc.queue", "Hello");
     await _.timeout(100);
     expect(Tasks.stack.length).toBe(1);
