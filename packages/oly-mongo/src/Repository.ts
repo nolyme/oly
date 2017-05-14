@@ -1,6 +1,6 @@
 import { Collection, ObjectID } from "mongodb";
-import { IClass, IClassOf, inject, Kernel, Logger, MetadataUtil } from "oly-core";
-import { FieldMetadataUtil, ObjectMapper } from "oly-mapper";
+import { IClassOf, inject, Kernel, Logger, MetadataUtil } from "oly-core";
+import { FieldMetadataUtil, JsonService } from "oly-mapper";
 import { lyIndexes } from "./annotations";
 import { ID, IDocument } from "./interfaces";
 import { MongoProvider } from "./MongoProvider";
@@ -27,8 +27,8 @@ export abstract class Repository<T extends IDocument> {
   @inject(MongoProvider)
   protected database: MongoProvider;
 
-  @inject(ObjectMapper)
-  protected objectMapper: ObjectMapper;
+  @inject(JsonService)
+  protected jsonService: JsonService;
 
   /**
    * Define the collection name.
@@ -88,7 +88,7 @@ export abstract class Repository<T extends IDocument> {
     }
 
     if (this.type) {
-      return this.kernel.get(this.type, {instance: this.objectMapper.parse(this.type, object)}); // tslint:disable-line
+      return this.kernel.get(this.type, {instance: this.jsonService.build(this.type, object)}); // tslint:disable-line
     }
 
     return object as T;
@@ -221,7 +221,7 @@ export abstract class Repository<T extends IDocument> {
    */
   public async sync() {
 
-    const syncType = async (Type: IClass, parent = "") => {
+    const syncType = async (Type: any, parent = "") => {
 
       const indexes = MetadataUtil.deep(lyIndexes, Type);
       for (const propertyKey of Object.keys(indexes)) {
@@ -231,8 +231,8 @@ export abstract class Repository<T extends IDocument> {
 
       const fields = FieldMetadataUtil.getFields(this.type);
       for (const field of fields) {
-        if (field.of && FieldMetadataUtil.hasFields(field.of)) {
-          await syncType(field.of, parent + field.name + ".");
+        if (field.type && FieldMetadataUtil.hasFields(field.type)) {
+          await syncType(field.type, parent + field.name + ".");
         }
       }
     };

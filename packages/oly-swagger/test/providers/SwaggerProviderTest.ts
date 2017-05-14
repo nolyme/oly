@@ -1,29 +1,27 @@
 import { ApiProvider, get, use } from "oly-api";
-import { Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
+import { attachKernel } from "oly-test";
 import { SwaggerProvider } from "../../src/providers/SwaggerProvider";
+
+const toto = () =>
+  function hasRoleMiddleware(ctx: any, next: any) {
+    return next();
+  };
+
+class Ctrl {
+  @use(toto())
+  @get("/")
+  index() {
+    return {ok: true};
+  }
+}
 
 describe("SwaggerProvider", () => {
 
-  const toto = () =>
-    function hasRoleMiddleware(ctx: any, next: any) {
-      return next();
-    };
-
-  class Ctrl {
-    @use(toto())
-    @get("/") index() {
-      return {ok: true};
-    }
-  }
-
-  const kernel = new Kernel({
+  const kernel = attachKernel({
     OLY_HTTP_SERVER_PORT: 6833,
     OLY_LOGGER_LEVEL: "ERROR",
   }).with(Ctrl, SwaggerProvider);
-
-  beforeAll(() => kernel.start());
-  afterAll(() => kernel.stop());
 
   describe("#onStart()", () => {
     it("should provide spec", async () => {

@@ -1,15 +1,14 @@
 import { ApiProvider, KoaRouterBuilder } from "oly-api";
 import { _, IDeclarations, inject, Kernel, Logger } from "oly-core";
 import { HttpServerProvider, serve } from "oly-http";
-import { ObjectMapper } from "oly-mapper";
+import { JsonService } from "oly-mapper";
 import { RouterMetadataUtil } from "oly-router";
 import { join } from "path";
 
 /**
  * Auto-generate SwaggerSpec based on @route.
  *
- * @experimentation
- * @shitty
+ * @experimental
  */
 export class SwaggerProvider {
 
@@ -18,8 +17,8 @@ export class SwaggerProvider {
    */
   public swagger: any;
 
-  @inject(ObjectMapper)
-  protected objectMapper: ObjectMapper;
+  @inject(JsonService)
+  protected jsonService: JsonService;
 
   @inject(HttpServerProvider)
   protected httpServerProvider: HttpServerProvider;
@@ -127,7 +126,7 @@ export class SwaggerProvider {
                     $ref: "#/definitions/" + arg.body.name,
                   },
                 });
-                this.swagger.definitions[arg.body.name] = this.objectMapper.schema(arg.body);
+                this.swagger.definitions[arg.body.name] = this.jsonService.schema(arg.body);
               }
             }
           }

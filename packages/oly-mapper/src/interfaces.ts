@@ -147,7 +147,7 @@ export interface IMetaObject extends IMetaBase {
 /**
  * Metadata about a generic field.
  */
-export interface IField extends Partial<IMetaArray>, IMetaNumber, IMetaString, IMetaObject {
+export interface IField extends Partial<IMetaArray>, IMetaNumber, IMetaString, IMetaObject, IMetaBase {
 
   name: string; // a field has ALWAYS a name
 

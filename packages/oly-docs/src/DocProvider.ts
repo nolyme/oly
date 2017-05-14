@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
 import { env, inject, Logger } from "oly-core";
-import { ObjectMapper } from "oly-mapper";
+import { JsonService } from "oly-mapper";
 import { resolve } from "path";
 import { Application, ProjectReflection } from "typedoc";
 import { DeclarationReflection } from "typedoc/dist/lib/models";
@@ -21,11 +21,11 @@ export class DocProvider {
   @inject private logger: Logger;
   @inject private parser: DocParser;
   @inject private builder: DocBuilder;
-  @inject private objectMapper: ObjectMapper;
+  @inject private jsonService: JsonService;
 
   public async onStart() {
     const configPath = resolve(this.cwd, "docs.json");
-    const config = this.objectMapper.parse(Configuration, readFileSync(configPath, "UTF-8"));
+    const config = this.jsonService.build(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
     const pkg = require(resolve(this.cwd, "package.json"));

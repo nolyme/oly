@@ -193,12 +193,8 @@ describe("ApiProvider", () => {
       expect(await fetch("3?b=toto")).toEqual({b: null});
     });
     it("should extract query as object", async () => {
-      expect(await fetch("4", {params: {b: "h"}})).toEqual({
-        error: {
-          message: apiErrorService.invalidFormat("query", "b", "json").message,
-          status: 400,
-        },
-      });
+      expect((await fetch("4", {params: {b: "h"}})).error.message)
+        .toBe(apiErrorService.invalidFormat("queryParam", "b", "json").message);
       expect(await fetch("4", {params: {b: {h: 3}}})).toEqual({b: {h: 3}});
     });
     it("should extract query as object", async () => {

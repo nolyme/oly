@@ -1,7 +1,7 @@
 import * as KoaRouter from "koa-router";
 import { IClass, inject } from "oly-core";
 import { IKoaContext } from "oly-http";
-import { FieldMetadataUtil, ObjectMapper } from "oly-mapper";
+import { FieldMetadataUtil, IType, JsonService } from "oly-mapper";
 import { IRouteMetadata, RouterMetadataUtil } from "oly-router";
 import { IUploadedFile } from "../interfaces";
 import { end } from "../middlewares/end";
@@ -15,8 +15,8 @@ export class KoaRouterBuilder {
   @inject(ApiErrorService)
   protected apiErrorService: ApiErrorService;
 
-  @inject(ObjectMapper)
-  public objectMapper: ObjectMapper;
+  @inject(JsonService)
+  protected json: JsonService;
 
   /**
    * Transform router metadata into a fresh koa-router object.
@@ -71,15 +71,35 @@ export class KoaRouterBuilder {
 
       if (!!arg.path) {
 
-        return this.parsePathVariable(ctx, arg);
+        const value: string = ctx.params[arg.path];
+        if (!value) {
+          throw this.apiErrorService.missing("pathVariable", arg.path);
+        }
+        return this.parseAndCast(value, arg.type, arg.path, "pathVariable");
 
       } else if (!!arg.query) {
 
-        return this.parseQueryParam(ctx, arg);
+        const value: string = ctx.query[arg.query];
+        if (!value && arg.required === true) {
+          throw this.apiErrorService.missing("queryParam", arg.query);
+        }
+        return this.parseAndCast(value, arg.type, arg.query, "queryParam");
+
+      } else if (!!arg.header) {
+
+        const value: string = ctx.header[arg.header];
+        if (!value && arg.required === true) {
+          throw this.apiErrorService.missing("header", arg.query);
+        }
+        return this.parseAndCast(value, arg.type, arg.header, "header");
 
       } else if (!!arg.body) {
 
-        return this.parseBody(ctx, arg);
+        const value: object | object[] = ctx.request.body;
+        if (!value && arg.required === true) {
+          throw this.apiErrorService.missing("request", "body");
+        }
+        return this.parseBody(value, arg);
 
       } else if (!!arg.upload) {
 
@@ -92,73 +112,62 @@ export class KoaRouterBuilder {
     });
   }
 
-  public parseBody(ctx: IKoaContext, arg: any) {
-
-    const body = ctx.request.body;
-
-    if (arg.body === Boolean) {
-      return body === "true" || body === true;
-    } else if (arg.body === Number) {
-      return Number(body);
-    } else if (arg.body === String) {
-      return String(body);
-    }
+  /**
+   * Body is already parsed by koa-bodyparser.
+   * However, we can map json to typed object and make some validations!
+   *
+   * @param body    Object
+   * @param arg     Arg definition
+   * @return        Object
+   */
+  public parseBody(body: any, arg: any) {
 
     if (!FieldMetadataUtil.hasFields(arg.body)) {
       return body;
     }
 
     try {
-      return new ObjectMapper().parse(arg.body, body);
+      return this.json.build(arg.body, body);
     } catch (e) {
       throw this.apiErrorService.validationHasFailed(arg.path);
     }
   }
 
-  public parsePathVariable(ctx: IKoaContext, arg: any) {
+  /**
+   *
+   * @param value
+   * @param type
+   * @param argKey
+   * @param argType
+   * @return
+   */
+  protected parseAndCast(value: any, type: IType, argKey: string, argType: string): any {
 
-    const value = ctx.params[arg.path];
-    if (!value) {
-      throw this.apiErrorService.missingPathVariable(arg.path);
-    }
-
-    if (arg.type === Boolean) {
-      return value === "true";
-    } else if (arg.type === Number) {
-      return Number(value);
-    } else {
-      return value;
-    }
-  }
-
-  public parseQueryParam(ctx: IKoaContext, arg: any) {
-
-    const value = ctx.request.query[arg.query];
-    if (!arg.type) {
+    if (!type) {
       return value;
     }
 
-    if (arg.type === Boolean) {
+    if (type === Boolean) {
       return (value === "true" || value === "");
-    } else if (arg.type === Number) {
+    } else if (type === Number) {
       if (value === "") {
         return null;
       }
       return Number(value);
-    } else if (FieldMetadataUtil.hasFields(arg.type)) {
+    } else if (FieldMetadataUtil.hasFields(type)) {
       try {
-        return this.objectMapper.parse(arg.type, value);
+        return this.json.build(type as IClass, value);
       } catch (e) {
         throw this.apiErrorService.validationHasFailed(e.message);
       }
-    } else if (arg.type === Object) {
+    } else if (type === Object) {
       if (value === "") {
         return null;
       }
       try {
         return JSON.parse(value);
-      } catch (e) {
-        throw this.apiErrorService.invalidFormat("query", arg.query, "json");
+      } catch (ignore) {
+        throw this.apiErrorService.invalidFormat(argType, argKey, "json");
       }
     } else {
       return value;
