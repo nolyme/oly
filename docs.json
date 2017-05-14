@@ -32,10 +32,11 @@
       "icon": "flows",
       "decorators": [
         "decorators/array.ts",
-        "decorators/field.ts"
+        "decorators/field.ts",
+        "decorators/date.ts"
       ],
       "services": [
-        "ObjectMapper.ts"
+        "JsonService.ts"
       ]
     },
     {
@@ -47,6 +48,7 @@
         "decorators/post",
         "decorators/del",
         "decorators/path",
+        "decorators/header",
         "decorators/query",
         "decorators/body",
         "decorators/use"

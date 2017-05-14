@@ -16,6 +16,7 @@ import { arg } from "oly-router";
  *    @post('/2') create2(@body() body) {
  *    }
  * }
+ * ```
  */
 export const body = (type?: IClass): ParameterDecorator => {
   return (target: object, propertyKey: string, parameterIndex: number): void => {
