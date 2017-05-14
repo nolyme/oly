@@ -12,16 +12,21 @@ import { arg } from "oly-router";
  * }
  * ```
  */
-export const query =
-  (name?: string): ParameterDecorator =>
-    (target: object, propertyKey: string, parameterIndex: number): void => {
+export const query = (options: string | { name?: string; required?: boolean } = {}): ParameterDecorator => {
+  return (target: object, propertyKey: string, parameterIndex: number): void => {
 
-      if (!name) {
-        name = MetadataUtil.getParamNames(target[propertyKey])[parameterIndex];
-      }
+    const meta = typeof options === "string"
+      ? {name: options}
+      : options;
 
-      return arg({
-        query: name,
-        type: MetadataUtil.getPropParamTypes(target, propertyKey)[parameterIndex],
-      })(target, propertyKey, parameterIndex);
-    };
+    if (!meta.name) {
+      meta.name = MetadataUtil.getParamNames(target[propertyKey])[parameterIndex];
+    }
+
+    return arg({
+      query: meta.name,
+      required: meta.required,
+      type: MetadataUtil.getPropParamTypes(target, propertyKey)[parameterIndex],
+    })(target, propertyKey, parameterIndex);
+  };
+};

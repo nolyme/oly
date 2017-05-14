@@ -13,4 +13,8 @@ export class ApiErrorService {
   public invalidFormat(type: string, key: string, expected: string) {
     return new HttpError(400, `Invalid format. The ${type} '${key}' expects ${expected}`);
   }
+
+  public serviceNotFound() {
+    return new HttpError(404, "The requested service does not exists");
+  }
 }

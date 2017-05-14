@@ -87,7 +87,7 @@ export class KoaRouterBuilder {
 
       } else if (!!arg.header) {
 
-        const value: string = ctx.header[arg.header];
+        const value: string = ctx.header[arg.header.toLowerCase()];
         if (!value && arg.required === true) {
           throw this.apiErrorService.missing("header", arg.query);
         }
@@ -134,20 +134,20 @@ export class KoaRouterBuilder {
   }
 
   /**
+   * Convert value into the requested type.
+   * Used by header, query and path.
    *
-   * @param value
-   * @param type
-   * @param argKey
-   * @param argType
-   * @return
+   * @param value       Current value (string)
+   * @param type        Requested type
+   * @param argKey      Who need this (name)
+   * @param argType     Who need this (type)
+   * @return            Value, converted if possible
    */
   protected parseAndCast(value: any, type: IType, argKey: string, argType: string): any {
 
-    if (!type) {
+    if (!type || !value) {
       return value;
-    }
-
-    if (type === Boolean) {
+    } else if (type === Boolean) {
       return (value === "true" || value === "");
     } else if (type === Number) {
       if (value === "") {
@@ -169,6 +169,8 @@ export class KoaRouterBuilder {
       } catch (ignore) {
         throw this.apiErrorService.invalidFormat(argType, argKey, "json");
       }
+    } else if (type === String) {
+      return value.toString();
     } else {
       return value;
     }
