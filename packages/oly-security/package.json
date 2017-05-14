@@ -1,7 +1,7 @@
 {
   "name": "oly-security",
   "description": "oly-security",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -20,14 +20,14 @@
     "jsonwebtoken": "7.4.0"
   },
   "devDependencies": {
-    "oly-api": "^0.9.2",
-    "oly-core": "^0.9.2",
-    "oly-http": "^0.9.2"
+    "oly-api": "^0.9.3",
+    "oly-core": "^0.9.3",
+    "oly-http": "^0.9.3"
   },
   "peerDependencies": {
-    "oly-api": "^0.9.2",
-    "oly-core": "^0.9.2",
-    "oly-http": "^0.9.2"
+    "oly-api": "^0.9.3",
+    "oly-core": "^0.9.3",
+    "oly-http": "^0.9.3"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

@@ -1,7 +1,7 @@
 {
   "name": "oly-test",
   "description": "oly-test",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,12 +16,12 @@
     "jsdom": "10.1.0"
   },
   "devDependencies": {
-    "oly-core": "^0.9.2"
+    "oly-core": "^0.9.3"
   },
   "peerDependencies": {
     "@types/jest": "^19.2.2",
     "jest": "^19.0.2",
-    "oly-core": "^0.9.2",
+    "oly-core": "^0.9.3",
     "ts-jest": "^19.0.14"
   },
   "scripts": {
