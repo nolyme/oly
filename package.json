@@ -3,10 +3,10 @@
   "devDependencies": {
     "@types/jest": "19.2.3",
     "@types/node": "7.0.18",
-    "jest": "20.0.0",
+    "jest": "20.0.1",
     "lerna": "2.0.0-rc.4",
     "rimraf": "2.6.1",
-    "ts-jest": "20.0.0",
+    "ts-jest": "20.0.3",
     "tslint": "5.2.0",
     "tslint-react": "3.0.0",
     "typescript": "2.3.2"

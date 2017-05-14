@@ -116,6 +116,7 @@ export class DocProvider {
           type: this.parser.getType(m.type),
         }))), [])
       .map((i) => {
+        i.name = i.name.replace(/"/igm, "");
         this.logger.info(`push ${i.name}`);
         return i;
       });
