@@ -1,19 +1,20 @@
 import { IAnyFunction, IClass, MetadataUtil } from "oly-core";
-import { FieldType, IField } from "../interfaces";
+import { FieldType, IField, IType } from "../interfaces";
 
 export class FieldMetadataUtil {
 
   public static lyFields = "ly:fields";
 
   /**
+   * Find the correct field type based on JsonSchema spec.
    *
-   * @param type
-   * @return {any}
+   * @param type    Function type
+   * @return        string value of field type
    */
-  public static findTypeName(type?: IAnyFunction | null): FieldType {
+  public static getFieldType(type?: IType): FieldType {
 
     if (type == null) {
-      return "any";
+      return "null";
     }
 
     switch (type) {
@@ -23,6 +24,8 @@ export class FieldMetadataUtil {
         return "number";
       case Boolean:
         return "boolean";
+      case Array:
+        return "array";
       default:
         return "object";
     }

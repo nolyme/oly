@@ -341,6 +341,26 @@ describe("Kernel", () => {
       equal(child.state("D"), "f");
       equal(child["store"]["D"], undefined); // tslint:disable-line
     });
+
+    it("should init state once", () => {
+      class A {
+        @state()
+        b = "c";
+      }
+
+      const kernel = createKernel();
+      const a = kernel.get(A);
+      expect(a.b).toBe("c");
+      a.b = "d";
+      expect(a.b).toBe("d");
+      expect(kernel.state(_.targetToString(A, "b"))).toBe(a.b);
+      const child = kernel.fork();
+      const a2 = child.get(A);
+      expect(a2.b).toBe("d");
+      expect(a.b).toBe(a2.b);
+      expect(kernel.state(_.targetToString(A, "b"))).toBe(a.b);
+      expect(child.state(_.targetToString(A, "b"))).toBe(a.b);
+    });
   });
 
   describe("extends", () => {

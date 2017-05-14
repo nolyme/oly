@@ -17,7 +17,7 @@ export class HttpError extends Error {
 
   /**
    * Http Error message. (e.g 'User not found')
-   * This is already defined in Error. Okay?
+   * This is already defined in Error.
    */
   public message: string;
 
@@ -29,7 +29,7 @@ export class HttpError extends Error {
 
   /**
    * Extension: Details (could be anything)
-   * Free Object field for more details.
+   * Free object field for more details.
    */
   public details: any;
 

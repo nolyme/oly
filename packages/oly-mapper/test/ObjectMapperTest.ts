@@ -1,7 +1,9 @@
 import { deepEqual, equal } from "assert";
+import { createKernel } from "oly-test";
 import { array } from "../src";
 import { field } from "../src/decorators/field";
-import { ObjectMapper } from "../src/ObjectMapper";
+import { JsonService } from "../src/JsonService";
+import { JsonValidator } from "../src/services/JsonValidator";
 
 describe("ObjectMapper", () => {
   it("should parse an object", () => {
@@ -38,17 +40,17 @@ describe("ObjectMapper", () => {
       },
     };
 
-    const oly = new ObjectMapper();
-    const obj = oly.parse(Data, JSON.stringify(raw));
+    const json = createKernel().get(JsonService);
+    const obj = json.build(Data, JSON.stringify(raw));
 
     equal(obj.msg, "hello world a1true");
     equal(obj.arr1.join(""), "ab");
     equal(obj.arr2[0].upper, "TEST");
 
-    deepEqual(oly.schema(Data), {
+    deepEqual(json.schema(Data), {
       name: "Data",
       properties: {
-        arr1: {type: "array"},
+        arr1: {items: [{type: "string"}], type: "array"},
         arr2: {
           items: [{
             name: "SubData",
@@ -104,7 +106,7 @@ describe("ObjectMapper", () => {
       @field() password: string;
     }
 
-    const oly = new ObjectMapper();
+    const json = createKernel().get(JsonValidator);
     const entry = {
       username: 2,
     };
@@ -114,11 +116,11 @@ describe("ObjectMapper", () => {
     };
 
     try {
-      oly.validate(Credentials, entry);
+      json.validateClass(Credentials, entry);
       throw new Error("");
     } catch (e) {
       localize.fr(e.details);
-      equal(oly.ajv.errorsText(e.details), "data.username doit être de type string");
+      equal(json.ajv.errorsText(e.details), "data.username doit être de type string");
       equal(e.message, "Validation has failed (data.username should be string)");
     }
   });
