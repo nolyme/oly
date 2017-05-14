@@ -12,15 +12,20 @@ import { arg } from "oly-router";
  * }
  * ```
  */
-export const header = (name?: string): ParameterDecorator => {
+export const header = (options: string | { name?: string; required?: boolean } = {}): ParameterDecorator => {
   return (target: object, propertyKey: string, parameterIndex: number): void => {
 
-    if (!name) {
-      name = MetadataUtil.getParamNames(target[propertyKey])[parameterIndex];
+    const meta = typeof options === "string"
+      ? {name: options}
+      : options;
+
+    if (!meta.name) {
+      meta.name = MetadataUtil.getParamNames(target[propertyKey])[parameterIndex];
     }
 
     return arg({
-      header: name,
+      header: meta.name,
+      required: meta.required,
       type: MetadataUtil.getPropParamTypes(target, propertyKey)[parameterIndex],
     })(target, propertyKey, parameterIndex);
   };

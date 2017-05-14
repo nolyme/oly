@@ -145,7 +145,7 @@ export class KoaRouterBuilder {
    */
   protected parseAndCast(value: any, type: IType, argKey: string, argType: string): any {
 
-    if (!type || !value) {
+    if (!type) {
       return value;
     } else if (type === Boolean) {
       return (value === "true" || value === "");
@@ -169,7 +169,7 @@ export class KoaRouterBuilder {
       } catch (ignore) {
         throw this.apiErrorService.invalidFormat(argType, argKey, "json");
       }
-    } else if (type === String) {
+    } else if (type === String && !!value) {
       return value.toString();
     } else {
       return value;

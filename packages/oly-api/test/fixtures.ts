@@ -9,6 +9,7 @@ import { query } from "../src/decorators/query";
 import { router } from "../src/decorators/router";
 import { use } from "../src/decorators/use";
 import { body, path } from "../src/index";
+import { IUploadedFile } from "../src/interfaces";
 
 export const dummyMiddleware: KoaMiddleware = async (ctx, next) => {
   ctx.kernel.state("counter", ctx.kernel.state("counter") + 1);
@@ -67,6 +68,11 @@ export class A2 {
 
   @post("/body/parse")
   bodyParse(@body() a: Data) {
+    return {a};
+  }
+
+  @post("/upload")
+  upload(@body() a: IUploadedFile) {
     return {a};
   }
 }
