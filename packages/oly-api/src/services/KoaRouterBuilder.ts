@@ -1,15 +1,22 @@
 import * as KoaRouter from "koa-router";
-import { _, IClass } from "oly-core";
-import { HttpError, IKoaContext } from "oly-http";
+import { IClass, inject } from "oly-core";
+import { IKoaContext } from "oly-http";
 import { FieldMetadataUtil, ObjectMapper } from "oly-mapper";
 import { IRouteMetadata, RouterMetadataUtil } from "oly-router";
 import { IUploadedFile } from "../interfaces";
 import { end } from "../middlewares/end";
+import { ApiErrorService } from "./ApiErrorService";
 
 /**
  * koa-router build based on metadata.
  */
 export class KoaRouterBuilder {
+
+  @inject(ApiErrorService)
+  protected apiErrorService: ApiErrorService;
+
+  @inject(ObjectMapper)
+  public objectMapper: ObjectMapper;
 
   /**
    * Transform router metadata into a fresh koa-router object.
@@ -64,40 +71,97 @@ export class KoaRouterBuilder {
 
       if (!!arg.path) {
 
-        // @path
-        return (ctx as any).params[arg.path];
+        return this.parsePathVariable(ctx, arg);
 
       } else if (!!arg.query) {
 
-        // @query
-        const value = ctx.request.query[arg.query];
-        return _.parseNumberAndBoolean(value);
+        return this.parseQueryParam(ctx, arg);
+
+      } else if (!!arg.body) {
+
+        return this.parseBody(ctx, arg);
 
       } else if (!!arg.upload) {
 
         // @upload (multer)
         return ctx.req[arg.upload] as IUploadedFile;
 
-      } else if (!!arg.body) {
-
-        // @body
-        const body = (ctx.request as any).body;
-
-        if (!FieldMetadataUtil.hasFields(arg.body)) {
-          return body;
-        }
-
-        // this is't a good idea.
-        // @body should just return the body.
-        try {
-          return new ObjectMapper().parse(arg.body, body);
-        } catch (e) {
-          throw new HttpError(400, "Validation has failed", e);
-        }
-
       } else {
-        throw new Error("Unsupported paramTypes");
+        return ctx;
       }
     });
+  }
+
+  public parseBody(ctx: IKoaContext, arg: any) {
+
+    const body = ctx.request.body;
+
+    if (arg.body === Boolean) {
+      return body === "true" || body === true;
+    } else if (arg.body === Number) {
+      return Number(body);
+    } else if (arg.body === String) {
+      return String(body);
+    }
+
+    if (!FieldMetadataUtil.hasFields(arg.body)) {
+      return body;
+    }
+
+    try {
+      return new ObjectMapper().parse(arg.body, body);
+    } catch (e) {
+      throw this.apiErrorService.validationHasFailed(arg.path);
+    }
+  }
+
+  public parsePathVariable(ctx: IKoaContext, arg: any) {
+
+    const value = ctx.params[arg.path];
+    if (!value) {
+      throw this.apiErrorService.missingPathVariable(arg.path);
+    }
+
+    if (arg.type === Boolean) {
+      return value === "true";
+    } else if (arg.type === Number) {
+      return Number(value);
+    } else {
+      return value;
+    }
+  }
+
+  public parseQueryParam(ctx: IKoaContext, arg: any) {
+
+    const value = ctx.request.query[arg.query];
+    if (!arg.type) {
+      return value;
+    }
+
+    if (arg.type === Boolean) {
+      return (value === "true" || value === "");
+    } else if (arg.type === Number) {
+      if (value === "") {
+        return null;
+      }
+      return Number(value);
+    } else if (FieldMetadataUtil.hasFields(arg.type)) {
+      try {
+        return this.objectMapper.parse(arg.type, value);
+      } catch (e) {
+        throw this.apiErrorService.validationHasFailed(e.message);
+      }
+    } else if (arg.type === Object) {
+      if (value === "") {
+        return null;
+      }
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        throw this.apiErrorService.invalidFormat("query", arg.query, "json");
+      }
+    } else {
+      return value;
+    }
   }
 }

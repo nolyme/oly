@@ -20,5 +20,8 @@ export const query =
         name = MetadataUtil.getParamNames(target[propertyKey])[parameterIndex];
       }
 
-      return arg({query: name})(target, propertyKey, parameterIndex);
+      return arg({
+        query: name,
+        type: MetadataUtil.getPropParamTypes(target, propertyKey)[parameterIndex],
+      })(target, propertyKey, parameterIndex);
     };

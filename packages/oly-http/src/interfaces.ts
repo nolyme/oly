@@ -13,11 +13,19 @@ declare module "koa" {
   }
 }
 
+export interface IKoaRequest extends Koa.Request { // tslint:disable-line
+}
+
+export interface IKoaResponse extends Koa.Response { // tslint:disable-line
+}
+
 /**
  * Koa context with oly kernel.
  */
 export interface IKoaContext extends Koa.Context {
   kernel: Kernel;
+  request: IKoaRequest;
+  response: IKoaResponse;
 }
 
 /**

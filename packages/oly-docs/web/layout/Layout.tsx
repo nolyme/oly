@@ -14,6 +14,7 @@ export class Layout extends React.Component<{ doc: IDoc }, {}> {
       <div className="flex flex-row">
         <Helmet>
           <title>oly/docs</title>
+          <link rel="icon" href="favicon.png" sizes="64x64" type="image/png"/>
         </Helmet>
         <Header doc={this.props.doc}/>
         <div className="flex-full container">

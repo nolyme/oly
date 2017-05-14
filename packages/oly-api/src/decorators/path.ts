@@ -18,6 +18,9 @@ export const path = (name?: string): ParameterDecorator => {
     if (!name) {
       name = MetadataUtil.getParamNames(target[propertyKey])[parameterIndex];
     }
-    return arg({path: name})(target, propertyKey, parameterIndex);
+    return arg({
+      path: name,
+      type: MetadataUtil.getPropParamTypes(target, propertyKey)[parameterIndex],
+    })(target, propertyKey, parameterIndex);
   };
 };

@@ -67,6 +67,7 @@ export class DocProvider {
       dependencies: m.dependencies,
       env: this.generateEnv(app, sources, m.services),
       home: this.parser.mark(readFileSync(resolve(project, m.home || "README.md"), "UTF-8")),
+      icon: m.icon,
       name: m.name,
       services: this.generateService(app, sources, m.services),
     };

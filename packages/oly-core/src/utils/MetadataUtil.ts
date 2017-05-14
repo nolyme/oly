@@ -1,3 +1,4 @@
+import { designParamTypes, designType } from "../constants/keys";
 import { IAnyFunction, IClass } from "../interfaces/types";
 import { _, CommonUtil } from "./CommonUtil";
 
@@ -45,6 +46,24 @@ export class MetadataUtil {
    */
   public static getProp(name: string, target: object, propertyKey: string, defaultValue: any = []): any {
     return MetadataUtil.getReflect().getMetadata(name, target, propertyKey) || defaultValue;
+  }
+
+  /**
+   *
+   * @param target
+   * @param propertyKey
+   */
+  public static getPropType(target: object, propertyKey: string): any {
+    return MetadataUtil.getProp(designType, target, propertyKey);
+  }
+
+  /**
+   *
+   * @param target
+   * @param propertyKey
+   */
+  public static getPropParamTypes(target: object, propertyKey: string): any[] {
+    return MetadataUtil.getProp(designParamTypes, target, propertyKey);
   }
 
   /**

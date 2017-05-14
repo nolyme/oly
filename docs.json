@@ -6,6 +6,7 @@
   "modules": [
     {
       "name": "oly-core",
+      "icon": "layout",
       "decorators": [
         "decorators/env",
         "decorators/inject",
@@ -19,6 +20,7 @@
     },
     {
       "name": "oly-http",
+      "icon": "globe",
       "decorators": [],
       "services": [
         "providers/HttpServerProvider.ts",
@@ -27,6 +29,7 @@
     },
     {
       "name": "oly-mapper",
+      "icon": "flows",
       "decorators": [
         "decorators/array.ts",
         "decorators/field.ts"
@@ -37,6 +40,7 @@
     },
     {
       "name": "oly-api",
+      "icon": "heat-grid",
       "decorators": [
         "decorators/get",
         "decorators/put",
@@ -53,6 +57,7 @@
     },
     {
       "name": "oly-react",
+      "icon": "control",
       "decorators": [
         "core/decorators/action",
         "core/decorators/attach",

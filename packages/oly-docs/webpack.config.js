@@ -7,7 +7,8 @@ const config = module.exports = tools.createConfiguration({
     "./web/main.ts",
     "./web/main.scss",
   ],
-  styleLoader: tools.loaders.sassLoaderFactory()
+  styleLoader: tools.loaders.sassLoaderFactory(),
+  assets: "./web/assets"
 });
 
 config.plugins.push(new webpack.DefinePlugin({

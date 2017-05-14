@@ -6,6 +6,20 @@ import * as KoaRouter from "koa-router";
 export type IKoaRouter = KoaRouter;
 
 /**
+ * Add koa-bodyparser and koa-router to definitions.
+ */
+declare module "oly-http/lib/interfaces" {
+
+  interface IKoaRequest {
+    body: any;
+  }
+
+  interface IKoaContext {
+    params: { [key: string]: any };
+  }
+}
+
+/**
  * Default error structure.
  * Override with typescript interface enhancement.
  *
