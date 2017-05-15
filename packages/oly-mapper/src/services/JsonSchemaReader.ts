@@ -51,7 +51,9 @@ export class JsonSchemaReader {
   }
 
   public extractProperty(field: IField): IJsonSchema {
+
     const jsonSchema: IJsonSchema = this.extractJsonSchemaKeywords(field);
+
     jsonSchema.type = FieldMetadataUtil.getFieldType(field.type);
 
     if (jsonSchema.type === "object" && FieldMetadataUtil.hasFields(field.type)) {
@@ -66,7 +68,7 @@ export class JsonSchemaReader {
     if (jsonSchema.type === "array") {
       const array = field as IMetaArray;
       const item: IField = typeof array.of === "function" ? {type: array.of, name: ""} : array.of;
-      jsonSchema.items = [this.extractProperty(item)]; // TODO: (nfo) multi types ?
+      jsonSchema.items = [this.extractProperty(item)];
     }
 
     return jsonSchema;

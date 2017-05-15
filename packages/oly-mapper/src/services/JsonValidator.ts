@@ -1,6 +1,7 @@
 import * as Ajv from "ajv";
 import { ValidateFunction } from "ajv";
 import { IClass, inject, state } from "oly-core";
+import { IField } from "../interfaces";
 import { JsonSchemaReader } from "./JsonSchemaReader";
 
 export class JsonValidator {
@@ -33,19 +34,40 @@ export class JsonValidator {
   }
 
   /**
+   * Validate a field.
+   *
+   * @param field     Field
+   * @param source    Value
+   */
+  public validateField<T>(field: IField, source: T): T {
+
+    const validate = this.ajv.compile(this.schemaReader.extractProperty(field));
+    const valid = validate(source);
+
+    if (!valid) {
+      this.throwValidationError(validate);
+    }
+
+    return source;
+  }
+
+  /**
    * Find/Create validate function based on class definition.
    *
    * @param definition    Class definition
    * @return              Validate function
    */
   public getValidationFunction(definition: IClass): ValidateFunction {
+
     const func = this.cache.filter((pair) => pair[0] === definition)[0];
     if (!!func) {
       return func[1];
     }
+
     const schema = this.schemaReader.extractSchema(definition);
     const validate = this.ajv.compile(schema);
     this.cache.push([definition, validate]);
+
     return validate;
   }
 

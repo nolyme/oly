@@ -1,8 +1,7 @@
 import * as KoaRouter from "koa-router";
 import { IClass, inject } from "oly-core";
 import { IKoaContext } from "oly-http";
-import { FieldMetadataUtil, IType, JsonService } from "oly-mapper";
-import { TypeUtil } from "oly-mapper/lib/utils/TypeUtil";
+import { FieldMetadataUtil, IType, JsonService, TypeUtil } from "oly-mapper";
 import { IRouteMetadata, RouterMetadataUtil } from "oly-router";
 import { IUploadedFile } from "../interfaces";
 import { end } from "../middlewares/end";
