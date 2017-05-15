@@ -105,20 +105,12 @@ describe("Kernel", () => {
         }
       }
 
-      class B {
-        @state() c: string;
-      }
-
       const k = createKernel();
       await k.start();
 
       await equalException(
         () => k.get(A)
         , errors.noDepAfterStart("A"),
-      );
-      await equalException(
-        () => k.get(B)
-        , errors.noDepAfterStart("B"),
       );
     });
 

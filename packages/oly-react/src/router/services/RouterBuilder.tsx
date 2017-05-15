@@ -262,6 +262,7 @@ export class RouterBuilder {
           }
 
           const args = [];
+
           if (resolver.page && Array.isArray(resolver.page.args)) {
             for (const arg of resolver.page.args) {
               if (arg.path) {
@@ -272,7 +273,6 @@ export class RouterBuilder {
             }
           }
 
-          args.push(nextState, replace);
           const componentAsync = ctrl[propertyKey].apply(ctrl, args);
           const isPromise = !!componentAsync.then;
           const promise = isPromise ? componentAsync : Promise.resolve(componentAsync);

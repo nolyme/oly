@@ -6,16 +6,23 @@ import { attach, page, page404, page500, RouterState } from "oly-react";
 import * as React from "react";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
+interface IAppTest {
+  kernel: Kernel;
+
+  open(url: string): Promise<{
+    html: string;
+    $: CheerioStatic
+  }>;
+}
+
+class SuperService {
+  data: string;
+  getText = () => "about";
+  getAsyncText = () => Promise.resolve("home");
+  reverseAsync = () => Promise.resolve(this.data.split("").reverse().join(""));
+}
+
 describe("ReactServerProvider", () => {
-
-  interface IAppTest {
-    kernel: Kernel;
-
-    open(url: string): Promise<{
-      html: string;
-      $: CheerioStatic
-    }>;
-  }
 
   const appTestFactory = async (Router: IClass): Promise<IAppTest> => {
     const kernel = new Kernel({
@@ -23,8 +30,8 @@ describe("ReactServerProvider", () => {
       OLY_LOGGER_LEVEL: "ERROR",
       OLY_REACT_SERVER_POINTS: ["default"],
     }).with(Router, ReactServerProvider);
-    await kernel.start();
     const client = kernel.get(HttpClient).with({baseURL: "http://localhost:" + kernel.env("OLY_HTTP_SERVER_PORT")});
+    await kernel.start();
     return {
       kernel,
       open: async (url: string) => {
@@ -36,13 +43,6 @@ describe("ReactServerProvider", () => {
       },
     };
   };
-
-  class SuperService {
-    data: string;
-    getText = () => "about";
-    getAsyncText = () => Promise.resolve("home");
-    reverseAsync = () => Promise.resolve(this.data.split("").reverse().join(""));
-  }
 
   @attach
   class About extends React.Component<any, any> {
@@ -87,7 +87,7 @@ describe("ReactServerProvider", () => {
           {React.cloneElement(children, {data})}
         </div>
       );
-    }
+    };
 
     @page("/about") about = () => About;
 

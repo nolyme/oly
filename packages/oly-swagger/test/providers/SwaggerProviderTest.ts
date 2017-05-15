@@ -22,18 +22,16 @@ describe("SwaggerProvider", () => {
     OLY_HTTP_SERVER_PORT: 6833,
     OLY_LOGGER_LEVEL: "ERROR",
   }).with(Ctrl, SwaggerProvider);
+  const server = kernel.get(ApiProvider);
+  const client = kernel.get(HttpClient).with({baseURL: server.hostname});
 
   describe("#onStart()", () => {
     it("should provide spec", async () => {
-      const server = kernel.get(ApiProvider);
-      const client = kernel.get(HttpClient).with({baseURL: server.hostname});
       const {data} = await client.get<any>("/swagger.json");
       expect(data.swagger).toBe("2.0");
       expect(data.securityDefinitions.Bearer.in).toBe("header");
     });
     it("should provide ui", async () => {
-      const server = kernel.get(ApiProvider);
-      const client = kernel.get(HttpClient).with({baseURL: server.hostname});
       const {data} = await client.get<any>("/swagger/ui");
       expect(typeof data).toBe("string");
       expect(data.indexOf("html")).not.toBe(-1);

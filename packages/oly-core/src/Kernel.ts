@@ -108,6 +108,11 @@ export class Kernel {
   private parent?: Kernel;
 
   /**
+   * Lazy logger ref.
+   */
+  private logger: Logger;
+
+  /**
    * Create a new kernel.
    * First argument is a initial store, for configuration.
    * Then, there is the 'parent' argument which create a fork.
@@ -508,6 +513,7 @@ export class Kernel {
 
   /**
    * Check if a definition can be named as IProvider.
+   * Providers can"t be injected after #start().
    *
    * @param definition      Class definition
    */
@@ -521,12 +527,13 @@ export class Kernel {
       return true;
     }
 
-    const states: IVirtualStateMetadataMap = MetadataUtil.deep(lyStates, definition, {});
-    for (const propertyKey of Object.keys(states)) {
-      if (!states[propertyKey].readonly) {
-        return true;
-      }
-    }
+    // TODO: i don't know if it's a good idea or not
+    // const states: IVirtualStateMetadataMap = MetadataUtil.deep(lyStates, definition, {});
+    // for (const propertyKey of Object.keys(states)) {
+    //  if (!states[propertyKey].readonly) {
+    //    return true;
+    //  }
+    // }
 
     return false;
   }
@@ -635,7 +642,10 @@ export class Kernel {
    * Internal logger.
    */
   protected getLogger() {
-    return this.get(Logger).as("Kernel");
+    if (!this.logger) {
+      this.logger = this.get(Logger).as("Kernel");
+    }
+    return this.logger;
   }
 
   /**
@@ -657,7 +667,8 @@ export class Kernel {
       observers.push(this.on(key, {target, propertyKey, instance}));
     }
 
-    // hacky hack is hacky
+    // TODO: find a better way
+    // this is currently use on oly-react
     instance["__free__"] = () => { // tslint:disable-line
       observers.forEach((obs) => obs.free());
     };
