@@ -1,5 +1,5 @@
 import { AxiosError, AxiosInstance, AxiosRequestConfig, default as axiosInstance } from "axios";
-import { inject, Logger } from "oly-core";
+import { inject, Logger, state } from "oly-core";
 import { HttpError } from "../helpers/HttpError";
 import { IHttpRequest, IHttpResponse } from "../interfaces";
 
@@ -9,7 +9,8 @@ import { IHttpRequest, IHttpResponse } from "../interfaces";
  */
 export class HttpClient {
 
-  protected axios: AxiosInstance = axiosInstance;
+  @state
+  protected axios: AxiosInstance = this.createAxios();
 
   @inject(Logger)
   protected logger: Logger;
@@ -17,11 +18,11 @@ export class HttpClient {
   /**
    * Configure a new axios instance.
    * Useful for attach BASE_URL or similar stuff.
-   * This is not reliable as axios is not in the state.
+   * Use it for test only.
    *
    * @param options   Axios configuration
    */
-  public with(options: AxiosRequestConfig) {
+  public with(options: AxiosRequestConfig): this {
     this.axios = axiosInstance.create(options);
     return this;
   }
@@ -99,6 +100,13 @@ export class HttpClient {
     options.url = url;
 
     return this.request(options);
+  }
+
+  /**
+   *
+   */
+  protected createAxios() {
+    return axiosInstance.create();
   }
 
   /**
