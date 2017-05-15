@@ -2,6 +2,7 @@ import * as KoaRouter from "koa-router";
 import { IClass, inject } from "oly-core";
 import { IKoaContext } from "oly-http";
 import { FieldMetadataUtil, IType, JsonService } from "oly-mapper";
+import { TypeUtil } from "oly-mapper/lib/utils/TypeUtil";
 import { IRouteMetadata, RouterMetadataUtil } from "oly-router";
 import { IUploadedFile } from "../interfaces";
 import { end } from "../middlewares/end";
@@ -148,12 +149,15 @@ export class KoaRouterBuilder {
     if (!type) {
       return value;
     } else if (type === Boolean) {
-      return (value === "true" || value === "");
+      if (value === "") {
+        return true;
+      }
+      return TypeUtil.forceBoolean(value);
     } else if (type === Number) {
       if (value === "") {
         return null;
       }
-      return Number(value);
+      return TypeUtil.forceNumber(value);
     } else if (FieldMetadataUtil.hasFields(type)) {
       try {
         return this.json.build(type as IClass, value);

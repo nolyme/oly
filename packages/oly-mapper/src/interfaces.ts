@@ -8,7 +8,7 @@ export type IType = IAnyFunction;
 /**
  * Json schema list of type.
  */
-export type FieldType = "object" | "array" | "string" | "number" | "boolean" | "null";
+export type FieldType = "object" | "array" | "string" | "number" | "boolean" | "null" | "any";
 
 /**
  * Json Schema list of format.
