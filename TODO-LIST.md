@@ -1,24 +1,10 @@
-# React
 
-react use oly-router
-UPGRADE REACT ROUTER AOZFJIAZFIAZFIAZFHI
+# TODO
 
-# Socket
-
-socket.io
-
-# Integration
-
-Real app with ALL packages
-
-# Core
-
-big error refacto
-
-create Exception
-
-# Mapper
-rename to json
-
-real map (by type)
-validate (by field)
+- (docs) finish oly-docs step 1. **[IN PROGRESS]**
+- (react) migrate react-router v4
+- (security) test jwt and decorators
+- (ws) create oly-ws: socket.io
+- (core) add Exception everywhere **[IN PROGRESS]**
+- (mapper) rename to oly-json
+- (swagger) better api, add tests

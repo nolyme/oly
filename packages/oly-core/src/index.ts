@@ -15,3 +15,5 @@ export * from "./interfaces/store";
 export * from "./interfaces/types";
 export * from "./Kernel";
 export * from "./logger/index";
+export * from "./exceptions/Exception";
+export * from "./exceptions/WeirdException";
