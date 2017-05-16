@@ -1,25 +1,15 @@
 import { deepEqual, equal } from "assert";
 import { _ } from "../src";
-import { errors } from "../src/constants/errors";
+import { olyCoreErrors } from "../src/constants/errors";
 import { env } from "../src/decorators/env";
 import { inject } from "../src/decorators/inject";
 import { injectable } from "../src/decorators/injectable";
 import { on } from "../src/decorators/on";
 import { state } from "../src/decorators/state";
-import { IAnyFunction } from "../src/interfaces/types";
 import { Kernel } from "../src/Kernel";
 
 const createKernel = (options: object = {}) => {
   return Kernel.create(_.assign({}, {OLY_LOGGER_LEVEL: "ERROR"}, options, process.env));
-};
-
-const equalException = async (run: IAnyFunction, error: Error) => {
-  try {
-    await run();
-    throw new Error("");
-  } catch (e) {
-    equal(e.message, error.message);
-  }
 };
 
 describe("Kernel", () => {
@@ -49,17 +39,13 @@ describe("Kernel", () => {
     });
     it("should reject when null", async () => {
       const A: any = null;
-      await equalException(
-        () => createKernel().with(A)
-        , errors.injectableIsNull(),
-      );
+      expect(() => createKernel().with(A))
+        .toThrow(olyCoreErrors.injectableIsNull());
     });
     it("should reject when null 2", async () => {
       const A: any = null;
-      await equalException(
-        () => createKernel().get({provide: A, use: A})
-        , errors.isNotFunction("provide", typeof A),
-      );
+      expect(() => createKernel().get({provide: A, use: A}))
+        .toThrow(olyCoreErrors.isNotFunction("provide", typeof A));
     });
   });
   describe("#start()", () => {
@@ -108,26 +94,19 @@ describe("Kernel", () => {
       const k = createKernel();
       await k.start();
 
-      await equalException(
-        () => k.get(A)
-        , errors.noDepAfterStart("A"),
-      );
+      expect(() => k.get(A))
+        .toThrow(olyCoreErrors.noDepAfterStart("A"));
     });
 
     it("should reject #start() after #start()", async () => {
       const k = createKernel();
       await k.start();
-      await equalException(
-        () => k.start()
-        , errors.alreadyStarted(),
-      );
+      expect(() => k.start()).toThrow(olyCoreErrors.alreadyStarted());
     });
+
     it("should reject #stop() before #start()", async () => {
       const k = createKernel();
-      await equalException(
-        () => k.stop()
-        , errors.notStarted(),
-      );
+      expect(() => k.stop()).toThrow(olyCoreErrors.notStarted());
     });
 
     it("should accept #start() again after #stop()", async () => {
@@ -185,15 +164,16 @@ describe("Kernel", () => {
       equal(stack.join(""), "->ABCDEFGH");
     });
     it("should handle error", async () => {
-      const ef = () => new Error("FAIL");
+
+      const error = "Fail";
 
       class A {
         onStart() {
-          throw ef();
+          throw new Error(error);
         }
       }
 
-      await equalException(() => createKernel().with(A).start(), ef());
+      (expect(createKernel().with(A).start()) as any).rejects.toEqual(new Error(error));
     });
   });
   describe("#env()", () => {
@@ -263,10 +243,8 @@ describe("Kernel", () => {
         @env("x") x: string;
       }
 
-      await equalException(
-        () => createKernel().with(A)
-        , errors.envNotDefined("x"),
-      );
+      expect(() => createKernel().with(A))
+        .toThrow(olyCoreErrors.envNotDefined("x"));
     });
   });
   describe("#fork()", () => {
@@ -369,8 +347,8 @@ describe("Kernel", () => {
         @env("B") b: string;
       }
 
-      equal(createKernel().get(Parent).a, "a");
-      await equalException(() => createKernel().get(Child).a, errors.envNotDefined("B"));
+      expect(createKernel().get(Parent).a).toBe("a");
+      expect(() => createKernel().get(Child).a).toThrow(olyCoreErrors.envNotDefined("B"));
     });
   });
 
@@ -393,7 +371,7 @@ describe("Kernel", () => {
       equal(kernel.get(A).b.c, "MOCK");
     });
 
-    it("should reject mocking when it's too late", () => {
+    it("should reject swap of B if B is already defined", () => {
       class B {
         c = "C";
       }
@@ -406,12 +384,8 @@ describe("Kernel", () => {
         @inject b: B;
       }
 
-      try {
-        createKernel().with(A).with({provide: B, use: BMock});
-        throw new Error("");
-      } catch (e) {
-        equal(e.message, errors.noDepUpdate("B").message);
-      }
+      expect(() => createKernel().with(A).with({provide: B, use: BMock}))
+        .toThrow(olyCoreErrors.noDepUpdate("B"));
     });
 
     it("should register swapping with identity", () => {

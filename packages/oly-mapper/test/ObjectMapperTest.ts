@@ -2,6 +2,7 @@ import { deepEqual, equal } from "assert";
 import { createKernel } from "oly-test";
 import { array } from "../src";
 import { field } from "../src/decorators/field";
+import { ValidationException } from "../src/exceptions/ValidationException";
 import { JsonService } from "../src/JsonService";
 import { JsonValidator } from "../src/services/JsonValidator";
 
@@ -119,9 +120,22 @@ describe("ObjectMapper", () => {
       json.validateClass(Credentials, entry);
       throw new Error("");
     } catch (e) {
-      localize.fr(e.details);
-      equal(json.ajv.errorsText(e.details), "data.username doit être de type string");
-      equal(e.message, "Validation has failed (data.username should be string)");
+      expect(e).toBeInstanceOf(ValidationException);
+      const ev: ValidationException = e;
+      localize.fr(ev.errors);
+      expect(json.ajv.errorsText(ev.errors)).toBe("data.username doit être de type string");
+      expect(ev.message).toBe("data.username should be string");
+    }
+
+    try {
+      json.validateField({type: String, name: "username"}, 1);
+      throw new Error("");
+    } catch (e) {
+      expect(e).toBeInstanceOf(ValidationException);
+      const ev: ValidationException = e;
+      localize.fr(ev.errors);
+      expect(json.ajv.errorsText(ev.errors)).toBe("data doit être de type string");
+      expect(ev.message).toBe("data should be string");
     }
   });
 });

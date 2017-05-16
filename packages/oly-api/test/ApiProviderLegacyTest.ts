@@ -3,6 +3,7 @@ import { HttpClient, IHttpRequest } from "oly-http";
 import { field } from "oly-mapper";
 import { attachKernel } from "oly-test";
 import { ApiProvider } from "../src";
+import { olyApiErrors } from "../src/constants/errors";
 import { body } from "../src/decorators/body";
 import { del } from "../src/decorators/del";
 import { get } from "../src/decorators/get";
@@ -10,8 +11,7 @@ import { path } from "../src/decorators/path";
 import { post } from "../src/decorators/post";
 import { query } from "../src/decorators/query";
 import { router } from "../src/decorators/router";
-import { IApiError } from "../src/interfaces";
-import { ApiErrorService } from "../src/services/ApiErrorService";
+import { ApiException } from "../src/exceptions/ApiException";
 
 describe("ApiProviderLegacy", () => {
   describe("@get()", () => {
@@ -35,8 +35,8 @@ describe("ApiProviderLegacy", () => {
     });
 
     it("should response correctly", async () => {
-      equal((await client.request<IApiError>({url: "/"})).data.error.message,
-        "The requested service does not exists");
+      equal((await client.request<ApiException>({url: "/"})).data.message,
+        olyApiErrors.serviceNotFound());
       equal((await client.request({url: "/hello"})).data, "Hello World");
       equal((await client.request({url: "/hello/jean"})).data, "Hello jean");
     });
@@ -164,7 +164,6 @@ describe("ApiProviderLegacy", () => {
 
     const kernel = attachKernel({OLY_HTTP_SERVER_PORT: 2912}).with(A);
     const server = kernel.get(ApiProvider);
-    const apiErrorService = kernel.get(ApiErrorService);
     const client = kernel.get(HttpClient).with({
       baseURL: server.hostname,
       validateStatus: () => true,
@@ -193,13 +192,13 @@ describe("ApiProviderLegacy", () => {
       expect(await fetch("3?b=toto")).toEqual({b: null});
     });
     it("should extract query as object", async () => {
-      expect((await fetch("4", {params: {b: "h"}})).error.message)
-        .toBe(apiErrorService.invalidFormat("queryParam", "b", "json").message);
+      expect((await fetch("4", {params: {b: "h"}})).message)
+        .toBe(olyApiErrors.invalidFormat("queryParam", "b", "json"));
       expect(await fetch("4", {params: {b: {h: 3}}})).toEqual({b: {h: 3}});
     });
     it("should extract query as object", async () => {
-      expect((await fetch("5", {params: {b: "h"}})).error.message)
-        .toEqual(apiErrorService.validationHasFailed(null).message);
+      expect((await fetch("5", {params: {b: "h"}})).message)
+        .toBe(olyApiErrors.validationHasFailed());
       expect(await fetch("5", {params: {b: {name: "toto"}}})).toEqual({b: {name: "toto"}});
     });
   });

@@ -96,24 +96,39 @@ export class CommonUtil {
    * @param type2   Class 2
    */
   public static is(type1: any, type2: any) {
+
     if (typeof type1 !== "function" || typeof type2 !== "function") {
       return false;
     }
+
     if (type1 === type2) {
       return true;
     }
+
     if (typeof type1.name === "string" && (type1.name === type2.name)) {
       // TODO: disable in production ? (performance)
       return "" + type1 === "" + type2;
     }
+
     return false;
+  }
+
+  /**
+   * Create an identifier with a class and one of his propertyKey.
+   * This is important and used by many of oly packages.
+   *
+   * Class A { b() {} } -> "A.b".
+   */
+  public static targetToString(target: IClass, propertyKey: string): string {
+    return `${target.name}.${propertyKey}`;
   }
 
   /**
    * Try to convert string into number/boolean.
    *
-   * @param value
-   * @return {any}
+   * @internal
+   * @param value  Something
+   * @return       Boolean or string or something
    */
   public static parseNumberAndBoolean(value: any): any {
     if (typeof value === "string") {
@@ -126,13 +141,6 @@ export class CommonUtil {
       }
     }
     return value;
-  }
-
-  /**
-   * Class A { b() {} } -> "A.b".
-   */
-  public static targetToString(target: IClass, propertyKey: string): string {
-    return `${target.name}.${propertyKey}`;
   }
 
   /**

@@ -16,6 +16,8 @@ import { MetadataUtil } from "../utils/MetadataUtil";
  * @param options     {@see IDefinitionMetadata}
  */
 export const injectable = <T>(options: IDefinitionMetadata<T> = {}) => (target: IClass): any => {
+
   MetadataUtil.set(lyDefinition, options, target);
+
   return target;
 };

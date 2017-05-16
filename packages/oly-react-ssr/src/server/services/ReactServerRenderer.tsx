@@ -31,7 +31,7 @@ export class ReactServerRenderer {
       <html>
         <head>
           <meta charset="UTF-8"/>
-          <title>App</title>
+          <title>${this.kernel.env("OLY_APP_NAME")}</title>
           <base href="${prefix}"/>
         </head>
         <body>
@@ -69,6 +69,14 @@ export class ReactServerRenderer {
   /**
    * In very few cases, SSR can failed.
    *
+   * ```
+   * class MyRenderer extends ReactServerRenderer {
+   *  renderError(ctx, template, id, error) {
+   *    return ``; // wat u want
+   *  }
+   * }
+   * ```
+   *
    * @param ctx         Koa Context with Kernel
    * @param mountId
    * @param template    App template with styles + scripts
@@ -89,5 +97,4 @@ export class ReactServerRenderer {
        </body>
     `);
   }
-
 }

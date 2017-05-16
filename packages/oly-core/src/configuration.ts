@@ -9,7 +9,6 @@ import { Kernel } from "./Kernel";
  * ```
  *
  * @param kernel
- * @constructor
  */
 export const USE_PROCESS_ENV = (kernel: Kernel) => {
   for (const key of Object.keys(process.env)) {
@@ -23,12 +22,15 @@ export const USE_PROCESS_ENV = (kernel: Kernel) => {
  * Add process.env.NODE_ENV into kernel store.
  *
  * @param kernel
- * @constructor
  */
 export const USE_NODE_ENV = (kernel: Kernel) => {
   kernel.state("NODE_ENV", process.env.NODE_ENV);
 };
 
+/**
+ *
+ * @param kernel
+ */
 export const USE_STOP_ON_EXIT = (kernel: Kernel) => {
   process.once("SIGINT", () => {
     kernel.stop()

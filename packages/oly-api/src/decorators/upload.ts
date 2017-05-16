@@ -9,7 +9,7 @@ export const multer: any = require("koa-multer"); // tslint:disable-line
  *
  * ```
  * class A {
- *  @post("/") upload(@upload() file: any) {}
+ *  @post("/") upload(@upload() file: IUploadedFile) {}
  * }
  * ```
  *

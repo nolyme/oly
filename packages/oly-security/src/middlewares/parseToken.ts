@@ -1,11 +1,11 @@
 import { IAnyFunction, Logger } from "oly-core";
-import { IKoaContext, KoaMiddleware } from "oly-http";
+import { IKoaContext, IKoaMiddleware } from "oly-http";
 import { JwtAuthService } from "../services/JwtAuthService";
 
 /**
  *
  */
-export const parseToken = (): KoaMiddleware => {
+export const parseToken = (): IKoaMiddleware => {
   return async function parseTokenMiddleware(ctx: IKoaContext, next: IAnyFunction) {
 
     const authorization = ctx.request.header.authorization;

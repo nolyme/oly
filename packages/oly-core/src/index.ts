@@ -16,4 +16,4 @@ export * from "./interfaces/types";
 export * from "./Kernel";
 export * from "./logger/index";
 export * from "./exceptions/Exception";
-export * from "./exceptions/WeirdException";
+export * from "./exceptions/KernelException";

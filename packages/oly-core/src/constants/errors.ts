@@ -1,23 +1,29 @@
 /**
- * Error Factory.
+ * oly-core error messages.
  */
-export const errors = {
+export const olyCoreErrors = {
+
   alreadyStarted: () =>
-    new Error(`Kernel has already been started. You should call Kernel#stop() before doing that`),
+    `Kernel has already been started. You should call Kernel#stop() before doing that`,
+
+  defaultException: () =>
+    `An exception has been thrown without any message`,
+
   envNotDefined: (name: string) =>
-    new Error(`Env key '${name}' is required but not defined. Use "new Kernel({'${name}': 'xxx'})"`),
+    `Env key '${name}' is required but not defined. Use "new Kernel({'${name}': 'xxx'})"`,
+
   injectableIsNull: () =>
-    new Error(`You are trying to inject a null object. This isn't allowed`),
+    `You are trying to inject a null object. This isn't allowed`,
+
   isNotFunction: (name: string, type: string) =>
-    new Error(`Your '${name}' key must be a Function/ES6 Class. Current is '${type}'`),
+    `Your '${name}' key must be a Function/ES6 Class. Current is '${type}'`,
+
   noDepAfterStart: (name: string) =>
-    new Error(`Declaration of '${name}' isn't allowed after the Kernel#start(). Register it before starting kernel`),
+    `Declaration of '${name}' isn't allowed after the Kernel#start(). Register it before starting kernel`,
+
   noDepUpdate: (name: string) =>
-    new Error(`You are trying to update '${name}', which is an already-declared dependency`),
+    `You are trying to update '${name}', which is an already-declared dependency`,
+
   notStarted: () =>
-    new Error(`Kernel isn't started. You should call Kernel#start() before doing that`),
-  reflectRequired: () =>
-    new Error(
-      `MetadataUtil requires 'reflect-metadata' polyfill. ` +
-      `Use 'import "reflect-metadata";' on the top of your main script`),
+    `Kernel isn't started. You should call Kernel#start() before doing that`,
 };

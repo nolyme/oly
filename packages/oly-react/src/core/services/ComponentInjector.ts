@@ -10,8 +10,7 @@ import {
   Logger,
   lyEvents,
   lyStates,
-  MetadataUtil,
-  STATE_MUTATE,
+  MetadataUtil, olyCoreEvents,
 } from "oly-core";
 import { ACTIONS_ERROR, ACTIONS_SUCCESS, lyActions } from "../constants";
 import { IActionMetadata, IActionMetadataMap, IActionResult, IActionResultError } from "../interfaces";
@@ -72,7 +71,7 @@ export class ComponentInjector {
       }
 
       const events: IEventMetadataMap = MetadataUtil.get(lyEvents, instance.constructor);
-      events[propertyKey + "$$refresh"] = {name: STATE_MUTATE};
+      events[propertyKey + "$$refresh"] = {name: olyCoreEvents.STATE_MUTATE};
       MetadataUtil.set(lyEvents, events, instance.constructor);
 
       instance[propertyKey + "$$refresh"] = function refreshHandler(this: any, event: IStateMutate) {

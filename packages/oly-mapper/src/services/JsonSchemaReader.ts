@@ -21,7 +21,7 @@ export class JsonSchemaReader {
     "uniqueItems",
     "default",
     "additionalProperties",
-    "enum",
+    "enum"
   ];
 
   /**

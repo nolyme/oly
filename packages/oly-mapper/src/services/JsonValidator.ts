@@ -1,6 +1,7 @@
 import * as Ajv from "ajv";
 import { ValidateFunction } from "ajv";
 import { IClass, inject, state } from "oly-core";
+import { ValidationException } from "../exceptions/ValidationException";
 import { IField } from "../interfaces";
 import { JsonSchemaReader } from "./JsonSchemaReader";
 
@@ -27,7 +28,7 @@ export class JsonValidator {
     const valid = validate(source);
 
     if (!valid) {
-      this.throwValidationError(validate);
+      throw new ValidationException(this.ajv.errorsText(validate.errors), validate.errors || []);
     }
 
     return source;
@@ -45,7 +46,7 @@ export class JsonValidator {
     const valid = validate(source);
 
     if (!valid) {
-      this.throwValidationError(validate);
+      throw new ValidationException(this.ajv.errorsText(validate.errors), validate.errors || []);
     }
 
     return source;
@@ -78,17 +79,5 @@ export class JsonValidator {
     return new Ajv({
       useDefaults: true,
     });
-  }
-
-  /**
-   * Poop exception on validator error.
-   *
-   * @param validate
-   */
-  protected throwValidationError(validate: Ajv.ValidateFunction): any {
-    const error: any = new Error(`Validation has failed (${this.ajv.errorsText(validate.errors)})`);
-    error.status = 400;
-    error.details = validate.errors;
-    throw error;
   }
 }

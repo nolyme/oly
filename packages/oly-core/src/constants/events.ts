@@ -1,4 +1,7 @@
 /**
- * @event STATE_MUTATE
+ * oly-core event names.
  */
-export const STATE_MUTATE = "state:mutate";
+export const olyCoreEvents = {
+
+  STATE_MUTATE: "oly:state:mutate",
+};

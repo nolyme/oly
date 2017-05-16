@@ -20,30 +20,6 @@ declare module "oly-http/lib/interfaces" {
 }
 
 /**
- * Default error structure.
- * Override with typescript interface enhancement.
- *
- * ```ts
- * declare module "oly-api/lib/interfaces" {
- *    export interface IApiError {
- *      error: {
- *         status: number;
- *         message: string;
- *         // ...
- *      }
- *    }
- * }
- * ```
- */
-export interface IApiError {
-  error: {
-    status: number;
-    message: string;
-    details?: any;
-  };
-}
-
-/**
  * Definition of file used by multer.
  *
  * @experimental

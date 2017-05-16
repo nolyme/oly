@@ -1,7 +1,7 @@
 import { createServer, Server } from "http";
 import * as Koa from "koa";
 import { env, IAnyFunction, inject, Kernel, Logger, state } from "oly-core";
-import { KoaMiddleware } from "../interfaces";
+import { IKoaMiddleware } from "../interfaces";
 import { context } from "../middlewares";
 
 // override default interface
@@ -75,7 +75,7 @@ export class HttpServerProvider {
    *
    * @param middleware
    */
-  public use(middleware: KoaMiddleware) {
+  public use(middleware: IKoaMiddleware) {
     this.app.use(middleware);
     return this;
   }

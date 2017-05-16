@@ -1,4 +1,4 @@
-import { KoaMiddleware } from "oly-http";
+import { IKoaMiddleware } from "oly-http";
 import { RouterMetadataUtil } from "oly-router";
 
 /**
@@ -17,7 +17,7 @@ import { RouterMetadataUtil } from "oly-router";
  *
  * @param middleware    Koa2 middleware, not express!!
  */
-export const use = (middleware: KoaMiddleware): PropertyDecorator => {
+export const use = (middleware: IKoaMiddleware): PropertyDecorator => {
   return (target: object, propertyKey: string): void => {
 
     const router = RouterMetadataUtil.getRouter(target.constructor);

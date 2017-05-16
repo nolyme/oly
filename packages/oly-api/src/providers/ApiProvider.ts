@@ -1,9 +1,9 @@
 import * as koaBodyParser from "koa-bodyparser";
 import { env, IClass, IDeclarations, inject, Logger } from "oly-core";
-import { HttpError, HttpServerProvider, KoaMiddleware, mount } from "oly-http";
+import { HttpError, HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
 import { RouterMetadataUtil } from "oly-router";
 import { IKoaRouter } from "../interfaces";
-import { root } from "../middlewares/root";
+import { ApiMiddlewares } from "../services/ApiMiddlewares";
 import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
 
 /**
@@ -20,6 +20,9 @@ export class ApiProvider {
   @inject(KoaRouterBuilder)
   protected koaRouterBuilder: KoaRouterBuilder;
 
+  @inject(ApiMiddlewares)
+  protected apiMiddlewares: ApiMiddlewares;
+
   @inject(HttpServerProvider)
   protected httpServerProvider: HttpServerProvider;
 
@@ -30,14 +33,14 @@ export class ApiProvider {
    * Get current hostname based on configuration.
    * Api prefix is included.
    */
-  public get hostname() {
+  public get hostname(): string {
     return this.httpServerProvider.hostname + this.prefix;
   }
 
   /**
    * Use a koa middleware.
    */
-  public use(middleware: KoaMiddleware) {
+  public use(middleware: IKoaMiddleware): this {
     this.httpServerProvider.use(mount(this.prefix, middleware));
     return this;
   }
@@ -45,7 +48,7 @@ export class ApiProvider {
   /**
    * Mount a middleware on prefix. ('/', '/wat', ...)
    */
-  public mount(prefix: string, middleware: KoaMiddleware) {
+  public mount(prefix: string, middleware: IKoaMiddleware): this {
     return this.use(mount(prefix, middleware));
   }
 
@@ -54,10 +57,11 @@ export class ApiProvider {
    *
    * @param definition   Class with Router Metadata
    */
-  public register(definition: IClass): void {
+  public register(definition: IClass): this {
     const router = this.koaRouterBuilder.createFromDefinition(definition);
-    this.logRouter(router, definition);
-    this.mountRouter(router);
+    return this
+      .logRouter(router, definition)
+      .mountRouter(router);
   }
 
   /**
@@ -76,7 +80,7 @@ export class ApiProvider {
   /**
    * Default koa body parser.
    */
-  protected useBodyParser() {
+  protected useBodyParser(): this {
     return this.use(koaBodyParser() as any);
   }
 
@@ -85,9 +89,10 @@ export class ApiProvider {
    *
    * @param declarations
    */
-  protected async onStart(declarations: IDeclarations) {
+  protected async onStart(declarations: IDeclarations): Promise<void> {
     this.useBodyParser();
-    this.use(root());
+    this.use(this.apiMiddlewares.log());
+    this.use(this.apiMiddlewares.errorHandler());
     this.logger.info(`prefix api with ${this.prefix}`);
     this.scan(declarations);
   }
@@ -97,13 +102,14 @@ export class ApiProvider {
    *
    * @param router    Koa router instance
    */
-  protected mountRouter(router: IKoaRouter) {
+  protected mountRouter(router: IKoaRouter): this {
     this.use(router.routes() as any);
     this.use(router.allowedMethods({
       methodNotAllowed: () => new HttpError(405),
       notImplemented: () => new HttpError(501),
       throw: true,
     }) as any);
+    return this;
   }
 
   /**
@@ -112,12 +118,13 @@ export class ApiProvider {
    * @param router         Koa router instance
    * @param definition     Dependency definition used with this router
    */
-  protected logRouter(router: IKoaRouter, definition: IClass) {
+  protected logRouter(router: IKoaRouter, definition: IClass): this {
     this.logger.trace(`prepare ${definition.name}`);
     for (const layer of router.stack) {
       const method = layer.methods[layer.methods.length - 1];
       const path = (this.prefix + layer.path).replace(/\/\//, "/");
       this.logger.debug(`mount ${method} ${path} -> ${definition.name}#${(layer as any).propertyKey}()`);
     }
+    return this;
   }
 }

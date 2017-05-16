@@ -6,6 +6,10 @@ import { IClass, IClassOf, IFactoryOf } from "./types";
  * @alias
  */
 export type IDefinition<T> = IClassOf<T>;
+
+/**
+ * @alias
+ */
 export type IAnyDefinition = IDefinition<any>;
 
 /**

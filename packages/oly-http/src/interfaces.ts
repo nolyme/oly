@@ -31,7 +31,7 @@ export interface IKoaContext extends Koa.Context {
 /**
  * Middleware with our Koa.Context
  */
-export type KoaMiddleware = (ctx: IKoaContext, next: () => Promise<void>) => any;
+export type IKoaMiddleware = (ctx: IKoaContext, next: () => Promise<void>) => any;
 
 /**
  * https://github.com/koajs/static

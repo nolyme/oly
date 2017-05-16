@@ -29,12 +29,15 @@ export const inject = (type?: IClass | object, propertyKey?: string): any => {
   return $inject(type as IClass);
 };
 
+/**
+ * Real decorator.
+ */
 const $inject = (type?: IClass): PropertyDecorator => (target: object, propertyKey: string): void => {
-  const injections: IDependencyMetadataMap = MetadataUtil.get(lyDependencies, target.constructor);
+  const dependencies: IDependencyMetadataMap = MetadataUtil.get(lyDependencies, target.constructor);
 
-  injections[propertyKey] = {
+  dependencies[propertyKey] = {
     type: type || MetadataUtil.getProp(designType, target, propertyKey),
   };
 
-  MetadataUtil.set(lyDependencies, injections, target.constructor);
+  MetadataUtil.set(lyDependencies, dependencies, target.constructor);
 };

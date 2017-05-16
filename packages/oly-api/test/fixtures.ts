@@ -86,3 +86,11 @@ export class A3 {
     return {};
   }
 }
+
+export class A4 {
+
+  @get("/error/raw")
+  error() {
+    throw new Error("BOOM");
+  }
+}

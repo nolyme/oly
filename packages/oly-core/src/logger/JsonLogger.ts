@@ -6,6 +6,7 @@ import { LogLevels } from "./LogLevels";
 
 /**
  * Display {json: message} instead of classic format.
+ *
  * ```typescript
  * kernel.with(JsonLogger);
  * ```

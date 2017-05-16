@@ -3,20 +3,21 @@ import { IClass, inject } from "oly-core";
 import { IKoaContext } from "oly-http";
 import { FieldMetadataUtil, IType, JsonService, TypeUtil } from "oly-mapper";
 import { IRouteMetadata, RouterMetadataUtil } from "oly-router";
+import { olyApiErrors } from "../constants/errors";
+import { BadRequestException } from "../exceptions/BadRequestException";
 import { IUploadedFile } from "../interfaces";
-import { end } from "../middlewares/end";
-import { ApiErrorService } from "./ApiErrorService";
+import { ApiMiddlewares } from "./ApiMiddlewares";
 
 /**
  * koa-router build based on metadata.
  */
 export class KoaRouterBuilder {
 
-  @inject(ApiErrorService)
-  protected apiErrorService: ApiErrorService;
-
   @inject(JsonService)
   protected json: JsonService;
+
+  @inject(ApiMiddlewares)
+  protected apiMiddlewares: ApiMiddlewares;
 
   /**
    * Transform router metadata into a fresh koa-router object.
@@ -42,7 +43,7 @@ export class KoaRouterBuilder {
       mount.apply(koaRouter, [
         path,
         ...middlewares,
-        end(definition, propertyKey, route),
+        this.apiMiddlewares.invoke(definition, propertyKey, route),
       ]);
 
       // hack used for logging only (@see ApiProvider)
@@ -73,7 +74,7 @@ export class KoaRouterBuilder {
 
         const value: string = ctx.params[arg.path];
         if (!value) {
-          throw this.apiErrorService.missing("pathVariable", arg.path);
+          throw new BadRequestException(olyApiErrors.missing("pathVariable", arg.path));
         }
         return this.parseAndCast(value, arg.type, arg.path, "pathVariable");
 
@@ -81,7 +82,7 @@ export class KoaRouterBuilder {
 
         const value: string = ctx.query[arg.query];
         if (!value && arg.required === true) {
-          throw this.apiErrorService.missing("queryParam", arg.query);
+          throw new BadRequestException(olyApiErrors.missing("queryParam", arg.query));
         }
         return this.parseAndCast(value, arg.type, arg.query, "queryParam");
 
@@ -89,7 +90,7 @@ export class KoaRouterBuilder {
 
         const value: string = ctx.header[arg.header.toLowerCase()];
         if (!value && arg.required === true) {
-          throw this.apiErrorService.missing("header", arg.query);
+          throw new BadRequestException(olyApiErrors.missing("header", arg.header));
         }
         return this.parseAndCast(value, arg.type, arg.header, "header");
 
@@ -97,7 +98,7 @@ export class KoaRouterBuilder {
 
         const value: object | object[] = ctx.request.body;
         if (!value && arg.required === true) {
-          throw this.apiErrorService.missing("request", "body");
+          throw new BadRequestException(olyApiErrors.missing("request", "body"));
         }
         return this.parseBody(value, arg);
 
@@ -129,7 +130,7 @@ export class KoaRouterBuilder {
     try {
       return this.json.build(arg.body, body);
     } catch (e) {
-      throw this.apiErrorService.validationHasFailed(arg.path);
+      throw new BadRequestException(e, olyApiErrors.validationHasFailed());
     }
   }
 
@@ -159,9 +160,9 @@ export class KoaRouterBuilder {
       return TypeUtil.forceNumber(value);
     } else if (FieldMetadataUtil.hasFields(type)) {
       try {
-        return this.json.build(type as IClass, value);
+        return this.json.build(type as IClass, value); // TODO: ValidationException() + .reason or field
       } catch (e) {
-        throw this.apiErrorService.validationHasFailed(e.message);
+        throw new BadRequestException(e, olyApiErrors.validationHasFailed());
       }
     } else if (type === Object) {
       if (value === "") {
@@ -170,7 +171,7 @@ export class KoaRouterBuilder {
       try {
         return JSON.parse(value);
       } catch (ignore) {
-        throw this.apiErrorService.invalidFormat(argType, argKey, "json");
+        throw new BadRequestException(olyApiErrors.invalidFormat(argType, argKey, "json"));
       }
     } else if (type === String && !!value) {
       return value.toString();

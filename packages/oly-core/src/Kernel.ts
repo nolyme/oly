@@ -1,5 +1,7 @@
-import { errors } from "./constants/errors";
+import { olyCoreErrors } from "./constants/errors";
+import { olyCoreEvents } from "./constants/events";
 import { lyDefinition, lyDependencies, lyEvents, lyStates } from "./constants/keys";
+import { KernelException } from "./exceptions/KernelException";
 import {
   IEventCallback,
   IEventListener,
@@ -188,7 +190,7 @@ export class Kernel {
   public start(): Promise<Kernel> {
 
     if (this.started) {
-      throw errors.alreadyStarted();
+      throw new KernelException(olyCoreErrors.alreadyStarted());
     }
 
     this.getLogger().trace("start kernel");
@@ -223,7 +225,7 @@ export class Kernel {
   public stop(): Promise<Kernel> {
 
     if (!this.started) {
-      throw errors.notStarted();
+      throw new KernelException(olyCoreErrors.notStarted());
     }
 
     this.getLogger().debug("stop kernel");
@@ -253,7 +255,7 @@ export class Kernel {
 
     for (const injectable of definitions) {
       if (!injectable) {
-        throw errors.injectableIsNull();
+        throw new KernelException(olyCoreErrors.injectableIsNull());
       }
       this.get(injectable);
     }
@@ -288,7 +290,7 @@ export class Kernel {
     this.forceProvideDecorator(target);
 
     if (typeof target.provide !== "function" || !target.provide.name) {
-      throw errors.isNotFunction("provide", typeof target.provide);
+      throw new KernelException(olyCoreErrors.isNotFunction("provide", typeof target.provide));
     }
 
     // check if dependency already exists
@@ -297,7 +299,7 @@ export class Kernel {
     const match = this.declarations.filter((i) => _.is(i.definition, target.provide) || _.is(i.use, target.provide))[0];
 
     if (!!target.use && match && match.use !== target.use) {
-      throw errors.noDepUpdate(target.provide.name || "???");
+      throw new KernelException(olyCoreErrors.noDepUpdate(target.provide.name || "???"));
     }
 
     const dependency = !!match
@@ -343,7 +345,7 @@ export class Kernel {
       if (this.store[identifier] !== newValue) {
         const mutation: IStateMutate = {key: identifier, newValue, oldValue: this.store[identifier]};
         this.store[identifier] = newValue;
-        this.emit("state:mutate", mutation);
+        this.emit(olyCoreEvents.STATE_MUTATE, mutation);
       }
     }
 
@@ -475,7 +477,7 @@ export class Kernel {
   protected createDependency<T>(target: IComplexDefinition<T>): IDeclaration<T> {
 
     if (typeof target.use !== "undefined" && typeof target.use !== "function") {
-      throw errors.isNotFunction("use", typeof target.use);
+      throw new KernelException(olyCoreErrors.isNotFunction("use", typeof target.use));
     }
 
     const options: IDefinitionMetadata<T> = MetadataUtil.get(lyDefinition, target.use || target.provide);
@@ -488,14 +490,14 @@ export class Kernel {
     target.use = options.use || target.use || target.provide;
 
     if (typeof target.use !== "function") {
-      throw errors.isNotFunction("use", typeof target.use);
+      throw new KernelException(olyCoreErrors.isNotFunction("use", typeof target.use));
     }
 
     if (this.started
       && options.singleton
       && this.isProvider(target.provide)
     ) {
-      throw errors.noDepAfterStart(target.provide.name || "???");
+      throw new KernelException(olyCoreErrors.noDepAfterStart(target.provide.name || "???"));
     }
 
     const declaration: IDeclaration<T> = {
@@ -627,7 +629,7 @@ export class Kernel {
         if (typeof this.state(chunkName) === "undefined") {
           // when readonly + no default value, env is useless so we throw an error
           // for avoiding this, you need to set env = null
-          throw errors.envNotDefined(chunkName);
+          throw new KernelException(olyCoreErrors.envNotDefined(chunkName));
         }
         Object.defineProperty(instance, propertyKey, {
           get: () => this.env(chunkName),

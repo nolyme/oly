@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { env, IDeclarations, inject, Kernel, Logger, state } from "oly-core";
-import { HttpError, HttpServerProvider, IKoaContext, KoaMiddleware, mount } from "oly-http";
+import { HttpError, HttpServerProvider, IKoaContext, IKoaMiddleware, mount } from "oly-http";
 import { IPageDefinition, RouterBuilder, RouterHooks } from "oly-react";
 import { join } from "path";
 import { match, RouteConfig, RouterState } from "react-router";
@@ -58,7 +58,7 @@ export class ReactServerProvider {
    *
    * @param middleware    Koa Middleware
    */
-  public use(middleware: KoaMiddleware): ReactServerProvider {
+  public use(middleware: IKoaMiddleware): ReactServerProvider {
     this.httpServerProvider.use(mount(this.prefix, middleware));
     return this;
   }

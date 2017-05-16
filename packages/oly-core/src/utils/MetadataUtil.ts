@@ -18,8 +18,8 @@ export class MetadataUtil {
   public static getReflect() {
     if (!MetadataUtil.reflect) {
       if (!Reflect || !Reflect.getOwnMetadata) {
-        // throw errors.reflectRequired();
-        require("reflect-metadata"); // NOOOOOOOOOOOOOOoooo00000ooooOOOO
+        // throw olyCoreErrors.reflectRequired();
+        require("reflect-metadata"); // NOOOOOOOOOOOOOOoooo00000ooooOOOO WHY?????? DO NOT DO THAT!
       }
       MetadataUtil.reflect = _.assign({}, Reflect);
     }
