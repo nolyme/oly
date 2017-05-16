@@ -130,16 +130,15 @@ export class Search extends React.Component<{ doc: IDoc }, IState> {
                       <span>{result.name}</span>
                     </Go>
                   </div>))
-                :
-                <div className="search-empty">👌 No result for "{this.state.query}".</div>}
+                : <div className="search-empty">👌 No result for "{this.state.query}".</div>}
             </div>
           )}
           onInteraction={this.handlePopoverInteraction}
           autoFocus={false}
           enforceFocus={false}
           isOpen={!!this.state.results}
-          inline={true}
-          popoverClassName="pt-popover-content-sizing pt-minimal"
+          inline={false}
+          popoverClassName="pt-popover-content-sizing pt-minimal search"
           position={Position.BOTTOM}
         >
           <div className="pt-input-group" style={{marginRight: "20px"}}>

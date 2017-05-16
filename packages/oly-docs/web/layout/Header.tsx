@@ -20,7 +20,6 @@ export class Header extends React.Component<{ doc: IDoc }, {}> {
     if (path.indexOf("/m/") === -1) {
       return "/";
     }
-    console.log(path.replace(/(\/m\/[a-z-]*)\/.*/igm, "$1"));
     return path.replace(/(\/m\/[a-z-]*)\/.*/igm, "$1");
   }
 

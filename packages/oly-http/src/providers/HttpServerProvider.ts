@@ -4,26 +4,19 @@ import { env, IAnyFunction, inject, Kernel, Logger, state } from "oly-core";
 import { IKoaMiddleware } from "../interfaces";
 import { context } from "../middlewares";
 
-// override default interface
-declare module "http" {
-  interface Server { // tslint:disable-line
-    shutdown: IAnyFunction;
-  }
-}
-
 /**
  * Default http server provider
  */
 export class HttpServerProvider {
 
   /**
-   * @see {IEnv.OLY_HTTP_SERVER_PORT}
+   *
    */
   @env("OLY_HTTP_SERVER_HOST")
   protected host: string = "localhost";
 
   /**
-   * @see {IEnv.OLY_HTTP_SERVER_PORT}
+   *
    */
   @env("OLY_HTTP_SERVER_PORT")
   protected port: number = 3000;
@@ -114,12 +107,19 @@ export class HttpServerProvider {
    * Stop http server.
    * We don't wait the callback.
    */
-  protected  onStop(): Promise<void> {
+  protected onStop(): Promise<void> {
 
     // stop server
     this.logger.info("kill server");
     return new Promise<void>((resolve, reject) => this.http.shutdown((err: Error) => {
       err ? reject(err) : resolve();
     }));
+  }
+}
+
+// override default interface
+declare module "http" {
+  interface Server { // tslint:disable-line
+    shutdown: IAnyFunction;
   }
 }

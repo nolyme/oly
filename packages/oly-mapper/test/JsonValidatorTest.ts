@@ -7,7 +7,6 @@ describe("JsonValidator", () => {
 
   const kernel = attachKernel();
   const validator = kernel.get(JsonValidator);
-  const error = /Validation has failed/;
 
   it("should valid string", () => {
 
@@ -19,9 +18,9 @@ describe("JsonValidator", () => {
     };
 
     expect(() => validator.validateField(test, "toto")).not.toThrow();
-    expect(() => validator.validateField(test, "t")).toThrow(error);
-    expect(() => validator.validateField(test, 3)).toThrow(error);
-    expect(() => validator.validateField(test, "aiozjdazd")).toThrow(error);
+    expect(() => validator.validateField(test, "t")).toThrow();
+    expect(() => validator.validateField(test, 3)).toThrow();
+    expect(() => validator.validateField(test, "aiozjdazd")).toThrow();
   });
 
   it("should valid boolean", () => {
@@ -33,11 +32,11 @@ describe("JsonValidator", () => {
 
     expect(() => validator.validateField(test, true)).not.toThrow();
     expect(() => validator.validateField(test, false)).not.toThrow();
-    expect(() => validator.validateField(test, "true")).toThrow(error);
-    expect(() => validator.validateField(test, 0)).toThrow(error);
-    expect(() => validator.validateField(test, 1)).toThrow(error);
-    expect(() => validator.validateField(test, "akzdnl")).toThrow(error);
-    expect(() => validator.validateField(test, {})).toThrow(error);
-    expect(() => validator.validateField(test, TypeUtil.forceBoolean("true"))).not.toThrow(error);
+    expect(() => validator.validateField(test, "true")).toThrow();
+    expect(() => validator.validateField(test, 0)).toThrow();
+    expect(() => validator.validateField(test, 1)).toThrow();
+    expect(() => validator.validateField(test, "akzdnl")).toThrow();
+    expect(() => validator.validateField(test, {})).toThrow();
+    expect(() => validator.validateField(test, TypeUtil.forceBoolean("true"))).not.toThrow();
   });
 });

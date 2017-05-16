@@ -41,7 +41,7 @@
     },
     {
       "name": "oly-api",
-      "icon": "heat-grid",
+      "icon": "send-to-graph",
       "decorators": [
         "decorators/get",
         "decorators/put",

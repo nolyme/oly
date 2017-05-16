@@ -1,9 +1,14 @@
+import { Collapse } from "@blueprintjs/core";
 import { attach, Go } from "oly-react";
 import * as React from "react";
 import { IModuleContent } from "../../src/interfaces";
 
 @attach
-export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> {
+export class ModuleMenu extends React.Component<{ module: IModuleContent }, { isDecoratorsOpen: boolean }> {
+
+  state = {
+    isDecoratorsOpen: true,
+  };
 
   public rel(path: string = "") {
     return `/m/${this.props.module.name}/${path}`;
@@ -19,13 +24,11 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
         {this.props.module.services.map((s) => (
           <div key={s.name}>
             <Go to={this.rel(`s/${s.name}`)}>{s.name}</Go>
-            {
-              s.methods.map((m) => (
-                <div key={m.name} style={{paddingLeft: "10px", fontSize: "12px"}}>
-                  <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
-                </div>
-              ))
-            }
+            {s.methods.map((m) => (
+              <div key={m.name} style={{paddingLeft: "10px", fontSize: "12px"}}>
+                <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
+              </div>
+            ))}
           </div>
         ))}
       </div>
@@ -38,12 +41,14 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
     }
     return (
       <div>
-        <div>Decorators</div>
-        {this.props.module.decorators.map((s) => (
-          <div key={s.name}>
-            <Go to={this.rel(`@/${s.name}`)}>{"@" + s.name}</Go>
-          </div>
-        ))}
+        <div onClick={() => this.setState({isDecoratorsOpen: !this.state.isDecoratorsOpen})}>Decorators</div>
+        <Collapse isOpen={this.state.isDecoratorsOpen}>
+          {this.props.module.decorators.map((s) => (
+            <div key={s.name}>
+              <Go to={this.rel(`@/${s.name}`)}>{"@" + s.name}</Go>
+            </div>
+          ))}
+        </Collapse>
       </div>
     );
   }
