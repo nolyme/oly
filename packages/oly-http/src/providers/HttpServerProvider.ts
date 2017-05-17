@@ -13,33 +13,33 @@ export class HttpServerProvider {
    *
    */
   @env("OLY_HTTP_SERVER_HOST")
-  protected host: string = "localhost";
+  protected readonly host: string = "localhost";
 
   /**
    *
    */
   @env("OLY_HTTP_SERVER_PORT")
-  protected port: number = 3000;
+  protected readonly port: number = 3000;
 
   /**
    * Kernel.
    * We use kernel here to fork context on each request.
    */
   @inject(Kernel)
-  protected kernel: Kernel;
+  protected readonly kernel: Kernel;
 
   /**
    * Logger.
    */
   @inject(Logger)
-  protected logger: Logger;
+  protected readonly logger: Logger;
 
   /**
    * Koa application.
    * Http Server is provided with Koa.
    */
   @state()
-  protected app: Koa;
+  protected readonly app: Koa;
 
   /**
    * NodeJS Http Server instance.

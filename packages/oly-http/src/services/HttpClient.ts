@@ -1,6 +1,6 @@
 import { AxiosError, AxiosInstance, AxiosRequestConfig, default as axiosInstance } from "axios";
-import { inject, Logger, state } from "oly-core";
-import { HttpError } from "../helpers/HttpError";
+import { Exception, inject, Logger, state } from "oly-core";
+import { HttpClientException } from "../exceptions/HttpClientException";
 import { IHttpRequest, IHttpResponse } from "../interfaces";
 
 /**
@@ -116,26 +116,13 @@ export class HttpClient {
    * @param error       Axios error
    */
   protected errorHandler(options: IHttpRequest, error: AxiosError) {
-    if (error.response) {
-      this.logger.debug("response error", error.response.data);
-      // detect oly-api (IApiError)
-      if (error.response.data
-        && error.response.data.error
-        && error.response.data.error.message
-        && error.response.data.error.status) {
-        throw new HttpError(
-          error.response.data.error.status,
-          `Can't fetch ${options.method} ${options.url} (${error.response.data.error.message})`,
-          error.response.data.error.details,
-        );
-      } else {
-        if (typeof error.response.data === "string") {
-          throw new HttpError(error.response.status, error.response.data);
-        } else {
-          throw new HttpError(error.response.status, error.response.statusText, error.response.data);
-        }
-      }
+
+    if (!error.response) {
+      throw new Exception(error.message);
     }
-    throw error;
+
+    this.logger.debug(`request ${options.method || "GET"} ${options.url} has failed`, error.response.data);
+
+    throw new HttpClientException(error);
   }
 }
