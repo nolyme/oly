@@ -1,6 +1,9 @@
 import { ErrorObject } from "ajv";
 import { Exception } from "oly-core";
 
+/**
+ *
+ */
 export class ValidationException extends Exception {
 
   public errors: ErrorObject[];
@@ -10,6 +13,9 @@ export class ValidationException extends Exception {
     this.errors = errors;
   }
 
+  /**
+   *
+   */
   public toJSON(): object {
     return {
       ...super.toJSON(),

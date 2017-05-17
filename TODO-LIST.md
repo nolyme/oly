@@ -2,7 +2,6 @@
 # TODO
 
 - (docs) finish oly-docs step 1. **[IN PROGRESS]**
-- (api) ApiException **[IN PROGRESS]**
 - (react) migrate react-router v4
 - (security) test jwt and decorators
 - (ws) create oly-ws: socket.io
