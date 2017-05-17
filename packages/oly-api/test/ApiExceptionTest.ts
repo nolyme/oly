@@ -1,5 +1,5 @@
+import { HttpServerException } from "oly-http";
 import { olyApiErrors } from "../src/constants/errors";
-import { HttpServerException } from "../src/exceptions/HttpServerException";
 import { BadRequestException } from "../src/exceptions/BadRequestException";
 import { NotFoundException } from "../src/exceptions/NotFoundException";
 
