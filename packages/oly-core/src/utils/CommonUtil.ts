@@ -89,13 +89,37 @@ export class CommonUtil {
   }
 
   /**
+   * A lightweight string replace engine for text-based templates.
+   *
+   * ```
+   * _.template("Hello ${name}", {name: "World"}); // Hello World
+   * ```
+   *
+   * @param text
+   * @param map
+   * @return {string}
+   */
+  public static template(text: string, map: { [key: string]: any }): string {
+
+    return text.replace(/\$\{([0-9a-zA-Z_.\-/\\]+)\}/g, (match, key) => {
+
+      const value = map[key];
+      if (value === null || value === undefined) {
+        return match;
+      }
+
+      return value;
+    });
+  }
+
+  /**
    * Make a comparison of two classes.
    * Works with "npm link" and duplicates classes.
    *
    * @param type1   Class 1
    * @param type2   Class 2
    */
-  public static is(type1: any, type2: any) {
+  public static isEqualClass(type1: any, type2: any) {
 
     if (typeof type1 !== "function" || typeof type2 !== "function") {
       return false;
@@ -121,26 +145,6 @@ export class CommonUtil {
    */
   public static targetToString(target: IClass, propertyKey: string): string {
     return `${target.name}.${propertyKey}`;
-  }
-
-  /**
-   * Try to convert string into number/boolean.
-   *
-   * @internal
-   * @param value  Something
-   * @return       Boolean or string or something
-   */
-  public static parseNumberAndBoolean(value: any): any {
-    if (typeof value === "string") {
-      if (value === "true") {
-        return true;
-      } else if (value === "false") {
-        return false;
-      } else if (!isNaN(value as any)) {
-        return Number(value);
-      }
-    }
-    return value;
   }
 
   /**

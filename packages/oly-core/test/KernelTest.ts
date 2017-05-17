@@ -186,9 +186,18 @@ describe("Kernel", () => {
     });
 
     it("should return 'undefined' when not defined", () => {
-
       const kernel = createKernel();
       equal(kernel.env("HELLO"), undefined);
+    });
+
+    it("should cast env as number", () => {
+      const kernel = createKernel({A: "1"});
+      equal(kernel.env("A"), 1);
+    });
+
+    it("should template values", () => {
+      const kernel = createKernel({A: "B", C: "${A}"});
+      equal(kernel.env("C"), "B");
     });
   });
   describe("#state()", () => {

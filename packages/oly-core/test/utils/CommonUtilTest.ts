@@ -1,5 +1,5 @@
 import { deepEqual, equal } from "assert";
-import { CommonUtil } from "../../src/utils/CommonUtil";
+import { _, CommonUtil } from "../../src/utils/CommonUtil";
 
 describe("CommonUtil", () => {
   describe("#shortid()", () => {
@@ -38,10 +38,10 @@ describe("CommonUtil", () => {
       }
     };
     it("should accept classes", () => {
-      expect(CommonUtil.is(f1(), f1())).toBeTruthy();
+      expect(CommonUtil.isEqualClass(f1(), f1())).toBeTruthy();
     });
     it("should accept classes with != ref", () => {
-      expect(CommonUtil.is(f1(), f2())).toBeTruthy();
+      expect(CommonUtil.isEqualClass(f1(), f2())).toBeTruthy();
     });
   });
   describe("#cascade()", () => {
@@ -62,6 +62,14 @@ describe("CommonUtil", () => {
       const deps = [0, 1, 4, 19, 120, 3, 5, 0, 1];
       const cmp = (target: number[], i: number) => !!target[i + 1] && target[i] < target[i + 1];
       deepEqual(CommonUtil.bubble(deps, cmp), [0, 0, 1, 1, 3, 4, 5, 19, 120].reverse());
+    });
+  });
+  describe("#template()", () => {
+    it("should inject name", () => {
+      expect(_.template("Hello ${name}", {name: "World"})).toBe("Hello World");
+      expect(_.template("Hello ${name}", {})).toBe("Hello ${name}");
+      expect(_.template("${/\\-._}", {"/\\-._": "OK"})).toBe("OK");
+      expect(_.template("${A}${A}${A}", {A: "B"})).toBe("BBB");
     });
   });
 });

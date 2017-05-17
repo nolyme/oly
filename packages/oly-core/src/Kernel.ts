@@ -296,7 +296,7 @@ export class Kernel {
     // check if dependency already exists
     // -> `definition` is the first criteria of research
     // -> but if you are doing a swap, the real criteria is `use`, not `definition`
-    const match = this.declarations.filter((i) => _.is(i.definition, target.provide) || _.is(i.use, target.provide))[0];
+    const match = this.declarations.filter((i) => _.isEqualClass(i.definition, target.provide) || _.isEqualClass(i.use, target.provide))[0];
 
     if (!!target.use && match && match.use !== target.use) {
       throw new KernelException(olyCoreErrors.noDepUpdate(target.provide.name || "???"));
@@ -370,7 +370,20 @@ export class Kernel {
    */
   public env(key: string): any {
     const value = this.state(key);
-    return _.parseNumberAndBoolean(value);
+
+    if (typeof value === "string") {
+      if (value === "true") {
+        return true;
+      } else if (value === "false") {
+        return false;
+      } else if (!isNaN(value as any)) {
+        return Number(value);
+      } else {
+        return _.template(value, this.store);
+      }
+    }
+
+    return value;
   }
 
   /**
@@ -581,7 +594,7 @@ export class Kernel {
       const dependency = dependencies[propertyKey];
 
       if (typeof instance[propertyKey] === "undefined") {
-        if (_.is(dependency.type, Kernel)) {
+        if (_.isEqualClass(dependency.type, Kernel)) {
           Object.defineProperty(instance, propertyKey, {get: () => this});
         } else {
           const value = this.get(dependency.type, {parent: definition});
@@ -685,12 +698,12 @@ export class Kernel {
   protected sortDeclarations() {
     return _.bubble(this.declarations, (list, index) => {
       const findDefinitionInTree = (declaration: IAnyDeclaration, definition: IAnyDefinition) => {
-        if (_.is(declaration.definition, definition)) {
+        if (_.isEqualClass(declaration.definition, definition)) {
           return true;
         }
         for (const child of declaration.children) {
           const childDependency = this.declarations.filter((d: IAnyDeclaration) =>
-            _.is(d.definition, child.type))[0];
+            _.isEqualClass(d.definition, child.type))[0];
           if (!!childDependency && findDefinitionInTree(childDependency, definition)) {
             return true;
           }
