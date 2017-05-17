@@ -51,7 +51,7 @@ export class HttpServerProvider {
    * Initialize once koa.
    */
   public constructor() {
-    // initialize global state with new koa instance
+    // initialize global state with a new koa instance
     this.app = new Koa();
   }
 

@@ -17,7 +17,7 @@ export class HttpClientException extends Exception {
 
     this.response = source.response;
 
-    if (this.isApiException(source.response)) {
+    if (this.isHttpServerException(source.response)) {
       this.message = source.response.data.message;
       this.status = source.response.data.status;
     } else {
@@ -35,9 +35,10 @@ export class HttpClientException extends Exception {
     };
   }
 
-  protected isApiException(response: IHttpResponse<any>): boolean {
+  protected isHttpServerException(response: IHttpResponse<any>): boolean {
     return !!response.data
       && !!response.data.status
+      && !!response.data.name
       && !!response.data.message;
   }
 }

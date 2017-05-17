@@ -1,7 +1,8 @@
 import * as jwt from "jsonwebtoken";
 import { SignOptions, VerifyOptions } from "jsonwebtoken";
+import { UnauthorizedException } from "oly-api";
 import { CommonUtil as _, env, inject, Logger } from "oly-core";
-import { HttpError } from "oly-http";
+import { TokenApiException } from "../exceptions/TokenApiException";
 import { IPayload, IToken } from "../interfaces";
 import { CryptoService } from "./CryptoService";
 
@@ -60,7 +61,7 @@ export class JwtAuthService {
     this.logger.trace("check token", {token});
 
     if (!token || typeof token !== "string") {
-      throw new HttpError(401, "Invalid token");
+      throw new UnauthorizedException("Invalid token");
     }
 
     token = token.replace("Bearer ", "");
@@ -70,7 +71,7 @@ export class JwtAuthService {
       this.token = payload.data as IToken;
       return payload;
     } catch (e) {
-      throw new HttpError(401, "Invalid token", e.message);
+      throw new UnauthorizedException(e, "Invalid token");
     }
   }
 }

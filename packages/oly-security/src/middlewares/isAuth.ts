@@ -1,5 +1,6 @@
+import { UnauthorizedException } from "oly-api";
 import { IAnyFunction } from "oly-core";
-import { HttpError, IKoaContext, IKoaMiddleware } from "oly-http";
+import { IKoaContext, IKoaMiddleware } from "oly-http";
 import { JwtAuthService } from "../services/JwtAuthService";
 import { parseToken } from "./parseToken";
 
@@ -14,7 +15,7 @@ export const isAuth = (): IKoaMiddleware => {
     const authenticationService = ctx.kernel.get(JwtAuthService);
 
     if (!authenticationService.token) {
-      throw new HttpError(401, "Authentication is required");
+      throw new UnauthorizedException("Authentication is required");
     }
 
     await next();

@@ -1,8 +1,8 @@
 import { AxiosInstance, default as axiosInstance } from "axios";
 
 export * from "./services/HttpClient";
-export * from "./helpers/HttpError";
-
+export * from "./exceptions/HttpServerException";
+export * from "./exceptions/HttpClientException";
 /**
  * Export default axios instance.
  */

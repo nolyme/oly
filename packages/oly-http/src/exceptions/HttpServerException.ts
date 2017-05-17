@@ -1,7 +1,7 @@
 import { Exception } from "oly-core";
 import { olyApiErrors } from "../constants/errors";
 
-export class ApiException extends Exception {
+export class HttpServerException extends Exception {
 
   public static readonly DEFAULT_MESSAGE: string = olyApiErrors.internalError();
 

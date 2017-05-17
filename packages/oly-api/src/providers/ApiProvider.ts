@@ -1,7 +1,9 @@
 import * as koaBodyParser from "koa-bodyparser";
 import { env, IClass, IDeclarations, inject, Logger } from "oly-core";
-import { HttpError, HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
+import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
 import { RouterMetadataUtil } from "oly-router";
+import { MethodNotAllowedException } from "../exceptions/MethodNotAllowedException";
+import { NotImplementedException } from "../exceptions/NotImplementedException";
 import { IKoaRouter } from "../interfaces";
 import { ApiMiddlewares } from "../services/ApiMiddlewares";
 import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
@@ -105,8 +107,8 @@ export class ApiProvider {
   protected mountRouter(router: IKoaRouter): this {
     this.use(router.routes() as any);
     this.use(router.allowedMethods({
-      methodNotAllowed: () => new HttpError(405),
-      notImplemented: () => new HttpError(501),
+      methodNotAllowed: () => new MethodNotAllowedException(),
+      notImplemented: () => new NotImplementedException(),
       throw: true,
     }) as any);
     return this;

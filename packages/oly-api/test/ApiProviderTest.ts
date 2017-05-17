@@ -59,10 +59,10 @@ describe("ApiProvider", () => {
     await fetch("/a3/");
     expect(kernel.state("counter")).toBe(1);
   });
-  it("should always retruns an ApiException", async () => {
+  it("should always retruns an HttpServerException", async () => {
     expect((await fetch("/error/raw"))).toEqual({
       message: olyApiErrors.internalError(),
-      name: "ApiException",
+      name: "HttpServerException",
       status: 500,
     });
   });

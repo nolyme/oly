@@ -11,7 +11,7 @@ import { path } from "../src/decorators/path";
 import { post } from "../src/decorators/post";
 import { query } from "../src/decorators/query";
 import { router } from "../src/decorators/router";
-import { ApiException } from "../src/exceptions/ApiException";
+import { HttpServerException } from "../src/exceptions/HttpServerException";
 
 describe("ApiProviderLegacy", () => {
   describe("@get()", () => {
@@ -35,7 +35,7 @@ describe("ApiProviderLegacy", () => {
     });
 
     it("should response correctly", async () => {
-      equal((await client.request<ApiException>({url: "/"})).data.message,
+      equal((await client.request<HttpServerException>({url: "/"})).data.message,
         olyApiErrors.serviceNotFound());
       equal((await client.request({url: "/hello"})).data, "Hello World");
       equal((await client.request({url: "/hello/jean"})).data, "Hello jean");

@@ -1,9 +1,10 @@
 import * as cheerio from "cheerio";
 import { env, IDeclarations, inject, Kernel, Logger, state } from "oly-core";
-import { HttpError, HttpServerProvider, IKoaContext, IKoaMiddleware, mount } from "oly-http";
+import { HttpServerProvider, IKoaContext, IKoaMiddleware, mount } from "oly-http";
 import { IPageDefinition, RouterBuilder, RouterHooks } from "oly-react";
 import { join } from "path";
 import { match, RouteConfig, RouterState } from "react-router";
+import { NotFoundException } from "../exceptions/PageNotFoundException";
 import { ReactProxyService } from "../services/ReactProxyService";
 import { ReactServerRenderer } from "../services/ReactServerRenderer";
 import { ReactStaticService } from "../services/ReactStaticService";
@@ -208,7 +209,7 @@ export class ReactServerProvider {
       // IMPORTANT: you should avoid this passage by @page('**') and handle 404 by yourself
       if (!nextState) {
         this.logger.warn("there is no default handler for page 404, you can set it with the annotation @page404()");
-        throw new HttpError(404, "Page not found");
+        throw new NotFoundException("Page not found");
       }
 
       // build page

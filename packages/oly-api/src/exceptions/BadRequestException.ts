@@ -1,7 +1,7 @@
+import { HttpServerException } from "oly-http";
 import { olyApiErrors } from "../constants/errors";
-import { ApiException } from "./ApiException";
 
-export class BadRequestException extends ApiException {
+export class BadRequestException extends HttpServerException {
 
   public static readonly DEFAULT_MESSAGE: string = olyApiErrors.badRequest();
 

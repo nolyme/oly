@@ -1,8 +1,7 @@
 import { _, Exception, IAnyFunction, IClass, Logger } from "oly-core";
-import { IKoaContext, IKoaMiddleware } from "oly-http";
+import { HttpServerException, IKoaContext, IKoaMiddleware } from "oly-http";
 import { IRouteMetadata } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
-import { ApiException } from "../exceptions/ApiException";
 import { NotFoundException } from "../exceptions/NotFoundException";
 import { KoaRouterBuilder } from "./KoaRouterBuilder";
 
@@ -42,7 +41,7 @@ export class ApiMiddlewares {
 
       } catch (e) {
 
-        const exception = e instanceof ApiException ? e : new ApiException(e);
+        const exception = e instanceof HttpServerException ? e : new HttpServerException(e);
 
         ctx.status = exception.status;
         ctx.body = exception;

@@ -1,14 +1,14 @@
 import { olyApiErrors } from "../src/constants/errors";
-import { ApiException } from "../src/exceptions/ApiException";
+import { HttpServerException } from "../src/exceptions/HttpServerException";
 import { BadRequestException } from "../src/exceptions/BadRequestException";
 import { NotFoundException } from "../src/exceptions/NotFoundException";
 
-describe("ApiException", () => {
+describe("HttpServerException", () => {
 
   it("is a internal error by default", () => {
-    expect(new ApiException().status).toBe(500);
-    expect(new ApiException().message).toBe(olyApiErrors.internalError());
-    expect(new ApiException("Toto").message).toBe("Toto");
+    expect(new HttpServerException().status).toBe(500);
+    expect(new HttpServerException().message).toBe(olyApiErrors.internalError());
+    expect(new HttpServerException("Toto").message).toBe("Toto");
   });
 
   it("can have child", () => {
