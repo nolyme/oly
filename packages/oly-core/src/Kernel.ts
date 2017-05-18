@@ -306,7 +306,7 @@ export class Kernel {
       }
 
       // remove current declaration
-      this.declarations.splice(this.declarations.indexOf(match), 1);
+      this.removeDependency(match);
 
       // and recreate it with our new config
       return this.get(definition, options);
@@ -532,6 +532,25 @@ export class Kernel {
     this.declarations.push(declaration);
 
     return declaration;
+  }
+
+  /**
+   * Remove a dependency from kernel.
+   * This will also removed all unused children and events.
+   * However state is kept.
+   */
+  protected removeDependency(declaration: IAnyDeclaration) {
+    const index = this.declarations.indexOf(declaration);
+    if (index > -1) {
+      this.declarations.splice(index, 1);
+    }
+    if (declaration.instance && typeof declaration.instance.__free__ === "function") {
+      declaration.instance.__free__();
+    }
+    declaration.children
+      .map((c) => this.declarations.filter((d) => d.definition === c.type)[0])
+      .filter((c) => !!c)
+      .forEach((c) => this.removeDependency(c));
   }
 
   /**

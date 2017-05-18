@@ -196,6 +196,35 @@ describe("Kernel", () => {
 
       equal(stack.join(""), "eccfcggh");
     });
+
+    it("removes unused declarations after a late-swapping", async () => {
+
+      class C {
+        onStart() {
+          throw new Error("This is't excepted");
+        }
+      }
+
+      class B {
+        @inject c: C;
+        d = "e";
+      }
+
+      class B2 {
+        d = "f";
+      }
+
+      class A {
+        @inject b: B;
+      }
+
+      const k = await createKernel()
+        .with(A) // first declaration will add A, B and C
+        .with({provide: B, use: B2})
+        .start();
+
+      expect(k.get(A).b.d).toBe("f");
+    });
   });
 
   describe("#start()", () => {
