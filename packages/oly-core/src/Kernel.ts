@@ -296,10 +296,20 @@ export class Kernel {
     // check if dependency already exists
     // -> `definition` is the first criteria of research
     // -> but if you are doing a swap, the real criteria is `use`, not `definition`
-    const match = this.declarations.filter((i) => _.isEqualClass(i.definition, target.provide) || _.isEqualClass(i.use, target.provide))[0];
+    const match = this.declarations
+      .filter((i) => _.isEqualClass(i.definition, target.provide) || _.isEqualClass(i.use, target.provide))[0];
 
+    // check if dependency will be updated
     if (!!target.use && match && match.use !== target.use) {
-      throw new KernelException(olyCoreErrors.noDepUpdate(target.provide.name || "???"));
+      if (this.started) {
+        throw new KernelException(olyCoreErrors.noDepUpdate(target.provide.name));
+      }
+
+      // remove current declaration
+      this.declarations.splice(this.declarations.indexOf(match), 1);
+
+      // and recreate it with our new config
+      return this.get(definition, options);
     }
 
     const dependency = !!match
@@ -419,32 +429,30 @@ export class Kernel {
    * @param options.fork      If yes, kernel is forked for each call
    */
   public emit(key: string, data?: any, options: IKernelEmitOptions = {}): Promise<any> {
+
+    const createAction = (event: IEventListener): IAnyFunction => {
+      if (typeof event.action === "function") {
+        return event.action;
+      }
+      if (options.fork) {
+        const instance = this.fork().get(event.action.target);
+        return instance[event.action.propertyKey].bind(instance);
+      }
+      return event.action.instance[event.action.propertyKey].bind(event.action.instance);
+    };
+
     const promises = this.events
       .filter((event) => event.key === key)
       .map((event) => {
         if (event.unique) {
           this.events.splice(this.events.indexOf(event), 1);
         }
-        try {
-          let action: IAnyFunction;
-          if (typeof event.action === "function") {
-            action = event.action;
-          } else {
-            if (options.fork) {
-              const instance = this.fork().get(event.action.target);
-              action = instance[event.action.propertyKey].bind(instance);
-            } else {
-              action = event.action.instance[event.action.propertyKey].bind(event.action.instance);
-            }
-          }
-          return _.promise(action(data)).catch((e) => {
+        return Promise.resolve()
+          .then(() => _.promise(createAction(event)(data)))
+          .catch((e) => {
             this.getLogger().warn(`handle event['${key}'] error`, e);
             return e;
           });
-        } catch (e) {
-          this.getLogger().warn(`handle event['${key}'] error`, e);
-          return Promise.resolve(e);
-        }
       });
 
     if (options.parent && this.parent) {
@@ -479,7 +487,7 @@ export class Kernel {
     return (
       this.processStates(definition,
         this.processEvents(definition,
-          this.processInjections(definition, instance || new definition()))));
+          this.processInjections(definition, instance || new definition(this)))));
   }
 
   /**
@@ -510,7 +518,7 @@ export class Kernel {
       && options.singleton
       && this.isProvider(target.provide)
     ) {
-      throw new KernelException(olyCoreErrors.noDepAfterStart(target.provide.name || "???"));
+      throw new KernelException(olyCoreErrors.noDepAfterStart(target.provide.name));
     }
 
     const declaration: IDeclaration<T> = {
@@ -597,8 +605,10 @@ export class Kernel {
         if (_.isEqualClass(dependency.type, Kernel)) {
           Object.defineProperty(instance, propertyKey, {get: () => this});
         } else {
-          const value = this.get(dependency.type, {parent: definition});
-          Object.defineProperty(instance, propertyKey, {get: () => value});
+          this.get(dependency.type, {parent: definition});
+          Object.defineProperty(instance, propertyKey, {
+            get: () => this.get(dependency.type, {parent: definition}),
+          });
         }
       }
     }
@@ -682,8 +692,7 @@ export class Kernel {
       observers.push(this.on(key, {target, propertyKey, instance}));
     }
 
-    // TODO: find a better way
-    // this is currently use on oly-react
+    // this is currently used by oly-react
     instance["__free__"] = () => { // tslint:disable-line
       observers.forEach((obs) => obs.free());
     };

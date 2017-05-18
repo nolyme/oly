@@ -18,7 +18,7 @@ export const olyCoreErrors = {
   isNotFunction: (name: string, type: string) =>
     `Your '${name}' key must be a Function/ES6 Class. Current is '${type}'`,
 
-  noDepAfterStart: (name: string) =>
+  noDepAfterStart: (name: string = "Unknown") =>
     `Declaration of '${name}' isn't allowed after the Kernel#start(). Register it before starting kernel`,
 
   noDepUpdate: (name: string) =>

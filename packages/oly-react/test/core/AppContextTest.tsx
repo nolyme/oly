@@ -10,82 +10,83 @@ import { attach, connect } from "../../src/core/decorators/attach";
 import { styles } from "../../src/core/decorators/styles";
 import { IActionResult, IActionResultError } from "../../src/core/interfaces";
 
+class PersonService {
+  createPerson() {
+    return {name: "Luc"};
+  }
+}
+
+@connect
+class A extends Component<any, any> {
+  @inject(Kernel) kernel: Kernel;
+
+  @on("plus")
+  inc() {
+    const counter = this.kernel.state("counter") || 0;
+    this.kernel.state("counter", counter + 1);
+  }
+
+  render() {
+    return (<div id="A">A</div>);
+  }
+}
+
+@attach
+@styles(() => null)
+class B extends Component<any, any> {
+
+  @env("DEFAULT_NAME") defaultName: string;
+
+  @inject kernel: Kernel;
+
+  @inject personService: PersonService;
+
+  @state("person") person: { name: string };
+
+  @state("open") open: boolean;
+
+  @on("rename") renameHandler = (name: string) => this.person = {name};
+
+  @action
+  renameAction() {
+    return this.person = this.personService.createPerson();
+  }
+
+  @action
+  async renameActionAsync() {
+    await _.timeout(1);
+    return this.person = this.personService.createPerson();
+  }
+
+  @action
+  renameActionLikeACow() {
+    throw new Error("I am Groot");
+  }
+
+  componentWillMount() {
+    this.person = {name: this.defaultName};
+  }
+
+  render() {
+    return (
+      <div>
+        <button id="btn1" onClick={this.renameAction}>rename</button>
+        <button id="btn2" onClick={this.renameActionLikeACow}>rename</button>
+        <button id="btn3" onClick={this.renameActionAsync}>rename</button>
+        <strong>
+          {this.person.name}
+        </strong>
+        {this.open && <A/>}
+      </div>
+    );
+  }
+}
+
+const kernel = createKernel({DEFAULT_NAME: "Francis"});
+
+const dom = createDOM();
+
 describe("AppContext", () => {
-
-  class PersonService {
-    createPerson() {
-      return {name: "Luc"};
-    }
-  }
-
-  @connect
-  class A extends Component<any, any> {
-    @inject(Kernel) kernel: Kernel;
-
-    @on("plus")
-    inc() {
-      const counter = this.kernel.state("counter") || 0;
-      this.kernel.state("counter", counter + 1);
-    }
-
-    render() {
-      return (<div id="A">A</div>);
-    }
-  }
-
-  @attach
-  @styles(() => null)
-  class B extends Component<any, any> {
-
-    @env("DEFAULT_NAME") defaultName: string;
-
-    @inject kernel: Kernel;
-
-    @inject personService: PersonService;
-
-    @state("person") person: { name: string };
-
-    @state("open") open: boolean;
-
-    @on("rename") renameHandler = (name: string) => this.person = {name};
-
-    @action
-    renameAction() {
-      return this.person = this.personService.createPerson();
-    }
-
-    @action
-    async renameActionAsync() {
-      await _.timeout(1);
-      return this.person = this.personService.createPerson();
-    }
-
-    @action
-    renameActionLikeACow() {
-      throw new Error("I am Groot");
-    }
-
-    componentWillMount() {
-      this.person = {name: this.defaultName};
-    }
-
-    render() {
-      return (
-        <div>
-          <button id="btn1" onClick={this.renameAction}>rename</button>
-          <button id="btn2" onClick={this.renameActionLikeACow}>rename</button>
-          <button id="btn3" onClick={this.renameActionAsync}>rename</button>
-          <strong>
-            {this.person.name}
-          </strong>
-          {this.open && <A/>}
-        </div>
-      );
-    }
-  }
-
-  const kernel = createKernel({DEFAULT_NAME: "Francis"});
-  const dom = createDOM();
 
   beforeAll(() => {
     render(<AppContext kernel={kernel}><B/></AppContext>, dom.container);
@@ -99,8 +100,9 @@ describe("AppContext", () => {
     expect(dom.get("strong").textContent).toBe("Francis");
   });
 
-  it("state mutation update component", () => {
+  it("state mutation update component", async() => {
     kernel.state("person", {name: "Paul"});
+    await _.timeout(1);
     expect(dom.get("strong").textContent).toBe("Paul");
   });
 
@@ -121,10 +123,12 @@ describe("AppContext", () => {
   it("kernel __free__", async () => {
     kernel.state("counter", 0);
     kernel.state("open", true);
+    await _.timeout(1);
     await kernel.emit("plus");
     expect(dom.container.querySelector("#A")).not.toBe(null);
     expect(kernel.state("counter")).toBe(1);
     kernel.state("open", false);
+    await _.timeout(1);
     expect(dom.container.querySelector("#A")).toBe(null);
 
     // Emitting "plus" here has not effect, no more component are subscribed to this event.

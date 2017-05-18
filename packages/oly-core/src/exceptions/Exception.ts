@@ -146,11 +146,17 @@ export class Exception {
    *  JSON.stringify version.
    */
   public toJSON(): object {
-    return {
+
+    const json: any = {
       message: this.message,
       name: this.name,
-      source: this.source,
     };
+
+    if (this.source) {
+      json.source = this.source;
+    }
+
+    return json;
   }
 }
 
