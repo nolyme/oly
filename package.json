@@ -18,6 +18,8 @@
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
+    "lint": "tslint --force -o checkstyle-result.xml -t checkstyle packages/**/src/**/*.ts",
+    "lint:fix": "tslint --fix packages/**/src/**/*.ts",
     "test": "lerna run test",
     "test:ci": "jest --coverage",
     "publish": "lerna publish --force-publish=*"

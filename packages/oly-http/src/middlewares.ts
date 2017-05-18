@@ -1,5 +1,5 @@
 import { IAnyFunction, Kernel } from "oly-core";
-import { ICompressOptions, ICorsOptions, IKoaContext, IServeOptions, IKoaMiddleware } from "./interfaces";
+import { ICompressOptions, ICorsOptions, IKoaContext, IKoaMiddleware, IServeOptions } from "./interfaces";
 
 // --
 const koaStatic = require("koa-static");        // tslint:disable-line
