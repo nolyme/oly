@@ -1,7 +1,7 @@
 {
   "name": "oly-tools",
   "description": "oly-tools",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "license": "MIT",
   "main": "webpack/index.js",
   "keywords": [

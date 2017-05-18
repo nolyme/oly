@@ -1,7 +1,7 @@
 {
   "name": "oly-react-ssr",
   "description": "oly-react-ssr",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -26,16 +26,16 @@
     "@types/cheerio": "0.22.1",
     "@types/react": "15.0.24",
     "jsdom": "10.1.0",
-    "oly-core": "^0.9.3",
-    "oly-http": "^0.9.3",
-    "oly-react": "^0.9.3",
-    "oly-test": "^0.9.3",
+    "oly-core": "^0.10.0",
+    "oly-http": "^0.10.0",
+    "oly-react": "^0.10.0",
+    "oly-test": "^0.10.0",
     "react": "15.5.4"
   },
   "peerDependencies": {
-    "oly-core": "^0.9.3",
-    "oly-http": "^0.9.3",
-    "oly-react": "^0.9.3",
+    "oly-core": "^0.10.0",
+    "oly-http": "^0.10.0",
+    "oly-react": "^0.10.0",
     "react": "^15.5.4"
   },
   "scripts": {
