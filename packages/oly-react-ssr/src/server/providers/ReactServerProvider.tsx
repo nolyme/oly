@@ -55,6 +55,13 @@ export class ReactServerProvider {
   protected template: string;
 
   /**
+   * Get the react app prefix.
+   */
+  public get hostname(): string {
+    return this.httpServerProvider.hostname + this.prefix;
+  }
+
+  /**
    * Mount a koa middleware on the react-server way.
    *
    * @param middleware    Koa Middleware
@@ -62,13 +69,6 @@ export class ReactServerProvider {
   public use(middleware: IKoaMiddleware): ReactServerProvider {
     this.httpServerProvider.use(mount(this.prefix, middleware));
     return this;
-  }
-
-  /**
-   * Get the react app prefix.
-   */
-  public get hostname(): string {
-    return this.httpServerProvider.hostname + this.prefix;
   }
 
   /**

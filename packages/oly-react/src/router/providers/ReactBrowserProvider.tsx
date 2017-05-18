@@ -1,5 +1,5 @@
 import { History, Location } from "history";
-import { env, IDeclarations, inject, Kernel, state } from "oly-core";
+import { env, IDeclarations, inject, Kernel, Logger, state } from "oly-core";
 import * as React from "react";
 import { match, RouteConfig, Router as RouterComponent, RouterState } from "react-router";
 import { AppContext } from "../../core/components/AppContext";
@@ -20,6 +20,9 @@ export class ReactBrowserProvider {
 
   @inject(Kernel)
   protected kernel: Kernel;
+
+  @inject(Logger)
+  protected logger: Logger;
 
   @inject(Browser)
   protected browser: Browser;
@@ -47,7 +50,8 @@ export class ReactBrowserProvider {
 
       if (!nextState) {
         this.browser.render((<div>{"The page you are looking for can't be found."}</div>), this.mountId);
-        throw new Error(`No routes was found for current url. Please, use @page('**') for a better 404 handler`);
+        this.logger.warn(`No routes was found for current url. Please, use @page('**') for a better 404 handler`);
+        return;
       }
 
       return this.render(nextState);

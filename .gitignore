@@ -11,6 +11,9 @@
 *.cache
 *.lock
 /manuals
+/packages/oly-tools/**/*.js
+/packages/oly-tools/**/*.js.map
+/packages/oly-tools/**/*.d.ts
 /packages/oly/**/*.js
 /packages/oly/**/*.js.map
 /packages/oly/**/*.d.ts

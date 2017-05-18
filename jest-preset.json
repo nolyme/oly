@@ -12,6 +12,7 @@
     "tsx"
   ],
   "mapCoverage": true,
+  "testURL": "http://127.0.0.1/",
   "globals": {
     "__TS_CONFIG__": "test/tsconfig.json"
   }

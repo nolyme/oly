@@ -1,6 +1,6 @@
 import { IAnyFunction, IClass, Kernel } from "oly-core";
 import * as React from "react";
-import { ChangeHook, LeaveHook, RouterState } from "react-router";
+import { RouterState } from "react-router";
 
 /**
  * @alias
@@ -22,8 +22,6 @@ export interface IPageOptions {
   nested?: IClass[] | IClass;
   children?: IClass[];
   data?: any;
-  onChange?: ChangeHook;
-  onLeave?: LeaveHook;
 }
 
 /**

@@ -152,11 +152,11 @@ export class Logger {
    * @param text
    */
   protected appender(text: string): void {
-    if (typeof window !== "undefined") {
-      LoggerUtil.logStyles(LoggerUtil.toHtml(text));
+    if (typeof process !== "undefined" && typeof process.stdout !== "undefined") {
+      console.log(text); // tslint:disable-line
       return;
     }
-    console.log(text); // tslint:disable-line
+    LoggerUtil.logStyles(LoggerUtil.toHtml(text));
   }
 
   /**

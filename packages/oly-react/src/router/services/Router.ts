@@ -1,26 +1,25 @@
 import { Location, LocationDescriptorObject } from "history";
-import { InjectedRouter } from "react-router";
+import { _, inject, Kernel } from "oly-core";
+import { TRANSITION_FINISH } from "../constants";
+import { Browser } from "./Browser";
 
 /**
- * TODO: make your own router
- * - navigate should returns Promise
- *  -> break on wrong resolve
- *  -> finish on transition end
+ *
  */
 export class Router {
 
-  /**
-   *
-   */
-  public history: InjectedRouter;
+  @inject(Browser)
+  protected browser: Browser;
+
+  @inject(Kernel)
+  protected kernel: Kernel;
 
   /**
    *
    * @return {any}
    */
   public get current(): Location {
-    this.checkIfReady();
-    return this.history["location"]; // tslint:disable-line
+    return this.browser.history.getCurrentLocation();
   }
 
   /**
@@ -28,56 +27,34 @@ export class Router {
    * @param url
    * @param replace
    */
-  public navigate(url: string | LocationDescriptorObject, replace = false): void {
-    this.checkIfReady();
+  public navigate(url: string | LocationDescriptorObject, replace = false): Promise<void> {
     if (replace) {
-      this.history.replace(url);
+      this.browser.history.replace(url);
     } else {
-      this.history.push(url);
+      this.browser.history.push(url);
     }
+    return this.kernel.on(TRANSITION_FINISH, _.noop).wait();
   }
 
   /**
    *
    * @param url
    */
-  public replace(url: string | LocationDescriptorObject): void {
-    this.navigate(url, true);
+  public replace(url: string | LocationDescriptorObject): Promise<void> {
+    return this.navigate(url, true);
   }
 
   /**
    *
    */
   public back(): void {
-    this.checkIfReady();
-    this.history.goBack();
+    this.browser.history.goBack();
   }
 
   /**
    *
    */
   public forward(): void {
-    this.checkIfReady();
-    this.history.goForward();
-  }
-
-  /**
-   *
-   * @param url
-   * @param strict
-   * @return {boolean}
-   */
-  public isActive(url: string, strict = false): boolean {
-    this.checkIfReady();
-    return this.history.isActive(url, strict);
-  }
-
-  /**
-   *
-   */
-  private checkIfReady() {
-    if (!this.history) {
-      throw new Error("Router is not available outside react context");
-    }
+    this.browser.history.goForward();
   }
 }

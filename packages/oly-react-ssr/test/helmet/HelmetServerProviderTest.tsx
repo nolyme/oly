@@ -1,10 +1,10 @@
 import * as cheerio from "cheerio";
 import { Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
+import { page } from "oly-react";
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import { HelmetServerProvider } from "../../src/helmet/HelmetServerProvider";
-import { page } from "oly-react";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 describe("HelmetServiceProvider", () => {
@@ -21,7 +21,7 @@ describe("HelmetServiceProvider", () => {
         </Helmet>
         bottom
       </div>
-    )
+    );
   }
 
   const kernel = new Kernel({
@@ -44,7 +44,7 @@ describe("HelmetServiceProvider", () => {
     expect($("title").text()).toBe("Hello");
     expect($("html").attr("lang")).toBe("en");
     expect($("body").attr("class")).toBe("root");
-    expect($('meta[name="description"]').attr("content")).toBe("This is cool");
-    expect($('div[id="app"] div').text()).toBe("topbottom");
+    expect($("meta[name=\"description\"]").attr("content")).toBe("This is cool");
+    expect($("div[id=\"app\"] div").text()).toBe("topbottom");
   });
 });

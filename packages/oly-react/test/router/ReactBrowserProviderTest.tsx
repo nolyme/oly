@@ -1,59 +1,67 @@
-import { equal } from "assert";
-import { inject, Kernel } from "oly-core";
+/**
+ * @jest-environment jsdom
+ */
+
+import { inject, state } from "oly-core";
+import { attachKernel } from "oly-test";
 import * as React from "react";
 import { page } from "../../src";
 import { ReactBrowserProvider } from "../../src/router/providers/ReactBrowserProvider";
-import { BrowserMock } from "../../src/router/services/BrowserMock";
+import { Browser } from "../../src/router/services/Browser";
+import { Router } from "../../src/router/services/Router";
+
+class FakeHttp {
+
+  @state("logs") logs: string[] = [];
+
+  fetchSomeData() {
+    return Promise.resolve("1+1=3");
+  }
+
+  onStart() {
+    this.logs.push("Yes, i'm started");
+  }
+}
+
+class NestedView {
+  @page("/yo") yo = () => <div>yo</div>;
+}
+
+class NestedAsyncView {
+  @inject http: FakeHttp;
+
+  @page("/async")
+  async ho() {
+    const data = await this.http.fetchSomeData();
+    return <h1>{data}</h1>;
+  }
+}
+
+class App {
+  @page("/") index = () => <h1>HI</h1>;
+
+  @page("/nested", {children: [NestedAsyncView, NestedView]})
+  module() {
+    return ({children}: { children: any }) => <div>MENU{children}</div>;
+  }
+}
 
 describe("ReactBrowserProvider", () => {
 
-  const checker: string[] = [];
-
-  class FakeHttp {
-    fetchSomeData() {
-      return Promise.resolve("1+1=3");
-    }
-
-    onStart() {
-      checker.push("Yes, i'm started");
-    }
-  }
-
-  class NestedView {
-    @page("/yo") yo = () => <div>yo</div>;
-  }
-
-  class NestedAsyncView {
-    @inject http: FakeHttp;
-    @page("/async") ho = async () => {
-      const data = await this.http.fetchSomeData();
-      return <h1>{data}</h1>;
-    }
-  }
-
-  class App {
-    @page("/") index = () => <h1>HI</h1>;
-    @page("/nested", {children: [NestedAsyncView, NestedView]}) module = () => {
-      return ({children}: { children: any }) => <div>MENU{children}</div>;
-    }
-  }
-
-  const kernel = new Kernel({OLY_LOGGER_LEVEL: "ERROR"});
-  const browser = kernel.get(BrowserMock);
-
-  kernel.with(App, NestedAsyncView, ReactBrowserProvider);
+  const kernel = attachKernel().with(App, ReactBrowserProvider);
+  const router = kernel.get(Router);
+  const browser = kernel.get(Browser);
 
   it("should inject dependencies", async () => {
-    equal(checker[0], null);
-    await kernel.start();
-    equal(checker[0], "Yes, i'm started");
-    equal(browser.html, "<h1>HI</h1>");
+    await router.navigate("/");
+    expect(kernel.state("logs")[0]).toBe("Yes, i'm started");
+    expect(browser.root.textContent).toBe("HI");
   });
 
   it("should support nested & resolvers", async () => {
-    await browser.open("/nested/async");
-    equal(browser.html, "<div>MENU<h1>1+1=3</h1></div>");
-    await browser.open("/nested/yo");
-    equal(browser.html, "<div>MENU<div>yo</div></div>");
+    await router.navigate("/nested/async");
+    expect(browser.root.textContent).toBe("MENU1+1=3");
+    await router.navigate("/nested/yo");
+    expect(browser.root.textContent).toBe("MENUyo");
   });
 });

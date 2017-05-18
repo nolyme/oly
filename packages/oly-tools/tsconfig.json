@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
-    "outDir": "lib",
     "declaration": true,
     "sourceMap": true,
     "experimentalDecorators": true,
@@ -11,7 +10,7 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
     "jsx": "react",
     "lib": [

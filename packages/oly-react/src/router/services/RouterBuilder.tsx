@@ -1,10 +1,8 @@
-import { createMemoryHistory } from "history";
 import { CommonUtil as _, IAnyFunction, IClass, IDeclarations, inject, Kernel, Logger, MetadataUtil } from "oly-core";
-import { browserHistory, EnterHook, PlainRoute, RouterState } from "react-router";
+import { EnterHook, PlainRoute, RouterState } from "react-router";
 import { lyPages } from "../constants";
 import { IPageDefinition, IPages, IRouteResolver } from "../interfaces";
 import { Browser } from "./Browser";
-import { Router } from "./Router";
 import { RouterHooks } from "./RouterHooks";
 
 /**
@@ -188,9 +186,7 @@ export class RouterBuilder {
     // build route
     const route: PlainRoute = _.assign({}, page.options.data, {
       getComponent: this.getComponentFactory(resolver),
-      onChange: page.options.onChange,
       onEnter: this.onEnterFactory(pageDef.target, propertyKey, resolver),
-      onLeave: page.options.onLeave,
       path: page.url,
     });
 
@@ -245,22 +241,7 @@ export class RouterBuilder {
       return Promise.resolve()
         .then(() => {
           const ctrl = resolver.kernel.get(definition);
-          const router = resolver.kernel.get(Router);
           const logger = resolver.kernel.get(Logger).as("ReactRouter");
-
-          // HACK: create a fake router during if reactRouter is undefined
-          if (!router.history) {
-            const history = browserHistory || createMemoryHistory(nextState) as any;
-            router.history = {
-              ...history,
-              ...nextState,
-              replace,
-              isActive: _.noop as any,
-              setRouteLeaveHook: _.noop as any,
-              volatile: true,
-            };
-          }
-
           const args = [];
 
           if (resolver.page && Array.isArray(resolver.page.args)) {

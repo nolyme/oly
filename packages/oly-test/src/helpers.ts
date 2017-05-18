@@ -1,5 +1,10 @@
 import { IClass, IStore, Kernel } from "oly-core";
 
+/**
+ *
+ * @param target
+ * @param kernelInstance
+ */
 const setContext = (target: any, kernelInstance?: Kernel) => {
   const kernel = kernelInstance || Kernel.create();
   if (!kernel.env("OLY_LOGGER_LEVEL")) {
@@ -72,3 +77,8 @@ export const skip = (name?: any, propertyKey?: string): any => {
  * @alias
  */
 export const test = check;
+
+/**
+ * @alias
+ */
+export const spec = check;

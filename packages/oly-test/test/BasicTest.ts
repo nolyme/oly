@@ -14,13 +14,10 @@ export class MockHttp {
   }
 }
 
-/**
- *
- */
-
 export class BasicTest {
 
-  @test watwat(kernel: Kernel) {
+  @test
+  watwat(kernel: Kernel) {
     expect(true).toEqual(true);
   }
 }
@@ -36,4 +33,3 @@ export class BasicMockTest {
     expect(await this.http.get("/")).toEqual({ok: false});
   }
 }
-

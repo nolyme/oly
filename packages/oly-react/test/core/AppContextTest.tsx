@@ -1,5 +1,9 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { _, env, inject, Kernel, on, state } from "oly-core";
-import { createDOM, createKernel } from "oly-test";
+import { createKernel } from "oly-test";
 import * as React from "react";
 import { Component } from "react";
 import { render } from "react-dom";
@@ -83,8 +87,19 @@ class B extends Component<any, any> {
 }
 
 const kernel = createKernel({DEFAULT_NAME: "Francis"});
-
-const dom = createDOM();
+const container = document.createElement("div");
+container.setAttribute("id", "app");
+document.body.appendChild(container);
+const dom = {
+  container,
+  get: (query: string): HTMLElement => {
+    const el = container.querySelector(query);
+    if (!el) {
+      throw new Error(`Element not found (query='${query}')`);
+    }
+    return el as HTMLElement;
+  },
+};
 
 describe("AppContext", () => {
 
@@ -100,7 +115,7 @@ describe("AppContext", () => {
     expect(dom.get("strong").textContent).toBe("Francis");
   });
 
-  it("state mutation update component", async() => {
+  it("state mutation update component", async () => {
     kernel.state("person", {name: "Paul"});
     await _.timeout(1);
     expect(dom.get("strong").textContent).toBe("Paul");

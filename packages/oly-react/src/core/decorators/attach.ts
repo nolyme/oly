@@ -1,6 +1,5 @@
 import { _ } from "oly-core";
 import * as React from "react";
-import { Router } from "../../router/services/Router";
 import { ComponentInjector } from "../services/ComponentInjector";
 
 const PropTypes = require("prop-types"); // tslint:disable-line
@@ -23,7 +22,6 @@ export const attach = (target: React.ComponentClass<any> | React.StatelessCompon
 
   target.contextTypes = {
     kernel: PropTypes.object.isRequired,
-    router: PropTypes.object,
   };
 
   // patch react component (Stateful only)
@@ -32,9 +30,6 @@ export const attach = (target: React.ComponentClass<any> | React.StatelessCompon
     // force Kernel#inject() before #componentWillMount()
     target.prototype.componentWillMount$$ = target.prototype.componentWillMount || _.noop;
     target.prototype.componentWillMount = function componentWillMount(this: React.Component<{}, {}>) {
-      if (this.context.router) {
-        this.context.kernel.get(Router).history = this.context.router; // TODO: remove this thing !!!
-      }
       this.context.kernel.get(ComponentInjector).inject(target, this);
       return target.prototype.componentWillMount$$.apply(this, arguments);
     };
