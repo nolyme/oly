@@ -6,12 +6,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictNullChecks": true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "strict": true,
     "jsx": "react",
     "lib": [
       "es2015.promise",
@@ -21,6 +16,5 @@
   },
   "exclude": [
     "node_modules"
-  ],
-  "compileOnSave": true
+  ]
 }

@@ -18,12 +18,13 @@
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
-    "test": "jest"
+    "test": "echo"
   },
   "jest": {
     "preset": "../../jest-preset.json"
   },
   "dependencies": {
+    "@types/shelljs": "^0.7.1",
     "shelljs": "0.7.7"
   }
 }

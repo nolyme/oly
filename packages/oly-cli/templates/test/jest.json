@@ -1,0 +1,18 @@
+{
+  "mapCoverage": true,
+  "testRegex": "(Test)\\.(ts|tsx)$",
+  "testURL": "http://127.0.0.1/",
+  "transform": {
+    ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+  },
+  "moduleFileExtensions": [
+    "js",
+    "jsx",
+    "json",
+    "ts",
+    "tsx"
+  ],
+  "globals": {
+    "__TS_CONFIG__": "test/tsconfig.json"
+  }
+}

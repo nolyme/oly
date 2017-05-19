@@ -1,24 +1,5 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "declaration": true,
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "strictNullChecks": true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "jsx": "react",
-    "lib": [
-      "es2015.promise",
-      "es5",
-      "dom"
-    ]
-  },
+  "extends": "../../tsconfig.json",
   "include": [
     "webpack/**/*"
   ]
