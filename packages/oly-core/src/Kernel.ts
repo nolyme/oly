@@ -664,7 +664,7 @@ export class Kernel {
       if (chunk.readonly !== true) {
         // state can be updated
         Object.defineProperty(instance, propertyKey, {
-          get: () => this.env(chunkName),
+          get: () => this.state(chunkName),
           set: (newValue) => this.state(chunkName, newValue),
         });
       } else {
