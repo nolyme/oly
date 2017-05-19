@@ -363,14 +363,22 @@ describe("Kernel", () => {
 
   describe("#state()", () => {
 
-    it("should return the correct value", () => {
+    it("should cast only if it's possible and asked", () => {
 
       class A {
         @state() data = "SECRET";
+        @env("data2") data2: string;
+        @env("data3") data3: number;
+
+        getEnv = () => this.data2;
       }
 
-      expect(createKernel().with(A).state(_.targetToString(A, "data")))
-        .toBe("SECRET");
+      const kernel = createKernel({
+        data2: "1",
+        data3: "1",
+      });
+      expect(kernel.with(A).state(_.targetToString(A, "data"))).toBe("SECRET");
+      expect(kernel.get(A).getEnv()).toBe("1");
     });
 
     it("should use NODE_ENV", () => {
@@ -381,14 +389,14 @@ describe("Kernel", () => {
     });
 
     it("should parse boolean", () => {
-      expect(createKernel({ok: "true"}).env("ok")).toBe(true);
+      expect(createKernel({ok: "true"}).env("ok", Boolean)).toBe(true);
       expect(createKernel({ok: "true"}).state("ok")).toBe("true");
-      expect(createKernel({ok: "false"}).env("ok")).toBe(false);
+      expect(createKernel({ok: "false"}).env("ok", Boolean)).toBe(false);
       expect(createKernel({ok: "false"}).state("ok")).toBe("false");
     });
 
     it("should parse number", () => {
-      expect(createKernel({port: "8080"}).env("port")).toBe(8080);
+      expect(createKernel({port: "8080"}).env("port", Number)).toBe(8080);
       expect(createKernel({port: "8080"}).state("port")).toBe("8080");
     });
 
@@ -405,7 +413,7 @@ describe("Kernel", () => {
       expect(k.state("Y")).toBeUndefined();
       expect(k.state(_.targetToString(A, "w"))).toBe("z");
       expect(k.state(_.targetToString(A, "m"))).toBe("1");
-      expect(k.env(_.targetToString(A, "m"))).toBe(1);
+      expect(k.env(_.targetToString(A, "m"), Number)).toBe(1);
     });
 
     it("should reject undefined readonly state", async () => {
@@ -435,7 +443,7 @@ describe("Kernel", () => {
 
     it("should cast env as number", () => {
       const kernel = createKernel({A: "1"});
-      expect(kernel.env("A")).toBe(1);
+      expect(kernel.env("A", Number)).toBe(1);
     });
 
     it("should template values", () => {

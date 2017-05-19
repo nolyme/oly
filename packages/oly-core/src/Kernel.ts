@@ -376,17 +376,18 @@ export class Kernel {
    * kernel.state("a"); // "true"
    * ```
    *
-   * @param key   Identifier as string who defined the value
+   * @param key         Identifier as string who defined the value
+   * @param forceType   Convert string on given type (number or boolean only) when it's possible
    */
-  public env(key: string): any {
+  public env(key: string, forceType?: IClass): any {
     const value = this.state(key);
 
     if (typeof value === "string") {
-      if (value === "true") {
+      if (forceType && forceType === Boolean && value === "true") {
         return true;
-      } else if (value === "false") {
+      } else if (forceType && forceType === Boolean && value === "false") {
         return false;
-      } else if (!isNaN(value as any)) {
+      } else if (forceType && forceType === Number && !isNaN(value as any)) {
         return Number(value);
       } else {
         return _.template(value, this.store);
@@ -674,7 +675,7 @@ export class Kernel {
           throw new KernelException(olyCoreErrors.envNotDefined(chunkName));
         }
         Object.defineProperty(instance, propertyKey, {
-          get: () => this.env(chunkName),
+          get: () => this.env(chunkName, chunk.type),
         });
       }
     }

@@ -61,7 +61,7 @@ export const initServer = (): void => {
   copyFiles("server");
   mergePackageJson({
     scripts: {
-      start: "src/main.server.ts",
+      start: "ts-node src/main.server.ts",
     },
   });
 };
@@ -69,7 +69,7 @@ export const initServer = (): void => {
 export const initServerApi = (): void => {
   ensureDependencies(["typescript",
     {name: "oly-core", dev: false},
-    {name: "oly-mapper;", dev: false},
+    {name: "oly-mapper", dev: false},
     {name: "oly-http", dev: false},
     {name: "oly-api", dev: false},
     "ts-node"]);
@@ -77,7 +77,7 @@ export const initServerApi = (): void => {
   copyFiles("server-api");
   mergePackageJson({
     scripts: {
-      start: "src/main.server.ts",
+      start: "ts-node src/main.server.ts",
     },
   });
 };
