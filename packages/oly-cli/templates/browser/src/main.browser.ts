@@ -1,8 +1,8 @@
-import { Kernel, Logger } from "oly-core";
+import { Kernel } from "oly-core";
 
 new Kernel()
-  .configure((k) => {
-    k.get(Logger).as("Demo").info("Hello");
-  })
+  .with(
+    /** **/
+  )
   .start()
   .catch(console.error);

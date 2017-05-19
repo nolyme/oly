@@ -1,20 +1,18 @@
 import { getLocalBinary, ICommands, showHelp, spawnExecutable } from "./constants";
-import { initBrowser, initServer, initTest } from "./templates";
+import { initCommands } from "./templates";
 
 export const commands: ICommands = {
   "init": {
     help: "create a new project",
     exec: (args: string[]) => {
-      if (args[0] === "--server") {
-        initServer();
-      } else if (args[0] === "--test") {
-        initTest();
-      } else if (args[0] === "--browser") {
-        initBrowser();
+      const cmds = args
+        .map((arg) => initCommands[arg])
+        .filter((cmd) => !!cmd && !!cmd.exec);
+      if (cmds.length > 0) {
+        cmds.forEach((cmd) =>
+          cmd.exec && cmd.exec(args));
       } else {
-        initServer();
-        initTest();
-        initBrowser();
+        showHelp(initCommands);
       }
     },
   },
@@ -56,11 +54,11 @@ export const commands: ICommands = {
     exec: (args: string[]) => spawnExecutable(getLocalBinary("jest"), args),
   },
   "webpack": {
-    ensure: ["typescript", "oly-tools", "webpack"],
+    ensure: ["typescript", "oly-tools", "ts-node", "webpack"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("webpack"), args),
   },
   "webpack-dev-server": {
-    ensure: ["typescript", "oly-tools", "webpack", "webpack-dev-server"],
+    ensure: ["typescript", "oly-tools", "ts-node", "webpack", "webpack-dev-server"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("webpack-dev-server"), args),
   },
   "help": {

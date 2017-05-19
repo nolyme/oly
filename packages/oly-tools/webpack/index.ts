@@ -91,8 +91,8 @@ export interface IToolsOptions {
    */
   open?: boolean;
   /**
-   * Super power.
-   * Default is true.
+   * Display nyan cat during the compilation.
+   * Default is false.
    */
   nyan?: boolean;
   /**
@@ -237,8 +237,10 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     config.plugins.push(new OpenBrowserPlugin());
   }
 
-  if (options.nyan !== false) {
-    config.plugins.push(new NyanProgressPlugin());
+  if (options.nyan === true) {
+    config.plugins.push(new NyanProgressPlugin({
+      nyanCatSays: (progress) => progress === 1 && "oly!",
+    }));
   }
 
   if (isProduction) {
