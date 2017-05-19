@@ -19,7 +19,7 @@
       "dom"
     ]
   },
-  "exclude": [
-    "node_modules"
+  "include": [
+    "webpack/**/*"
   ]
 }

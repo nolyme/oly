@@ -1,0 +1,216 @@
+#!/usr/bin/env node
+"use strict";
+
+/**
+ * Dependencies
+ */
+
+const {resolve} = require("path");
+const {cp, set, which} = require("shelljs");
+const {existsSync, writeFileSync, readFileSync} = require("fs");
+const {spawnSync} = require("child_process");
+
+/**
+ * Constants
+ */
+
+const olyCliPath = resolve(__dirname, "..");
+const pkgPath = process.cwd() + "/package.json";
+
+/**
+ * Utils
+ */
+
+const getLocalBinary = (name) => resolve(process.cwd(), "node_modules/.bin/" + name);
+const spawnExecutable = (name, args) => spawnSync(name, args, {stdio: [null, process.stdout, process.stderr]});
+const log = (...msg) => console.log(...msg);
+const showHelp = (commands) => {
+  log("");
+  for (const name of Object.keys(commands)) {
+    if (commands[name].help) {
+      console.log(`   ${name}: ${commands[name].help}`);
+    }
+  }
+  log("");
+};
+
+/**
+ * Dependencies management
+ */
+
+const addDependencies = (deps, dev = false) => {
+  if (which("yarn")) {
+    spawnExecutable("yarn", ["add", dev ? "-D" : "", ...deps]);
+  } else {
+    spawnExecutable("npm", ["install", dev ? "-D" : "-S", ...deps]);
+  }
+};
+const addDevDependencies = (deps) => addDependencies(deps, true);
+const ensureDependencies = (deps = []) => {
+  const listOfDevDeps = [];
+  const listOfDeps = [];
+  for (const dep of deps) {
+    const name = typeof dep === "string" ? dep : dep.name;
+    if (!existsSync(resolve(process.cwd(), "node_modules", name))) {
+      if (typeof dep === "string") {
+        listOfDevDeps.push(name);
+      } else {
+        listOfDeps.push(name);
+      }
+    }
+  }
+  if (listOfDevDeps.length) {
+    addDevDependencies(listOfDevDeps);
+  }
+  if (listOfDeps.length) {
+    addDevDependencies(listOfDeps);
+  }
+};
+
+/**
+ * Init management
+ */
+
+const initPackage = (newPkg) => {
+  const pkg = existsSync(pkgPath)
+    ? JSON.parse(readFileSync(pkgPath, "UTF-8"))
+    : {};
+  writeFileSync(pkgPath, JSON.stringify(Object.assign(pkg, newPkg), null, "  "), "UTF-8");
+};
+const initFiles = (type = "project") => {
+  cp("-Rn", olyCliPath + `/templates/${type}/*`, ".");
+};
+const initBrowser = () => {
+  ensureDependencies(["typescript", {name: "oly-core"}, "oly-tools", "webpack", "webpack-dev-server"]);
+  initFiles("project");
+  initFiles("browser");
+  initPackage({
+    scripts: {
+      build: "webpack",
+      serve: "webpack-dev-server"
+    }
+  });
+};
+const initServer = () => {
+  ensureDependencies(["typescript", {name: "oly-core"}, "ts-node"]);
+  initFiles("project");
+  initFiles("server");
+  initPackage({
+    scripts: {
+      start: "src/main.server.ts"
+    }
+  })
+};
+const initTest = () => {
+  ensureDependencies(["typescript", "tslint", "jest", "@types/jest", "ts-jest"]);
+  initFiles("project");
+  initFiles("test");
+  initPackage({
+    scripts: {
+      lint: "tslint",
+      test: "jest"
+    },
+    jest: {
+      "mapCoverage": true,
+      "testRegex": "(Test)\\.(ts|tsx)$",
+      "testURL": "http://127.0.0.1/",
+      "transform": {
+        ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      },
+      "moduleFileExtensions": [
+        "js",
+        "jsx",
+        "json",
+        "ts",
+        "tsx"
+      ],
+      "globals": {
+        "__TS_CONFIG__": "test/tsconfig.json"
+      }
+    }
+  })
+};
+
+/**
+ * Commands
+ */
+const commands = {
+  "init": {
+    help: "create a new project",
+    exec: (args) => {
+      if (args[0] === "--server") {
+        initServer();
+      } else if (args[0] === "--test") {
+        initTest();
+      } else if (args[0] === "--browser") {
+        initBrowser();
+      } else {
+        initServer();
+        initTest();
+        initBrowser();
+      }
+    }
+  },
+  "run": {
+    help: "exec ts-node",
+    alias: "ts-node"
+  },
+  "test": {
+    help: "exec jest",
+    alias: "jest"
+  },
+  "build": {
+    help: "exec webpack",
+    alias: "webpack"
+  },
+  "serve": {
+    help: "exec webpack-dev-server",
+    alias: "webpack-dev-server"
+  },
+  "lint": {
+    help: "exec tslint",
+    exec: (args) => spawnExecutable(getLocalBinary("tslint"), [...args, "src/**/*"])
+  },
+  "tsc": {
+    help: "exec tsc",
+    ensure: ["typescript"],
+    exec: (args) => spawnExecutable(getLocalBinary("tsc"), args)
+  },
+  "ts-node": {
+    ensure: ["typescript", "ts-node"],
+    exec: (args) => spawnExecutable(getLocalBinary("ts-node"), args)
+  },
+  "tslint": {
+    ensure: ["typescript", "tslint"],
+    exec: (args) => spawnExecutable(getLocalBinary("tslint"), args)
+  },
+  "jest": {
+    ensure: ["typescript", "jest", "@types/jest", "ts-jest"],
+    exec: (args) => spawnExecutable(getLocalBinary("jest"), args)
+  },
+  "webpack": {
+    ensure: ["typescript", "oly-tools", "webpack"],
+    exec: (args) => spawnExecutable(getLocalBinary("webpack"), args)
+  },
+  "webpack-dev-server": {
+    ensure: ["typescript", "oly-tools", "webpack", "webpack-dev-server"],
+    exec: (args) => spawnExecutable(getLocalBinary("webpack-dev-server"), args)
+  },
+  "help": {
+    help: "show this message",
+    exec: (args) => showHelp(commands)
+  }
+};
+
+/**
+ * Bootstrap
+ */
+
+const actionName = process.argv[2];
+const args = process.argv.slice(3);
+const target = commands[actionName] || commands["help"];
+const action = target.alias ? commands[target.alias] : target;
+
+set('-e');
+ensureDependencies(action.ensure);
+action.exec(args);

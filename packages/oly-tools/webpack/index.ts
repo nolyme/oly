@@ -3,6 +3,8 @@ import * as CleanWebpackPlugin from "clean-webpack-plugin";
 import * as CopyPlugin from "copy-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
+import * as NyanProgressPlugin from "nyan-progress-webpack-plugin";
+import * as OpenBrowserPlugin from "open-browser-webpack-plugin";
 import { join, resolve } from "path";
 import * as _webpack from "webpack";
 import { Configuration, Entry, Rule } from "webpack";
@@ -83,6 +85,16 @@ export interface IToolsOptions {
    * Delay between webpackDevServer reload.
    */
   timeout?: number;
+  /**
+   * Opens a new browser tab when Webpack loads.
+   * Default is true.
+   */
+  open?: boolean;
+  /**
+   * Super power.
+   * Default is true.
+   */
+  nyan?: boolean;
   /**
    * Override typescript loader.
    */
@@ -219,6 +231,14 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         from: options.assets, to: "./",
       }]),
     );
+  }
+
+  if (options.open !== false) {
+    config.plugins.push(new OpenBrowserPlugin());
+  }
+
+  if (options.nyan !== false) {
+    config.plugins.push(new NyanProgressPlugin());
   }
 
   if (isProduction) {
