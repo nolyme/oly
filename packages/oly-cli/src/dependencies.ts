@@ -7,7 +7,11 @@ export type IDep = string | { name: string; dev: boolean };
 
 export const addDependencies = (deps: string[], dev: boolean = false): void => {
   if (which("yarn")) {
-    spawnExecutable("yarn", ["add", dev ? "-D" : "", ...deps]);
+    if (dev) {
+      spawnExecutable("yarn", ["add", "--dev", ...deps]);
+    } else {
+      spawnExecutable("yarn", ["add", ...deps]);
+    }
   } else {
     spawnExecutable("npm", ["install", dev ? "-D" : "-S", ...deps]);
   }
