@@ -62,6 +62,7 @@ export const initServer = (): void => {
   mergePackageJson({
     scripts: {
       start: "ts-node src/main.server.ts",
+      compile: "tsc",
     },
   });
 };
@@ -78,6 +79,7 @@ export const initServerApi = (): void => {
   mergePackageJson({
     scripts: {
       start: "ts-node src/main.server.ts",
+      compile: "tsc",
     },
   });
 };
