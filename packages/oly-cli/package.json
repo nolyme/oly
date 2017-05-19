@@ -4,7 +4,7 @@
   },
   "name": "oly-cli",
   "description": "oly-cli",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -24,7 +24,7 @@
     "preset": "../../jest-preset.json"
   },
   "dependencies": {
-    "@types/shelljs": "^0.7.1",
+    "@types/shelljs": "0.7.1",
     "shelljs": "0.7.7"
   }
 }

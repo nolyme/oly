@@ -1,7 +1,7 @@
 {
   "name": "oly-mongo",
   "description": "oly-mongo",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -17,13 +17,13 @@
     "mongodb": "2.2.26"
   },
   "devDependencies": {
-    "oly-core": "^0.10.0",
-    "oly-mapper": "^0.10.0",
-    "oly-test": "^0.10.0"
+    "oly-core": "^0.10.1",
+    "oly-mapper": "^0.10.1",
+    "oly-test": "^0.10.1"
   },
   "peerDependencies": {
-    "oly-core": "^0.10.0",
-    "oly-mapper": "^0.10.0"
+    "oly-core": "^0.10.1",
+    "oly-mapper": "^0.10.1"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
