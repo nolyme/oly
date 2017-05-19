@@ -31,21 +31,21 @@ export class ApiMiddlewares {
    * Basic error handler.
    */
   public errorHandler(): IKoaMiddleware {
-    return async (ctx: IKoaContext, next: IAnyFunction) => {
-      try {
+    return (ctx: IKoaContext, next: IAnyFunction) => {
+      return next().then(() => {
 
-        await next();
-        if (ctx.status >= 400) {
+        // override koa 404 by our 404 Exception
+        if (ctx.status === 404) {
           throw new NotFoundException(olyApiErrors.serviceNotFound());
         }
 
-      } catch (e) {
+      }).catch((e: HttpServerException | Error) => {
 
         const exception = e instanceof HttpServerException ? e : new HttpServerException(e);
 
         ctx.status = exception.status;
         ctx.body = exception;
-      }
+      });
     };
   }
 
@@ -53,29 +53,29 @@ export class ApiMiddlewares {
    * Simple request logger.
    */
   public log(): IKoaMiddleware {
-    return async (ctx: IKoaContext, next: IAnyFunction) => {
+    return (ctx: IKoaContext, next: IAnyFunction) => {
 
       const logger = ctx.kernel.get(Logger).as("KoaRouter");
 
       logger.info(`incoming request ${ctx.method} ${ctx.path}`);
       logger.debug("request data", ctx.request.toJSON());
 
-      await next();
+      return next().then(() => {
+        if (ctx.status < 400) {
 
-      if (ctx.status < 400) {
+          logger.info(`request ending successfully (${ctx.status})`);
+          logger.debug("response data", ctx.response.toJSON());
 
-        logger.info(`request ending successfully (${ctx.status})`);
-        logger.debug("response data", ctx.response.toJSON());
+        } else {
 
-      } else {
+          if (ctx.status === 500) {
+            logger.error("internal error", ctx.body);
+          }
 
-        if (ctx.status === 500) {
-          logger.error("internal error", ctx.body);
+          logger.info(`request has been rejected (${ctx.status})`);
+          logger.debug("response error data", ctx.response.toJSON());
         }
-
-        logger.info(`request has been rejected (${ctx.status})`);
-        logger.debug("response error data", ctx.response.toJSON());
-      }
+      });
     };
   }
 
@@ -90,7 +90,7 @@ export class ApiMiddlewares {
    * @param route         Optional IRouteMetadata used for params injection
    */
   public invoke(definition: IClass, propertyKey: string, route?: IRouteMetadata): IKoaMiddleware {
-    return async (ctx: IKoaContext) => {
+    return (ctx: IKoaContext) => {
 
       // inject all "light deps" of the controller
       const target = ctx.kernel.get(definition);
@@ -114,16 +114,17 @@ export class ApiMiddlewares {
 
       logger.trace(`apply ${_.targetToString(definition, propertyKey)}()`); // tslint:disable-line
 
-      const response = await action.apply(target, args);
-      if (response != null) {
-        // if controller returns 'something' => set to the response body
-        ctx.body = response;
-        ctx.status = ctx.status || 200;
-      } else if (ctx.status === 404 && !ctx.body) {
-        logger.trace("no body detected, status -> 204");
-        // v0.3, if no response -> 204
-        ctx.status = 204;
-      }
+      return _.promise(action.apply(target, args)).then((response) => {
+        if (response != null) {
+          // if controller returns 'something' => set to the response body
+          ctx.body = response;
+          ctx.status = ctx.status || 200;
+        } else if (ctx.status === 404 && !ctx.body) {
+          logger.trace("no body detected, status -> 204");
+          // (v0.3) if no response -> 204
+          ctx.status = 204;
+        }
+      });
     };
   }
 }
