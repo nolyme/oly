@@ -1,7 +1,7 @@
 {
   "name": "oly-router",
   "description": "oly-router",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,10 +13,10 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "oly-core": "^0.10.1"
+    "oly-core": "^0.10.2"
   },
   "peerDependencies": {
-    "oly-core": "^0.10.1"
+    "oly-core": "^0.10.2"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
