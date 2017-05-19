@@ -13,7 +13,7 @@ export class HttpServerProvider {
    *
    */
   @env("OLY_HTTP_SERVER_HOST")
-  protected readonly host: string = "localhost";
+  protected readonly host: string = "0.0.0.0";
 
   /**
    *
