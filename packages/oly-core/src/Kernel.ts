@@ -712,10 +712,12 @@ export class Kernel {
       observers.push(this.on(key, {target, propertyKey, instance}));
     }
 
-    // this is currently used by oly-react
-    instance["__free__"] = () => { // tslint:disable-line
-      observers.forEach((obs) => obs.free());
-    };
+    if (observers.length > 0) {
+      // this is currently used by oly-react
+      instance["__free__"] = () => { // tslint:disable-line
+        observers.forEach((obs) => obs.free());
+      };
+    }
 
     return instance;
   }
