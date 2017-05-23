@@ -2,6 +2,10 @@ import { AxiosError } from "axios";
 import { Exception } from "oly-core";
 import { IHttpResponse } from "../interfaces";
 
+/**
+ * Exception thrown by a axios (http client).
+ * Default status is -1 (no status).
+ */
 export class HttpClientException extends Exception {
 
   public status: number = -1;
