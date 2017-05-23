@@ -34,6 +34,7 @@
       "!packages/oly/**/*.{ts,tsx}",
       "!packages/oly-test/src/**/*.{ts,tsx}",
       "!packages/oly-docs/src/**/*.{ts,tsx}",
+      "!packages/oly-cli/src/**/*.{ts,tsx}",
       "!packages/oly-tools/**/*.{ts,tsx}"
     ],
     "globals": {
