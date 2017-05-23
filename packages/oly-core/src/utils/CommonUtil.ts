@@ -1,5 +1,3 @@
-import { IClass } from "../interfaces/types";
-
 /**
  * Collection of internal utils.
  */
@@ -143,8 +141,8 @@ export class CommonUtil {
    *
    * Class A { b() {} } -> "A.b".
    */
-  public static targetToString(target: IClass, propertyKey: string): string {
-    return `${target.name}.${propertyKey}`;
+  public static targetToString(target: { name?: string }, propertyKey: string): string {
+    return `${target.name || target}.${propertyKey}`;
   }
 
   /**
