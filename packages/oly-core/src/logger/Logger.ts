@@ -3,7 +3,6 @@ import { env } from "../decorators/env";
 import { injectable } from "../decorators/injectable";
 import { IClass } from "../interfaces/types";
 import { Kernel } from "../Kernel";
-import { LoggerUtil } from "./LoggerUtil";
 import { LogLevels } from "./LogLevels";
 
 /**
@@ -21,7 +20,7 @@ export class Logger {
   public static DEFAULT_NAME = "Unknown";
 
   /**
-   * Used by chalk.
+   * Used by this.chalk.
    */
   public static colors = {
     DEBUG: "cyan",
@@ -35,13 +34,13 @@ export class Logger {
    * Set a name to your app.
    */
   @env("OLY_APP_NAME")
-  protected appName = "MyApp";
+  protected appName: string = "MyApp";
 
   /**
    * Set the level of your logger.
    */
   @env("OLY_LOGGER_LEVEL")
-  protected logLevel = "INFO";
+  protected logLevel: string = "INFO";
 
   protected contextId: string;
 
@@ -122,7 +121,7 @@ export class Logger {
     if (LogLevels[this.logLevel] <= LogLevels.WARN) {
       if (data && data instanceof Error) {
         this.appender(this.format("WARN", message));
-        this.appender("\n " + chalk.red(data.stack || "?") + " \n");
+        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n");
       } else {
         this.appender(this.format("WARN", message, data));
       }
@@ -139,7 +138,7 @@ export class Logger {
     if (LogLevels[this.logLevel] <= LogLevels.ERROR) {
       if (data && data instanceof Error) {
         this.appender(this.format("ERROR", message));
-        this.appender("\n " + chalk.red(data.stack || "?") + " \n\n");
+        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n");
       } else {
         this.appender(this.format("ERROR", message, data));
       }
@@ -152,11 +151,7 @@ export class Logger {
    * @param text
    */
   protected appender(text: string): void {
-    if (typeof process !== "undefined" && typeof process.stdout !== "undefined") {
-      console.log(text); // tslint:disable-line
-      return;
-    }
-    LoggerUtil.logStyles(LoggerUtil.toHtml(text));
+    console.log(text); // tslint:disable-line
   }
 
   /**
@@ -169,12 +164,19 @@ export class Logger {
   protected format(type: string, message: string, data?: object): string {
     const now = new Date().toLocaleString();
     return ""
-      + "[" + chalk.grey(now) + "] "
+      + "[" + this.chalk.grey(now) + "] "
       + chalk[Logger.colors[type]](type) + " "
-      + chalk.bold(this.appName + "(") + ""
-      + this.contextId + chalk.bold(")") + " "
-      + chalk.bold(this.componentName + ":") + " "
+      + this.chalk.bold(this.appName + "(") + ""
+      + this.contextId + this.chalk.bold(")") + " "
+      + this.chalk.bold(this.componentName + ":") + " "
       + ("\"" + message + "\" ")
-      + chalk.gray(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
+      + this.chalk.gray(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
+  }
+
+  /**
+   * Chalk factory.
+   */
+  protected get chalk() {
+    return chalk;
   }
 }

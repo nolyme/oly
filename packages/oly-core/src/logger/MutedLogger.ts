@@ -18,8 +18,4 @@ export class MutedLogger extends Logger {
   protected appender() {
     return null;
   }
-
-  protected format() {
-    return "";
-  }
 }

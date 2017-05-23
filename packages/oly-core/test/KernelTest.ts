@@ -21,7 +21,7 @@ describe("Kernel", () => {
       }
 
       const kernel = createKernel();
-      const a = kernel.get(A, {register: false});
+      const a = kernel.get(A, { register: false });
 
       expect(a.b).toBe("c");
     });
@@ -32,8 +32,8 @@ describe("Kernel", () => {
         @inject kernel: Kernel;
       }
 
-      const kernel = createKernel({A: "B"});
-      const a = kernel.get(A, {register: false});
+      const kernel = createKernel({ A: "B" });
+      const a = kernel.get(A, { register: false });
 
       expect(a.kernel.id).toBe(kernel.id);
       expect(a.kernel.state("A")).toBe("B");
@@ -47,7 +47,7 @@ describe("Kernel", () => {
 
     it("should reject when null 2", async () => {
       const A: any = null;
-      expect(() => createKernel().get({provide: A, use: A}))
+      expect(() => createKernel().get({ provide: A, use: A }))
         .toThrow(olyCoreErrors.isNotFunction("provide", typeof A));
     });
 
@@ -82,7 +82,7 @@ describe("Kernel", () => {
         @inject b: B;
       }
 
-      const kernel = createKernel().with({provide: B, use: BMock}, A);
+      const kernel = createKernel().with({ provide: B, use: BMock }, A);
       expect(kernel.get(A).b.c).toBe("MOCK");
     });
 
@@ -100,8 +100,8 @@ describe("Kernel", () => {
       }
 
       expect(createKernel().get(A).b.c).toBe("C");
-      expect(createKernel().with(A).with({provide: B, use: BMock}).get(A).b.c).toBe("MOCK");
-      await expect(createKernel().with(A).start().then((k) => k.with({provide: B, use: BMock})))
+      expect(createKernel().with(A).with({ provide: B, use: BMock }).get(A).b.c).toBe("MOCK");
+      await expect(createKernel().with(A).start().then((k) => k.with({ provide: B, use: BMock })))
         .rejects.toEqual(new KernelException(olyCoreErrors.noDepUpdate("B")));
     });
 
@@ -118,7 +118,7 @@ describe("Kernel", () => {
       const kernel = createKernel();
 
       // define A2 as A then return A2
-      const a = kernel.get({provide: A, use: A2});
+      const a = kernel.get({ provide: A, use: A2 });
       equal(a.b, "d");
       a.b = "e";
 
@@ -127,7 +127,7 @@ describe("Kernel", () => {
 
       // you can break the rule with lambda
       const k2 = createKernel();
-      const a2 = k2.get({provide: A, use: (k) => k.get(A2, {register: false})}); // this is allowed
+      const a2 = k2.get({ provide: A, use: (k) => k.get(A2, { register: false }) }); // this is allowed
 
       // but now, 'use' cannot be a research criteria
       equal(a2.b, "d");
@@ -177,7 +177,7 @@ describe("Kernel", () => {
         }
       }
 
-      await createKernel().with({provide: A, use: A3}, B).start();
+      await createKernel().with({ provide: A, use: A3 }, B).start();
       await createKernel().with(A3, B).start();
       await createKernel().with(B).start();
       await createKernel().with(A4, B).start();
@@ -186,10 +186,10 @@ describe("Kernel", () => {
       await createKernel().with(A5, B).start();
 
       // whereas with manual providing, this will returns A5
-      await createKernel().with({provide: A, use: A5}, B).start();
+      await createKernel().with({ provide: A, use: A5 }, B).start();
 
       // if you provide A4 with A5, A5 will swap A4 BUT A4 is provide-force to A so B will have A5 !!!!
-      await createKernel().with({provide: A4, use: A5}, B).start();
+      await createKernel().with({ provide: A4, use: A5 }, B).start();
 
       // recursively, A6 -> A4 -> A
       await createKernel().with(A6, B).start();
@@ -220,7 +220,7 @@ describe("Kernel", () => {
 
       const k = await createKernel()
         .with(A) // first declaration will add A, B and C
-        .with({provide: B, use: B2})
+        .with({ provide: B, use: B2 })
         .start();
 
       expect(k.get(A).b.d).toBe("f");
@@ -389,15 +389,15 @@ describe("Kernel", () => {
     });
 
     it("should parse boolean", () => {
-      expect(createKernel({ok: "true"}).env("ok", Boolean)).toBe(true);
-      expect(createKernel({ok: "true"}).state("ok")).toBe("true");
-      expect(createKernel({ok: "false"}).env("ok", Boolean)).toBe(false);
-      expect(createKernel({ok: "false"}).state("ok")).toBe("false");
+      expect(createKernel({ ok: "true" }).env("ok", Boolean)).toBe(true);
+      expect(createKernel({ ok: "true" }).state("ok")).toBe("true");
+      expect(createKernel({ ok: "false" }).env("ok", Boolean)).toBe(false);
+      expect(createKernel({ ok: "false" }).state("ok")).toBe("false");
     });
 
     it("should parse number", () => {
-      expect(createKernel({port: "8080"}).env("port", Number)).toBe(8080);
-      expect(createKernel({port: "8080"}).state("port")).toBe("8080");
+      expect(createKernel({ port: "8080" }).env("port", Number)).toBe(8080);
+      expect(createKernel({ port: "8080" }).state("port")).toBe("8080");
     });
 
     it("should define a name to anonymous states", () => {
@@ -430,8 +430,7 @@ describe("Kernel", () => {
   describe("#env()", () => {
 
     it("should return the correct value", () => {
-
-      const kernel = createKernel({HELLO: "WORLD"});
+      const kernel = createKernel({ HELLO: "WORLD" });
       expect(kernel.env("HELLO")).toBe("WORLD");
       expect(kernel.env("HELLO2")).toBeUndefined();
     });
@@ -442,12 +441,12 @@ describe("Kernel", () => {
     });
 
     it("should cast env as number", () => {
-      const kernel = createKernel({A: "1"});
+      const kernel = createKernel({ A: "1" });
       expect(kernel.env("A", Number)).toBe(1);
     });
 
     it("should template values", () => {
-      const kernel = createKernel({A: "B", C: "${A}"});
+      const kernel = createKernel({ A: "B", C: "${A}" });
       expect(kernel.env("C")).toBe("B");
     });
   });
@@ -509,7 +508,7 @@ describe("Kernel", () => {
         @env("D") d = "e";
       }
 
-      const kernel = new Kernel({D: "f"}).with(C);
+      const kernel = new Kernel({ D: "f" }).with(C);
       equal(kernel.state("D"), "f");
       equal(kernel["store"]["D"], "f"); // tslint:disable-line
       const child = kernel.fork();
@@ -542,8 +541,8 @@ describe("Kernel", () => {
 
     it("should wait event", async () => {
       const k = new Kernel();
-      _.timeout(10).then((_) => k.emit("test:lol", {OK: true}));
-      deepEqual(await k.on("test:lol", _.noop).wait(), {OK: true});
+      _.timeout(10).then((_) => k.emit("test:lol", { OK: true }));
+      deepEqual(await k.on("test:lol", _.noop).wait(), { OK: true });
     });
 
     it("should process event", async () => {
@@ -578,7 +577,7 @@ describe("Kernel", () => {
       const k = createKernel();
       const func = () => i++;
       const obs = k.on("a", func);
-      k.on("a", func, {unique: true});
+      k.on("a", func, { unique: true });
       await k.emit("a");
       await k.emit("a");
       expect(i).toBe(3);
@@ -601,7 +600,7 @@ describe("Kernel", () => {
       parent.on("test", () => inc += 1);
       const child = parent.fork();
       await child.emit("test");
-      await child.emit("test", null, {parent: true});
+      await child.emit("test", null, { parent: true });
       await child.emit("test");
       expect(inc).toBe(1);
     });
@@ -618,7 +617,7 @@ describe("Kernel", () => {
       }
 
       const kernel = createKernel().with(A);
-      const [id] = await kernel.emit(_.targetToString(A, "b"), null, {fork: true});
+      const [id] = await kernel.emit(_.targetToString(A, "b"), null, { fork: true });
       expect(id.length).toBe(25); // 12 + 1 + 12
     });
   });
