@@ -9,6 +9,8 @@ import { join, resolve } from "path";
 import * as _webpack from "webpack";
 import { Configuration, Entry, Rule } from "webpack";
 
+export { Configuration, NewModule } from "webpack";
+
 const {
   LoaderOptionsPlugin,
   DefinePlugin,
@@ -149,8 +151,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   options.styleLoader = options.styleLoader || cssLoaderFactory();
 
   // devtool accepts a string to define type of source-map
-  // set 'eval' for speeeeed
-  config.devtool = "source-map";
+  config.devtool = "inline-source-map";
 
   // set a default context (base)
   // it's basically your root directory
@@ -199,6 +200,14 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       options.imageLoader,
     ],
   };
+
+  if (!isProduction) {
+    config.module.rules.push({
+      test: /\.js$/,
+      use: ["source-map-loader"],
+      enforce: "pre",
+    });
+  }
 
   // Plugins
 

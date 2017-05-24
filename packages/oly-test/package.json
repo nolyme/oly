@@ -17,10 +17,7 @@
     "oly-core": "^0.10.2"
   },
   "peerDependencies": {
-    "@types/jest": "^19.2.2",
-    "jest": "^19.0.2",
-    "oly-core": "^0.10.2",
-    "ts-jest": "^19.0.14"
+    "oly-core": "^0.10.2"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

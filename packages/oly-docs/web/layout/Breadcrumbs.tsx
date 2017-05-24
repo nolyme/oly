@@ -21,7 +21,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   };
 
   public transform(value: string): string {
-    const history: any = this.router.history;
+    const history: any = this.router;
     const kvs = Object.keys(history.params).map((key) => ({key, value: history.params[key]}));
     const match = kvs.filter((kv) => kv.value === value)[0];
     if (!match) {
