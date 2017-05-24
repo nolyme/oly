@@ -25,7 +25,7 @@ import { olyApiErrors } from "../constants/errors";
  */
 export class HttpServerException extends Exception {
 
-  public static readonly DEFAULT_MESSAGE: string = olyApiErrors.internalError();
+  public static readonly defaultMessage: string = olyApiErrors.internalError();
 
   public status: number = 500;
 
@@ -35,6 +35,7 @@ export class HttpServerException extends Exception {
   }
 
   public toJSON(): object {
+    console.log(this);
     return {
       message: this.message,
       name: this.name,

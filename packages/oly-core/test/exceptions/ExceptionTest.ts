@@ -23,14 +23,6 @@ describe("Exception", () => {
     expect(new KernelException().name).toBe("KernelException");
   });
 
-  it("should have custom name", () => {
-    class WeirdName extends Exception {
-      name = "FatalError";
-    }
-
-    expect(new WeirdName().name).toBe("FatalError");
-  });
-
   it("should be json aware", () => {
     expect(JSON.stringify(new Exception("boom"))).toBe(JSON.stringify({
       message: "boom",
@@ -43,8 +35,8 @@ describe("Exception", () => {
       .toMatch(/Exception: boom\n.*at/);
   });
 
-  it("should have a source", () => {
-    expect(new Exception(new Exception("A"), "B").source!.message).toBe("A");
+  it("should have a cause", () => {
+    expect(new Exception(new Exception("A"), "B").cause!.message).toBe("A");
     expect(() => {
       throw new Exception(new Exception("A"), "B");
     }).toThrow(/B/);
@@ -52,6 +44,6 @@ describe("Exception", () => {
   });
 
   it("should accept legacy error as source", () => {
-    expect(new KernelException(new RangeError("That's bad.")).source!.name).toBe("RangeError");
+    expect(new KernelException(new RangeError("That's bad.")).cause!.name).toBe("RangeError");
   });
 });

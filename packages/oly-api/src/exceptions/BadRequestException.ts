@@ -3,7 +3,7 @@ import { olyApiErrors } from "../constants/errors";
 
 export class BadRequestException extends HttpServerException {
 
-  public static readonly DEFAULT_MESSAGE: string = olyApiErrors.badRequest();
+  public static readonly defaultMessage: string = olyApiErrors.badRequest();
 
   public status: number = 400;
 }

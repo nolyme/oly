@@ -45,20 +45,21 @@ export class Exception {
     const type = self.constructor as any;
 
     // attributes
-    const message = (typeof cause === "string" ? cause : description) || type.defaultMessage;
+    const data: any = {};
+    data.message = (typeof cause === "string" ? cause : description) || type.defaultMessage;
     if (typeof cause !== "string" && typeof cause !== "undefined") {
       this.cause = cause;
     }
 
-    const source = new Error(message);
+    const source = new Error(data.message);
     Object.defineProperty(this, "name", {get: () => type.name});
-    Object.defineProperty(this, "message", {get: () => message});
+    Object.defineProperty(this, "message", {get: () => data.message, set: (m) => data.message = m});
     Object.defineProperty(this, "source", {get: () => source});
 
     // tricky part
-    const ctx = Error.apply(this, [message]);
+    const ctx = Error.apply(this, [data.message]);
     Object.defineProperty(ctx, "name", {get: () => type.name});
-    Object.defineProperty(ctx, "message", {get: () => message});
+    Object.defineProperty(ctx, "message", {get: () => data.message, set: (m) => data.message = m});
     Object.defineProperty(ctx, "source", {get: () => source});
     Object.defineProperty(ctx, "toJSON", {value: self.toJSON});
     Object.defineProperty(ctx, "toString", {value: self.toString});
