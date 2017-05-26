@@ -121,7 +121,7 @@ export class Logger {
     if (LogLevels[this.logLevel] <= LogLevels.WARN) {
       if (data && data instanceof Error) {
         this.appender(this.format("WARN", message));
-        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n");
+        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n");
       } else {
         this.appender(this.format("WARN", message, data));
       }

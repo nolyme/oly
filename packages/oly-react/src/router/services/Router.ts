@@ -57,4 +57,8 @@ export class Router {
   public forward(): void {
     this.browser.history.goForward();
   }
+
+  isActive(to: string) {
+
+  }
 }

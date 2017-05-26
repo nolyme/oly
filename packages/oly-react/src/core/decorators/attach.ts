@@ -20,11 +20,13 @@ export const attach = (target: React.ComponentClass<any> | React.StatelessCompon
     return target;
   }
 
-  target.contextTypes = {
-    kernel: PropTypes.object.isRequired,
-  };
+  if (target.contextTypes) {
+    target.contextTypes.kernel = PropTypes.object;
+  } else {
+    target.contextTypes = {kernel: PropTypes.object};
+  }
 
-  // patch react component (Stateful only)
+  // patch react component hooks (stateful only)
   if (!!target.prototype) {
 
     // force Kernel#inject() before #componentWillMount()

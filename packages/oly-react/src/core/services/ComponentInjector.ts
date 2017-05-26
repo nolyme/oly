@@ -11,7 +11,7 @@ import {
   lyEvents,
   lyStates,
   MetadataUtil,
-  olyCoreEvents
+  olyCoreEvents,
 } from "oly-core";
 import { ACTIONS_ERROR, ACTIONS_SUCCESS, lyActions } from "../constants";
 import { IActionMetadata, IActionMetadataMap, IActionResult, IActionResultError } from "../interfaces";
@@ -120,6 +120,7 @@ export class ComponentInjector {
    * Useful if component had events.
    */
   public free(instance: any) {
+    console.log("FREE", instance);
     if (typeof instance.__free__ === "function") {
       instance.__free__();
     }
