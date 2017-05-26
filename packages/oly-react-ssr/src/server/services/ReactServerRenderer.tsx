@@ -1,9 +1,9 @@
 import { inject, Kernel, state } from "oly-core";
 import { IKoaContext } from "oly-http";
-import { AppContext } from "oly-react";
+import { AppContext, View } from "oly-react";
 import * as React from "react";
+import { createElement } from "react";
 import { renderToString } from "react-dom/server";
-import { RouterContext, RouterState } from "react-router";
 
 export class ReactServerRenderer {
 
@@ -45,16 +45,12 @@ export class ReactServerRenderer {
    * Make the react rendering.
    *
    * @param ctx             IKoaContext
-   * @param mountId
-   * @param nextState       React router state
    * @param template        index.html
-   * @returns {string}
+   * @param mountId
    */
-  public render(ctx: IKoaContext, template: string, mountId: string, nextState: RouterState): string {
+  public render(ctx: IKoaContext, template: string, mountId: string): string {
 
-    const markup = renderToString(
-      <AppContext kernel={ctx.kernel}><RouterContext {...nextState}/></AppContext>,
-    );
+    const markup = renderToString(this.rootElement);
 
     template = template.replace(
       `<div id="${mountId}"></div>`,
@@ -96,5 +92,12 @@ export class ReactServerRenderer {
         </div>
        </body>
     `);
+  }
+
+  /**
+   *
+   */
+  public get rootElement(): JSX.Element {
+    return createElement(AppContext, {kernel: this.kernel}, createElement(View, {index: 0}));
   }
 }

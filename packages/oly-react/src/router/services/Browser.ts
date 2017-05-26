@@ -1,41 +1,60 @@
-import * as H from "history";
 import { inject, Logger } from "oly-core";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { browserHistory } from "react-router";
 
 /**
  *
  */
 export class Browser {
 
-  public history: H.History = browserHistory;
-
-  protected container: HTMLElement | null;
-
   @inject(Logger)
   protected logger: Logger;
 
+  /**
+   *
+   */
+  protected container: HTMLElement | null;
+
+  /**
+   *
+   */
   public get window(): Window {
+    if (!this.exists()) {
+      throw new Error("There is no DOM env here");
+    }
     return window;
   }
 
+  /**
+   *
+   */
   public get document(): Document {
-    return document;
+    return this.window.document;
   }
 
+  /**
+   *
+   */
   public get root(): HTMLElement {
     if (!this.container) {
-      throw new Error("You should probably call #render() before use .root");
+      throw new Error("There is no container yet, maybe you should call #render() before");
     }
     return this.container;
   }
 
+  /**
+   *
+   */
   public exists(): boolean {
     return typeof window !== "undefined"
       && typeof document !== "undefined";
   }
 
+  /**
+   *
+   * @param element
+   * @param mountId
+   */
   public render(element: React.ReactElement<any>, mountId: string): void {
 
     this.container = this.window.document.getElementById(mountId);

@@ -1,8 +1,9 @@
 import { equal } from "assert";
 import * as cheerio from "cheerio";
-import { IAnyFunction, IClass, inject, Kernel } from "oly-core";
+import { IClass, inject, Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
-import { attach, page, page404, page500, RouterState } from "oly-react";
+import { attach, page, page404 } from "oly-react";
+import { View } from "oly-react/lib/router/components/View";
 import * as React from "react";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
@@ -24,13 +25,15 @@ class SuperService {
 
 describe("ReactServerProvider", () => {
 
-  const appTestFactory = async (Router: IClass): Promise<IAppTest> => {
+  const appTestFactory = async (app: IClass): Promise<IAppTest> => {
     const kernel = new Kernel({
       OLY_HTTP_SERVER_PORT: 6001 + Math.floor(Math.random() * 100),
       OLY_LOGGER_LEVEL: "ERROR",
       OLY_REACT_SERVER_POINTS: ["default"],
-    }).with(Router, ReactServerProvider);
-    const client = kernel.get(HttpClient).with({baseURL: "http://localhost:" + kernel.env("OLY_HTTP_SERVER_PORT")});
+    }).with(app, ReactServerProvider);
+    const client = kernel.get(HttpClient).with({
+      baseURL: "http://localhost:" + kernel.env("OLY_HTTP_SERVER_PORT"),
+    });
     await kernel.start();
     return {
       kernel,
@@ -47,73 +50,61 @@ describe("ReactServerProvider", () => {
   @attach
   class About extends React.Component<any, any> {
 
-    @inject ss: SuperService;
+    @inject service: SuperService;
 
     render() {
       return (
-        <div>{this.ss.getText()}</div>
+        <div>{this.service.getText()}</div>
       );
     }
   }
 
   class NestedRouter {
 
-    @inject ss: SuperService;
+    @inject service: SuperService;
 
-    @page("/") a = () => <div>A</div>;
+    @page("/") a() {
+      return <div>A</div>;
+    }
 
     @page("/b")
     async b() {
-      const text = await this.ss.reverseAsync();
-      return ({data}: any) => (
-        <div>{data}{text}</div>
+      const text = await this.service.reverseAsync();
+      return () => (
+        <div>{text}</div>
       );
     }
   }
 
-  class Router {
+  class App {
 
-    @inject ss: SuperService;
+    @inject service: SuperService;
 
-    @page("/", {
-      nested: [NestedRouter],
+    @page("", {
+      children: [NestedRouter],
     })
-    index = async () => {
-      const data = await this.ss.getAsyncText();
-      this.ss.data = data;
-      return ({children}: any) => (
+    async index() {
+      const data = await this.service.getAsyncText();
+      this.service.data = data;
+      return () => (
         <div>
           {data}
-          {React.cloneElement(children, {data})}
+          <View/>
         </div>
       );
-    };
+    }
 
     @page("/about") about = () => About;
-
-    @page("/fail")
-    crazyAction() {
-      const wat = true;
-      if (wat) {
-        throw new Error("LOL");
-      }
-      return <div>never</div>;
-    }
 
     @page404
     notFound() {
       return <div>notFound</div>;
     }
-
-    @page500
-    errorHandler(state: RouterState, replace: IAnyFunction, error: Error) {
-      return <div>snap,{error.message}</div>;
-    }
   }
 
   let app: IAppTest;
 
-  beforeAll(async () => app = await appTestFactory(Router));
+  beforeAll(async () => app = await appTestFactory(App));
   afterAll(async () => await app.kernel.stop());
 
   it("should render component", async () => {
@@ -129,17 +120,12 @@ describe("ReactServerProvider", () => {
 
   it("should render nested routing view", async () => {
     const {$} = await app.open("/b");
-    equal($("div[id=\"app\"] div").text(), "homehomeemohhomeemoh");
-    equal($("div[id=\"app\"] div div").text(), "homeemoh");
+    equal($("div[id=\"app\"] div").text(), "homeemohemoh");
+    equal($("div[id=\"app\"] div div").text(), "emoh");
   });
 
   it("should render not-found", async () => {
     const {$} = await app.open("/c");
     equal($("div[id=\"app\"] div").text(), "notFound");
-  });
-
-  it("should handle error", async () => {
-    const {$} = await app.open("/fail");
-    equal($("div[id=\"app\"] div").text(), "snap,LOL");
   });
 });

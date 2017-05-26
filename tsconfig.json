@@ -6,6 +6,8 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    // (oly-react) @uirouter/core  26/05/2017
+    "skipLibCheck": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "jsx": "react",

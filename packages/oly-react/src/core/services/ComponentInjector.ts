@@ -120,7 +120,6 @@ export class ComponentInjector {
    * Useful if component had events.
    */
   public free(instance: any) {
-    console.log("FREE", instance);
     if (typeof instance.__free__ === "function") {
       instance.__free__();
     }

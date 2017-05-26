@@ -1,64 +1,64 @@
-import { Location, LocationDescriptorObject } from "history";
-import { _, inject, Kernel } from "oly-core";
-import { TRANSITION_FINISH } from "../constants";
-import { Browser } from "./Browser";
+import { HrefOptions, TransitionOptions } from "@uirouter/core";
+import { inject } from "oly-core";
+import { IRouteState } from "../interfaces";
+import { RouterProvider } from "./RouterProvider";
 
-/**
- *
- */
 export class Router {
 
-  @inject(Browser)
-  protected browser: Browser;
-
-  @inject(Kernel)
-  protected kernel: Kernel;
+  @inject(RouterProvider)
+  protected routerProvider: RouterProvider;
 
   /**
-   *
-   * @return {any}
+   * Get the current route state definition.
    */
-  public get current(): Location {
-    return this.browser.history.getCurrentLocation();
-  }
-
-  /**
-   *
-   * @param url
-   * @param replace
-   */
-  public navigate(url: string | LocationDescriptorObject, replace = false): Promise<void> {
-    if (replace) {
-      this.browser.history.replace(url);
-    } else {
-      this.browser.history.push(url);
+  public get current(): IRouteState {
+    if (this.routerProvider.uiRouter.stateService.transition) {
+      return this.routerProvider.uiRouter.stateService.transition.$to();
     }
-    return this.kernel.on(TRANSITION_FINISH, _.noop).wait();
+    return this.routerProvider.uiRouter.stateService.$current;
   }
 
   /**
-   *
-   * @param url
+   * Get the current route parameters (path+query).
    */
-  public replace(url: string | LocationDescriptorObject): Promise<void> {
-    return this.navigate(url, true);
+  public get params(): { [key: string]: string } {
+    if (this.routerProvider.uiRouter.stateService.transition) {
+      return this.routerProvider.uiRouter.stateService.transition.injector().get("$stateParams");
+    }
+    return this.routerProvider.uiRouter.stateService.params;
   }
 
   /**
+   * Go to a named state.
    *
+   * @param routeName   Route state
+   * @param params      Parameters
+   * @param options     UIRouter go options
    */
-  public back(): void {
-    this.browser.history.goBack();
+  public go(routeName: string, params: object = {}, options: TransitionOptions = {}): Promise<IRouteState> {
+    if (routeName[0] === "/") {
+      throw new Error("Go requires a routeName, not an url");
+    }
+    return this.routerProvider.uiRouter.stateService.go(routeName, params, options);
   }
 
   /**
+   * Get the path of a route state.
    *
+   * @param routeName   Route state
+   * @param params      Parameters
+   * @param options     UIRouter go options
    */
-  public forward(): void {
-    this.browser.history.goForward();
+  public path(routeName: string, params: object = {}, options: HrefOptions = {}): string {
+    return this.routerProvider.uiRouter.stateService.href(routeName, params, options);
   }
 
-  isActive(to: string) {
-
+  /**
+   * Check if a route state is active.
+   *
+   * @param routeName
+   */
+  public isActive(routeName: string | IRouteState): boolean {
+    return this.current.includes[typeof routeName === "string" ? routeName : routeName.name];
   }
 }

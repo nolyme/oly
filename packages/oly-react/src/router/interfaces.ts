@@ -1,75 +1,54 @@
-import { IAnyFunction, IClass, Kernel } from "oly-core";
-import * as React from "react";
-import { RouterState } from "react-router";
+import { StateObject } from "@uirouter/core";
+import { IClass } from "oly-core";
+import { ComponentClass } from "react";
 
 /**
- * @alias
+ * Layer object.
  */
-export type IRouterState = RouterState;
+export type IChunks = { [key: string]: JSX.Element }; // tslint:disable-line
+
+/**
+ * Result of page controller.
+ */
+export type IRawChunk = JSX.Element | ComponentClass<any> | IChunks;
 
 /**
  *
  */
-export interface IPageArg {
-  path?: string;
-  query?: string;
+export type IRouteState = StateObject;
+
+/**
+ * Layer description.
+ */
+export interface ILayer {
+  chunks: IChunks;
 }
 
 /**
- *
+ * Page options.
  */
 export interface IPageOptions {
-  nested?: IClass[] | IClass;
   children?: IClass[];
   data?: any;
+  name?: string;
+  abstract?: boolean;
 }
 
 /**
- *
+ * Page metadata.
  */
-export interface IPage {
-  options?: IPageOptions;
+export interface IPageMetadata {
+  abstract: boolean;
   url: string;
-  args: IPageArg[];
-}
-
-/**
- *
- */
-export interface IPages {
-  [propertyKey: string]: IPage;
-}
-
-/**
- * Tree of page
- */
-export interface IPageDefinition {
-  pages: IPages;
+  name: string;
   target: IClass;
-  children: {
-    [propertyKey: string]: IPageDefinition[];
-  };
+  propertyKey: string;
+  children?: IClass[];
 }
 
 /**
- *
+ * Page metadata map.
  */
-export interface IRouteResolver {
-  page?: IPage;
-  stack?: number;
-  error?: Error;
-  component?: () => React.Component<any, any>;
-  kernel: Kernel;
-  parent?: IRouteResolver;
-  path: string;
+export interface IPageMetadataMap {
+  [propertyKey: string]: IPageMetadata;
 }
-
-/**
- * Handler of @page, @pageLayout, @page404
- */
-export type ActionHandler = (state: IRouterState, replace: IAnyFunction) => any;
-
-/**
- * Handler of @page500
- */
-export type ErrorHandler = (state: IRouterState, replace: IAnyFunction, error: Error) => any;

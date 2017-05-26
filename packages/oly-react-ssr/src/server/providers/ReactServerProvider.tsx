@@ -1,13 +1,12 @@
 import * as cheerio from "cheerio";
 import { env, IDeclarations, inject, Kernel, Logger, state } from "oly-core";
-import { HttpServerProvider, IKoaContext, IKoaMiddleware, mount } from "oly-http";
-import { IPageDefinition, RouterBuilder, RouterHooks } from "oly-react";
+import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
+import { RouterProvider } from "oly-react";
 import { join } from "path";
-import { match, RouteConfig, RouterState } from "react-router";
-import { NotFoundException } from "../exceptions/PageNotFoundException";
 import { ReactProxyService } from "../services/ReactProxyService";
 import { ReactServerRenderer } from "../services/ReactServerRenderer";
 import { ReactStaticService } from "../services/ReactStaticService";
+import { serverLocationPlugin } from "../services/ServerLocation";
 
 /**
  *
@@ -30,11 +29,8 @@ export class ReactServerProvider {
   @inject(HttpServerProvider)
   protected httpServerProvider: HttpServerProvider;
 
-  @inject(RouterBuilder)
-  protected routerBuilder: RouterBuilder;
-
-  @inject(RouterHooks)
-  protected routerHooks: RouterHooks;
+  @inject(RouterProvider)
+  protected routerProvider: RouterProvider;
 
   @inject(ReactServerRenderer)
   protected reactServerRenderer: ReactServerRenderer;
@@ -80,11 +76,10 @@ export class ReactServerProvider {
 
   /**
    * Default behavior for the react server.
-   *
-   * @param pages
    */
-  protected useTemplate(pages: IPageDefinition[]) {
-    return this.use(async (ctx, next) => {
+  protected requestHandlerMiddleware(): IKoaMiddleware {
+    return async (ctx, next) => {
+
       // wait the end
       await next();
 
@@ -94,20 +89,27 @@ export class ReactServerProvider {
       // - check if url is not a file / assets
       if (ctx.status === 404 && !ctx.body && ctx.url.indexOf(".") === -1) {
 
-        // make #match()
-        await this.createHandler(ctx, this.template, pages);
-      }
-    });
-  }
+        const kernel: Kernel = ctx.kernel;
+        const logger: Logger = kernel.get(Logger).as("ReactRouter");
+        const renderer = kernel.get(ReactServerRenderer);
 
-  /**
-   * Create pages from kernel declarations.
-   *
-   * @param deps
-   * @returns {IPageDefinition[]}
-   */
-  protected getPagesFromDependencies(deps: IDeclarations): IPageDefinition[] {
-    return this.routerBuilder.createPages(deps.map((d) => d.definition));
+        logger.info(`incoming request ${ctx.method} ${ctx.path}`);
+        logger.trace("page data", ctx.request.toJSON());
+
+        try {
+          // find route + resolve
+          await this.routerProvider.listen(serverLocationPlugin(ctx.req.url || "/"));
+
+          // build page
+          ctx.body = renderer.render(ctx, this.template, this.mountId);
+
+        } catch (e) {
+          logger.error("server rendering has failed", e);
+          ctx.status = e.status || 500;
+          ctx.body = renderer.renderError(ctx, this.template, this.mountId, e);
+        }
+      }
+    };
   }
 
   /**
@@ -116,6 +118,19 @@ export class ReactServerProvider {
    * @param deps  Kernel dependencies
    */
   protected async onStart(deps: IDeclarations): Promise<void> {
+
+    await this.createTemplate();
+
+    this.use(this.requestHandlerMiddleware());
+
+    this.logger.info("template is ready");
+  }
+
+  /**
+   * Create a new template (index.html empty)
+   * Points are used to find the correct template.
+   */
+  protected async createTemplate(): Promise<void> {
 
     const points = typeof this.points === "string"
       ? [this.points]
@@ -147,78 +162,9 @@ export class ReactServerProvider {
     }
 
     const $ = cheerio.load(this.template);
+
     if ($("#" + this.mountId).length === 0) {
       throw new Error(`React mount-point #${this.mountId} is not found in the current template`);
-    }
-
-    this.useTemplate(this.getPagesFromDependencies(deps));
-
-    this.logger.info("template is ready");
-  }
-
-  /**
-   * Resolve routes !
-   *
-   * @param location      Url
-   * @param routes        ReactRouter Routes
-   */
-  protected match(location: string,
-                  routes: RouteConfig): Promise<{ redirectLocation: Location, nextState: RouterState }> {
-    return new Promise((resolve, reject) => {
-      match({location, routes}, (error, redirectLocation, nextState) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve({
-            redirectLocation,
-            nextState,
-          });
-        }
-      });
-    });
-  }
-
-  /**
-   * Translate koa request into into react page
-   *
-   * @param ctx         Koa Context
-   * @param template    React default template
-   * @param pages       React Router pages interface
-   */
-  protected async createHandler(ctx: IKoaContext, template: string, pages: IPageDefinition[]) {
-
-    const context: Kernel = ctx.kernel;
-    const logger: Logger = context.get(Logger).as("ReactRouter");
-    const routes = this.routerBuilder.createRoutesFromPages(pages, context);
-
-    logger.info(`incoming request ${ctx.method} ${ctx.path}`);
-    logger.trace("page data", ctx.request.toJSON());
-
-    try {
-      // find route + resolve
-      const {redirectLocation, nextState} = await this.match(ctx.req.url || "/", routes);
-
-      // redirection if needed (--> when you call #replace('/') <--)
-      if (!!redirectLocation) {
-        const url = redirectLocation.pathname + redirectLocation.search;
-        this.logger.debug(`redirect to ${url}`);
-        return ctx.redirect(url);
-      }
-
-      // if nextState is not defined -> 404!
-      // IMPORTANT: you should avoid this passage by @page('**') and handle 404 by yourself
-      if (!nextState) {
-        this.logger.warn("there is no default handler for page 404, you can set it with the annotation @page404()");
-        throw new NotFoundException("Page not found");
-      }
-
-      // build page
-      ctx.body = this.reactServerRenderer.render(ctx, template, this.mountId, nextState);
-
-    } catch (e) {
-      logger.error("server rendering has failed", e);
-      ctx.status = e.status || 500;
-      ctx.body = this.reactServerRenderer.renderError(ctx, template, this.mountId, e);
     }
   }
 }
