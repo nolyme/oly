@@ -24,7 +24,6 @@
     "nyan-progress-webpack-plugin": "1.2.0",
     "open-browser-webpack-plugin": "0.0.5",
     "postcss-loader": "2.0.5",
-    "source-map-loader": "0.2.1",
     "style-loader": "0.18.1"
   },
   "devDependencies": {

@@ -201,14 +201,6 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     ],
   };
 
-  if (!isProduction) {
-    config.module.rules.push({
-      test: /\.js$/,
-      use: ["source-map-loader"],
-      enforce: "pre",
-    });
-  }
-
   // Plugins
 
   config.plugins = [

@@ -2,6 +2,10 @@ import { olyCoreErrors } from "../constants/errors";
 import { _ } from "../utils/CommonUtil";
 
 /**
+ * Exception.
+ *
+ * You can't extend Error directly, it's broken with es5.
+ *
  * Exception has a real #toJSON().
  * ```typescript
  * console.log(JSON.stringify(new Exception("A")));
@@ -74,10 +78,10 @@ export class Exception {
   public get stack(): string {
 
     let level = 0;
-    let parent = this;
-    while (parent && parent["__proto__"] && parent["__proto__"].constructor !== Exception) {
+    let parent = this as any;
+    while (parent && parent.__proto__ && parent.__proto__.constructor !== Exception) {
       level++;
-      parent = parent["__proto__"];
+      parent = parent.__proto__;
     }
 
     let stack = this.source.stack || "";
@@ -135,4 +139,6 @@ export class Exception {
 
 export type Throwable = Error | Exception;
 
-Exception.prototype["__proto__"] = Error.prototype;
+// tricky
+const proto = Exception.prototype as any;
+proto.__proto__ = Error.prototype;
