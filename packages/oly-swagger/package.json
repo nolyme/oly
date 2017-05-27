@@ -1,7 +1,7 @@
 {
   "name": "oly-swagger",
   "description": "oly-swagger",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -13,20 +13,20 @@
     "swagger"
   ],
   "dependencies": {
-    "oly-router": "^0.10.2"
+    "oly-router": "^0.10.3"
   },
   "devDependencies": {
-    "oly-api": "^0.10.2",
-    "oly-core": "^0.10.2",
-    "oly-http": "^0.10.2",
-    "oly-mapper": "^0.10.2",
-    "oly-test": "^0.10.2"
+    "oly-api": "^0.10.3",
+    "oly-core": "^0.10.3",
+    "oly-http": "^0.10.3",
+    "oly-mapper": "^0.10.3",
+    "oly-test": "^0.10.3"
   },
   "peerDependencies": {
-    "oly-api": "^0.10.2",
-    "oly-core": "^0.10.2",
-    "oly-http": "^0.10.2",
-    "oly-mapper": "^0.10.2"
+    "oly-api": "^0.10.3",
+    "oly-core": "^0.10.3",
+    "oly-http": "^0.10.3",
+    "oly-mapper": "^0.10.3"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
