@@ -291,7 +291,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 /**
  * Typescript loader factory
  */
-function typescriptLoaderFactory() {
+function typescriptLoaderFactory(): Rule {
   return {
     exclude: /node_modules/,
     test: /\.tsx?$/,
@@ -309,7 +309,7 @@ function typescriptLoaderFactory() {
 /**
  * CSS loader factory
  */
-function cssLoaderFactory() {
+function cssLoaderFactory(): Rule {
   return {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
@@ -322,16 +322,16 @@ function cssLoaderFactory() {
 /**
  * Less loader factory
  *
- * @param options - less options
+ * @param lessLoaderOptions   less options
  */
-function lessLoaderFactory(options) {
+function lessLoaderFactory(lessLoaderOptions: object = {}): Rule {
   return {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
       use: [
         {loader: "css-loader"},
         {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
-        {loader: "less-loader", options},
+        {loader: "less-loader", options: lessLoaderOptions},
       ],
     }),
     test: /\.(css|less)$/,
@@ -341,16 +341,16 @@ function lessLoaderFactory(options) {
 /**
  * Sass loader factory
  *
- * @param options - sass options
+ * @param sassLoaderOptions  sass options
  */
-function sassLoaderFactory(options) {
+function sassLoaderFactory(sassLoaderOptions: object = {}): Rule {
   return {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
       use: [
         {loader: "css-loader"},
         {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
-        {loader: "sass-loader", options},
+        {loader: "sass-loader", options: sassLoaderOptions},
       ],
     }),
     test: /\.(css|scss|sass)$/,
@@ -360,7 +360,7 @@ function sassLoaderFactory(options) {
 /**
  * Image loader factory
  */
-function imageLoaderFactory(isProduction) {
+function imageLoaderFactory(isProduction: boolean = false): Rule {
   return {
     test: /\.(png|jpeg|jpg|svg)$/,
     use: [{
@@ -377,7 +377,7 @@ function imageLoaderFactory(isProduction) {
 /**
  * Font loader factory
  */
-function fontLoaderFactory(isProduction) {
+function fontLoaderFactory(isProduction: boolean = false) {
   return {
     test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
     use: [{
