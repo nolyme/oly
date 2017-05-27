@@ -7,7 +7,10 @@ export const mergePackageJson = (newPkg: object) => {
   const pkg = existsSync(pkgPath)
     ? JSON.parse(readFileSync(pkgPath, "UTF-8"))
     : {};
-  writeFileSync(pkgPath, JSON.stringify((Object as any).assign(pkg, newPkg), null, "  "), "UTF-8");
+  writeFileSync(
+    pkgPath,
+    JSON.stringify((Object as any).assign(pkg, newPkg), null, "  "),
+    "UTF-8");
 };
 
 export const copyFiles = (type = "project"): void => {

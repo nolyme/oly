@@ -22,7 +22,8 @@
   "devDependencies": {
     "oly-api": "^0.10.2",
     "oly-core": "^0.10.2",
-    "oly-http": "^0.10.2"
+    "oly-http": "^0.10.2",
+    "oly-test": "^0.10.2"
   },
   "peerDependencies": {
     "oly-api": "^0.10.2",

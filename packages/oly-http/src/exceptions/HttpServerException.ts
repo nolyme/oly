@@ -35,7 +35,6 @@ export class HttpServerException extends Exception {
   }
 
   public toJSON(): object {
-    console.log(this);
     return {
       message: this.message,
       name: this.name,

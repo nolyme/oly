@@ -15,7 +15,7 @@ export const isAuth = (): IKoaMiddleware => {
     const authenticationService = ctx.kernel.get(JwtAuthService);
 
     if (!authenticationService.token) {
-      throw new UnauthorizedException("Authentication is required");
+      throw new UnauthorizedException();
     }
 
     await next();

@@ -34,7 +34,7 @@ export const commands: ICommands = {
   },
   "lint": {
     help: "exec tslint",
-    exec: (args: string[]) => spawnExecutable(getLocalBinary("tslint"), [...args, "src/**/*"]),
+    exec: (args: string[]) => spawnExecutable(getLocalBinary("tslint"), [...args, "src/**/*.ts"]),
   },
   "tsc": {
     help: "exec tsc",
