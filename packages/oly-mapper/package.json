@@ -13,10 +13,10 @@
     "ajv"
   ],
   "dependencies": {
-    "ajv": "5.0.1"
+    "ajv": "5.1.4"
   },
   "devDependencies": {
-    "ajv-i18n": "1.7.0",
+    "ajv-i18n": "2.0.1",
     "oly-core": "^0.10.3",
     "oly-test": "^0.10.3"
   },

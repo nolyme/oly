@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@types/mongodb": "2.2.2",
-    "mongodb": "2.2.26"
+    "mongodb": "2.2.27"
   },
   "devDependencies": {
     "oly-core": "^0.10.3",

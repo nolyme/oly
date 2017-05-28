@@ -19,8 +19,7 @@
     "react-dom": "15.5.4"
   },
   "devDependencies": {
-    "@types/react": "15.0.24",
-    "jsdom": "10.1.0",
+    "@types/react": "15.0.25",
     "oly-core": "^0.10.3",
     "oly-test": "^0.10.3",
     "react": "15.5.4"
