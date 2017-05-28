@@ -21,6 +21,11 @@ describe("Exception", () => {
   it("should have name", () => {
     expect(new Exception().name).toBe("Exception");
     expect(new KernelException().name).toBe("KernelException");
+
+    class Toto extends KernelException {
+    }
+
+    expect(new Toto().name).toBe("Toto");
   });
 
   it("should be json aware", () => {

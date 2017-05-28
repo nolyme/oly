@@ -7,15 +7,13 @@ import { HttpClient } from "../src/services/HttpClient";
 
 describe("HttpServerProvider", () => {
 
+  class BoomException extends HttpServerException {
+    name = "BoomBoomException";
+    message = "Boom";
+    status = 409;
+  }
+
   const message = "OK";
-
-  const fakeMiddleware = (ctx: IKoaContext) => {
-    if (ctx.method === "DELETE") {
-      throw new HttpServerException("Boom");
-    }
-    ctx.body = message;
-  };
-
   const kernel = attachKernel({
     OLY_HTTP_SERVER_PORT: 6093,
   });
@@ -31,7 +29,7 @@ describe("HttpServerProvider", () => {
     })
     .use((ctx: IKoaContext) => {
       if (ctx.method === "DELETE") {
-        throw new HttpServerException("Boom");
+        throw new BoomException("MegaBoom");
       }
       ctx.body = message;
     });
@@ -48,8 +46,9 @@ describe("HttpServerProvider", () => {
       throw new Error("");
     } catch (e) {
       expect(e).toBeInstanceOf(HttpClientException);
-      expect(e.status).toBe(500);
-      expect(e.message).toBe("Boom");
+      expect(e.status).toBe(409);
+      expect(e.message).toBe("MegaBoom");
+      expect(e.name).toBe("BoomBoomException");
     }
   });
 });

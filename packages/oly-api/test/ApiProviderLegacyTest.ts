@@ -1,5 +1,5 @@
 import { equal } from "assert";
-import { HttpClient, IHttpRequest } from "oly-http";
+import { HttpClient, HttpServerException, IHttpRequest } from "oly-http";
 import { field } from "oly-mapper";
 import { attachKernel } from "oly-test";
 import { ApiProvider } from "../src";
@@ -11,7 +11,6 @@ import { path } from "../src/decorators/path";
 import { post } from "../src/decorators/post";
 import { query } from "../src/decorators/query";
 import { router } from "../src/decorators/router";
-import { HttpServerException } from "../src/exceptions/HttpServerException";
 
 describe("ApiProviderLegacy", () => {
   describe("@get()", () => {

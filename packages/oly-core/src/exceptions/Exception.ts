@@ -50,21 +50,25 @@ export class Exception {
 
     // attributes
     const data: any = {};
+    data.name = type.name;
     data.message = (typeof cause === "string" ? cause : description) || type.defaultMessage;
     if (typeof cause !== "string" && typeof cause !== "undefined") {
       this.cause = cause;
     }
 
     const source = new Error(data.message);
-    Object.defineProperty(this, "name", {get: () => type.name});
-    Object.defineProperty(this, "message", {get: () => data.message, set: (m) => data.message = m});
+    Object.defineProperty(this, "name", {get: () => data.name, set: (m) => data.name = m});
+    Object.defineProperty(this, "message", {
+      get: () => data.message, set: (m) => {
+        if (data.message === type.defaultMessage) {
+          data.message = m;
+        }
+      },
+    });
     Object.defineProperty(this, "source", {get: () => source});
 
     // tricky part
     const ctx = Error.apply(this, [data.message]);
-    Object.defineProperty(ctx, "name", {get: () => type.name});
-    Object.defineProperty(ctx, "message", {get: () => data.message, set: (m) => data.message = m});
-    Object.defineProperty(ctx, "source", {get: () => source});
     Object.defineProperty(ctx, "toJSON", {value: self.toJSON});
     Object.defineProperty(ctx, "toString", {value: self.toString});
     Object.defineProperty(ctx, "stack", {get: () => self.stack});
