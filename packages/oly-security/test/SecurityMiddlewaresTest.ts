@@ -2,7 +2,9 @@ import { ApiProvider, ForbiddenException, get, UnauthorizedException } from "oly
 import { HttpClient, HttpClientException } from "oly-http";
 import { attachKernel } from "oly-test";
 import { auth } from "../src";
+import { olySecurityErrors } from "../src/constants/errors";
 import { JwtAuthService } from "../src/services/JwtAuthService";
+import { JwtUtil } from "../src/utils/JwtUtil";
 
 class App {
 
@@ -24,9 +26,13 @@ describe("SecurityMiddlewares", () => {
     baseURL: server.hostname,
   });
 
+  beforeEach(() => {
+    kernel.state("OLY_SECURITY_TOKEN_EXPIRATION", 60 * 60 * 3);
+  });
+
   it("should reject unauthorized requests", async () => {
     try {
-      await client.get<HttpClientException>("/");
+      await client.get("/");
       throw new Error("");
     } catch (e) {
       expect(e).toBeInstanceOf(HttpClientException);
@@ -35,9 +41,25 @@ describe("SecurityMiddlewares", () => {
     }
   });
 
+  it("should reject invalid token", async () => {
+    try {
+      await client.get("/", {
+        headers: {
+          Authorization: `Bearer HAHAHAHAHA`,
+        },
+      });
+      throw new Error("");
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpClientException);
+      expect(e.status).toBe(401);
+      expect(e.name).toBe("JsonWebTokenException");
+      expect(e.message).toBe(olySecurityErrors.invalidToken("jwt malformed"));
+    }
+  });
+
   it("should reject forbidden requests", async () => {
     try {
-      await client.get<HttpClientException>("/", {
+      await client.get("/", {
         headers: {
           Authorization: `Bearer ${jwt.createToken("<id>")}`,
         },
@@ -51,11 +73,30 @@ describe("SecurityMiddlewares", () => {
   });
 
   it("should allow auth requests", async () => {
-    const {data} = await client.get<HttpClientException>("/", {
+    const {data} = await client.get("/", {
       headers: {
         Authorization: `Bearer ${jwt.createToken("<id>", ["ADMIN"])}`,
       },
     });
     expect(data).toBe("OK");
+  });
+
+  it("should reject expired token", async () => {
+    kernel.state("OLY_SECURITY_TOKEN_EXPIRATION", 0);
+    const token = jwt.createToken("<id>");
+    expect(JwtUtil.isValid(token)).toBeFalsy();
+    try {
+      await client.get("/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      throw new Error("");
+    } catch (e) {
+      expect(e).toBeInstanceOf(HttpClientException);
+      expect(e.status).toBe(401);
+      expect(e.name).toBe("TokenExpiredException");
+      expect(e.message).toBe(olySecurityErrors.tokenExpired());
+    }
   });
 });

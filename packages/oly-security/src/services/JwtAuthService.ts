@@ -2,6 +2,9 @@ import * as jwt from "jsonwebtoken";
 import { SignOptions, VerifyOptions } from "jsonwebtoken";
 import { UnauthorizedException } from "oly-api";
 import { CommonUtil as _, env, inject, Logger } from "oly-core";
+import { olySecurityErrors } from "../constants/errors";
+import { JsonWebTokenException } from "../exceptions/JsonWebTokenException";
+import { TokenExpiredException } from "../exceptions/TokenExpiredException";
 import { IPayload, IToken } from "../interfaces";
 import { CryptoService } from "./CryptoService";
 
@@ -11,7 +14,7 @@ import { CryptoService } from "./CryptoService";
 export class JwtAuthService {
 
   @env("OLY_SECURITY_TOKEN_EXPIRATION")
-  public readonly tokenExpiration: number | string = 60 * 60 * 3;
+  public readonly tokenExpiration: number = 60 * 60 * 3;
 
   public token: IToken;
 
@@ -26,17 +29,15 @@ export class JwtAuthService {
    * @param id
    * @param roles
    * @param options
-   * @return {string}
    */
   public createToken(id: string | number, roles: string[] = [], options: SignOptions = {}): string {
 
     this.logger.trace("create token", {id, roles});
 
     const config: any = {};
-    const expiresIn = Number(this.tokenExpiration);
 
-    if (expiresIn && !isNaN(expiresIn)) {
-      config.expiresIn = expiresIn;
+    if (typeof this.tokenExpiration === "number") {
+      config.expiresIn = this.tokenExpiration;
     }
 
     return jwt.sign({
@@ -53,7 +54,6 @@ export class JwtAuthService {
    *
    * @param token
    * @param options
-   * @return {any}
    */
   public checkToken(token: string, options: VerifyOptions = {}): IPayload {
 
@@ -70,7 +70,13 @@ export class JwtAuthService {
       this.token = payload.data as IToken;
       return payload;
     } catch (e) {
-      throw new UnauthorizedException(e, "Invalid token");
+      if (e.name === "TokenExpiredError") {
+        throw new TokenExpiredException();
+      } else if (e.name === "JsonWebTokenError") {
+        throw new JsonWebTokenException(e, olySecurityErrors.invalidToken(e.message));
+      } else {
+        throw e;
+      }
     }
   }
 }

@@ -39,9 +39,11 @@ export class ApiMiddlewares {
           throw new NotFoundException(olyApiErrors.serviceNotFound());
         }
 
-      }).catch((e: HttpServerException | Error) => {
+      }).catch((e: any) => {
 
-        const exception = e instanceof HttpServerException ? e : new HttpServerException(e);
+        const exception = (e instanceof HttpServerException || typeof e === "object" && e.message && e.status && e.name)
+          ? e
+          : new HttpServerException(e);
 
         ctx.status = exception.status;
         ctx.body = exception;
