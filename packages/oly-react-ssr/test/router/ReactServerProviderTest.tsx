@@ -1,4 +1,3 @@
-import { equal } from "assert";
 import * as cheerio from "cheerio";
 import { IClass, inject, Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
@@ -63,7 +62,8 @@ describe("ReactServerProvider", () => {
 
     @inject service: SuperService;
 
-    @page("/") a() {
+    @page("/")
+    a() {
       return <div>A</div>;
     }
 
@@ -109,23 +109,23 @@ describe("ReactServerProvider", () => {
 
   it("should render component", async () => {
     const {$} = await app.open("/about");
-    equal($("div[id=\"app\"] div").text(), "about");
+    expect($("div[id=\"app\"] div").text()).toBe("about");
   });
 
   it("should render nested view", async () => {
     const {$} = await app.open("/");
-    equal($("div[id=\"app\"] div").text(), "homeAA");
-    equal($("div[id=\"app\"] div div").text(), "A");
+    expect($("div[id=\"app\"] div").text()).toBe("homeAA");
+    expect($("div[id=\"app\"] div div").text()).toBe("A");
   });
 
   it("should render nested routing view", async () => {
     const {$} = await app.open("/b");
-    equal($("div[id=\"app\"] div").text(), "homeemohemoh");
-    equal($("div[id=\"app\"] div div").text(), "emoh");
+    expect($("div[id=\"app\"] div").text()).toBe("homeemohemoh");
+    expect($("div[id=\"app\"] div div").text()).toBe("emoh");
   });
 
   it("should render not-found", async () => {
     const {$} = await app.open("/c");
-    equal($("div[id=\"app\"] div").text(), "notFound");
+    expect($("div[id=\"app\"] div").text()).toBe("notFound");
   });
 });

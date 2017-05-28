@@ -91,6 +91,7 @@ export class ReactServerProvider {
 
         const kernel: Kernel = ctx.kernel;
         const logger: Logger = kernel.get(Logger).as("ReactRouter");
+        const router = kernel.get(RouterProvider);
         const renderer = kernel.get(ReactServerRenderer);
 
         logger.info(`incoming request ${ctx.method} ${ctx.path}`);
@@ -98,7 +99,7 @@ export class ReactServerProvider {
 
         try {
           // find route + resolve
-          await this.routerProvider.listen(serverLocationPlugin(ctx.req.url || "/"));
+          await router.listen(serverLocationPlugin(ctx.req.url || "/"));
 
           // build page
           ctx.body = renderer.render(ctx, this.template, this.mountId);

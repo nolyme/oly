@@ -24,8 +24,6 @@ export class RouterProvider {
 
   /**
    * TODO: Find a better way...
-   * Count resolve on each transition and use this variable as "layer identifier". XD ...
-   * THIS IS HERE ONLY FOR "auto index" <View/> omg
    */
   public resolveLevelCounter: number = 0;
 
@@ -48,8 +46,14 @@ export class RouterProvider {
 
     this.uiRouter = new UIRouter();
     this.setHooks();
-
-    this.stateDeclarations.forEach((state) => this.uiRouter.stateRegistry.register(state));
+    this.stateDeclarations.forEach((state) => {
+      this.uiRouter.stateRegistry.register({
+        ...state,
+        resolve: state.resolve || {
+          ["oly$" + state.name]: this.createPageResolver(state.data.target, state.data.propertyKey),
+        },
+      });
+    });
     this.uiRouter.urlService.rules.otherwise({state: "404"});
 
     this.uiRouter.plugin(locationPlugin);
@@ -131,9 +135,7 @@ export class RouterProvider {
       abstract: meta.abstract,
       name: meta.name,
       parent: parent ? parent.name : undefined,
-      resolve: {
-        ["oly$" + meta.name]: this.createPageResolver(meta.target, meta.propertyKey),
-      },
+      data: meta,
       url: meta.url,
     });
   }
@@ -146,15 +148,15 @@ export class RouterProvider {
    */
   protected hasParent(pageDeclarations: IDeclarations, definition: IAnyDefinition) {
     return pageDeclarations
-        .filter((p) => p.definition !== definition)
-        .map((p) => MetadataUtil.get(lyPages, p.definition) as IPageMetadataMap)
-        .filter((p) => {
-          for (const key of Object.keys(p)) {
-            if (Array.isArray(p[key].children) && p[key].children!.indexOf(definition) > -1) {
-              return true;
-            }
+      .filter((p) => p.definition !== definition)
+      .map((p) => MetadataUtil.get(lyPages, p.definition) as IPageMetadataMap)
+      .filter((p) => {
+        for (const key of Object.keys(p)) {
+          if (Array.isArray(p[key].children) && p[key].children!.indexOf(definition) > -1) {
+            return true;
           }
-        }).length > 0;
+        }
+      }).length > 0;
   }
 
   /**
@@ -163,7 +165,8 @@ export class RouterProvider {
    * @param definition    Class to instantiate
    * @param propertyKey   Property name to call
    */
-  protected createPageResolver(definition: IClass, propertyKey: string): () => Promise<IChunks> {
+  protected createPageResolver(definition: IClass,
+                               propertyKey: string): () => Promise<IChunks> {
     return () => {
 
       this.logger.trace("resolve " + _.targetToString(definition, propertyKey));

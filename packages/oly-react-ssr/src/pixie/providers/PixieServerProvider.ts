@@ -48,8 +48,8 @@ export class PixieServerProvider {
     });
 
     // set pixie store into index.html
-    this.reactServerRenderer.templateTransforms.push(((template, context) =>
-        template.replace(/<body(.*)>/, `<body$1>${context.get(Pixie).toHTML()}`)
-    ));
+    this.reactServerRenderer.templateTransforms.push(((template, context) => {
+      return template.replace(/<body(.*)>/, `<body$1>${context.get(Pixie).toHTML()}`);
+    }));
   }
 }
