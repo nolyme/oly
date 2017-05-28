@@ -1,7 +1,7 @@
 {
   "name": "oly-test",
   "description": "oly-test",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,10 +14,10 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "oly-core": "^0.10.3"
+    "oly-core": "^0.10.4"
   },
   "peerDependencies": {
-    "oly-core": "^0.10.3"
+    "oly-core": "^0.10.4"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

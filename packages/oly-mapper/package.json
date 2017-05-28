@@ -1,7 +1,7 @@
 {
   "name": "oly-mapper",
   "description": "oly-mapper",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -17,11 +17,11 @@
   },
   "devDependencies": {
     "ajv-i18n": "2.0.1",
-    "oly-core": "^0.10.3",
-    "oly-test": "^0.10.3"
+    "oly-core": "^0.10.4",
+    "oly-test": "^0.10.4"
   },
   "peerDependencies": {
-    "oly-core": "^0.10.3"
+    "oly-core": "^0.10.4"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
