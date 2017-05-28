@@ -1,11 +1,14 @@
 /**
  * @jest-environment jsdom
  */
+import { pushStateLocationPlugin } from "@uirouter/core";
 import { _ } from "oly-core";
 import { attachKernel } from "oly-test";
+import { olyReactEvents } from "../../src";
 import { Browser } from "../../src/router/services/Browser";
 import { ReactBrowserProvider } from "../../src/router/services/ReactBrowserProvider";
 import { Router } from "../../src/router/services/Router";
+import { RouterProvider } from "../../src/router/services/RouterProvider";
 import { FakeApp } from "./fixtures";
 
 describe("BrowserReactProvider", () => {
@@ -30,5 +33,20 @@ describe("BrowserReactProvider", () => {
   it("should returns params", async () => {
     await router.go("details", {id: "1"});
     expect(browser.root.textContent).toBe("Layout:Nested:Details(1)");
+  });
+
+  it("should use <Go/>", async () => {
+    await router.go("back");
+    const go: any = browser.root.querySelector("#go");
+    go.click();
+    await kernel.on(olyReactEvents.TRANSITION_END, _.noop).wait();
+    expect(browser.root.textContent).toBe("Layout:Home");
+  });
+
+  it("should returns 404", async () => {
+    const routerProvider = kernel.get(RouterProvider);
+    browser.window.history.pushState({}, "", "/wat");
+    await routerProvider.listen(pushStateLocationPlugin);
+    expect(browser.root.textContent).toBe("Layout:NotFound");
   });
 });

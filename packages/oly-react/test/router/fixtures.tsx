@@ -1,8 +1,10 @@
 import { _, inject } from "oly-core";
 import * as React from "react";
+import { Go } from "../../src/router/components/Go";
 import { View } from "../../src/router/components/View";
 import { layout } from "../../src/router/decorators/layout";
 import { page } from "../../src/router/decorators/page";
+import { page404 } from "../../src/router/decorators/page404";
 import { Router } from "../../src/router/services/Router";
 
 export class FakeNestedApp {
@@ -19,6 +21,11 @@ export class FakeNestedApp {
   public details() {
     return <div>Details({this.router.params.id})</div>;
   }
+
+  @page("/back")
+  public back() {
+    return <div><Go id="go" to="home">Back</Go></div>;
+  }
 }
 
 export class FakeApp {
@@ -31,6 +38,11 @@ export class FakeApp {
   @page("/")
   public home() {
     return <div>Home</div>;
+  }
+
+  @page404
+  public notFound() {
+    return <div>NotFound</div>;
   }
 
   @page("/nested", {
