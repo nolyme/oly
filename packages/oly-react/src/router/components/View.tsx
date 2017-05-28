@@ -4,7 +4,7 @@ import * as React from "react";
 import { Children, Component } from "react";
 import { attach } from "../../core/decorators/attach";
 import { ILayer } from "../interfaces";
-import { RouterProvider } from "../services/RouterProvider";
+import { ReactRouterProvider } from "../services/ReactRouterProvider";
 
 /**
  *
@@ -46,8 +46,8 @@ export class View extends Component<IViewProps, IViewState> {
   @inject(Logger)
   public logger: Logger;
 
-  @inject(RouterProvider)
-  public routerProvider: RouterProvider;
+  @inject(ReactRouterProvider)
+  public routerProvider: ReactRouterProvider;
 
   public index: number;
 
@@ -64,7 +64,7 @@ export class View extends Component<IViewProps, IViewState> {
    */
   @on(olyCoreEvents.STATE_MUTATE)
   public onTransitionEnd(ev: IStateMutate): void {
-    if (ev.key === "RouterProvider.layers") {
+    if (ev.key === "ReactRouterProvider.layers") {
       if (this.layer && this.layer.chunks[this.name] !== this.state.content) {
         this.logger.trace(`update view ${this.index} (${this.name})`);
         this.setState({
@@ -114,8 +114,3 @@ export class View extends Component<IViewProps, IViewState> {
     return null;
   }
 }
-
-setTimeout(() => {
-  // TODO: TMP
-  View.contextTypes.layer = PropTypes.number;
-});

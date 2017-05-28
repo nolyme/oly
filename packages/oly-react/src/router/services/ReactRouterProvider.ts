@@ -6,7 +6,7 @@ import { olyReactEvents } from "../constants/events";
 import { lyPages } from "../constants/keys";
 import { IChunks, ILayer, IPageMetadata, IPageMetadataMap, IRawChunk, IRouteState } from "../interfaces";
 
-export class RouterProvider {
+export class ReactRouterProvider {
 
   /**
    * This is the current stack.
@@ -131,9 +131,19 @@ export class RouterProvider {
 
     this.logger.debug(`Add route ${meta.url} (${meta.name}) -> ${_.targetToString(meta.target, meta.propertyKey)}`);
 
+    const queryParams = Array.isArray(meta.args)
+      ? meta.args.filter((arg) => arg.type === "query")
+      : [];
+
+    const params = queryParams.reduce((p, arg) => {
+      p[arg.name] = null;
+      return p;
+    }, {});
+
     this.stateDeclarations.push({
       abstract: meta.abstract,
       name: meta.name,
+      params,
       parent: parent ? parent.name : undefined,
       data: meta,
       url: meta.url,
@@ -170,37 +180,44 @@ export class RouterProvider {
     return () => {
 
       this.logger.trace("resolve " + _.targetToString(definition, propertyKey));
+      const meta: IPageMetadataMap = MetadataUtil.deep(lyPages, definition);
       const instance = this.kernel.get(definition);
-      const action = instance[propertyKey].bind(instance);
+      const params = this.uiRouter.stateService.transition.injector().get("$stateParams");
+      const action = instance[propertyKey];
+      const args: any[] = Array.isArray(meta[propertyKey].args)
+        ? meta[propertyKey].args.map((arg) => params[arg.name])
+        : [];
 
-      return new Promise<IChunks>((resolve) => resolve(action())).then((rawChunk: IRawChunk) => {
+      return new Promise<IChunks>((resolve) => resolve(action.apply(instance, args)))
+        .then((rawChunk: IRawChunk) => {
 
-        if (typeof rawChunk === "function") {
-          return {main: createElement(rawChunk)};
-        }
+          if (typeof rawChunk === "function") {
+            return {main: createElement(rawChunk)};
+          }
 
-        if (rawChunk["$$typeof"]) { // tslint:disable-line
-          return {main: rawChunk};
-        }
+          if (rawChunk["$$typeof"]) { // tslint:disable-line
+            return {main: rawChunk};
+          }
 
-        for (const key of Object.keys(rawChunk)) {
-          rawChunk[key] = typeof rawChunk[key] === "function"
-            ? createElement(rawChunk[key])
-            : rawChunk[key];
-        }
+          for (const key of Object.keys(rawChunk)) {
+            rawChunk[key] = typeof rawChunk[key] === "function"
+              ? createElement(rawChunk[key])
+              : rawChunk[key];
+          }
 
-        return rawChunk;
+          return rawChunk;
 
-      }).then((chunks: IChunks) => {
+        })
+        .then((chunks: IChunks) => {
 
-        const level = this.resolveLevelCounter += 1;
-        for (const key of Object.keys(chunks)) {
-          chunks[key] = createElement(Layer, {id: level}, chunks[key]);
-        }
+          const level = this.resolveLevelCounter += 1;
+          for (const key of Object.keys(chunks)) {
+            chunks[key] = createElement(Layer, {id: level}, chunks[key]);
+          }
 
-        this.logger.trace("resolve " + _.targetToString(definition, propertyKey) + " OK");
-        return chunks;
-      });
+          this.logger.trace("resolve " + _.targetToString(definition, propertyKey) + " OK");
+          return chunks;
+        });
     };
   }
 

@@ -7,8 +7,8 @@ import { attachKernel } from "oly-test";
 import { olyReactEvents } from "../../src";
 import { Browser } from "../../src/router/services/Browser";
 import { ReactBrowserProvider } from "../../src/router/services/ReactBrowserProvider";
+import { ReactRouterProvider } from "../../src/router/services/ReactRouterProvider";
 import { Router } from "../../src/router/services/Router";
-import { RouterProvider } from "../../src/router/services/RouterProvider";
 import { FakeApp } from "./fixtures";
 
 describe("BrowserReactProvider", () => {
@@ -31,8 +31,8 @@ describe("BrowserReactProvider", () => {
   });
 
   it("should returns params", async () => {
-    await router.go("details", {id: "1"});
-    expect(browser.root.textContent).toBe("Layout:Nested:Details(1)");
+    await router.go("details", {id: "1", name: "lol"});
+    expect(browser.root.textContent).toBe("Layout:Nested:Details(1,lol)");
   });
 
   it("should use <Go/>", async () => {
@@ -44,7 +44,7 @@ describe("BrowserReactProvider", () => {
   });
 
   it("should returns 404", async () => {
-    const routerProvider = kernel.get(RouterProvider);
+    const routerProvider = kernel.get(ReactRouterProvider);
     browser.window.history.pushState({}, "", "/wat");
     await routerProvider.listen(pushStateLocationPlugin);
     expect(browser.root.textContent).toBe("Layout:NotFound");

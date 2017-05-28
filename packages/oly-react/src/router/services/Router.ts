@@ -1,12 +1,12 @@
 import { HrefOptions, TransitionOptions } from "@uirouter/core";
 import { inject } from "oly-core";
 import { IRouteState } from "../interfaces";
-import { RouterProvider } from "./RouterProvider";
+import { ReactRouterProvider } from "./ReactRouterProvider";
 
 export class Router {
 
-  @inject(RouterProvider)
-  protected routerProvider: RouterProvider;
+  @inject(ReactRouterProvider)
+  protected routerProvider: ReactRouterProvider;
 
   /**
    * Get the current route state definition.

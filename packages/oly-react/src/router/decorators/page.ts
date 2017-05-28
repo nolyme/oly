@@ -20,6 +20,7 @@ export const page = (url: string, options: IPageOptions = {}) => {
     }
 
     pages[propertyKey] = {
+      ...pages[propertyKey],
       abstract: options.abstract === true,
       children: options.children,
       name: options.name || propertyKey,

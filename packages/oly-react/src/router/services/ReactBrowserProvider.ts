@@ -4,7 +4,7 @@ import { createElement } from "react";
 import { AppContext } from "../../core/components/AppContext";
 import { View } from "../components/View";
 import { Browser } from "./Browser";
-import { RouterProvider } from "./RouterProvider";
+import { ReactRouterProvider } from "./ReactRouterProvider";
 
 /**
  *
@@ -32,8 +32,8 @@ export class ReactBrowserProvider {
   @inject(Browser)
   protected browser: Browser;
 
-  @inject(RouterProvider)
-  protected router: RouterProvider;
+  @inject(ReactRouterProvider)
+  protected router: ReactRouterProvider;
 
   /**
    * Hook - start

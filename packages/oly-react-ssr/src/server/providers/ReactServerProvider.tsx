@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { env, IDeclarations, inject, Kernel, Logger, state } from "oly-core";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
-import { RouterProvider } from "oly-react";
+import { ReactRouterProvider } from "oly-react";
 import { join } from "path";
 import { ReactProxyService } from "../services/ReactProxyService";
 import { ReactServerRenderer } from "../services/ReactServerRenderer";
@@ -29,8 +29,8 @@ export class ReactServerProvider {
   @inject(HttpServerProvider)
   protected httpServerProvider: HttpServerProvider;
 
-  @inject(RouterProvider)
-  protected routerProvider: RouterProvider;
+  @inject(ReactRouterProvider)
+  protected reactRouterProvider: ReactRouterProvider;
 
   @inject(ReactServerRenderer)
   protected reactServerRenderer: ReactServerRenderer;
@@ -91,7 +91,7 @@ export class ReactServerProvider {
 
         const kernel: Kernel = ctx.kernel;
         const logger: Logger = kernel.get(Logger).as("ReactRouter");
-        const router = kernel.get(RouterProvider);
+        const router = kernel.get(ReactRouterProvider);
         const renderer = kernel.get(ReactServerRenderer);
 
         logger.info(`incoming request ${ctx.method} ${ctx.path}`);

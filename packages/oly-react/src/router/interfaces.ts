@@ -44,6 +44,10 @@ export interface IPageMetadata {
   target: IClass;
   propertyKey: string;
   children?: IClass[];
+  args: Array<{
+    type: "path" | "query";
+    name: string;
+  }>;
 }
 
 /**
