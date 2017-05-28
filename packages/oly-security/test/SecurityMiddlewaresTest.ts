@@ -1,7 +1,7 @@
 import { ApiProvider, ForbiddenException, get, UnauthorizedException } from "oly-api";
 import { HttpClient, HttpClientException } from "oly-http";
 import { attachKernel } from "oly-test";
-import { auth } from "../src/decorators/auth";
+import { auth } from "../src";
 import { JwtAuthService } from "../src/services/JwtAuthService";
 
 class App {

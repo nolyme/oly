@@ -7,7 +7,7 @@ import { createKernel } from "oly-test";
 import * as React from "react";
 import { Component } from "react";
 import { render } from "react-dom";
-import { AppContext } from "../../src/core/components/AppContext";
+import { AppContext } from "../../src/core";
 import { ACTIONS_ERROR, ACTIONS_SUCCESS } from "../../src/core/constants";
 import { action } from "../../src/core/decorators/action";
 import { attach, connect } from "../../src/core/decorators/attach";

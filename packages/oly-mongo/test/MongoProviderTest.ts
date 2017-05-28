@@ -1,6 +1,6 @@
 import { field } from "oly-mapper";
 import { attachKernel } from "oly-test";
-import { Repository } from "../src/Repository";
+import { Repository } from "../src";
 
 describe("MongoProvider", () => {
 
