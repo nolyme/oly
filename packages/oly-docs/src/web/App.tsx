@@ -32,9 +32,7 @@ export class App {
     if (!this.module) {
       return NotFound;
     }
-    return (props: object) => (
-      <Module module={this.module}/>
-    );
+    return <Module module={this.module}/>;
   }
 
   @page404

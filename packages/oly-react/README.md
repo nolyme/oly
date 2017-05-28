@@ -1,6 +1,6 @@
 # o*l*y react
 
-```tsx
+```typescript jsx
 import "oly-core/polyfill";
 import * as React from "react";
 import { Kernel } from "oly-core";

@@ -158,15 +158,15 @@ export class ReactRouterProvider {
    */
   protected hasParent(pageDeclarations: IDeclarations, definition: IAnyDefinition) {
     return pageDeclarations
-      .filter((p) => p.definition !== definition)
-      .map((p) => MetadataUtil.get(lyPages, p.definition) as IPageMetadataMap)
-      .filter((p) => {
-        for (const key of Object.keys(p)) {
-          if (Array.isArray(p[key].children) && p[key].children!.indexOf(definition) > -1) {
-            return true;
+        .filter((p) => p.definition !== definition)
+        .map((p) => MetadataUtil.get(lyPages, p.definition) as IPageMetadataMap)
+        .filter((p) => {
+          for (const key of Object.keys(p)) {
+            if (Array.isArray(p[key].children) && p[key].children!.indexOf(definition) > -1) {
+              return true;
+            }
           }
-        }
-      }).length > 0;
+        }).length > 0;
   }
 
   /**
@@ -246,11 +246,17 @@ export class ReactRouterProvider {
 
     this.uiRouter.transitionService.onStart({}, (transition) => {
 
-      if (this.resolveLevelCounter > 0) {
-        const from = this.getName(transition.$from()).split(".");
-        const to = this.getName(transition.$to()).split(".");
+      const from: string = this.getName(transition.$from());
+      const to: string = this.getName(transition.$to());
+
+      if (this.resolveLevelCounter > 0 && to !== from) {
+        const fromArray = from.split(".");
+        const toArray = to.split(".");
         this.resolveLevelCounter = 0;
-        while (from[this.resolveLevelCounter] === to[this.resolveLevelCounter]) {
+        while (fromArray[this.resolveLevelCounter] === toArray[this.resolveLevelCounter]) {
+          if (this.resolveLevelCounter >= 10) {
+            throw new Error("Infinite loop");
+          }
           this.resolveLevelCounter += 1;
         }
       }

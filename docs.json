@@ -64,13 +64,12 @@
         "core/decorators/action",
         "core/decorators/attach",
         "router/decorators/page",
-        "router/decorators/page404",
         "router/decorators/layout",
         "router/decorators/query",
         "router/decorators/path"
       ],
       "services": [
-        "router/providers/ReactBrowserProvider.ts",
+        "router/services/ReactBrowserProvider.ts",
         "router/services/Browser.ts",
         "router/services/Router.ts"
       ]

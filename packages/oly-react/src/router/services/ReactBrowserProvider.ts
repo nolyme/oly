@@ -44,6 +44,12 @@ export class ReactBrowserProvider {
       ? hashLocationPlugin
       : pushStateLocationPlugin;
 
+    // when you go to "/" in hash mode, there is no route
+    // so we redirect "/" to "/#/"
+    if (this.useHash && !this.browser.window.location.hash) {
+      this.browser.window.location.hash = "#/";
+    }
+
     return this.router.listen(locationService).then(() => {
       this.logger.info("render react view");
       this.render();
