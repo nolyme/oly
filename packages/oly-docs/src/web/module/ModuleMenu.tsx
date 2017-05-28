@@ -1,16 +1,16 @@
 import { Collapse } from "@blueprintjs/core";
 import { attach, Go } from "oly-react";
 import * as React from "react";
-import { IModuleContent } from "../../src/interfaces";
+import { IModuleContent } from "../../cli/interfaces";
 
 @attach
 export class ModuleMenu extends React.Component<{ module: IModuleContent }, { isDecoratorsOpen: boolean }> {
 
-  state = {
+  public state = {
     isDecoratorsOpen: true,
   };
 
-  public rel(path: string = "") {
+  public rel(path: string = ""): string {
     return `/m/${this.props.module.name}/${path}`;
   }
 
@@ -41,7 +41,9 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, { is
     }
     return (
       <div>
-        <div onClick={() => this.setState({isDecoratorsOpen: !this.state.isDecoratorsOpen})}>Decorators</div>
+        <div onClick={() => this.setState({isDecoratorsOpen: !this.state.isDecoratorsOpen})}>
+          Decorators
+        </div>
         <Collapse isOpen={this.state.isDecoratorsOpen}>
           {this.props.module.decorators.map((s) => (
             <div key={s.name}>

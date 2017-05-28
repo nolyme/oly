@@ -1,14 +1,11 @@
 import { attach } from "oly-react";
+import { View } from "oly-react/src/router/components/View";
 import * as React from "react";
-import { IModuleContent } from "../../src/interfaces";
+import { IModuleContent } from "../../cli/interfaces";
 import { ModuleMenu } from "./ModuleMenu";
 
 @attach
 export class Module extends React.Component<{ module: IModuleContent }, {}> {
-
-  public rel(path: string = "") {
-    return `/m/${this.props.module.name}/${path}`;
-  }
 
   public render() {
     return (
@@ -16,7 +13,7 @@ export class Module extends React.Component<{ module: IModuleContent }, {}> {
         <div className="flex">
           <ModuleMenu module={this.props.module}/>
           <div className="flex-full">
-            {React.cloneElement(this.props.children as any, {module: this.props.module})}
+            <View index={2}/>
           </div>
         </div>
       </div>

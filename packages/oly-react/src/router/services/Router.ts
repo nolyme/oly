@@ -35,11 +35,13 @@ export class Router {
    * @param params      Parameters
    * @param options     UIRouter go options
    */
-  public go(routeName: string, params: object = {}, options: TransitionOptions = {}): Promise<IRouteState> {
+  public go(routeName: string, params: object = {}, options: TransitionOptions = {}): Promise<void> {
     if (routeName[0] === "/") {
       throw new Error("Go requires a routeName, not an url");
     }
-    return this.routerProvider.uiRouter.stateService.go(routeName, params, options);
+    return this.routerProvider.uiRouter.stateService.go(routeName, params, options).then(() => {
+      // skip
+    });
   }
 
   /**

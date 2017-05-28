@@ -2,7 +2,7 @@ import { Tab2, Tabs2 } from "@blueprintjs/core";
 import { inject } from "oly-core";
 import { action, attach, Router } from "oly-react";
 import * as React from "react";
-import { IDoc, IModuleContent } from "../../src/interfaces";
+import { IDoc, IModuleContent } from "../../cli/interfaces";
 import { Search } from "./Search";
 
 @attach
@@ -11,12 +11,12 @@ export class Header extends React.Component<{ doc: IDoc }, {}> {
   @inject private router: Router;
 
   @action
-  public handleTabChange(pathname: string) {
-    this.router.navigate(pathname);
+  public handleTabChange(module: string) {
+    return this.router.go("moduleIndex", {module});
   }
 
   public getSelectedId() {
-    const path = this.router.current.pathname;
+    const path = this.router.current.name;
     if (path.indexOf("/m/") === -1) {
       return "/";
     }
@@ -36,7 +36,7 @@ export class Header extends React.Component<{ doc: IDoc }, {}> {
     return (
       <Tab2
         className="with-icon"
-        id={`/m/${m.name}`}
+        id={m.name}
         key={m.name}
         title={this.renderTabTitle(m)}
       />

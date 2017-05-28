@@ -13,7 +13,7 @@ import { ModuleConfiguration } from "./models/ModuleConfiguration";
 export class DocProvider {
 
   @env("CWD") private cwd: string = process.cwd();
-  @env("JSON") private json: boolean = false;
+  @env("JS") private asJs: boolean = false;
   @env("DIRECTORY_ROOT") private root: string = "packages";
   @env("DIRECTORY_SRC") private src: string = "src";
   @env("DIRECTORY_OUT") private out: string = "docs";
@@ -42,9 +42,9 @@ export class DocProvider {
       version: config.version || pkg.version,
     };
 
-    if (this.json) {
-      this.logger.debug(`write as json`);
-      writeFileSync(resolve(output, "doc.json"), JSON.stringify(doc), "UTF-8");
+    if (this.asJs) {
+      this.logger.debug(`write as js`);
+      writeFileSync(resolve(output, "docs.js"), "window.DOCS = " + JSON.stringify(doc), "UTF-8");
     } else {
       this.logger.debug(`write docs with webpack`);
       await this.builder.build(output, doc);
@@ -126,6 +126,10 @@ export class DocProvider {
 
     const files = results.map((i) => path + "/" + i.replace(/\.tsx?/mgi, ""));
     const reflection: ProjectReflection = app.convert(files);
+
+    if (!reflection) {
+      return [];
+    }
 
     const children = reflection.children || [];
     if (children.length === 0) {

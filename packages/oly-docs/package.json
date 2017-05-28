@@ -18,27 +18,28 @@
     "highlight.js": "9.11.0",
     "lato-font": "3.0.0",
     "marked": "0.3.6",
-    "node-sass": "4.5.2",
     "oly-core": "^0.10.3",
     "oly-http": "^0.10.3",
     "oly-mapper": "^0.10.3",
     "oly-react": "^0.10.3",
-    "oly-tools": "^0.10.3",
     "react": "15.5.4",
     "react-addons-css-transition-group": "15.5.2",
     "react-dom": "^15.5.4",
     "react-helmet": "5.0.3",
-    "sass-loader": "6.0.3",
     "source-map-support": "0.4.15",
-    "typedoc": "0.6.0",
-    "webpack": "2.5.1"
+    "typedoc": "0.6.0"
   },
   "devDependencies": {
+    "node-sass": "4.5.2",
+    "oly-tools": "^0.10.3",
+    "sass-loader": "6.0.3",
     "ts-node": "3.0.4",
+    "typescript": "^2.3.3",
+    "webpack": "2.6.1",
     "webpack-dev-server": "2.4.5"
   },
   "scripts": {
-    "start": "webpack-dev-server",
+    "dev": "webpack-dev-server",
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
     "test": "echo"

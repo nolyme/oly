@@ -1,7 +1,7 @@
 import { env, state } from "oly-core";
-import { page, page404, pageLayout, path } from "oly-react";
+import { layout, page, page404, path } from "oly-react";
 import * as React from "react";
-import { IDoc, IModuleContent } from "../src/interfaces";
+import { IDoc, IModuleContent } from "../cli/interfaces";
 import { Home } from "./layout/Home";
 import { Layout } from "./layout/Layout";
 import { NotFound } from "./layout/NotFound";
@@ -10,31 +10,30 @@ import { Module } from "./module/Module";
 
 export class App {
 
-  @state("module") private module: IModuleContent;
-
-  @env("DOC")
+  @env("DOCS")
   private doc: IDoc;
 
-  @pageLayout
+  @state
+  private module: IModuleContent;
+
+  @layout
   public layout() {
-    return (props: any) => <Layout doc={this.doc} {...props}/>;
+    return <Layout doc={this.doc}/>;
   }
 
   @page("/")
-  public index() {
+  public home() {
     return <Home doc={this.doc}/>;
   }
 
-  @page("/m/:module", {
-    children: [AppModule],
-  })
-  public modulePages(@path("module") moduleName: string) {
-    this.module = this.doc.modules.filter((m) => m.name === moduleName)[0];
+  @page("/m/:module", {children: [AppModule]})
+  public modulePages(@path("module") module: string) {
+    this.module = this.doc.modules.filter((m) => m.name === module)[0];
     if (!this.module) {
       return NotFound;
     }
     return (props: object) => (
-      <Module {...props} module={this.module}/>
+      <Module module={this.module}/>
     );
   }
 

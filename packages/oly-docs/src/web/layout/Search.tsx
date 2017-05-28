@@ -2,7 +2,7 @@ import { Popover, Position } from "@blueprintjs/core";
 import { action, attach, Go, styles } from "oly-react";
 import * as React from "react";
 import { ChangeEvent } from "react";
-import { IDoc } from "../../src/interfaces";
+import { IDoc } from "../../cli/interfaces";
 
 export interface IResult {
   name: string;

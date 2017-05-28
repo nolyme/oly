@@ -1,7 +1,8 @@
 import { attach } from "oly-react";
+import { View } from "oly-react/src/router/components/View";
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import { IDoc } from "../../src/interfaces";
+import { IDoc } from "../../cli/interfaces";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
@@ -19,7 +20,7 @@ export class Layout extends React.Component<{ doc: IDoc }, {}> {
         <Header doc={this.props.doc}/>
         <div className="flex-full container">
           <div style={{padding: "10px"}}><Breadcrumbs/></div>
-          {this.props.children}
+          <View index={1}/>
         </div>
         <Footer/>
       </div>

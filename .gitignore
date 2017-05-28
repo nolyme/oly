@@ -20,6 +20,6 @@
 /docs
 /lib
 /coverage
-doc.json
+docs.js
 checkstyle-result.xml
 TODO.md

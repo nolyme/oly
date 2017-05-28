@@ -1,6 +1,6 @@
 import { attach, Go } from "oly-react";
 import * as React from "react";
-import { IDocService, IModuleContent } from "../../src/interfaces";
+import { IDocService, IModuleContent } from "../../cli/interfaces";
 
 @attach
 export class ApiService extends React.Component<{ module: IModuleContent; service: IDocService }, {}> {

@@ -1,6 +1,6 @@
 import { attach } from "oly-react";
 import * as React from "react";
-import { IDocMethod, IDocService } from "../../src/interfaces";
+import { IDocMethod, IDocService } from "../../cli/interfaces";
 
 @attach
 export class ApiServiceMethod extends React.Component<{ service: IDocService; method: IDocMethod }, {}> {

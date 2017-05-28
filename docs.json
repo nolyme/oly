@@ -65,8 +65,7 @@
         "core/decorators/attach",
         "router/decorators/page",
         "router/decorators/page404",
-        "router/decorators/page500",
-        "router/decorators/pageLayout",
+        "router/decorators/layout",
         "router/decorators/query",
         "router/decorators/path"
       ],

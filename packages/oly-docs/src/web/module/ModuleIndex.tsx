@@ -1,6 +1,6 @@
 import { attach } from "oly-react";
 import * as React from "react";
-import { IModuleContent } from "../../src/interfaces";
+import { IModuleContent } from "../../cli/interfaces";
 import { ApiConfiguration } from "./ApiConfiguration";
 
 @attach

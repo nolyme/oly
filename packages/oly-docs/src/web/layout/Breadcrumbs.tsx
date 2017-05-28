@@ -35,7 +35,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   }
 
   public build() {
-    this.steps = this.router.current.pathname.split("/").filter((s) => !!s);
+    this.steps = location.pathname.split("/").filter((s) => !!s);
     this.stepsAllowed = this.steps.filter((s) => this.blackList.indexOf(s) === -1);
   }
 

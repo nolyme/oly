@@ -1,7 +1,7 @@
 import { state } from "oly-core";
 import { page, path } from "oly-react";
 import * as React from "react";
-import { IModuleContent } from "../../src/interfaces";
+import { IModuleContent } from "../../cli/interfaces";
 import { NotFound } from "../layout/NotFound";
 import { ApiDecorator } from "./ApiDecorator";
 import { ApiService } from "./ApiService";
@@ -10,11 +10,12 @@ import { ModuleIndex } from "./ModuleIndex";
 
 export class AppModule {
 
-  @state("module") private module: IModuleContent;
+  @state("App.module")
+  private module: IModuleContent;
 
   @page("/")
-  public index() {
-    return ModuleIndex;
+  public moduleIndex() {
+    return <ModuleIndex module={this.module}/>;
   }
 
   @page("/@/:decorator")
