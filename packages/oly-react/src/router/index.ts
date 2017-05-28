@@ -8,6 +8,8 @@ export * from "./constants/events";
 export * from "./decorators/page404";
 export * from "./decorators/page";
 export * from "./decorators/layout";
+export * from "./decorators/path";
+export * from "./decorators/query";
 export * from "./services/Router";
 export * from "./services/Browser";
 export * from "./services/ReactRouterProvider";

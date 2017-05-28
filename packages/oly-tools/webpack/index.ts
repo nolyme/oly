@@ -186,6 +186,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   };
 
   config.output = {
+    publicPath: "/",
     filename: isProduction ? "[name].[hash].js" : "[name].js",
     path: options.dist,
   };
