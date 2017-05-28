@@ -1,2 +1,2 @@
 export * from "./pixie/index.browser";
-export * from "./helmet";
+export * from "./helmet/index.browser";
