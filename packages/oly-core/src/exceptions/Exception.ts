@@ -1,10 +1,7 @@
 import { olyCoreErrors } from "../constants/errors";
-import { _ } from "../utils/CommonUtil";
 
 /**
  * Exception.
- *
- * You can't extend Error directly, it's broken with es5.
  *
  * Exception has a real #toJSON().
  * ```typescript
@@ -24,17 +21,13 @@ import { _ } from "../utils/CommonUtil";
  * }
  * ```
  */
-export class Exception {
-
-  /**
-   * Use this message is no message was given.
-   */
-  public static defaultMessage: string = olyCoreErrors.defaultException();
+export class Exception extends Error {
 
   public name: string;
-  public message: string;
-  public source: Error;
+
   public cause?: Exception | Error;
+
+  private source: Error;
 
   /**
    * Create a new exception.
@@ -43,43 +36,39 @@ export class Exception {
    * @param description Optional message if not set as source
    */
   public constructor(cause?: string | Throwable, description?: string) {
+    super();
 
-    // local
-    const self = this;
-    const type = self.constructor as any;
+    this.name = this.constructor.name;
+    this.source = new Error(); // because we have a virtual message and a virtual stack
+    this.source.message = (
+        typeof cause === "string"
+          ? cause
+          : description)
+      || olyCoreErrors.defaultException();
 
-    // attributes
-    const data: any = {};
-    data.name = type.name;
-    data.message = (typeof cause === "string" ? cause : description) || type.defaultMessage;
     if (typeof cause !== "string" && typeof cause !== "undefined") {
       this.cause = cause;
     }
 
-    const source = new Error(data.message);
-    Object.defineProperty(this, "name", {get: () => data.name, set: (m) => data.name = m});
-    Object.defineProperty(this, "message", {
-      get: () => data.message, set: (m) => {
-        if (data.message === type.defaultMessage) {
-          data.message = m;
+    const define = Object.defineProperty;
+
+    define(this, "stack", {
+      get: () => this.getStackTrace(),
+    });
+    define(this, "message", {
+      get: () => this.source.message,
+      set: (message) => {
+        if (this.source.message === olyCoreErrors.defaultException()) {
+          this.source.message = message;
         }
       },
     });
-    Object.defineProperty(this, "source", {get: () => source});
-
-    // tricky part
-    const ctx = Error.apply(this, [data.message]);
-    Object.defineProperty(ctx, "toJSON", {value: self.toJSON});
-    Object.defineProperty(ctx, "toString", {value: self.toString});
-    Object.defineProperty(ctx, "stack", {get: () => self.stack});
-
-    _.assign(ctx, this);
   }
 
   /**
    *
    */
-  public get stack(): string {
+  public getStackTrace(): string {
 
     let level = 0;
     let parent = this as any;
@@ -107,7 +96,7 @@ export class Exception {
    */
   public toString(): string {
 
-    let message = `OHBOY ${this.name}: ${this.message}`;
+    let message = `${this.name}: ${this.message}`;
 
     if (this.cause) {
       message += ". Caused by: " + this.cause;
@@ -142,7 +131,3 @@ export class Exception {
 }
 
 export type Throwable = Error | Exception;
-
-// tricky
-const proto = Exception.prototype as any;
-proto.__proto__ = Error.prototype;

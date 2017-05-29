@@ -10,9 +10,11 @@ export interface ICommands {
   };
 }
 
-export const root = resolve(__dirname, "..");
+export const root: string
+  = resolve(__dirname, "..");
 
-export const pkgPath = process.cwd() + "/package.json";
+export const pkgPath: string
+  = process.cwd() + "/package.json";
 
 export const getLocalBinary = (name: string) => resolve(process.cwd(), "node_modules/.bin/" + name);
 
@@ -24,6 +26,7 @@ export const log = (...msg: any[]) => console.log(msg); // tslint:disable-line
 
 export const showHelp = (commands: ICommands) => {
   log("");
+  log("oly v" + require("../package.json").version);
   for (const name of Object.keys(commands)) {
     if (commands[name].help) {
       log(`   ${name}: ${commands[name].help}`);

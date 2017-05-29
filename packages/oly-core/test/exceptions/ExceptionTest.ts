@@ -18,6 +18,20 @@ describe("Exception", () => {
     }).toThrow(olyCoreErrors.defaultException());
   });
 
+  it("should have custom message when extends", () => {
+    class Toto extends Exception {
+      message = "A";
+    }
+    class Toto2 extends Exception {
+      message = "C";
+    }
+
+    expect(new Toto().message).toBe("A");
+    expect(new Toto("B").message).toBe("B");
+    expect(new Toto2().message).toBe("C");
+    expect(new Toto2("D").message).toBe("D");
+  });
+
   it("should have name", () => {
     expect(new Exception().name).toBe("Exception");
     expect(new KernelException().name).toBe("KernelException");

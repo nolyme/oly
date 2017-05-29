@@ -45,6 +45,6 @@
     "test": "echo"
   },
   "jest": {
-    "preset": "../../jest-preset.json"
+    "preset": "../../jest.json"
   }
 }

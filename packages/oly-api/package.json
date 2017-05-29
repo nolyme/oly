@@ -37,6 +37,6 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "../../jest-preset.json"
+    "preset": "../../jest.json"
   }
 }

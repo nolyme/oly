@@ -31,7 +31,6 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "../../jest-preset.json",
-    "setupTestFrameworkScriptFile": "<rootDir>/../oly-core/polyfill"
+    "preset": "../../jest.json"
   }
 }

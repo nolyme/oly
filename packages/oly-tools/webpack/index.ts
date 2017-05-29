@@ -151,7 +151,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   options.styleLoader = options.styleLoader || cssLoaderFactory();
 
   // devtool accepts a string to define type of source-map
-  config.devtool = "inline-source-map";
+  config.devtool = "source-map";
 
   // set a default context (base)
   // it's basically your root directory
@@ -252,18 +252,18 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         debug: false,
         minimize: true,
       }),
-      new UglifyJsPlugin({
-        beautify: false,
-        comments: false,
-        compress: {
-          screw_ie8: true,
-          warnings: false,
-        },
-        mangle: {
-          keep_fnames: true,
-          screw_ie8: true,
-        },
-      }),
+      // new UglifyJsPlugin({
+      //   beautify: false,
+      //   comments: false,
+      //   compress: {
+      //     screw_ie8: true,
+      //     warnings: false,
+      //   },
+      //   mangle: {
+      //     keep_fnames: true,
+      //     screw_ie8: true,
+      //   },
+      // }),
     );
   }
 
