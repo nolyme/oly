@@ -252,6 +252,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         debug: false,
         minimize: true,
       }),
+      // TODO: uglify es6
       // new UglifyJsPlugin({
       //   beautify: false,
       //   comments: false,
@@ -284,7 +285,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 /**
  * Typescript loader factory
  */
-function typescriptLoaderFactory(): Rule {
+function typescriptLoaderFactory(options: object = {}): Rule {
   return {
     exclude: /node_modules/,
     test: /\.tsx?$/,
@@ -294,6 +295,7 @@ function typescriptLoaderFactory(): Rule {
         silent: true,
         // speedup compile time, our ide will check error for us beside
         transpileOnly: true,
+        ...options,
       },
     }],
   };

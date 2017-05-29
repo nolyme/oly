@@ -1,4 +1,4 @@
-export * from "./index.browser";
+export * from "./decorators";
 export * from "./providers/DatabaseProvider";
 export * from "./providers/Repository";
 

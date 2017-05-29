@@ -25,7 +25,7 @@
     "publish": "lerna publish --force-publish=*"
   },
   "jest": {
-    "preset": "./jest-preset.json",
+    "preset": "./jest.json",
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },

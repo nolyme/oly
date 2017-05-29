@@ -5,7 +5,8 @@ export default (env?: string) => {
   const config = createConfiguration({
     entry: "./src/main.browser.ts",
     nyan: true,
-    production: env === "prod",
+    open: true,
+    production: env === "production",
   });
 
   return config;

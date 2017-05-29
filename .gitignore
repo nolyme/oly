@@ -2,6 +2,7 @@
 .vscode
 /node_modules
 /packages/*/node_modules
+/packages/*/esm
 /packages/*/lib
 /packages/*/out
 /packages/*/coverage

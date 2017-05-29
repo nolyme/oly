@@ -58,7 +58,7 @@ export class Exception extends Error {
   public constructor(cause?: string | Throwable, message?: string) {
     super();
 
-    this.name = this.constructor.name;
+    this.name = (this.constructor as any).name;
     this.source = new Error();            // because we have a virtual message and a virtual stack
     this.source.message = (
         typeof cause === "string"
@@ -80,9 +80,9 @@ export class Exception extends Error {
     });
     define(this, "message", {
       get: () => this.source.message,
-      set: (message) => {
+      set: (m: string) => {
         if (isDefaultMessage) {
-          this.source.message = message;
+          this.source.message = m;
         }
       },
     });

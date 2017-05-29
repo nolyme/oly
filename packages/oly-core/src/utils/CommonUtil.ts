@@ -83,7 +83,8 @@ export class CommonUtil {
     if (typeof window === "object") {
       return window.atob(raw);
     }
-    return Buffer.from(raw, "base64").toString("ascii");
+    const b = "Buffer";
+    return global[b].from(raw, "base64").toString("ascii");
   }
 
   /**

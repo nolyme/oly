@@ -1,1 +1,1 @@
-export * from "./decorators";
+// noop
