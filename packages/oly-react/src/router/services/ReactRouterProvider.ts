@@ -5,6 +5,7 @@ import { Layer } from "../components/Layer";
 import { olyReactEvents } from "../constants/events";
 import { lyPages } from "../constants/keys";
 import { IChunks, ILayer, IPageMetadata, IPageMetadataMap, IRawChunk, IRouteState } from "../interfaces";
+import { DefaultNotFound } from "./DefaultNotFound";
 
 export class ReactRouterProvider {
 
@@ -13,7 +14,6 @@ export class ReactRouterProvider {
    * All resolved components are stored here.
    * On each page update, layers is erased, there is no cache.
    */
-  @state
   public layers: ILayer[];
 
   /**
@@ -131,23 +131,34 @@ export class ReactRouterProvider {
 
     this.logger.debug(`Add route ${meta.url} (${meta.name}) -> ${_.targetToString(meta.target, meta.propertyKey)}`);
 
-    const queryParams = Array.isArray(meta.args)
-      ? meta.args.filter((arg) => arg.type === "query")
-      : [];
-
-    const params = queryParams.reduce((p, arg) => {
-      p[arg.name] = null;
-      return p;
-    }, {});
-
-    this.stateDeclarations.push({
-      abstract: meta.abstract,
+    const stateDeclaration: StateDeclaration = {
       name: meta.name,
-      params,
       parent: parent ? parent.name : undefined,
-      data: meta,
+      data: {
+        target: meta.target,
+        propertyKey: meta.propertyKey,
+      },
       url: meta.url,
-    });
+    };
+
+    if (meta.abstract) {
+      stateDeclaration.abstract = true;
+    }
+
+    if (meta.args) {
+      const queryParams = Array.isArray(meta.args)
+        ? meta.args.filter((arg) => arg.type === "query")
+        : [];
+
+      if (queryParams.length > 0) {
+        stateDeclaration.params = queryParams.reduce((p, arg) => {
+          p[arg.name] = null;
+          return p;
+        }, {});
+      }
+    }
+
+    this.stateDeclarations.push(stateDeclaration);
   }
 
   /**
@@ -228,14 +239,8 @@ export class ReactRouterProvider {
    */
   protected onStart(declarations: IDeclarations): any {
 
-    this.stateDeclarations = [{
-      name: "404",
-      resolve: {
-        oly$404: () => ({main: createElement("p", {}, "Not Found")}),
-      },
-      url: "",
-    }];
-
+    this.stateDeclarations = [];
+    this.register(DefaultNotFound);
     this.scan(declarations);
   }
 

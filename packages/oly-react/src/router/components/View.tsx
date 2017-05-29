@@ -1,8 +1,9 @@
-import { env, inject, IStateMutate, Logger, olyCoreEvents, on } from "oly-core";
+import { env, inject, Logger, on } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";
 import { attach } from "../../core/decorators/attach";
+import { olyReactEvents } from "../constants/events";
 import { ILayer } from "../interfaces";
 import { ReactRouterProvider } from "../services/ReactRouterProvider";
 
@@ -62,15 +63,13 @@ export class View extends Component<IViewProps, IViewState> {
   /**
    * Refresh the chunk here
    */
-  @on(olyCoreEvents.STATE_MUTATE)
-  public onTransitionEnd(ev: IStateMutate): void {
-    if (ev.key === "ReactRouterProvider.layers") {
-      if (this.layer && this.layer.chunks[this.name] !== this.state.content) {
-        this.logger.trace(`update view ${this.index} (${this.name})`);
-        this.setState({
-          content: this.layer.chunks[this.name],
-        });
-      }
+  @on(olyReactEvents.TRANSITION_END)
+  public onTransitionEnd(): void {
+    if (this.layer && this.layer.chunks[this.name] !== this.state.content) {
+      this.logger.trace(`update view ${this.index} (${this.name})`);
+      this.setState({
+        content: this.layer.chunks[this.name],
+      });
     }
   }
 
