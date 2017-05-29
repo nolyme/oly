@@ -1,7 +1,10 @@
 import { olyCoreErrors } from "../constants/errors";
 
 /**
- * Exception.
+ * Enhance Error with toJSON, cause, ...
+ *
+ * **warning**
+ * This is totally broken in ES5 mode.
  *
  * Exception has a real #toJSON().
  * ```typescript
@@ -20,45 +23,65 @@ import { olyCoreErrors } from "../constants/errors";
  *  throw new Exception(e, "C");
  * }
  * ```
+ *
+ * You can set a default message.
+ * ```
+ * class MyException extends Exception {
+ *    message = "My default message";
+ * }
+ * ```
  */
 export class Exception extends Error {
 
+  /**
+   * Error name.
+   */
   public name: string;
 
-  public cause?: Exception | Error;
+  /**
+   * Error cause.
+   */
+  public cause?: Throwable;
 
+  /**
+   * Our witness error.
+   * It's useful because we have a virtual #stack and #message.
+   */
   private source: Error;
 
   /**
    * Create a new exception.
    *
-   * @param cause       Source (cause) or message
-   * @param description Optional message if not set as source
+   * @param cause         Source (cause) or message
+   * @param message       Optional message if not set as source
    */
-  public constructor(cause?: string | Throwable, description?: string) {
+  public constructor(cause?: string | Throwable, message?: string) {
     super();
 
     this.name = this.constructor.name;
-    this.source = new Error(); // because we have a virtual message and a virtual stack
+    this.source = new Error();            // because we have a virtual message and a virtual stack
     this.source.message = (
         typeof cause === "string"
           ? cause
-          : description)
+          : message)
       || olyCoreErrors.defaultException();
 
     if (typeof cause !== "string" && typeof cause !== "undefined") {
       this.cause = cause;
     }
 
+    // if we have a default message, it will be overridable by children "default message"
+    const isDefaultMessage = this.source.message === olyCoreErrors.defaultException();
     const define = Object.defineProperty;
 
+    // getters/setters are broken on es6, we need to do this
     define(this, "stack", {
       get: () => this.getStackTrace(),
     });
     define(this, "message", {
       get: () => this.source.message,
       set: (message) => {
-        if (this.source.message === olyCoreErrors.defaultException()) {
+        if (isDefaultMessage) {
           this.source.message = message;
         }
       },
@@ -66,7 +89,7 @@ export class Exception extends Error {
   }
 
   /**
-   *
+   * Get the long stack trace.
    */
   public getStackTrace(): string {
 
@@ -92,7 +115,7 @@ export class Exception extends Error {
   }
 
   /**
-   *
+   * Override toString.
    */
   public toString(): string {
 
@@ -106,7 +129,8 @@ export class Exception extends Error {
   }
 
   /**
-   *
+   * Return error as object without shitty data.
+   * Designed to be override.
    */
   public toJSON(): object {
 
@@ -130,4 +154,7 @@ export class Exception extends Error {
   }
 }
 
+/**
+ * Exception or Error.
+ */
 export type Throwable = Error | Exception;

@@ -1,3 +1,4 @@
+export * from "./constants/errors";
 export * from "./interfaces";
 export * from "./decorators/body";
 export * from "./decorators/del";

@@ -73,7 +73,7 @@ export class Go extends Component<IGoProps, IGoState> {
     return createElement("a" as any, {
       className: this.state.active ? "active" : undefined,
       ...rest,
-      href: this.router.path(to, params),
+      href: this.router.href(to, params),
       onClick: this.handleClick,
     }, this.props.children);
   }

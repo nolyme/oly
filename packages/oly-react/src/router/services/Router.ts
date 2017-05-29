@@ -31,6 +31,10 @@ export class Router {
   /**
    * Go to a named state.
    *
+   * ```typescript
+   * router.go("index");
+   * ```
+   *
    * @param routeName   Route state
    * @param params      Parameters
    * @param options     UIRouter go options
@@ -45,13 +49,22 @@ export class Router {
   }
 
   /**
+   * Reload state
+   */
+  public reload(): Promise<void> {
+    return this.routerProvider.uiRouter.stateService.reload().then(() => {
+      // skip
+    });
+  }
+
+  /**
    * Get the path of a route state.
    *
    * @param routeName   Route state
    * @param params      Parameters
    * @param options     UIRouter go options
    */
-  public path(routeName: string, params: object = {}, options: HrefOptions = {}): string {
+  public href(routeName: string, params: object = {}, options: HrefOptions = {}): string {
     return this.routerProvider.uiRouter.stateService.href(routeName, params, options);
   }
 

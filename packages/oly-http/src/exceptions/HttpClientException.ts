@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import { Exception } from "oly-core";
+import { olyHttpErrors } from "../constants/errors";
 import { IHttpResponse } from "../interfaces";
 
 /**
@@ -26,6 +27,8 @@ export class HttpClientException extends Exception {
     } else {
       if (typeof source.response.data === "string") {
         this.message = source.response.data;
+      } else {
+        this.message = olyHttpErrors.requestHasFailed(source.config.method, source.config.url);
       }
       this.status = source.response.status;
     }

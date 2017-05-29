@@ -3,7 +3,7 @@ import { olyApiErrors } from "../constants/errors";
 
 export class NotFoundException extends HttpServerException {
 
-  public static readonly defaultMessage: string = olyApiErrors.notFound();
+  public message: string = olyApiErrors.notFound();
 
   public status: number = 404;
 }

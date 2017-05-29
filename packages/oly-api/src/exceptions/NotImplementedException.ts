@@ -3,7 +3,7 @@ import { olyApiErrors } from "../constants/errors";
 
 export class NotImplementedException extends HttpServerException {
 
-  public static readonly defaultMessage: string = olyApiErrors.notImplemented();
+  public message: string = olyApiErrors.notImplemented();
 
   public status: number = 501;
 }

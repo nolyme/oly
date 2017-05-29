@@ -22,14 +22,27 @@ describe("Exception", () => {
     class Toto extends Exception {
       message = "A";
     }
-    class Toto2 extends Exception {
-      message = "C";
+
+    class Toto2 extends Toto {
+      public message = "C";
+      public status = 10;
+    }
+
+    class Toto3 extends Toto2 {
+      public status = 11;
+      constructor(letter: string) {
+        super();
+        this.message = `>${letter}<`;
+      }
     }
 
     expect(new Toto().message).toBe("A");
     expect(new Toto("B").message).toBe("B");
     expect(new Toto2().message).toBe("C");
     expect(new Toto2("D").message).toBe("D");
+    expect(new Toto2("D").status).toBe(10);
+    expect(new Toto3("E").message).toBe(">E<");
+    expect(new Toto3("E").status).toBe(11);
   });
 
   it("should have name", () => {

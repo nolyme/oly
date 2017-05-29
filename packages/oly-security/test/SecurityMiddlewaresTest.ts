@@ -1,4 +1,5 @@
-import { ApiProvider, ForbiddenException, get, UnauthorizedException } from "oly-api";
+import { ApiProvider, get } from "oly-api";
+import { olyApiErrors } from "oly-api";
 import { HttpClient, HttpClientException } from "oly-http";
 import { attachKernel } from "oly-test";
 import { auth } from "../src";
@@ -37,7 +38,7 @@ describe("SecurityMiddlewares", () => {
     } catch (e) {
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(401);
-      expect(e.message).toBe(UnauthorizedException.defaultMessage);
+      expect(e.message).toBe(olyApiErrors.unauthorized());
     }
   });
 
@@ -68,7 +69,7 @@ describe("SecurityMiddlewares", () => {
     } catch (e) {
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(403);
-      expect(e.message).toBe(ForbiddenException.defaultMessage);
+      expect(e.message).toBe(olyApiErrors.forbidden());
     }
   });
 

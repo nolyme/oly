@@ -3,7 +3,7 @@ import { olyApiErrors } from "../constants/errors";
 
 export class UnauthorizedException extends HttpServerException {
 
-  public static readonly defaultMessage: string = olyApiErrors.unauthorized();
+  public message: string = olyApiErrors.unauthorized();
 
   public status: number = 401;
 }

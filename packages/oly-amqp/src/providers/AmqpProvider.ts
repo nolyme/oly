@@ -46,8 +46,8 @@ export class AmqpProvider {
    *
    * @param taskName    Task name (= queue name)
    */
-  public purge(taskName: string): Promise<PurgeQueue> {
-    return this.channel.purgeQueue(taskName);
+  public async purge(taskName: string): Promise<PurgeQueue> {
+    return await this.channel.purgeQueue(taskName);
   }
 
   protected async onStart() {

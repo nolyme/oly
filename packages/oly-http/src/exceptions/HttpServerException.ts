@@ -1,5 +1,5 @@
 import { Exception } from "oly-core";
-import { olyApiErrors } from "../constants/errors";
+import { olyHttpErrors } from "../constants/errors";
 
 /**
  * Http server exception.
@@ -25,7 +25,7 @@ import { olyApiErrors } from "../constants/errors";
  */
 export class HttpServerException extends Exception {
 
-  public static readonly defaultMessage: string = olyApiErrors.internalError();
+  public message: string = olyHttpErrors.internalError();
 
   public status: number = 500;
 
