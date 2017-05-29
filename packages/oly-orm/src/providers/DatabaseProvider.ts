@@ -1,4 +1,4 @@
-import { env, IClass, IDeclarations, inject, Logger, state } from "oly-core";
+import { env, IAnyFunction, IDeclarations, inject, Logger, state } from "oly-core";
 import { Connection, createConnection, DriverOptions, Entity, getMetadataArgsStorage } from "typeorm";
 import { parse } from "url";
 
@@ -61,7 +61,7 @@ export class DatabaseProvider {
    *
    * @param deps
    */
-  protected getEntities(deps: IDeclarations): IClass[] {
+  protected getEntities(deps: IDeclarations): IAnyFunction[] {
 
     const tables = getMetadataArgsStorage().tables.toArray();
     const repositories = deps.filter((d) => !!d.instance && !!d.instance.type);
