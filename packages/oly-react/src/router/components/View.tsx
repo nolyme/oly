@@ -1,4 +1,4 @@
-import { env, inject, Logger, on } from "oly-core";
+import { _, env, inject, Logger, on } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";
@@ -52,6 +52,8 @@ export class View extends Component<IViewProps, IViewState> {
 
   public index: number;
 
+  public id = _.shortid();
+
   public get name(): string {
     return this.props.name || "main";
   }
@@ -63,14 +65,16 @@ export class View extends Component<IViewProps, IViewState> {
   /**
    * Refresh the chunk here
    */
-  @on(olyReactEvents.TRANSITION_END)
-  public onTransitionEnd(): void {
+  @on(olyReactEvents.TRANSITION_RENDER)
+  public onTransitionEnd(): Promise<void> {
     if (this.layer && this.layer.chunks[this.name] !== this.state.content) {
-      this.logger.trace(`update view ${this.index} (${this.name})`);
-      this.setState({
-        content: this.layer.chunks[this.name],
-      });
+      this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
+      const content = this.layer.chunks[this.name];
+      return new Promise<void>((resolve) =>
+        this.setState({content}, () => resolve()),
+      );
     }
+    return Promise.resolve();
   }
 
   /**
@@ -78,7 +82,7 @@ export class View extends Component<IViewProps, IViewState> {
    */
   public componentWillMount(): void {
     this.index = (this.props.index != null ? this.props.index : this.context.layer) || 0;
-    this.logger.trace(`init view ${this.index} (${this.name})`);
+    this.logger.trace(`init view ${this.id} ${this.index} (${this.name})`);
     this.state = {
       content: this.layer ? this.layer.chunks[this.name] : null,
     };
@@ -88,7 +92,7 @@ export class View extends Component<IViewProps, IViewState> {
    *
    */
   public componentWillUnmount(): void {
-    this.logger.trace(`destroy view ${this.index} (${this.name})`);
+    this.logger.trace(`destroy view ${this.id} ${this.index} (${this.name})`);
   }
 
   /**
@@ -96,7 +100,7 @@ export class View extends Component<IViewProps, IViewState> {
    */
   public render(): JSX.Element | null {
     if (this.state.content) {
-      this.logger.trace(`render view ${this.index} (${this.name})`);
+      this.logger.trace(`render view ${this.id} ${this.index} (${this.name})`);
       if (this.show) {
         return (
           <fieldset>

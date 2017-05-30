@@ -26,6 +26,14 @@ export class FakeNestedApp {
   }
 }
 
+export class Fake2 {
+
+  @page("/")
+  public victory() {
+    return <div>Victory</div>;
+  }
+}
+
 export class FakeApp {
 
   @layout
@@ -49,5 +57,12 @@ export class FakeApp {
   public async nested() {
     await _.timeout(10);
     return <div>Nested:<View/></div>;
+  }
+
+  @page("/nested2", {
+    children: [Fake2],
+  })
+  public nested2() {
+    return <div>Nested2:<View/></div>;
   }
 }

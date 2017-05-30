@@ -322,9 +322,9 @@ export class ReactRouterProvider {
     }
 
     this.layers = copy;
-    this.logger.trace(`transition end (layers=${this.layers.length})`);
+    return this.kernel.emit(olyReactEvents.TRANSITION_RENDER).then(() => {
+      this.logger.trace(`transition end (layers=${this.layers.length})`);
 
-    return _.timeout(1).then(() => {
       return this.kernel.emit(olyReactEvents.TRANSITION_END, transition);
     });
   }

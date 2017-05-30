@@ -13,7 +13,7 @@ import { FakeApp } from "./fixtures";
 
 describe("BrowserReactProvider", () => {
 
-  const kernel = attachKernel()
+  const kernel = attachKernel({OLY_LOGGER_LEVEL: "TRACE"})
     .with(FakeApp, ReactBrowserProvider);
 
   const browser = kernel.get(Browser);
@@ -33,6 +33,11 @@ describe("BrowserReactProvider", () => {
   it("should returns params", async () => {
     await router.go("details", {id: "1", name: "lol"});
     expect(browser.root.textContent).toBe("Layout:Nested:Details(1,lol)");
+  });
+
+  it("should render without conflict", async () => {
+    await router.go("victory");
+    expect(browser.root.textContent).toBe("Layout:Nested2:Victory");
   });
 
   it("should use <Go/>", async () => {

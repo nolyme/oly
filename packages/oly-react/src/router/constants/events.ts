@@ -13,5 +13,6 @@ export const olyReactEvents = {
   /**
    *
    */
+  TRANSITION_RENDER: "oly:transition:render",
   TRANSITION_END: "oly:transition:end",
 };
