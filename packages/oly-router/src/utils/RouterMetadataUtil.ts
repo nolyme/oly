@@ -46,11 +46,11 @@ export class RouterMetadataUtil {
    */
   public static setRoute(router: IRouterMetadata, propertyKey: string, route: Partial<IRouteMetadata>): IRouteMetadata {
     router.routes[propertyKey] = router.routes[propertyKey] || {};
-    router.routes[propertyKey] = _.assign({}, {
+    router.routes[propertyKey] = Object.assign({}, {
       method: "GET",
       path: "/",
     }, router.routes[propertyKey], route, {
-      args: _.assign({}, router.routes[propertyKey].args || {}, route.args || {}),
+      args: Object.assign({}, router.routes[propertyKey].args || {}, route.args || {}),
     });
     router.routes[propertyKey].api = router.routes[propertyKey].api || {};
     router.routes[propertyKey].middlewares = router.routes[propertyKey].middlewares || [];

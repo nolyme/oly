@@ -76,7 +76,7 @@ export class ComponentInjector {
       MetadataUtil.set(lyEvents, events, instance.constructor);
 
       instance[propertyKey + "$$refresh"] = function refreshHandler(this: any, event: IStateMutate) {
-        if (event.key === (state.name || _.targetToString(definition, propertyKey))) {
+        if (event.key === (state.name || _.identity(definition, propertyKey))) {
           this.setState({[event.key]: event.newValue});
         }
       };

@@ -114,7 +114,7 @@ export class ApiMiddlewares {
         throw new Exception(olyApiErrors.undefinedAction(propertyKey));
       }
 
-      logger.trace(`apply ${_.targetToString(definition, propertyKey)}()`); // tslint:disable-line
+      logger.trace(`apply ${_.identity(definition, propertyKey)}()`); // tslint:disable-line
 
       return _.promise(action.apply(target, args)).then((response) => {
         if (response != null) {

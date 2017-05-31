@@ -129,7 +129,7 @@ export class ReactRouterProvider {
       }
     }
 
-    this.logger.debug(`Add route ${meta.url} (${meta.name}) -> ${_.targetToString(meta.target, meta.propertyKey)}`);
+    this.logger.debug(`Add route ${meta.url} (${meta.name}) -> ${_.identity(meta.target, meta.propertyKey)}`);
 
     const stateDeclaration: StateDeclaration = {
       name: meta.name,
@@ -150,11 +150,14 @@ export class ReactRouterProvider {
         ? meta.args.filter((arg) => arg.type === "query")
         : [];
 
-      if (queryParams.length > 0) {
-        stateDeclaration.params = queryParams.reduce((p, arg) => {
-          p[arg.name] = null;
-          return p;
-        }, {});
+      if (queryParams.length > 0 && typeof stateDeclaration.url === "string") {
+        for (const qp of queryParams) {
+          if (stateDeclaration.url.indexOf("?") > -1) {
+            stateDeclaration.url += "&" + qp.name;
+          } else {
+            stateDeclaration.url += "?" + qp.name;
+          }
+        }
       }
     }
 
@@ -190,10 +193,11 @@ export class ReactRouterProvider {
                                propertyKey: string): () => Promise<IChunks> {
     return () => {
 
-      this.logger.trace("resolve " + _.targetToString(definition, propertyKey));
+      this.logger.trace("resolve " + _.identity(definition, propertyKey));
       const meta: IPageMetadataMap = MetadataUtil.deep(lyPages, definition);
       const instance = this.kernel.get(definition);
       const params = this.uiRouter.stateService.transition.injector().get("$stateParams");
+      console.log(this.uiRouter.stateService.transition.$to());
       const action = instance[propertyKey];
       const args: any[] = Array.isArray(meta[propertyKey].args)
         ? meta[propertyKey].args.map((arg) => params[arg.name])
@@ -226,7 +230,7 @@ export class ReactRouterProvider {
             chunks[key] = createElement(Layer, {id: level}, chunks[key]);
           }
 
-          this.logger.trace("resolve " + _.targetToString(definition, propertyKey) + " OK");
+          this.logger.trace("resolve " + _.identity(definition, propertyKey) + " OK");
           return chunks;
         });
     };

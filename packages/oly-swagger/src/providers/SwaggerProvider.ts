@@ -69,7 +69,7 @@ export class SwaggerProvider {
         for (const layer of router.stack) {
 
           const route: any = this.getRouteByLayer(dep.definition, layer);
-          const api: any = _.assign({
+          const api: any = Object.assign({
             parameters: [],
             produces: [
               "application/json",
@@ -172,11 +172,11 @@ export class SwaggerProvider {
       const r = router.routes[propertyKey];
 
       if (r.method === "DEL" && (router.prefix || "") + r.path === layer.path) {
-        return _.assign({}, r, {propertyKey});
+        return Object.assign({}, r, {propertyKey});
       }
 
       if (r.method === layer.methods[layer.methods.length - 1] && (router.prefix || "") + r.path === layer.path) {
-        return _.assign({}, r, {propertyKey});
+        return Object.assign({}, r, {propertyKey});
       }
     }
   }

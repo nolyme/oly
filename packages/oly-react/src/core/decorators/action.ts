@@ -17,7 +17,7 @@ export const action = (target: object | string, propertyKey?: string): any => {
 const $action = (name: string | null) => (target2: any, propertyKey2: string) => {
 
   const actions: IActionMetadataMap = MetadataUtil.get(lyActions, target2.constructor);
-  const newName = name || CommonUtil.targetToString(target2.constructor, propertyKey2);
+  const newName = name || CommonUtil.identity(target2.constructor, propertyKey2);
 
   if (!actions[propertyKey2]) {
     actions[propertyKey2] = {

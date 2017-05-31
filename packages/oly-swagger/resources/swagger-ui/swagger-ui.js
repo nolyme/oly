@@ -14567,7 +14567,7 @@ var baseCopy = require('./baseCopy'),
     keys = require('../object/keys');
 
 /**
- * The base implementation of `_.assign` without support for argument juggling,
+ * The base implementation of `Object.assign` without support for argument juggling,
  * multiple sources, and `customizer` functions.
  *
  * @private

@@ -97,7 +97,7 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public get<T>(url: string, options: IHttpRequest = {}): Promise<T> {
-    return this.request(_.assign({}, options, {url, method: "GET"}));
+    return this.request(Object.assign({}, options, {url, method: "GET"}));
   }
 
   /**
@@ -109,7 +109,7 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public post<T>(url: string, data: any, options: IHttpRequest = {}): Promise<T> {
-    return this.request(_.assign({}, options, {url, method: "POST", data}));
+    return this.request(Object.assign({}, options, {url, method: "POST", data}));
   }
 
   /**
@@ -121,7 +121,7 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public put<T>(url: string, data: any, options: IHttpRequest = {}): Promise<T> {
-    return this.request(_.assign({}, options, {url, method: "PUT", data}));
+    return this.request(Object.assign({}, options, {url, method: "PUT", data}));
   }
 
   /**
@@ -132,6 +132,6 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public del<T>(url: string, options: IHttpRequest = {}): Promise<T> {
-    return this.request(_.assign({}, options, {url, method: "DELETE"}));
+    return this.request(Object.assign({}, options, {url, method: "DELETE"}));
   }
 }

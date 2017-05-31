@@ -47,7 +47,7 @@ export class JwtAuthService {
         },
       },
       this.cryptoService.secret,
-      _.assign({}, config, options));
+      Object.assign({}, config, options));
   }
 
   /**

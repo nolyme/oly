@@ -67,6 +67,6 @@ export class ReactBrowserProvider {
    *
    */
   public get rootElement(): JSX.Element {
-    return createElement(AppContext, {kernel: this.kernel}, createElement(View, {}));
+    return createElement(AppContext, {kernel: this.kernel}, createElement(View));
   }
 }
