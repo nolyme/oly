@@ -1,10 +1,6 @@
 import { Channel, connect, Connection, Options, Replies } from "amqplib";
 import { env, inject, Kernel, Logger, state } from "oly-core";
-import PurgeQueue = Replies.PurgeQueue;
 
-/**
- *
- */
 export class AmqpProvider {
 
   /**
@@ -34,6 +30,7 @@ export class AmqpProvider {
    * @param options     Amqp publish options
    */
   public publish(queue: string, payload: string = "", options: Options.Publish = {}): boolean {
+
     this.logger.debug(`publish into ${queue}`);
 
     options.correlationId = this.kernel.id;
@@ -46,7 +43,7 @@ export class AmqpProvider {
    *
    * @param taskName    Task name (= queue name)
    */
-  public async purge(taskName: string): Promise<PurgeQueue> {
+  public async purge(taskName: string): Promise<Replies.PurgeQueue> {
     return await this.channel.purgeQueue(taskName);
   }
 

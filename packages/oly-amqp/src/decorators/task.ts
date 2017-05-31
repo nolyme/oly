@@ -1,30 +1,32 @@
-import { MetadataUtil } from "oly-core";
-import { lyTasks } from "../constants";
-import { ITaskOptions, ITasks } from "../interfaces";
+import { Options } from "amqplib";
+import { _, IDecorator, Meta } from "oly-core";
+import { olyAmqpKeys } from "../constants/keys";
 
-/**
- * Attach a Job to a propertyKey.
- * Result can be used by KueProvider (Publisher) or WorkerProvider (Subscriber).
- */
-export const task = (options?: Partial<ITaskOptions> | string) => {
-  return (target: object, propertyKey: string) => {
+export interface ITaskOptions {
+  assert?: Options.AssertQueue;
+  consume?: Options.Consume;
+  name?: string;
+}
 
-    const tasks: ITasks = MetadataUtil.get(lyTasks, target.constructor);
+export class TaskDecorator implements IDecorator {
 
-    tasks[propertyKey] = {
-      options: typeof options === "object" ? {
-        assert: options.assert || {},
-        consume: options.consume || {},
-        name: options.name || propertyKey,
-      } : {
-        assert: {},
-        consume: {},
-        name: options || propertyKey,
-      },
-      propertyKey,
-      target: (target.constructor as any),
-    };
+  private options: ITaskOptions;
 
-    MetadataUtil.set(lyTasks, tasks, target.constructor);
-  };
-};
+  public constructor(options: ITaskOptions | string = {}) {
+    if (typeof options === "string") {
+      this.options = {name: options};
+    } else if (typeof options === "object") {
+      this.options = options;
+    }
+  }
+
+  public asMethod(target: object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void {
+    Meta.of({key: olyAmqpKeys.tasks, target, propertyKey}).set({
+      name: this.options.name || _.identity(target, propertyKey),
+      consume: this.options.consume || {},
+      asserts: this.options.assert || {},
+    });
+  }
+}
+
+export const task = Meta.decorator(TaskDecorator);

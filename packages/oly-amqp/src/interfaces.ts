@@ -1,20 +1,14 @@
 import { Message, Options } from "amqplib";
-import { IClass } from "oly-core";
+import { IMetadata } from "oly-core";
 
 export type IMessage = Message;
 
-export interface ITaskOptions {
-  assert: Options.AssertQueue;
-  consume: Options.Consume;
-  name: string;
-}
-
-export interface ITask {
-  target: IClass;
-  propertyKey: string;
-  options: ITaskOptions;
-}
-
-export interface ITasks {
-  [propertyKey: string]: ITask;
+export interface ITasksMetadata extends IMetadata {
+  properties: {
+    [key: string]: {
+      assert: Options.AssertQueue;
+      consume: Options.Consume;
+      name: string;
+    };
+  };
 }

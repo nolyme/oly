@@ -1,6 +1,7 @@
-import { _ } from "oly-core";
+import { _, Exception } from "oly-core";
 import { attachKernel } from "oly-test";
 import { task } from "../src";
+import { message } from "../src/decorators/message";
 import { IMessage } from "../src/interfaces";
 import { AmqpProvider } from "../src/providers/AmqpProvider";
 import { WorkerProvider } from "../src/providers/WorkerProvider";
@@ -9,9 +10,9 @@ class Tasks {
   static stack: IMessage[] = [];
 
   @task("abc.queue")
-  abc(message: IMessage) {
+  abc(@message message: IMessage) {
     if (Tasks.stack.length === 1) {
-      throw new Error("boom");
+      throw new Exception("boom");
     }
     Tasks.stack.push(message);
   }
@@ -21,7 +22,7 @@ const kernel = attachKernel().with(WorkerProvider, Tasks);
 const amqp = kernel.get(AmqpProvider);
 
 describe("AmqpProvider", () => {
-  
+
   it("should publish a message", async () => {
     await amqp.purge("abc.queue");
     await amqp.publish("abc.queue", "Hello");
