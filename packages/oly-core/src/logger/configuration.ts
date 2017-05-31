@@ -1,6 +1,7 @@
 import { Kernel } from "../kernel/Kernel";
 import { JsonLogger } from "./JsonLogger";
 import { MutedLogger } from "./MutedLogger";
+import { _ } from "../kernel/utils/CommonUtil";
 
 /**
  * Hide Logger if production mode is enabled.
@@ -8,7 +9,7 @@ import { MutedLogger } from "./MutedLogger";
  * @param kernel
  */
 export const USE_MUTED_LOGGER_ON_PRODUCTION = (kernel: Kernel) => {
-  if (kernel.isProduction()) {
+  if (_.isProduction()) {
     kernel.with(MutedLogger);
   }
 };
@@ -19,7 +20,7 @@ export const USE_MUTED_LOGGER_ON_PRODUCTION = (kernel: Kernel) => {
  * @param kernel
  */
 export const USE_JSON_LOGGER_ON_PRODUCTION = (kernel: Kernel) => {
-  if (kernel.isProduction()) {
+  if (_.isProduction()) {
     kernel.with(JsonLogger);
   }
 };

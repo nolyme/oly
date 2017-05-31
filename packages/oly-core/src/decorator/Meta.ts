@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import {
   IDecorator,
   IDecoratorConstructor,
@@ -17,7 +16,12 @@ export class Meta {
    *
    */
   public static get reflect() {
-    return Reflect;
+    const g: any = typeof window === "undefined" ? global : window;
+    if (!g.Reflect || !g.Reflect.decorate) {
+      require("reflect-metadata");
+      g.Reflect = Reflect;
+    }
+    return g.Reflect;
   }
 
   /**
