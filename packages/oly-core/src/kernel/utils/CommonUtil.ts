@@ -10,6 +10,18 @@ export class CommonUtil {
    */
   public static noop: any = () => null;
 
+  public static isProduction(): boolean {
+    return process.env.NODE_ENV === "production";
+  }
+
+  public static isTest(): boolean {
+    return process.env.NODE_ENV === "test";
+  }
+
+  public static isBrowser(): boolean {
+    return typeof window === "object" && typeof window.document === "object";
+  }
+
   /**
    * Generate a short id.
    *

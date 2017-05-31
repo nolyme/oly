@@ -610,7 +610,8 @@ describe("Kernel", () => {
       class A {
         @inject k: Kernel;
 
-        @on b() {
+        @on
+        b() {
           return this.k.id;
         }
       }
@@ -647,6 +648,21 @@ describe("Kernel", () => {
       await k.invoke(B, "c");
       expect(b.e).toBe("c");
       expect(await k.invoke(new B("0"), "c")).toBe("c");
+    });
+    it("should have additionalArguments", async () => {
+      class A {
+        b: string;
+
+        c(d: string) {
+          this.b = d;
+        }
+      }
+
+      const k = createKernel();
+      const a = k.get(A);
+      expect(a.b).toBeUndefined();
+      await k.invoke(A, "c", "e");
+      expect(a.b).toBe("e");
     });
   });
 });

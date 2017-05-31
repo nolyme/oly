@@ -57,7 +57,7 @@ export class Exception extends Error {
    * Our witness error.
    * It's useful because we have a virtual #stack and #message.
    */
-  private source: Error;
+  private source: Error & { idm?: boolean };
 
   /**
    * Create a new exception.
@@ -82,20 +82,21 @@ export class Exception extends Error {
     }
 
     // if we have a default message, it will be overridden by children "default message"
-    const isDefaultMessage = this.source.message === Exception.DEFAULT_MESSAGE;
+    this.source.idm = this.source.message === Exception.DEFAULT_MESSAGE;
+  }
 
-    // getters/setters are broken on es6, we need to do this
-    Object.defineProperty(this, "stack", {
-      get: () => this.getStackTrace(),
-    });
-    Object.defineProperty(this, "message", {
-      get: () => this.source.message,
-      set: (m: string) => {
-        if (isDefaultMessage) {
-          this.source.message = m;
-        }
-      },
-    });
+  public get message(): string {
+    return this.source.message;
+  }
+
+  public set message(m: string) {
+    if (this.source.idm) {
+      this.source.message = m;
+    }
+  }
+
+  public get stack() {
+    return this.getStackTrace();
   }
 
   /**

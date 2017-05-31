@@ -506,8 +506,9 @@ export class Kernel {
    *
    * @param definition
    * @param propertyKey
+   * @param additionalArguments
    */
-  public invoke<T>(definition: Class<T> | T, propertyKey: keyof T): Promise<any> {
+  public invoke<T>(definition: Class<T> | T, propertyKey: keyof T, ...additionalArguments: any[]): Promise<any> {
 
     const target = typeof definition === "object" ? definition.constructor as Class<T> : definition;
     const instance: T = typeof definition === "object" ? definition : this.get(target);
@@ -524,7 +525,7 @@ export class Kernel {
 
     this.getLogger().info(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
 
-    return new Promise<any>((resolve) => resolve(action.apply(instance, args)));
+    return new Promise<any>((resolve) => resolve(action.apply(instance, args.concat(additionalArguments))));
   }
 
   // -------------------------------------------------------------------------------------------------------------------
