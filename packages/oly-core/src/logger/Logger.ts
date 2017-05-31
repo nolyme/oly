@@ -1,8 +1,8 @@
 import * as chalk from "chalk";
-import { env } from "../decorators/env";
-import { injectable } from "../decorators/injectable";
-import { IClass } from "../interfaces/types";
-import { Kernel } from "../Kernel";
+import { env } from "../kernel/decorators/env";
+import { injectable } from "../kernel/decorators/injectable";
+import { IClass } from "../kernel/interfaces/global";
+import { Kernel } from "../kernel/Kernel";
 import { LogLevels } from "./LogLevels";
 
 /**

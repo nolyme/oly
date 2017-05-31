@@ -1,8 +1,8 @@
-import { Kernel } from "../src/Kernel";
-import { _ } from "../src/utils/CommonUtil";
+import { Kernel } from "../src/kernel/Kernel";
+import { _ } from "../src/kernel/utils/CommonUtil";
 
 export const createKernel = (options: object = {}) => {
-  return Kernel.create(_.assign({}, {OLY_LOGGER_LEVEL: "ERROR"}, options, process.env));
+  return Kernel.create(Object.assign({}, {OLY_LOGGER_LEVEL: "ERROR"}, options, process.env));
 };
 
 declare global {

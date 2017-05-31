@@ -1,4 +1,4 @@
-import { Kernel } from "../Kernel";
+import { Kernel } from "../kernel/Kernel";
 import { JsonLogger } from "./JsonLogger";
 import { MutedLogger } from "./MutedLogger";
 

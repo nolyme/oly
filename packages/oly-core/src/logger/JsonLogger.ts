@@ -1,6 +1,6 @@
-import { injectable } from "../decorators/injectable";
-import { IClass } from "../interfaces/types";
-import { Kernel } from "../Kernel";
+import { injectable } from "../kernel/decorators/injectable";
+import { IClass } from "../kernel/interfaces/global";
+import { Kernel } from "../kernel/Kernel";
 import { Logger } from "./Logger";
 import { LogLevels } from "./LogLevels";
 
