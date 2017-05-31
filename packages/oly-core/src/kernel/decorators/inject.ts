@@ -1,18 +1,17 @@
 import { IDecorator } from "../../decorator/interfaces";
 import { Meta } from "../../decorator/Meta";
 import { olyCoreKeys } from "../constants/keys";
-import { IAnyFunction } from "../interfaces/global";
 import { Kernel } from "../Kernel";
 
 export interface IInjectOptions {
-  type?: IAnyFunction;
+  type?: Function;
 }
 
 export class InjectDecorator implements IDecorator {
 
   private options: IInjectOptions;
 
-  public constructor(options: IInjectOptions | IAnyFunction = {}) {
+  public constructor(options: IInjectOptions | Function = {}) {
     if (typeof options === "function") {
       this.options = {
         type: options,

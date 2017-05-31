@@ -1,5 +1,3 @@
-import { olyCoreErrors } from "../kernel/constants/errors";
-
 /**
  * It's an enhancement of Error with toJSON, cause, ...
  * It's totally BROKEN in es5. sorry.
@@ -39,6 +37,8 @@ import { olyCoreErrors } from "../kernel/constants/errors";
  */
 export class Exception extends Error {
 
+  public static DEFAULT_MESSAGE = `An exception has been thrown without any message`;
+
   /**
    * Error name.
    * It's not virtual, it's mutable.
@@ -75,14 +75,14 @@ export class Exception extends Error {
         typeof cause === "string"
           ? cause
           : message)
-      || olyCoreErrors.defaultException();
+      || Exception.DEFAULT_MESSAGE;
 
     if (typeof cause !== "string" && typeof cause !== "undefined") {
       this.cause = cause;
     }
 
     // if we have a default message, it will be overridden by children "default message"
-    const isDefaultMessage = this.source.message === olyCoreErrors.defaultException();
+    const isDefaultMessage = this.source.message === Exception.DEFAULT_MESSAGE;
 
     // getters/setters are broken on es6, we need to do this
     Object.defineProperty(this, "stack", {

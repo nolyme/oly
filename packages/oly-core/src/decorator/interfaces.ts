@@ -1,11 +1,9 @@
-import { IAnyFunction } from "../kernel/interfaces/global";
-
 /**
  *
  */
 export interface IMetaIdentifier {
   key: string;
-  target: object | IAnyFunction;
+  target: object | Function;
   propertyKey?: string;
   index?: number;
 }
@@ -14,17 +12,28 @@ export interface IMetaIdentifier {
  *
  */
 export interface IDecorator {
-  asClass?(target: IAnyFunction): void;
+
+  asClass?(target: Function): void;
+
   asProperty?(target: object, propertyKey: string): void;
+
   asMethod?(target: object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void;
+
   asParameter?(target: object, propertyKey: string, index: number): void;
 }
 
 /**
  *
  */
+export interface IDecoratorConstructor {
+  new(data1?: any, data2?: any, data3?: any): IDecorator;
+}
+
+/**
+ *
+ */
 export type IGenericDecorator =
-  (data?: object | IAnyFunction, p?: string, i?: number | TypedPropertyDescriptor<any>) => any;
+  (data?: object | Function, p?: string, i?: number | TypedPropertyDescriptor<any>) => any;
 
 /**
  *

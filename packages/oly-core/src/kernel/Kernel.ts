@@ -13,11 +13,12 @@ import {
   IKernelOnOptions,
   IObserver,
 } from "./interfaces/events";
-import { IAnyDefinition, IAnyFunction, IClass, IClassOf, IDefinition, IFactoryOf } from "./interfaces/global";
 import {
-  IAnyDeclaration,
-  IComplexDefinition,
+  Class,
   IDeclaration,
+  IDeclarations,
+  IDefinition,
+  IFactoryOf,
   IInjectableMetadata,
   IKernelGetOptions,
 } from "./interfaces/injections";
@@ -90,7 +91,7 @@ export class Kernel {
   /**
    * Declarations registry.
    */
-  private declarations: IAnyDeclaration[];
+  private declarations: IDeclarations;
 
   /**
    * States registry.
@@ -232,7 +233,7 @@ export class Kernel {
         }),
       ),
     ).then(() => {
-      this.getLogger().debug("kernel has been successfully started");
+      this.getLogger().info("kernel has been successfully started");
       return this;
     });
   }
@@ -246,7 +247,7 @@ export class Kernel {
       throw new KernelException(olyCoreErrors.notStarted());
     }
 
-    this.getLogger().debug("stop kernel");
+    this.getLogger().trace("stop kernel");
 
     return _.cascade(_.sortDeclarations(this.declarations)
       .filter((d) => !!d.instance && !!d.instance.onStop)
@@ -273,7 +274,7 @@ export class Kernel {
    * @param definitions   List of definitions.
    * @return              Kernel instance.
    */
-  public with(...definitions: Array<IDefinition<any> | IComplexDefinition<any>>): Kernel {
+  public with(...definitions: Array<Class<any> | IDefinition<any>>): Kernel {
 
     for (const injectable of definitions) {
       if (!injectable) {
@@ -293,13 +294,13 @@ export class Kernel {
    * kernel.get(A).b; // "c"
    * ```
    *
-   * @param definition          IDefinition or IComplexDefinition
+   * @param definition          IDefinition or IDefinition
    * @param [options]           Injection options
    * @param [options.parent]    Who want this dependency, default `undefined`
    * @param [options.register]  Register definition ? default `true`
    * @param [options.instance]  Do we have already an instance ? default `undefined`
    */
-  public get<T>(definition: IDefinition<T> | IComplexDefinition<T>, options: IKernelGetOptions = {}): T {
+  public get<T>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions = {}): T {
 
     // skip declaration, just inject
     if (typeof definition === "function" && (options.register === false || !!options.instance)) {
@@ -307,7 +308,7 @@ export class Kernel {
     }
 
     // easy parameters
-    const target: IComplexDefinition<T> =
+    const target: IDefinition<T> =
       !!(definition as any).provide
         ? definition as any
         : {provide: definition};
@@ -409,7 +410,7 @@ export class Kernel {
    * @param key         Identifier as string who defined the value
    * @param forceType   Convert string on given type (number or boolean only) when it's possible
    */
-  public env(key: string, forceType?: IClass | IAnyFunction): any {
+  public env(key: string, forceType?: Function | Function): any {
     const value = this.state(key);
 
     if (typeof value === "string") {
@@ -465,7 +466,7 @@ export class Kernel {
    */
   public emit(key: string, data?: any, options: IKernelEmitOptions = {}): Promise<any> {
 
-    const createAction = (event: IEventListener): IAnyFunction => {
+    const createAction = (event: IEventListener): Function => {
       if (typeof event.action === "function") {
         return event.action;
       }
@@ -506,14 +507,22 @@ export class Kernel {
    * @param definition
    * @param propertyKey
    */
-  public invoke<T>(definition: IClassOf<T> | T, propertyKey: keyof T): Promise<any> {
-    const target = typeof definition === "object" ? definition.constructor : definition;
-    const instance = typeof definition === "object" ? definition : this.get(target as IClass);
-    const action = instance[propertyKey];
+  public invoke<T>(definition: Class<T> | T, propertyKey: keyof T): Promise<any> {
+
+    const target = typeof definition === "object" ? definition.constructor as Class<T> : definition;
+    const instance: T = typeof definition === "object" ? definition : this.get(target);
+    const action: any = instance[propertyKey];
+
+    if (typeof action !== "function") {
+      throw new KernelException(olyCoreErrors.isNotFunction(propertyKey, typeof action));
+    }
+
     const meta = Meta.of({key: olyCoreKeys.arguments, target}).get<IArgumentsMetadata>();
     const args: any[] = meta && meta.args[propertyKey]
       ? meta.args[propertyKey].map((data) => data.handler(this))
       : [];
+
+    this.getLogger().info(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
 
     return new Promise<any>((resolve) => resolve(action.apply(instance, args)));
   }
@@ -537,11 +546,11 @@ export class Kernel {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Create and register a new dependency based on a IComplexDefinition (provide/use).
+   * Create and register a new dependency based on a IDefinition (provide/use).
    *
    * @param target  IDeclaration candidate
    */
-  protected createDependency<T>(target: IComplexDefinition<T>): IDeclaration<T> {
+  protected createDependency<T>(target: IDefinition<T>): IDeclaration<T> {
 
     if (typeof target.use !== "undefined" && typeof target.use !== "function") {
       throw new KernelException(olyCoreErrors.isNotFunction("use", typeof target.use));
@@ -597,7 +606,7 @@ export class Kernel {
    * - However state is kept.
    *
    */
-  protected removeDependency(declaration: IAnyDeclaration): void {
+  protected removeDependency(declaration: IDeclaration<any>): void {
     const index = this.declarations.indexOf(declaration);
     if (index > -1) {
       this.declarations.splice(index, 1);
@@ -618,7 +627,7 @@ export class Kernel {
    * @param dependency  Kernel dependency
    * @param parent      Instance who requires this instance
    */
-  protected createInstance<T>(dependency: IDeclaration<T>, parent?: IClass) {
+  protected createInstance<T>(dependency: IDeclaration<T>, parent?: Function) {
 
     const func = dependency.use as any;
 
@@ -631,10 +640,10 @@ export class Kernel {
 
       const instance: T = (func as IFactoryOf<T>)(this, parent);
 
-      return this.inject<T>(instance.constructor as IDefinition<T>, instance);
+      return this.inject<T>(instance.constructor as Class<T>, instance);
     }
 
-    return this.inject<T>(dependency.use as any);
+    return this.inject<T>(dependency.use as Class<T>);
   }
 
   /**
@@ -648,7 +657,7 @@ export class Kernel {
    * @param instance      Instance to use, optional
    * @returns {T}         The new instance
    */
-  protected inject<T>(definition: IAnyDefinition, instance?: T): T {
+  protected inject<T>(definition: Class<T>, instance?: T): T {
 
     const meta = Meta.of({key: olyCoreKeys.arguments, target: definition}).get<IArgumentsMetadata>();
     const args: any[] = meta && meta.args.$constructor
@@ -679,7 +688,7 @@ export class Kernel {
    * @param definition   Function/Class/Definition with IInjectionsMetadata
    * @param instance     Instance which will be processed
    */
-  protected processInjections<T>(definition: IAnyDefinition, instance: T): T {
+  protected processInjections<T>(definition: Class<T>, instance: T): T {
 
     const injections = Meta.of({key: olyCoreKeys.injections, target: definition}).get<IInjectionsMetadata>();
     if (injections) {
@@ -723,7 +732,7 @@ export class Kernel {
    * @param definition   IDefinition with @state / @env
    * @param instance     Instance to processed
    */
-  protected processStates<T>(definition: IAnyDefinition, instance: T): T {
+  protected processStates<T>(definition: Class<T>, instance: T): T {
 
     const statesMetadata = Meta.of({key: olyCoreKeys.states, target: definition}).get<IStatesMetadata>();
     if (statesMetadata) {
@@ -770,13 +779,13 @@ export class Kernel {
    * @param definition    IDefinition with event metadata
    * @param instance      Instance to decorate
    */
-  protected processEvents<T>(definition: IAnyDefinition, instance: T): T {
+  protected processEvents<T>(definition: Class<T>, instance: T): T {
 
     const eventsMetadata = Meta.of({key: olyCoreKeys.events, target: definition}).get<IEventsMetadata>();
     if (eventsMetadata) {
 
       const observers: IObserver[] = [];
-      const target = instance.constructor as IClass;
+      const target = instance.constructor as Class<T>;
       const keys = Object.keys(eventsMetadata.properties);
 
       for (const propertyKey of keys) {
@@ -805,7 +814,7 @@ export class Kernel {
    *
    * @param definition    Definition
    */
-  protected forceProvideDecorator<T>(definition: IComplexDefinition<T>) {
+  protected forceProvideDecorator<T>(definition: IDefinition<T>) {
     const injectableMetadata = Meta.of({
       key: olyCoreKeys.injectable,
       target: definition.provide,
@@ -822,7 +831,7 @@ export class Kernel {
    */
   protected getLogger() {
     if (!this.logger) {
-      this.logger = this.get(Logger).as("Kernel");
+      this.logger = this.inject(Logger, new Logger(this.id).as("Kernel"));
     }
     return this.logger;
   }

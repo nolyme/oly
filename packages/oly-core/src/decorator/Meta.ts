@@ -1,6 +1,12 @@
 import "reflect-metadata";
-import { IAnyFunction, IClassOf } from "../kernel/interfaces/global";
-import { IDecorator, IGenericDecorator, IGenericDecoratorFactory, IMetadata, IMetaIdentifier } from "./interfaces";
+import {
+  IDecorator,
+  IDecoratorConstructor,
+  IGenericDecorator,
+  IGenericDecoratorFactory,
+  IMetadata,
+  IMetaIdentifier,
+} from "./interfaces";
 
 /**
  *
@@ -10,54 +16,60 @@ export class Meta {
   /**
    *
    */
-  public static reflect = Reflect;
+  public static get reflect() {
+    return Reflect;
+  }
 
   /**
    *
    * @param identifier
    */
-  public static of(identifier: IMetaIdentifier) {
+  public static of(identifier: IMetaIdentifier): Meta {
     return new Meta(identifier);
   }
 
   /**
    *
-   * @param def
-   * @param data
+   * @param Decorator
+   * @param data1
    * @param data2
+   * @param data3
    */
-  public static decorator<T>(def: IClassOf<IDecorator>,
-                             data?: any,
-                             data2?: any): (IGenericDecoratorFactory<T> & IGenericDecorator) {
+  public static decorator<T>(Decorator: IDecoratorConstructor,
+                             data1?: any,
+                             data2?: any,
+                             data3?: any): (IGenericDecoratorFactory<T> & IGenericDecorator) {
     return (t: any, p?: any, i?: any) => {
-      const d = new def(data, data2);
+      const d = new Decorator(data1, data2, data3);
       if (!this.negotiator(t, p, i, d)) {
-        return this.decoratorWithoutOptions(def, t, p) as any;
+        return this.decoratorWithoutOptions(Decorator, t, p, i) as any;
       }
     };
   }
 
   /**
    *
-   * @param def
+   * @param Decorator
    */
-  public static decoratorWithOptions<T>(def: IClassOf<IDecorator>): IGenericDecoratorFactory<T> {
-    return (data: T, data2: any) => {
-      return this.decorator(def, data, data2);
+  public static decoratorWithOptions<T>(Decorator: IDecoratorConstructor): IGenericDecoratorFactory<T> {
+    return (data1: T, data2: any, data3: any) => {
+      return this.decorator(Decorator, data1, data2, data3);
     };
   }
 
   /**
    *
-   * @param def
-   * @param data
+   * @param Decorator
+   * @param data1
    * @param data2
+   * @param data3
    */
-  public static decoratorWithoutOptions(def: IClassOf<IDecorator>,
-                                        data?: any,
-                                        data2?: any): IGenericDecorator {
+  public static decoratorWithoutOptions(Decorator: IDecoratorConstructor,
+                                        data1?: any,
+                                        data2?: any,
+                                        data3?: any): IGenericDecorator {
     return (t: any, p?: any, i?: any) => {
-      const d = new def(data, data2);
+      const d = new Decorator(data1, data2, data3);
       this.negotiator(t, p, i, d);
     };
   }
@@ -67,7 +79,7 @@ export class Meta {
    * @param target
    * @param propertyKey
    */
-  public static designType(target: object | IAnyFunction, propertyKey: string): IAnyFunction {
+  public static designType(target: object | Function, propertyKey: string): Function {
     if (propertyKey === "$constructor") {
       return Meta.reflect.getOwnMetadata("design:type",
         typeof target === "function" ? target : target.constructor);
@@ -82,7 +94,7 @@ export class Meta {
    * @param target
    * @param propertyKey
    */
-  public static designParamTypes(target: object | IAnyFunction, propertyKey: string): IAnyFunction[] {
+  public static designParamTypes(target: object | Function, propertyKey: string): Function[] {
     if (propertyKey === "$constructor") {
       return Meta.reflect.getOwnMetadata("design:paramtypes",
         typeof target === "function" ? target : target.constructor);
@@ -91,6 +103,11 @@ export class Meta {
       typeof target === "function" ? target.prototype : target,
       propertyKey);
   }
+
+  /**
+   *
+   */
+  private static Reflect: any;
 
   /**
    *

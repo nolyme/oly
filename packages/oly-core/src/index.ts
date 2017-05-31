@@ -13,7 +13,6 @@ export * from "./kernel/constants/events";
 export * from "./kernel/interfaces/events";
 export * from "./kernel/interfaces/injections";
 export * from "./kernel/interfaces/states";
-export * from "./kernel/interfaces/global";
 export * from "./kernel/interfaces/arguments";
 export * from "./kernel/exceptions/KernelException";
 export * from "./kernel/Kernel";

@@ -1,7 +1,6 @@
 import * as chalk from "chalk";
 import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
-import { IClass } from "../kernel/interfaces/global";
 import { Kernel } from "../kernel/Kernel";
 import { LogLevels } from "./LogLevels";
 
@@ -10,9 +9,8 @@ import { LogLevels } from "./LogLevels";
  */
 @injectable({
   singleton: false,
-  use: (kernel: Kernel, parent: IClass) => {
-    const name = (!!parent && typeof parent.name === "string") ? parent.name : Logger.DEFAULT_NAME;
-    return new Logger(kernel.id, name);
+  use: (kernel: Kernel, parent?: Function) => {
+    return new Logger(kernel.id).as(parent ? parent.name : "");
   },
 })
 export class Logger {
@@ -42,23 +40,9 @@ export class Logger {
   @env("OLY_LOGGER_LEVEL")
   protected logLevel: string = "INFO";
 
-  protected contextId: string;
+  protected componentName: string = Logger.DEFAULT_NAME;
 
-  protected componentName: string;
-
-  /**
-   * Create a new logger with ctx id and component name
-   * ```ts
-   * const logger = new Logger('Ak3ja0mPln0', 'MySuperName');
-   * logger.info('Hello');
-   * ```
-   *
-   * @param contextId
-   * @param componentName
-   */
-  constructor(contextId: string, componentName: string) {
-    this.contextId = contextId;
-    this.componentName = componentName;
+  public constructor(protected contextId: string = "") {
   }
 
   /**

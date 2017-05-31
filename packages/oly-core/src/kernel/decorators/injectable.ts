@@ -1,12 +1,12 @@
 import { IDecorator } from "../../decorator/interfaces";
 import { Meta } from "../../decorator/Meta";
 import { olyCoreKeys } from "../constants/keys";
-import { IAnyFunction, IClassOf, IFactoryOf } from "../interfaces/global";
+import { Class, IFactoryOf } from "../interfaces/injections";
 
 export interface IInjectableOptions {
   singleton?: boolean;
   use?: IFactoryOf<any>;
-  provide?: IClassOf<any>;
+  provide?: Class<any>;
 }
 
 export class InjectableDecorator implements IDecorator {
@@ -17,7 +17,7 @@ export class InjectableDecorator implements IDecorator {
     this.options = options;
   }
 
-  public asClass(t: IAnyFunction): void {
+  public asClass(t: Function): void {
     Meta.of({key: olyCoreKeys.injectable, target: t}).set(this.options);
   }
 }

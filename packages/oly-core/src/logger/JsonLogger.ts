@@ -1,5 +1,4 @@
 import { injectable } from "../kernel/decorators/injectable";
-import { IClass } from "../kernel/interfaces/global";
 import { Kernel } from "../kernel/Kernel";
 import { Logger } from "./Logger";
 import { LogLevels } from "./LogLevels";
@@ -14,9 +13,8 @@ import { LogLevels } from "./LogLevels";
 @injectable({
   provide: Logger,
   singleton: false,
-  use: (kernel: Kernel, parent: IClass) => {
-    const name = (!!parent && typeof parent.name === "string") ? parent.name : Logger.DEFAULT_NAME;
-    return new JsonLogger(kernel.id, name);
+  use: (kernel: Kernel, parent: Function) => {
+    return new JsonLogger(kernel.id).as(parent ? parent.name : "");
   },
 })
 export class JsonLogger extends Logger {

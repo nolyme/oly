@@ -1,4 +1,3 @@
-import { IAnyDefinition, IAnyFunction, IClass } from "../interfaces/global";
 /**
  * Collection of internal utils.
  */
@@ -110,7 +109,7 @@ export class CommonUtil {
    *
    * Class A { b() {} } -> "A.b".
    */
-  public static identity(target: IAnyFunction | IClass | object, propertyKey: string): string {
+  public static identity(target: Function | object, propertyKey: string): string {
     if (typeof target === "object") {
       return `${target.constructor.name}.${propertyKey}`;
     }
@@ -172,7 +171,7 @@ export class CommonUtil {
    */
   public static sortDeclarations(declarations: IDeclarations): IDeclarations {
     return _.bubble(declarations, (list, index) => {
-      const findDefinitionInTree = (declaration: IAnyDeclaration, definition: IAnyDefinition) => {
+      const findDefinitionInTree = (declaration: IAnyDeclaration, definition: Function) => {
 
         if (_.isEqualClass(declaration.definition, definition)) {
           return true;
@@ -206,7 +205,7 @@ export class CommonUtil {
    *
    * @param definition  Class definition
    */
-  public static isProvider(definition: IClass) {
+  public static isProvider(definition: Function) {
 
     if (
       !!definition.prototype.onConfigure ||

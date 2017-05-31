@@ -1,5 +1,5 @@
 import { IMetadata } from "../../decorator/interfaces";
-import { IAnyDefinition, IClass, IClassOf, IDefinition, IFactoryOf } from "./global";
+import { Kernel } from "../Kernel";
 
 /**
  * How to define a declaration.
@@ -8,37 +8,32 @@ export interface IDeclaration<T> {
   // each or once ?
   singleton: boolean;
   // the definition
-  definition: IDefinition<T>;
+  definition: Class<T>;
   // cached instance
   instance?: T;
   // how to create our instance
-  use: IClassOf<T> | IFactoryOf<T>;
+  use: Class<T> | IFactoryOf<T>;
   // who rely on it
   children: Array<{
     // definition
-    type: IAnyDefinition;
+    type: Function;
   }>;
 }
-
-/**
- * @alias IDeclaration<T>
- */
-export type IAnyDeclaration = IDeclaration<any>;
 
 /**
  * Public list of declarations.
  * Used by #onStart() and #onStop().
  */
-export type IDeclarations = IAnyDeclaration[];
+export type IDeclarations = Array<IDeclaration<any>>;
 
 /**
  * Inline complex definition.
  */
-export interface IComplexDefinition<T> {
+export interface IDefinition<T> {
   // definition identifier
-  provide: IClassOf<T>;
+  provide: Class<T>;
   // the used definition/factory. default is value of `provide`
-  use?: IClassOf<T> | IFactoryOf<T>;
+  use?: Class<T> | IFactoryOf<T>;
 }
 
 /**
@@ -51,7 +46,7 @@ export interface IInjectableMetadata extends IMetadata {
     // specify a custom instance factory
     use?: IFactoryOf<any>;
     // force the definition identifier
-    provide?: IClassOf<any>;
+    provide?: Class<any>;
   };
 }
 
@@ -62,7 +57,7 @@ export interface IInjectionsMetadata extends IMetadata {
   properties: {
     [key: string]: {
       // definition
-      type: IAnyDefinition;
+      type: Class<any>;
     };
   };
 }
@@ -71,7 +66,39 @@ export interface IInjectionsMetadata extends IMetadata {
  * Kernel#get() options.
  */
 export interface IKernelGetOptions {
-  parent?: IClass;
+  parent?: Function;
   register?: boolean;
   instance?: any;
+}
+
+/**
+ * Typed factory of a class.
+ * This is used by Kernel for Factory injections.
+ */
+export type IFactoryOf<T> = (kernel: Kernel, parent?: Function) => T;
+
+/**
+ *
+ */
+export interface Class<T> { // tslint:disable-line
+  name: string;
+
+  new(...args: any[]): T;
+}
+
+/**
+ * This is how we see a provider.
+ * It's just 3 little hooks.
+ * This is completely optional, do not use it.
+ */
+export interface IProvider {
+
+  // before onStart(), A -> Z
+  onConfigure?(deps: Array<IDeclaration<any>>): Promise<void> | void;
+
+  // when you Kernel#start(), Z -> A
+  onStart?(deps: Array<IDeclaration<any>>): Promise<void> | void;
+
+  // when you Kernel#stop(), Z -> A
+  onStop?(deps: Array<IDeclaration<any>>): Promise<void> | void;
 }

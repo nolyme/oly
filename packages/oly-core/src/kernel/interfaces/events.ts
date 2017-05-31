@@ -1,5 +1,5 @@
 import { IMetadata } from "../../decorator/interfaces";
-import { IClass } from "./global";
+import { Class } from "./injections";
 
 /**
  *
@@ -10,7 +10,7 @@ export type IEventCallback = (data?: object) => any;
  *
  */
 export interface IEventReference {
-  target: IClass;
+  target: Class<any>;
   propertyKey: string;
   instance?: any;
 }
@@ -35,11 +35,16 @@ export interface IObserver {
 /**
  *
  */
+export interface IEventProperty {
+  name?: string;
+}
+
+/**
+ *
+ */
 export interface IEventsMetadata extends IMetadata {
   properties: {
-    [key: string]: {
-      name?: string;
-    };
+    [key: string]: IEventProperty;
   };
 }
 
