@@ -1,7 +1,7 @@
 /**
  * Collection of internal utils.
  */
-import { IAnyDeclaration, IDeclarations } from "../interfaces/injections";
+import { IDeclaration, IDeclarations } from "../interfaces/injections";
 
 export class CommonUtil {
 
@@ -171,14 +171,14 @@ export class CommonUtil {
    */
   public static sortDeclarations(declarations: IDeclarations): IDeclarations {
     return _.bubble(declarations, (list, index) => {
-      const findDefinitionInTree = (declaration: IAnyDeclaration, definition: Function) => {
+      const findDefinitionInTree = (declaration: IDeclaration<any>, definition: Function) => {
 
         if (_.isEqualClass(declaration.definition, definition)) {
           return true;
         }
 
         for (const child of declaration.children) {
-          const childDependency = declarations.find((d: IAnyDeclaration) =>
+          const childDependency = declarations.find((d: IDeclaration<any>) =>
             _.isEqualClass(d.definition, child.type));
           if (!!childDependency && findDefinitionInTree(childDependency, definition)) {
             return true;

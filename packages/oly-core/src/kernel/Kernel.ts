@@ -323,8 +323,8 @@ export class Kernel {
     // check if dependency already exists
     // -> `definition` is the first criteria of research
     // -> but if you are doing a swap, the real criteria is `use`, not `definition`
-    const match = this.declarations
-      .filter((i) => _.isEqualClass(i.definition, target.provide) || _.isEqualClass(i.use, target.provide))[0];
+    const match = this.declarations.find((i) =>
+      _.isEqualClass(i.definition, target.provide) || _.isEqualClass(i.use, target.provide));
 
     // check if dependency will be updated
     if (!!target.use && match && match.use !== target.use) {
@@ -615,9 +615,12 @@ export class Kernel {
       declaration.instance.__free__();
     }
     declaration.children
-      .map((c) => this.declarations.filter((d) => d.definition === c.type)[0])
-      .filter((c) => !!c)
-      .forEach((c) => this.removeDependency(c));
+      .map((c) => this.declarations.find((d) => d.definition === c.type))
+      .forEach((c) => {
+        if (c) {
+          this.removeDependency(c);
+        }
+      });
   }
 
   /**
