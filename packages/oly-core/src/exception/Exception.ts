@@ -85,16 +85,26 @@ export class Exception extends Error {
     this.source.idm = this.source.message === Exception.DEFAULT_MESSAGE;
   }
 
+  /**
+   *
+   */
   public get message(): string {
     return this.source.message;
   }
 
+  /**
+   *
+   * @param m
+   */
   public set message(m: string) {
     if (this.source.idm) {
       this.source.message = m;
     }
   }
 
+  /**
+   *
+   */
   public get stack() {
     return this.getStackTrace();
   }

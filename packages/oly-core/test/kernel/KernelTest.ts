@@ -381,13 +381,6 @@ describe("Kernel", () => {
       expect(kernel.get(A).getEnv()).toBe("1");
     });
 
-    it("should use NODE_ENV", () => {
-      process.env.NODE_ENV = "production";
-      expect(createKernel().isProduction()).toBeTruthy();
-      process.env.NODE_ENV = "test";
-      expect(createKernel().isProduction()).toBeFalsy();
-    });
-
     it("should parse boolean", () => {
       expect(createKernel({ok: "true"}).env("ok", Boolean)).toBe(true);
       expect(createKernel({ok: "true"}).state("ok")).toBe("true");
@@ -661,7 +654,7 @@ describe("Kernel", () => {
       const k = createKernel();
       const a = k.get(A);
       expect(a.b).toBeUndefined();
-      await k.invoke(A, "c", "e");
+      await k.invoke(A, "c", ["e"]);
       expect(a.b).toBe("e");
     });
   });

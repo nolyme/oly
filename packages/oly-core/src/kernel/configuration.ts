@@ -19,15 +19,6 @@ export const USE_PROCESS_ENV = (kernel: Kernel) => {
 };
 
 /**
- * Add process.env.NODE_ENV into kernel store.
- *
- * @param kernel
- */
-export const USE_NODE_ENV = (kernel: Kernel) => {
-  kernel.state("NODE_ENV", process.env.NODE_ENV);
-};
-
-/**
  *
  * @param kernel
  */

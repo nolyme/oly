@@ -14,14 +14,3 @@ describe("USE_PROCESS_ENV()", () => {
     equal(kernel.env("HELLO"), "ERROR");
   });
 });
-
-describe("USE_NODE_ENV()", () => {
-  it("should use global NODE_ENV", () => {
-    process.env.NODE_ENV = "production";
-    const kernel = new Kernel().configure(USE_NODE_ENV);
-    equal(kernel.isProduction(), true);
-    process.env.NODE_ENV = "watwat";
-    const kernel2 = new Kernel().configure(USE_NODE_ENV);
-    equal(kernel2.isProduction(), false);
-  });
-});
