@@ -1,3 +1,4 @@
+import "oly-core/node_modules/reflect-metadata";
 import { attachKernel } from "oly-test";
 import { JsonMapper } from "../src/services/JsonMapper";
 import { Address, Person, Status } from "./fixtures";

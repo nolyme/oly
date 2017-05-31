@@ -21,6 +21,7 @@ import {
   IFactoryOf,
   IInjectableMetadata,
   IKernelGetOptions,
+  IProvider,
 } from "./interfaces/injections";
 import { IStateMutateEvent, IStatesMetadata, IStore } from "./interfaces/states";
 import { CommonUtil as _ } from "./utils/CommonUtil";
@@ -219,17 +220,19 @@ export class Kernel {
     const declarations = _.sortDeclarations(this.declarations);
 
     return _.cascade(declarations
-      .filter((d) => !!d.instance && !!d.instance.onConfigure)
       .map((d) => () => {
         this.getLogger().debug("configure " + d.definition.name);
-        return d.instance.onConfigure(this.declarations);
+        if (d.instance && d.instance.onConfigure) {
+          return d.instance.onConfigure(this.declarations);
+        }
       }),
     ).then(() =>
       _.cascade(declarations
-        .filter((d) => !!d.instance && !!d.instance.onStart)
         .map((d) => () => {
-          this.getLogger().debug("start " + d.definition.name);
-          return d.instance.onStart(this.declarations);
+          if (d.instance && d.instance.onStart) {
+            this.getLogger().debug("start " + d.definition.name);
+            return d.instance.onStart(this.declarations);
+          }
         }),
       ),
     ).then(() => {
@@ -250,11 +253,12 @@ export class Kernel {
     this.getLogger().trace("stop kernel");
 
     return _.cascade(_.sortDeclarations(this.declarations)
-      .filter((d) => !!d.instance && !!d.instance.onStop)
       .reverse()
       .map((d) => () => {
-        this.getLogger().debug("stop " + d.definition.name);
-        return d.instance.onStop(this.declarations);
+        if (d.instance && d.instance.onStop) {
+          this.getLogger().debug("stop " + d.definition.name);
+          return d.instance.onStop(this.declarations);
+        }
       }),
     ).then(() => {
       this.started = false;
@@ -274,7 +278,7 @@ export class Kernel {
    * @param definitions   List of definitions.
    * @return              Kernel instance.
    */
-  public with(...definitions: Array<Class<any> | IDefinition<any>>): Kernel {
+  public with(...definitions: Array<Class | IDefinition>): Kernel {
 
     for (const injectable of definitions) {
       if (!injectable) {
@@ -300,7 +304,7 @@ export class Kernel {
    * @param [options.register]  Register definition ? default `true`
    * @param [options.instance]  Do we have already an instance ? default `undefined`
    */
-  public get<T>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions = {}): T {
+  public get<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions = {}): T {
 
     // skip declaration, just inject
     if (typeof definition === "function" && (options.register === false || !!options.instance)) {
@@ -323,11 +327,12 @@ export class Kernel {
     // check if dependency already exists
     // -> `definition` is the first criteria of research
     // -> but if you are doing a swap, the real criteria is `use`, not `definition`
-    const match = this.declarations.find((i) =>
-      _.isEqualClass(i.definition, target.provide) || _.isEqualClass(i.use, target.provide));
+    const match: IDeclaration | undefined = this.declarations.find((i) =>
+      _.isEqualClass(i.definition, target.provide) ||
+      _.isEqualClass(i.use, target.provide));
 
     // check if dependency will be updated
-    if (!!target.use && match && match.use !== target.use) {
+    if (target.use && match && match.use !== target.use) {
       if (this.started) {
         throw new KernelException(olyCoreErrors.noDepUpdate(target.provide.name));
       }
@@ -339,9 +344,9 @@ export class Kernel {
       return this.get(definition, options);
     }
 
-    const dependency = !!match
-      ? match
-      : this.createDependency(target);
+    const dependency: IDeclaration<T> = !!match
+      ? match as IDeclaration<T>
+      : this.createDependency<T>(target);
 
     // by default, each dep is a lazy singleton
     if (dependency.singleton) {
@@ -593,7 +598,7 @@ export class Kernel {
    * - However state is kept.
    *
    */
-  protected removeDependency(declaration: IDeclaration<any>): void {
+  protected removeDependency(declaration: IDeclaration): void {
     const index = this.declarations.indexOf(declaration);
     if (index > -1) {
       this.declarations.splice(index, 1);
@@ -804,7 +809,7 @@ export class Kernel {
    *
    * @param definition    Definition
    */
-  protected forceProvideDecorator<T>(definition: IDefinition<T>) {
+  protected forceProvideDecorator<T>(definition: IDefinition) {
     const injectableMetadata = Meta.of({
       key: olyCoreKeys.injectable,
       target: definition.provide,

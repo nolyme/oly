@@ -1,11 +1,11 @@
-import { attachKernel } from "oly-test";
+import { Kernel } from "oly-core";
 import { IField } from "../src/interfaces";
 import { JsonValidator } from "../src/services/JsonValidator";
 import { TypeUtil } from "../src/utils/TypeUtil";
 
 describe("JsonValidator", () => {
 
-  const kernel = attachKernel();
+  const kernel = Kernel.create();
   const validator = kernel.get(JsonValidator);
 
   it("should valid string", () => {

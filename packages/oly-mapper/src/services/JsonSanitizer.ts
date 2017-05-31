@@ -1,6 +1,7 @@
-import { IClass, IClassOf } from "oly-core";
-import { IField, IMetaNumber, IMetaString } from "../interfaces";
-import { FieldMetadataUtil } from "../utils/FieldMetadataUtil";
+import { Class, Meta } from "oly-core";
+import { olyMapperKeys } from "../constants/keys";
+import { IField, IFieldsMetadata, IMetaNumber, IMetaString } from "../interfaces";
+import { TypeUtil } from "../utils/TypeUtil";
 
 export class JsonSanitizer {
 
@@ -10,13 +11,19 @@ export class JsonSanitizer {
    * @param definition      Class definition
    * @param source          Json object data
    */
-  public sanitizeClass<T>(definition: IClassOf<T>, source: T): T {
+  public sanitizeClass<T>(definition: Class<T>, source: T): T {
 
-    const fields = FieldMetadataUtil.getFields(definition);
-    for (const field of fields) {
-      const key = field.name;
-      if (source[key] != null) {
-        source[key] = this.sanitizeField(field, source[key]);
+    const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).get<IFieldsMetadata>();
+    if (fieldsMetadata) {
+
+      const keys = Object.keys(fieldsMetadata.properties);
+      for (const propertyKey of keys) {
+        const field = fieldsMetadata.properties[propertyKey];
+        const key = field.name;
+
+        if (source[key] != null) {
+          source[key] = this.sanitizeField(field, source[key]);
+        }
       }
     }
 
@@ -24,13 +31,13 @@ export class JsonSanitizer {
   }
 
   public sanitizeField(field: IField, value: any): any {
-    const type = FieldMetadataUtil.getFieldType(field.type);
+    const type = TypeUtil.getFieldType(field.type);
     if (type === "array" && !!field.of && Array.isArray(value)) {
       const item = typeof field.of === "function" ? {type: field.of, name: ""} : field.of;
       return value.map((v) => this.sanitizeField(item, v));
     } else if (type === "object" && typeof field.type === "function") {
-      const definition = field.type as IClass;
-      if (FieldMetadataUtil.hasFields(definition)) {
+      const definition = field.type as Class;
+      if (Meta.of({key: olyMapperKeys.fields, target: definition}).has()) {
         return this.sanitizeClass(definition, value);
       } else {
         return value;

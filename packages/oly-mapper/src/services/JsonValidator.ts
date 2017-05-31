@@ -1,6 +1,6 @@
 import * as Ajv from "ajv";
 import { ValidateFunction } from "ajv";
-import { IClass, inject, state } from "oly-core";
+import { inject, state } from "oly-core";
 import { ValidationException } from "../exceptions/ValidationException";
 import { IField } from "../interfaces";
 import { JsonSchemaReader } from "./JsonSchemaReader";
@@ -11,7 +11,7 @@ export class JsonValidator {
   public ajv: Ajv.Ajv = this.createAjv();
 
   @state()
-  protected cache: Array<[IClass, ValidateFunction]> = [];
+  protected cache: Array<[Function, ValidateFunction]> = [];
 
   @inject(JsonSchemaReader)
   protected schemaReader: JsonSchemaReader;
@@ -22,7 +22,7 @@ export class JsonValidator {
    * @param definition      Class definition
    * @param source          Json object data
    */
-  public validateClass<T>(definition: IClass, source: T): T {
+  public validateClass<T>(definition: Function, source: T): T {
 
     const validate = this.getValidationFunction(definition);
     const valid = validate(source);
@@ -58,13 +58,14 @@ export class JsonValidator {
    * @param definition    Class definition
    * @return              Validate function
    */
-  public getValidationFunction(definition: IClass): ValidateFunction {
+  public getValidationFunction(definition: Function): ValidateFunction {
 
     const func = this.cache.filter((pair) => pair[0] === definition)[0];
     if (!!func) {
       return func[1];
     }
 
+    // ajv already cache validators but we cache also JsonSchema
     const schema = this.schemaReader.extractSchema(definition);
     const validate = this.ajv.compile(schema);
     this.cache.push([definition, validate]);

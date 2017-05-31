@@ -9,17 +9,17 @@ export class AmqpProvider {
   @env("OLY_AMQP_URL")
   public readonly url: string = "amqp://localhost";
 
-  @inject
-  protected readonly kernel: Kernel;
-
-  @inject
-  protected readonly logger: Logger;
-
   @state
   public connection: Connection;
 
   @state
   public channel: Channel;
+
+  @inject
+  protected readonly kernel: Kernel;
+
+  @inject
+  protected readonly logger: Logger;
 
   /**
    * Push message into a queue.

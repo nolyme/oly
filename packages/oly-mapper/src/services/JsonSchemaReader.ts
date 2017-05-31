@@ -1,6 +1,7 @@
-import { IClass } from "oly-core";
-import { IField, IJsonSchema, IMetaArray } from "../interfaces";
-import { FieldMetadataUtil } from "../utils/FieldMetadataUtil";
+import { Meta } from "oly-core";
+import { olyMapperKeys } from "../constants/keys";
+import { IField, IFieldsMetadata, IJsonSchema, IMetaArray } from "../interfaces";
+import { TypeUtil } from "../utils/TypeUtil";
 
 export class JsonSchemaReader {
 
@@ -30,35 +31,46 @@ export class JsonSchemaReader {
    * @param definition    Class definition
    * @return              JsonSchema
    */
-  public extractSchema(definition: IClass): IJsonSchema {
+  public extractSchema(definition: Function): IJsonSchema {
 
-    const fields = FieldMetadataUtil.getFields(definition);
     const jsonSchema: IJsonSchema = {
       name: definition.name,
       type: "object",
     };
     jsonSchema.properties = {};
 
-    for (const field of fields) {
-      jsonSchema.properties[field.name] = this.extractProperty(field);
-      if (field.required) {
-        jsonSchema.required = jsonSchema.required || [];
-        jsonSchema.required.push(field.name);
+    const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).get<IFieldsMetadata>();
+    if (fieldsMetadata) {
+
+      const keys = Object.keys(fieldsMetadata.properties);
+      for (const propertyKey of keys) {
+        const field = fieldsMetadata.properties[propertyKey];
+        const key = field.name;
+
+        jsonSchema.properties[field.name] = this.extractProperty(field);
+        if (field.required) {
+          jsonSchema.required = jsonSchema.required || [];
+          jsonSchema.required.push(field.name);
+        }
       }
     }
 
     return jsonSchema;
   }
 
+  /**
+   *
+   * @param field
+   */
   public extractProperty(field: IField): IJsonSchema {
 
     const jsonSchema: IJsonSchema = this.extractJsonSchemaKeywords(field);
 
-    jsonSchema.type = FieldMetadataUtil.getFieldType(field.type);
+    jsonSchema.type = TypeUtil.getFieldType(field.type);
 
-    if (jsonSchema.type === "object" && FieldMetadataUtil.hasFields(field.type)) {
-      if (FieldMetadataUtil.hasFields(field.type)) {
-        return this.extractSchema(field.type as IClass);
+    if (jsonSchema.type === "object") {
+      if (Meta.of({key: olyMapperKeys.fields, target: field.type}).has()) {
+        return this.extractSchema(field.type as Function);
       } else if (!!field.type.prototype.toJSON) {
         // object -> string (for Object.toJSON() like Date)
         jsonSchema.type = "string";
@@ -77,7 +89,6 @@ export class JsonSchemaReader {
   /**
    *
    * @param data
-   * @return {{}}
    */
   protected extractJsonSchemaKeywords(data: object): object {
     return Object.keys(data).reduce((result, key) => {

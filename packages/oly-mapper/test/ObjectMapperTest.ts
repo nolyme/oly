@@ -22,8 +22,8 @@ describe("ObjectMapper", () => {
       @array({of: SubData}) arr2: SubData[];
       @field() bo: boolean;
       @field() num: number;
-      @field() str: string;
-      @field() sub: SubData;
+      @field str: string;
+      @field sub: SubData;
 
       get msg() {
         return "hello " + this.sub.hello + " " + this.str + this.num + this.bo;

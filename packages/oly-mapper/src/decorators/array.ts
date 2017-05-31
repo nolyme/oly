@@ -1,14 +1,15 @@
+import { Meta } from "oly-core";
 import { IMetaArray } from "../interfaces";
-import { field } from "./field";
+import { FieldDecorator } from "./field";
 
-/**
- *
- */
-export const array = (options: IMetaArray): PropertyDecorator => {
-  return (target: object, propertyKey: string) => {
-    return field({
+export class ArrayDecorator extends FieldDecorator {
+
+  public constructor(options: IMetaArray) {
+    super({
       ...options,
       type: Array,
-    })(target, propertyKey);
-  };
-};
+    });
+  }
+}
+
+export const array = Meta.decoratorWithOptions<IMetaArray>(ArrayDecorator);

@@ -1,9 +1,9 @@
-import { IAnyFunction } from "oly-core";
+import { IMetadata } from "oly-core";
 
 /**
  * @alias
  */
-export type IType = IAnyFunction;
+export type IType = Function;
 
 /**
  * Json schema list of type.
@@ -157,6 +157,15 @@ export interface IField extends Partial<IMetaArray>, IMetaNumber, IMetaString, I
    * This is also used for auto-mapping.
    */
   type: IType;
+}
+
+/**
+ *
+ */
+export interface IFieldsMetadata extends IMetadata {
+  properties: {
+    [key: string]: IField;
+  };
 }
 
 /**

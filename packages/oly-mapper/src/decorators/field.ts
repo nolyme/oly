@@ -1,31 +1,23 @@
-import { MetadataUtil } from "oly-core";
+import { IDecorator, Meta } from "oly-core";
+import { olyMapperKeys } from "../constants/keys";
 import { IField, IType } from "../interfaces";
-import { FieldMetadataUtil } from "../utils/FieldMetadataUtil";
 
-/**
- * Add a field to the target schema.
- *
- * ```ts
- * class Data {
- *    @field() name: string;
- * }
- * ```
- *
- * @param options   IField options
- */
-export const field = (options: Partial<IField> | IType = {}): PropertyDecorator => {
-  return (target: object, propertyKey: string) => {
+export class FieldDecorator implements IDecorator {
 
-    const fields = FieldMetadataUtil.getFields(target.constructor);
-    const partial: Partial<IField> = typeof options === "function" ? {type: options} : options;
+  private options: Partial<IField>;
 
-    fields.push({
-      name: partial.name || propertyKey,
-      required: partial.required !== false,
-      type: partial.type || MetadataUtil.getPropType(target, propertyKey),
-      ...partial,
+  public constructor(options: Partial<IField> | IType = {}) {
+    this.options = typeof options === "function" ? {type: options} : options;
+  }
+
+  public asProperty(target: object, propertyKey: string): void {
+    Meta.of({key: olyMapperKeys.fields, target, propertyKey}).set({
+      name: this.options.name || propertyKey,
+      required: this.options.required !== false,
+      type: this.options.type || Meta.designType(target, propertyKey),
+      ...this.options,
     });
+  }
+}
 
-    MetadataUtil.set(FieldMetadataUtil.lyFields, fields, target.constructor);
-  };
-};
+export const field = Meta.decorator<Partial<IField> | IType>(FieldDecorator);

@@ -4,7 +4,7 @@ import { Kernel } from "../Kernel";
 /**
  * How to define a declaration.
  */
-export interface IDeclaration<T> {
+export interface IDeclaration<T extends IProvider = IProvider> {
   // each or once ?
   singleton: boolean;
   // the definition
@@ -24,12 +24,12 @@ export interface IDeclaration<T> {
  * Public list of declarations.
  * Used by #onStart() and #onStop().
  */
-export type IDeclarations = Array<IDeclaration<any>>;
+export type IDeclarations = IDeclaration[];
 
 /**
  * Inline complex definition.
  */
-export interface IDefinition<T> {
+export interface IDefinition<T extends IProvider = IProvider> {
   // definition identifier
   provide: Class<T>;
   // the used definition/factory. default is value of `provide`
@@ -80,7 +80,7 @@ export type IFactoryOf<T> = (kernel: Kernel, parent?: Function) => T;
 /**
  *
  */
-export interface Class<T> { // tslint:disable-line
+export interface Class<T = object> { // tslint:disable-line
   name: string;
 
   new(...args: any[]): T;
@@ -94,11 +94,15 @@ export interface Class<T> { // tslint:disable-line
 export interface IProvider {
 
   // before onStart(), A -> Z
-  onConfigure?(deps: Array<IDeclaration<any>>): Promise<void> | void;
+  onConfigure?(deps: Array<IDeclaration<any>>): any;
 
   // when you Kernel#start(), Z -> A
-  onStart?(deps: Array<IDeclaration<any>>): Promise<void> | void;
+  onStart?(deps: Array<IDeclaration<any>>): any;
 
   // when you Kernel#stop(), Z -> A
-  onStop?(deps: Array<IDeclaration<any>>): Promise<void> | void;
+  onStop?(deps: Array<IDeclaration<any>>): any;
+
+  // internal free function
+  // remove all listener
+  __free__?(): void;
 }

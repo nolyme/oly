@@ -1,6 +1,6 @@
-import { IClass, IClassOf } from "oly-core";
-import { IField } from "../interfaces";
-import { FieldMetadataUtil } from "../utils/FieldMetadataUtil";
+import { Class, Meta } from "oly-core";
+import { olyMapperKeys } from "../constants/keys";
+import { IField, IFieldsMetadata } from "../interfaces";
 import { TypeUtil } from "../utils/TypeUtil";
 
 export class JsonMapper {
@@ -11,15 +11,21 @@ export class JsonMapper {
    * @param definition      Class definition
    * @param source          Json object data
    */
-  public mapClass<T>(definition: IClassOf<T>, source: object): T {
+  public mapClass<T>(definition: Class<T>, source: object): T {
     const obj = new definition();
-    const fields = FieldMetadataUtil.getFields(definition);
-    for (const field of fields) {
-      const key = field.name;
-      if (source[key] != null) {
-        obj[key] = this.mapField(field, source[key]);
+    const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).get<IFieldsMetadata>();
+    if (fieldsMetadata) {
+
+      const keys = Object.keys(fieldsMetadata.properties);
+      for (const propertyKey of keys) {
+        const field = fieldsMetadata.properties[propertyKey];
+        const key = field.name;
+        if (source[key] != null) {
+          obj[key] = this.mapField(field, source[key]);
+        }
       }
     }
+
     return obj;
   }
 
@@ -35,7 +41,7 @@ export class JsonMapper {
       return field.map(value);
     }
 
-    const type = FieldMetadataUtil.getFieldType(field.type);
+    const type = TypeUtil.getFieldType(field.type);
     if (type === "array") {
       return this.mapArray(field, value);
     } else if (type === "object" && typeof field.type === "function") {
@@ -74,11 +80,11 @@ export class JsonMapper {
    */
   public mapObject(field: IField, value: any): object {
 
-    const definition = field.type as IClass;
+    const definition = field.type as Class;
 
     if (typeof field.type === "function") {
 
-      if (FieldMetadataUtil.hasFields(definition)) {
+      if (Meta.of({key: olyMapperKeys.fields, target: definition}).has()) {
         return this.mapClass(definition, value);
       } else if (definition === Object) {
         // if you have set an interface, but THIS IS UGLY

@@ -1,16 +1,16 @@
+import { Meta } from "oly-core";
 import { IField } from "../interfaces";
-import { field } from "./field";
+import { FieldDecorator } from "./field";
 
-/**
- *
- */
-export const date = (options: Partial<IField> = {}): PropertyDecorator => {
-  return (target: object, propertyKey: string) => {
-    return field({
+export class DateDecorator extends FieldDecorator {
+
+  public constructor(options: Partial<IField> = {}) {
+    super({
       format: "date-time",
       type: Date,
-      // SAME AS -> transform: (date) => new Date(date),
       ...options,
-    })(target, propertyKey);
-  };
-};
+    });
+  }
+}
+
+export const date = Meta.decorator<Partial<IField>>(DateDecorator);

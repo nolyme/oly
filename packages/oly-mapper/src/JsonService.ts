@@ -1,4 +1,4 @@
-import { IClass, IClassOf, inject } from "oly-core";
+import { Class, inject } from "oly-core";
 import { IJsonSchema } from "./interfaces";
 import { JsonMapper } from "./services/JsonMapper";
 import { JsonSanitizer } from "./services/JsonSanitizer";
@@ -10,16 +10,16 @@ import { JsonValidator } from "./services/JsonValidator";
  */
 export class JsonService {
 
-  @inject(JsonMapper)
+  @inject
   protected mapper: JsonMapper;
 
-  @inject(JsonSanitizer)
+  @inject
   protected sanitizer: JsonSanitizer;
 
-  @inject(JsonValidator)
+  @inject
   protected validator: JsonValidator;
 
-  @inject(JsonSchemaReader)
+  @inject
   protected schemaReader: JsonSchemaReader;
 
   /**
@@ -55,7 +55,7 @@ export class JsonService {
    * @param data    Json data
    * @return        Mapped object
    */
-  public map<T>(type: IClassOf<T>, data: object): T {
+  public map<T extends object>(type: Class<T>, data: object): T {
     return this.mapper.mapClass(type, data);
   }
 
@@ -67,7 +67,7 @@ export class JsonService {
    * @param data   Json data
    * @return       Data after validation if valid
    */
-  public validate<T>(type: IClass, data: T): T {
+  public validate<T extends object>(type: Class, data: T): T {
     return this.validator.validateClass(type, data);
   }
 
@@ -78,7 +78,7 @@ export class JsonService {
    * @param data    Json data
    * @return        Sanitized data
    */
-  public sanitize<T>(type: IClass, data: T): T {
+  public sanitize<T extends object>(type: Class<T>, data: T): T {
     return this.sanitizer.sanitizeClass(type, data);
   }
 
@@ -88,7 +88,7 @@ export class JsonService {
    * @param type    Class definition
    * @param data    Raw data (string or object)
    */
-  public build<V>(type: IClassOf<V>, data: string | object): V {
+  public build<T extends object>(type: Class<T>, data: string | object): T {
     return this.sanitize(type, this.map(type, this.validate(type, this.parse(data))));
   }
 
@@ -98,7 +98,7 @@ export class JsonService {
    * @param type    Definition
    * @return        JsonSchema
    */
-  public schema<T>(type: IClassOf<T>): IJsonSchema {
+  public schema<T extends object>(type: Class<T>): IJsonSchema {
     return this.schemaReader.extractSchema(type);
   }
 }
