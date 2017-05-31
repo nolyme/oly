@@ -9,17 +9,17 @@ export class AmqpProvider {
   @env("OLY_AMQP_URL")
   public readonly url: string = "amqp://localhost";
 
-  @state()
-  public connection: Connection;
-
-  @state()
-  public channel: Channel;
-
-  @inject(Kernel)
+  @inject
   protected readonly kernel: Kernel;
 
-  @inject(Logger)
+  @inject
   protected readonly logger: Logger;
+
+  @state
+  public connection: Connection;
+
+  @state
+  public channel: Channel;
 
   /**
    * Push message into a queue.
@@ -47,12 +47,18 @@ export class AmqpProvider {
     return await this.channel.purgeQueue(taskName);
   }
 
+  /**
+   *
+   */
   protected async onStart() {
     this.logger.info(`connect to ${this.url}`);
     this.connection = await connect(this.url);
     this.channel = await this.connection.createChannel();
   }
 
+  /**
+   *
+   */
   protected async onStop() {
     this.logger.info(`close connection`);
     await this.channel.close();

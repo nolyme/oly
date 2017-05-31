@@ -1,7 +1,6 @@
 import { _, Exception } from "oly-core";
 import { attachKernel } from "oly-test";
 import { task } from "../src";
-import { message } from "../src/decorators/message";
 import { IMessage } from "../src/interfaces";
 import { AmqpProvider } from "../src/providers/AmqpProvider";
 import { WorkerProvider } from "../src/providers/WorkerProvider";
@@ -10,7 +9,7 @@ class Tasks {
   static stack: IMessage[] = [];
 
   @task("abc.queue")
-  abc(@message message: IMessage) {
+  abc(message: IMessage) {
     if (Tasks.stack.length === 1) {
       throw new Exception("boom");
     }

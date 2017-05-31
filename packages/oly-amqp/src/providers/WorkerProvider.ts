@@ -1,20 +1,24 @@
 import { Message } from "amqplib";
-import { IClass, IDeclarations, inject, Kernel, Logger, Meta } from "oly-core";
+import { Class, IDeclarations, inject, Kernel, Logger, Meta } from "oly-core";
 import { olyAmqpKeys } from "../constants/keys";
 import { ITasksMetadata } from "../interfaces";
 import { AmqpProvider } from "./AmqpProvider";
 
 export class WorkerProvider {
 
-  @inject(AmqpProvider)
-  protected amqp: AmqpProvider;
+  @inject
+  protected readonly amqp: AmqpProvider;
 
-  @inject(Kernel)
+  @inject
   protected readonly kernel: Kernel;
 
-  @inject(Logger)
+  @inject
   protected readonly logger: Logger;
 
+  /**
+   *
+   * @param declarations
+   */
   public async scan(declarations: IDeclarations) {
     for (const {definition: target} of declarations) {
       const meta = Meta.of({key: olyAmqpKeys.tasks, target});
@@ -34,18 +38,28 @@ export class WorkerProvider {
     }
   }
 
+  /**
+   *
+   * @param declarations
+   */
   protected async onStart(declarations: IDeclarations) {
     await this.scan(declarations);
   }
 
-  protected createHandler(target: IClass, propertyKey: string, name: string) {
+  /**
+   *
+   * @param target
+   * @param propertyKey
+   * @param name
+   */
+  protected createHandler(target: Class<any>, propertyKey: string, name: string) {
     return async (message: Message) => {
       const kernel = this.kernel.fork();
       kernel.state("Amqp.message", message);
       const logger = kernel.get(Logger).as("ConsumerProvider");
       try {
         logger.info(`begin task "${name}:${message.properties.correlationId}"`);
-        await kernel.invoke(target, propertyKey);
+        await kernel.invoke(target, propertyKey, [message]);
         logger.info(`end task successfully`);
         this.amqp.channel.ack(message);
       } catch (e) {
