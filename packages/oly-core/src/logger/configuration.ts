@@ -1,7 +1,7 @@
+import { _ } from "../kernel/Global";
 import { Kernel } from "../kernel/Kernel";
 import { JsonLogger } from "./JsonLogger";
 import { MutedLogger } from "./MutedLogger";
-import { _ } from "../kernel/Global";
 
 /**
  * Hide Logger if production mode is enabled.

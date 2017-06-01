@@ -786,7 +786,7 @@ export class Kernel {
       const observers: IObserver[] = [];
       const target = instance.constructor as Class<T>;
       const keys = Object.keys(eventsMetadata.properties);
-      
+
       for (const propertyKey of keys) {
         const event = eventsMetadata.properties[propertyKey];
         const key = event.name || _.identity(definition, propertyKey);

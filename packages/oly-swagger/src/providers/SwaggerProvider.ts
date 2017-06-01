@@ -175,7 +175,8 @@ export class SwaggerProvider {
           return Object.assign({}, r, {propertyKey});
         }
 
-        if (r.method === layer.methods[layer.methods.length - 1] && (router.target.prefix || "") + r.path === layer.path) {
+        if (r.method === layer.methods[layer.methods.length - 1]
+          && (router.target.prefix || "") + r.path === layer.path) {
           return Object.assign({}, r, {propertyKey});
         }
       }
