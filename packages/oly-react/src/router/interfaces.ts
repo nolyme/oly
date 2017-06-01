@@ -1,4 +1,3 @@
-import { StateObject } from "@uirouter/core";
 import { Class, IMetadata } from "oly-core";
 import { ComponentClass } from "react";
 
@@ -15,7 +14,10 @@ export type IRawChunk = JSX.Element | ComponentClass<any> | IChunks;
 /**
  *
  */
-export type IRouteState = StateObject;
+export interface IRouteState {
+  name: string;
+  parent?: IRouteState;
+}
 
 /**
  * Layer description.
@@ -34,6 +36,9 @@ export interface IPagesProperty {
   children?: Class[];
 }
 
+/**
+ *
+ */
 export interface IPagesMetadata extends IMetadata {
   properties: {
     [key: string]: IPagesProperty;

@@ -14,7 +14,6 @@
   "dependencies": {
     "@types/prop-types": "15.5.1",
     "@types/react-dom": "15.5.0",
-    "@uirouter/core": "5.0.3",
     "prop-types": "15.5.10",
     "react-dom": "15.5.4"
   },

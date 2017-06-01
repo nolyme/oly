@@ -1,4 +1,3 @@
-import { HrefOptions, TransitionOptions } from "@uirouter/core";
 import { _, inject, Kernel } from "oly-core";
 import { olyReactRouterEvents } from "../constants/events";
 import { IRouteState } from "../interfaces";
@@ -43,11 +42,11 @@ export class Router {
    * @param params      Parameters
    * @param options     UIRouter go options
    */
-  public go(routeName: string, params: object = {}, options: TransitionOptions = {}): Promise<void> {
+  public go(routeName: string, params: object = {}): Promise<void> {
     if (routeName[0] === "/") {
       throw new Error("Go requires a routeName, not an url");
     }
-    return this.routerProvider.uiRouter.stateService.go(routeName, params, options).then(() => {
+    return this.routerProvider.uiRouter.stateService.go(routeName, params).then(() => {
       return this.kernel.on(olyReactRouterEvents.TRANSITION_END, _.noop).wait();
     });
   }
@@ -68,16 +67,28 @@ export class Router {
    * @param params      Parameters
    * @param options     UIRouter go options
    */
-  public href(routeName: string, params: object = {}, options: HrefOptions = {}): string {
-    return this.routerProvider.uiRouter.stateService.href(routeName, params, options);
+  public href(routeName: string, params: object = {}): string {
+    return this.routerProvider.uiRouter.stateService.href(routeName, params);
   }
 
   /**
    * Check if a route state is active.
    *
    * @param routeName
+   * @param strict
    */
-  public isActive(routeName: string | IRouteState): boolean {
-    return this.current.includes[typeof routeName === "string" ? routeName : routeName.name];
+  public isActive(routeName: string | IRouteState, strict = false): boolean {
+    const name = typeof routeName === "string" ? routeName : routeName.name;
+    if (strict) {
+      return name === routeName;
+    }
+    let t: IRouteState | undefined = this.current;
+    while (t) {
+      if (t.name === name) {
+        return true;
+      }
+      t = t.parent;
+    }
+    return false;
   }
 }

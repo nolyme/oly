@@ -1,4 +1,3 @@
-import { $injector, $q, LocationPlugin, services, StateDeclaration, Transition, UIRouter } from "@uirouter/core";
 import {
   _,
   Class,
@@ -13,12 +12,21 @@ import {
   state,
 } from "oly-core";
 import { createElement } from "react";
+import {
+  $injector,
+  $q,
+  LocationPlugin,
+  services,
+  StateDeclaration,
+  Transition,
+  UIRouter,
+} from "../../../modules/@uirouter/core";
 import { Layer } from "../components/Layer";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import { IChunks, ILayer, IPagesMetadata, IPagesProperty, IRawChunk, IRouteState } from "../interfaces";
 import { DefaultNotFound } from "./DefaultNotFound";
-import { serverLocationPlugin } from "./MemoryLocation";
+import { serverLocationPlugin } from "./Locations";
 
 export class ReactRouterProvider implements IProvider {
 
@@ -55,7 +63,7 @@ export class ReactRouterProvider implements IProvider {
   /**
    * Start Router5 listener.
    */
-  public listen(locationPlugin: ((router: UIRouter) => LocationPlugin) | string) {
+  public listen(locationPlugin: ((router: UIRouter) => LocationPlugin) | string): Promise<void> {
 
     this.uiRouter = new UIRouter();
     this.setHooks();
@@ -77,8 +85,8 @@ export class ReactRouterProvider implements IProvider {
     this.uiRouter.urlService.listen();
     this.uiRouter.urlService.sync();
 
-    return new Promise((resolve, reject) => {
-      this.kernel.on(olyReactRouterEvents.TRANSITION_END, resolve);
+    return new Promise<void>((resolve, reject) => {
+      this.kernel.on(olyReactRouterEvents.TRANSITION_END, () => resolve());
       this.kernel.on(olyReactRouterEvents.TRANSITION_ERROR, reject);
     });
   }
@@ -209,7 +217,7 @@ export class ReactRouterProvider implements IProvider {
    * @param pageDeclarations      All declarations
    * @param definition            The target
    */
-  protected hasParent(pageDeclarations: IDeclarations, definition: Class) {
+  protected hasParent(pageDeclarations: IDeclarations, definition: Class): boolean {
     return pageDeclarations
       .filter((p) => p.definition !== definition)
       .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())

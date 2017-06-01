@@ -1,14 +1,16 @@
+import { _, Class } from "oly-core";
 import {
   Disposable,
   getParams,
+  hashLocationPlugin as _hashLocationPlugin,
   LocationPlugin,
   locationPluginFactory,
   LocationServices,
   MemoryLocationConfig,
   parseUrl,
+  pushStateLocationPlugin as _pushStateLocationPlugin,
   UIRouter,
-} from "@uirouter/core";
-import { _, Class } from "oly-core";
+} from "../../../modules/@uirouter/core";
 
 export class MemoryLocationServices implements LocationServices, Disposable {
 
@@ -33,3 +35,6 @@ export class ServerLocationConfig extends MemoryLocationConfig { // tslint:disab
 export const serverLocationPlugin: (url: string) => (router: UIRouter) => LocationPlugin = (url) => {
   return locationPluginFactory("oly.serverLocation", false, MemoryLocationServices.of(url), ServerLocationConfig);
 };
+
+export const hashLocationPlugin = _hashLocationPlugin;
+export const pushStateLocationPlugin = _pushStateLocationPlugin;

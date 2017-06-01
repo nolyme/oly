@@ -1,7 +1,6 @@
-import { attach } from "oly-react";
-import { View } from "oly-react/src/router/components/View";
+import { attach, View } from "oly-react";
+import { Helmet } from "oly-react-ssr";
 import * as React from "react";
-import { Helmet } from "react-helmet";
 import { IDoc } from "../../cli/interfaces";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Footer } from "./Footer";

@@ -14,4 +14,3 @@ export * from "./services/Router";
 export * from "./services/Browser";
 export * from "./services/ReactRouterProvider";
 export * from "./services/ReactBrowserProvider";
-export * from "@uirouter/core";

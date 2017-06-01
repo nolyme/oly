@@ -1,9 +1,9 @@
-import { hashLocationPlugin, pushStateLocationPlugin } from "@uirouter/core";
 import { env, inject, Kernel, Logger } from "oly-core";
 import { createElement } from "react";
 import { AppContext } from "../../core/components/AppContext";
 import { View } from "../components/View";
 import { Browser } from "./Browser";
+import { hashLocationPlugin, pushStateLocationPlugin } from "./Locations";
 import { ReactRouterProvider } from "./ReactRouterProvider";
 
 /**
