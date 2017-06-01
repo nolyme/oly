@@ -1,7 +1,6 @@
 import * as KoaRouter from "koa-router";
 
 /**
- * @alias
  */
 export type IKoaRouter = KoaRouter;
 
@@ -21,8 +20,6 @@ declare module "oly-http/lib/interfaces" {
 
 /**
  * Definition of file used by multer.
- *
- * @experimental
  */
 export interface IUploadedFile {
   fieldname: string;

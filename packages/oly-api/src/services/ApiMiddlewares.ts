@@ -1,9 +1,7 @@
-import { _, Exception, Function, Logger } from "oly-core";
+import { _, Class, Logger } from "oly-core";
 import { HttpServerException, IKoaContext, IKoaMiddleware } from "oly-http";
-import { IRouteMetadata } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
 import { NotFoundException } from "../exceptions/NotFoundException";
-import { KoaRouterBuilder } from "./KoaRouterBuilder";
 
 /**
  * Collection of internal middlewares.
@@ -89,40 +87,18 @@ export class ApiMiddlewares {
    *
    * @param definition    Definition of the controller
    * @param propertyKey   Name of the method to run
-   * @param route         Optional IRouteMetadata used for params injection
    */
-  public invoke(definition: Function, propertyKey: string, route?: IRouteMetadata): IKoaMiddleware {
+  public invoke(definition: Class, propertyKey: string): IKoaMiddleware {
     return (ctx: IKoaContext) => {
 
-      // inject all "light deps" of the controller
-      const target = ctx.kernel.get(definition);
-      const logger = ctx.kernel.get(Logger).as("KoaRouter");
-      const args = [];
+      ctx.kernel.state("Koa.context", ctx);
 
-      if (route) {
-        const builder = ctx.kernel.get(KoaRouterBuilder);
-        args.push(...builder.parseParamTypes(ctx, route));
-      }
-
-      // always push current ctx as last argument
-      // i don't know if it's a good idea
-      args.push(ctx);
-
-      // instantiate controller and call method
-      const action = target[propertyKey];
-      if (!action) {
-        throw new Exception(olyApiErrors.undefinedAction(propertyKey));
-      }
-
-      logger.trace(`apply ${_.identity(definition, propertyKey)}()`); // tslint:disable-line
-
-      return _.promise(action.apply(target, args)).then((response) => {
+      return _.promise(ctx.kernel.invoke(definition, propertyKey, [ctx])).then((response) => {
         if (response != null) {
           // if controller returns 'something' => set to the response body
           ctx.body = response;
           ctx.status = ctx.status || 200;
         } else if (ctx.status === 404 && !ctx.body) {
-          logger.trace("no body detected, status -> 204");
           // (v0.3) if no response -> 204
           ctx.status = 204;
         }

@@ -11,4 +11,4 @@ import { route } from "oly-router";
  *
  * @param path    Relative path
  */
-export const get = (path: string) => route("GET", path);
+export const get = (path: string) => route({method: "GET", path});

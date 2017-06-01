@@ -18,8 +18,8 @@ export interface IRouterTarget {
 export interface IRouterProperty {
   method: IMethods;
   path: string;
-  middlewares: any[];
-  api: any;
+  middlewares: Function[];
+  api: object;
 }
 
 /**

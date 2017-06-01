@@ -1,32 +1,54 @@
-import { MetadataUtil } from "oly-core";
-import { arg } from "oly-router";
+import { Class, IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
+import { IKoaContext } from "oly-http";
+import { olyApiErrors } from "../constants/errors";
+import { BadRequestException } from "../exceptions/BadRequestException";
+import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
+
+export interface IHeaderOptions {
+  name?: string;
+  type?: any;
+  required?: boolean;
+}
+
+export class HeaderDecorator implements IDecorator {
+
+  private options: IHeaderOptions;
+
+  public constructor(options: IHeaderOptions | string = {}) {
+    if (typeof options === "string") {
+      this.options = {name: options};
+    } else {
+      this.options = options;
+    }
+  }
+
+  public asParameter(target: object, propertyKey: string, index: number): void {
+    Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
+      type: Meta.designParamTypes(target, propertyKey)[index] as any,
+      handler: (k: Kernel) => {
+        const ctx: IKoaContext = k.state("Koa.context");
+        if (ctx) {
+          const builder = k.get(KoaRouterBuilder);
+          const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
+          const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
+          const value: string = ctx.header[name.toLowerCase()];
+
+          if (!value && this.options.required === true) {
+            throw new BadRequestException(olyApiErrors.missing("header", name));
+          }
+
+          return builder.parseAndCast(
+            value,
+            type,
+            name,
+            "header");
+        }
+      },
+    });
+  }
+}
 
 /**
- * Annotate parameter as header with a name.
  *
- * ```typescript
- * class A {
- *    @get('/')
- *    action(@header('key') key: string) {
- *    }
- * }
- * ```
  */
-export const header = (options: string | { name?: string; required?: boolean } = {}): ParameterDecorator => {
-  return (target: object, propertyKey: string, parameterIndex: number): void => {
-
-    const meta = typeof options === "string"
-      ? {name: options}
-      : options;
-
-    if (!meta.name) {
-      meta.name = MetadataUtil.getParamNames(target[propertyKey])[parameterIndex];
-    }
-
-    return arg({
-      header: meta.name,
-      required: meta.required,
-      type: MetadataUtil.getPropParamTypes(target, propertyKey)[parameterIndex],
-    })(target, propertyKey, parameterIndex);
-  };
-};
+export const header = Meta.decorator<IHeaderOptions>(HeaderDecorator);

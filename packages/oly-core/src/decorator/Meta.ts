@@ -75,7 +75,10 @@ export class Meta {
                                         data3?: any): IGenericDecorator {
     return (t: any, p?: any, i?: any) => {
       const d = new Decorator(data1, data2, data3);
-      this.negotiator(t, p, i, d);
+      if (!this.negotiator(t, p, i, d)) {
+        const name = "@" + Decorator.name.replace("Decorator", "").toLowerCase();
+        throw new Error(`You can't use ${name} here`);
+      }
     };
   }
 

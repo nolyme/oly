@@ -26,4 +26,4 @@ export class RouterDecorator implements IDecorator {
   }
 }
 
-export const router = Meta.decorator(RouterDecorator);
+export const router = Meta.decoratorWithOptions<IRouterOptions>(RouterDecorator);

@@ -1,16 +1,16 @@
 import { equal } from "assert";
 import { HttpClient, HttpServerException, IHttpRequest } from "oly-http";
 import { field } from "oly-mapper";
+import { router } from "oly-router";
 import { attachKernel } from "oly-test";
 import { ApiProvider } from "../src";
 import { olyApiErrors } from "../src/constants/errors";
 import { body } from "../src/decorators/body";
 import { del } from "../src/decorators/del";
 import { get } from "../src/decorators/get";
-import { path } from "../src/decorators/path";
+import { param } from "../src/decorators/param";
 import { post } from "../src/decorators/post";
 import { query } from "../src/decorators/query";
-import { router } from "../src/decorators/router";
 
 describe("ApiProviderLegacy", () => {
   describe("@get()", () => {
@@ -21,7 +21,7 @@ describe("ApiProviderLegacy", () => {
       @get("/") index = () => "Hello World";
 
       @get("/:name")
-      byName(@path("name") name: string) {
+      byName(@param("name") name: string) {
         return `Hello ${name}`;
       }
     }
@@ -45,7 +45,7 @@ describe("ApiProviderLegacy", () => {
 
     class DataCheck {
       @field() username: string;
-      @field() password: string;
+      @field password: string;
     }
 
     class Data {
@@ -192,7 +192,7 @@ describe("ApiProviderLegacy", () => {
     });
     it("should extract query as object", async () => {
       expect((await fetch("4", {params: {b: "h"}})).message)
-        .toBe(olyApiErrors.invalidFormat("queryParam", "b", "json"));
+        .toBe(olyApiErrors.invalidFormat("query", "b", "json"));
       expect(await fetch("4", {params: {b: {h: 3}}})).toEqual({b: {h: 3}});
     });
     it("should extract query as object", async () => {

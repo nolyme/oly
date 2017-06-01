@@ -4,17 +4,17 @@ import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
 import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
 
-export interface IQueryOptions {
+export interface IParamOptions {
   name?: string;
   type?: any;
   required?: boolean;
 }
 
-export class QueryDecorator implements IDecorator {
+export class ParamDecorator implements IDecorator {
 
-  private options: IQueryOptions;
+  private options: IParamOptions;
 
-  public constructor(options: IQueryOptions | string = {}) {
+  public constructor(options: IParamOptions | string = {}) {
     if (typeof options === "string") {
       this.options = {name: options};
     } else {
@@ -31,17 +31,17 @@ export class QueryDecorator implements IDecorator {
           const builder = k.get(KoaRouterBuilder);
           const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
           const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
-          const value: string = ctx.query[name.toLowerCase()];
+          const value: string = ctx.params[name.toLowerCase()];
 
           if (!value && this.options.required === true) {
-            throw new BadRequestException(olyApiErrors.missing("query", name));
+            throw new BadRequestException(olyApiErrors.missing("param", name));
           }
 
           return builder.parseAndCast(
             value,
             type,
             name,
-            "query");
+            "param");
         }
       },
     });
@@ -51,4 +51,4 @@ export class QueryDecorator implements IDecorator {
 /**
  *
  */
-export const query = Meta.decorator<IQueryOptions>(QueryDecorator);
+export const param = Meta.decorator<IParamOptions>(ParamDecorator);

@@ -26,6 +26,10 @@ export class RouteDecorator implements IDecorator {
       middlewares: this.options.middlewares || [],
     });
   }
+
+  public asProperty(target: object, propertyKey: string): void {
+    this.asMethod(target, propertyKey, {});
+  }
 }
 
-export const route = Meta.decorator(RouteDecorator);
+export const route = Meta.decoratorWithOptions<IRouteOptions>(RouteDecorator);

@@ -1,7 +1,7 @@
 import * as koaBodyParser from "koa-bodyparser";
-import { env, Function, IDeclarations, inject, Logger } from "oly-core";
+import { Class, env, IDeclarations, inject, IProvider, Logger } from "oly-core";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
-import { RouterMetadataUtil } from "oly-router";
+import { MetaRouter } from "oly-router";
 import { MethodNotAllowedException } from "../exceptions/MethodNotAllowedException";
 import { NotImplementedException } from "../exceptions/NotImplementedException";
 import { IKoaRouter } from "../interfaces";
@@ -11,7 +11,7 @@ import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
 /**
  *
  */
-export class ApiProvider {
+export class ApiProvider implements IProvider {
 
   /**
    * Define a global namespace to your path api.
@@ -19,16 +19,16 @@ export class ApiProvider {
   @env("OLY_API_PREFIX")
   public prefix: string = "/api";
 
-  @inject(KoaRouterBuilder)
+  @inject
   protected koaRouterBuilder: KoaRouterBuilder;
 
-  @inject(ApiMiddlewares)
+  @inject
   protected apiMiddlewares: ApiMiddlewares;
 
-  @inject(HttpServerProvider)
+  @inject
   protected httpServerProvider: HttpServerProvider;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
   /**
@@ -59,7 +59,7 @@ export class ApiProvider {
    *
    * @param definition   Class with Router Metadata
    */
-  public register(definition: Function): this {
+  public register(definition: Class): this {
     const router = this.koaRouterBuilder.createFromDefinition(definition);
     return this
       .logRouter(router, definition)
@@ -73,17 +73,10 @@ export class ApiProvider {
    */
   public scan(declarations: IDeclarations): void {
     for (const declaration of declarations) {
-      if (RouterMetadataUtil.hasRouter(declaration.definition)) {
+      if (MetaRouter.get(declaration.definition)) {
         this.register(declaration.definition);
       }
     }
-  }
-
-  /**
-   * Default koa body parser.
-   */
-  protected useBodyParser(): this {
-    return this.use(koaBodyParser() as any);
   }
 
   /**
@@ -91,12 +84,19 @@ export class ApiProvider {
    *
    * @param declarations
    */
-  protected async onStart(declarations: IDeclarations): Promise<void> {
-    this.useBodyParser();
+  public async onStart(declarations: IDeclarations): Promise<void> {
     this.use(this.apiMiddlewares.log());
     this.use(this.apiMiddlewares.errorHandler());
+    this.useBodyParser();
     this.logger.info(`prefix api with ${this.prefix}`);
     this.scan(declarations);
+  }
+
+  /**
+   * Default koa body parser.
+   */
+  protected useBodyParser(): this {
+    return this.use(koaBodyParser() as any);
   }
 
   /**

@@ -16,7 +16,7 @@ describe("WorkspaceProvider", () => {
     const filepath = workspaceProvider.rand(".txt");
     await fileService.write(filepath, content);
     expect(await fileService.exists(filepath)).toBeTruthy();
-    expect(await fileService.read(filepath, {encoding: "UTF-8"})).toBe(content);
+    expect(await fileService.read(filepath)).toBe(content);
     await fileService.remove(filepath);
     expect(await fileService.exists(filepath)).toBeFalsy();
   });

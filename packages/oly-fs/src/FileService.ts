@@ -1,10 +1,13 @@
-import { copy, exists, mkdirp, move, readFile, remove, writeFile } from "fs-extra";
+import * as fs from "fs-extra";
+import { exists } from "fs-extra";
 import { inject, Logger } from "oly-core";
 
 /**
  *
  */
 export class FileService {
+
+  public fs = fs;
 
   @inject
   protected logger: Logger;
@@ -23,12 +26,10 @@ export class FileService {
    * Read a file.
    *
    * @param filepath     Absolute path
-   * @param options     Encoding and flag
    */
-  public async read(filepath: string, options: { encoding: "UTF-8"; flag?: string; }): Promise<string>;
-  public async read(filepath: string, options: { encoding: string; flag?: string; }): Promise<string | Buffer> {
+  public async read(filepath: string): Promise<string> {
     this.logger.debug(`read ${filepath}`);
-    return await readFile(filepath, options);
+    return await this.fs.readFile(filepath, "UTF-8");
   }
 
   /**
@@ -36,13 +37,10 @@ export class FileService {
    *
    * @param filepath   Absolute path
    * @param data      Data
-   * @param options   Encode, mode and flag
    */
-  public async write(filepath: string,
-                     data: string | Buffer,
-                     options: { encoding?: string; mode?: number; flag?: string; } = {}): Promise<void> {
+  public async write(filepath: string, data: string | Buffer): Promise<void> {
     this.logger.debug(`write ${filepath}`);
-    await writeFile(filepath, data);
+    await this.fs.writeFile(filepath, data);
   }
 
   /**
@@ -51,9 +49,9 @@ export class FileService {
    * @param filepath       Source
    * @param destination   Destination
    */
-  public async move(filepath: string, destination: string) {
+  public async move(filepath: string, destination: string): Promise<void> {
     this.logger.debug(`move ${filepath} to ${destination}`);
-    return await move(filepath, destination);
+    await this.fs.move(filepath, destination);
   }
 
   /**
@@ -62,9 +60,9 @@ export class FileService {
    * @param filepath       Source
    * @param destination   Destination
    */
-  public async copy(filepath: string, destination: string) {
+  public async copy(filepath: string, destination: string): Promise<void> {
     this.logger.debug(`copy ${filepath} to ${destination}`);
-    return await copy(filepath, destination);
+    await this.fs.copy(filepath, destination);
   }
 
   /**
@@ -72,9 +70,9 @@ export class FileService {
    *
    * @param filepath    Absolute path
    */
-  public async remove(filepath: string) {
+  public async remove(filepath: string): Promise<void> {
     this.logger.debug(`remove ${filepath}`);
-    return await remove(filepath);
+    await this.fs.remove(filepath);
   }
 
   /**
@@ -82,8 +80,8 @@ export class FileService {
    *
    * @param filepath    Absolute path
    */
-  public async mkdirp(filepath: string) {
+  public async mkdirp(filepath: string): Promise<void> {
     this.logger.debug(`mkdirp ${filepath}`);
-    return await mkdirp(filepath);
+    await this.fs.mkdirp(filepath);
   }
 }

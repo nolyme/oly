@@ -11,4 +11,4 @@ import { route } from "oly-router";
  *
  * @param path    Relative path
  */
-export const del = (path: string) => route("DEL", path);
+export const del = (path: string) => route({method: "DEL", path});

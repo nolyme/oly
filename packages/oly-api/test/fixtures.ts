@@ -1,14 +1,14 @@
 import { IKoaMiddleware } from "oly-http";
 import { array, field } from "oly-mapper";
+import { router, use } from "oly-router";
+import { body } from "../src/decorators/body";
 import { del } from "../src/decorators/del";
 import { get } from "../src/decorators/get";
 import { header } from "../src/decorators/header";
+import { param } from "../src/decorators/param";
 import { post } from "../src/decorators/post";
 import { put } from "../src/decorators/put";
 import { query } from "../src/decorators/query";
-import { router } from "../src/decorators/router";
-import { use } from "../src/decorators/use";
-import { body, path } from "../src/index";
 import { IUploadedFile } from "../src/interfaces";
 
 export const dummyMiddleware: IKoaMiddleware = async (ctx, next) => {
@@ -37,43 +37,43 @@ export class A1 {
 
 export class A2 {
   @get("/query")
-  query( @query("a") a: string) {
-    return { a };
+  query(@query("a") a: string) {
+    return {a};
   }
 
   @get("/query/required")
-  queryRequired( @query({ name: "a", required: true }) a: string) {
-    return { a };
+  queryRequired(@query({name: "a", required: true}) a: string) {
+    return {a};
   }
 
   @get("/header")
-  header( @header("AuthorizatION") a: string) {
-    return { a };
+  header(@header("AuthorizatION") a: string) {
+    return {a};
   }
 
   @get("/path/:id")
-  path( @path("id") a: string) {
-    return { a };
+  path(@param("id") a: string) {
+    return {a};
   }
 
   @get("/pathAsNumber/:id")
-  pathAsNumber( @path("id") a: number) {
-    return { a };
+  pathAsNumber(@param id: number) {
+    return {a: id};
   }
 
   @post("/body")
-  body( @body() a: object) {
-    return { a };
+  body(@body a: object) {
+    return {a};
   }
 
   @post("/body/parse")
-  bodyParse( @body() a: Data) {
-    return { a };
+  bodyParse(@body() a: Data) {
+    return {a};
   }
 
   @post("/upload")
-  upload( @body() a: IUploadedFile) {
-    return { a };
+  upload(@body() a: IUploadedFile) {
+    return {a};
   }
 }
 
