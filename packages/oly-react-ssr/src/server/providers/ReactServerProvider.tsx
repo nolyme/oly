@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { env, IDeclarations, inject, Kernel, Logger, state } from "oly-core";
+import { env, IDeclarations, inject, IProvider, Kernel, Logger, state } from "oly-core";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
 import { ReactRouterProvider } from "oly-react";
 import { join } from "path";
@@ -11,7 +11,7 @@ import { serverLocationPlugin } from "../services/ServerLocation";
 /**
  *
  */
-export class ReactServerProvider {
+export class ReactServerProvider implements IProvider {
 
   @env("OLY_REACT_SERVER_PREFIX")
   public prefix: string = "/";
@@ -26,28 +26,28 @@ export class ReactServerProvider {
     "default",
   ];
 
-  @inject(HttpServerProvider)
+  @inject
   protected httpServerProvider: HttpServerProvider;
 
-  @inject(ReactRouterProvider)
+  @inject
   protected reactRouterProvider: ReactRouterProvider;
 
-  @inject(ReactServerRenderer)
+  @inject
   protected reactServerRenderer: ReactServerRenderer;
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  @inject(ReactProxyService)
+  @inject
   protected reactProxy: ReactProxyService;
 
-  @inject(ReactStaticService)
+  @inject
   protected reactStatic: ReactStaticService;
 
-  @state()
+  @state
   protected template: string;
 
   /**
@@ -65,6 +65,20 @@ export class ReactServerProvider {
   public use(middleware: IKoaMiddleware): ReactServerProvider {
     this.httpServerProvider.use(mount(this.prefix, middleware));
     return this;
+  }
+
+  /**
+   * Hook - start
+   *
+   * @param deps  Kernel dependencies
+   */
+  public async onStart(deps: IDeclarations): Promise<void> {
+
+    await this.createTemplate();
+
+    this.use(this.requestHandlerMiddleware());
+
+    this.logger.info("template is ready");
   }
 
   /**
@@ -111,20 +125,6 @@ export class ReactServerProvider {
         }
       }
     };
-  }
-
-  /**
-   * Hook - start
-   *
-   * @param deps  Kernel dependencies
-   */
-  protected async onStart(deps: IDeclarations): Promise<void> {
-
-    await this.createTemplate();
-
-    this.use(this.requestHandlerMiddleware());
-
-    this.logger.info("template is ready");
   }
 
   /**

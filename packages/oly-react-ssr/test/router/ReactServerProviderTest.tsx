@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { Function, inject, Kernel } from "oly-core";
+import { Class, inject, Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
 import { attach, page, page404 } from "oly-react";
 import { View } from "oly-react/lib/router/components/View";
@@ -24,7 +24,7 @@ class SuperService {
 
 describe("ReactServerProvider", () => {
 
-  const appTestFactory = async (app: Function): Promise<IAppTest> => {
+  const appTestFactory = async (app: Class): Promise<IAppTest> => {
     const kernel = new Kernel({
       OLY_HTTP_SERVER_PORT: 6001 + Math.floor(Math.random() * 100),
       OLY_LOGGER_LEVEL: "ERROR",
@@ -80,7 +80,7 @@ describe("ReactServerProvider", () => {
 
     @inject service: SuperService;
 
-    @page("", {
+    @page({
       children: [NestedRouter],
     })
     async index() {

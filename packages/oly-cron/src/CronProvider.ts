@@ -26,14 +26,17 @@ export class CronProvider implements IProvider {
    */
   public scan(declarations: IDeclarations) {
     this.jobs = [];
-    for (const {definition: target} of declarations) {
-      const schedulersMetadata = Meta.of({key: olyCronKeys.schedulers, target}).get<ISchedulersMetadata>();
+    for (const de of declarations) {
+      const schedulersMetadata = Meta.of({
+        key: olyCronKeys.schedulers,
+        target: de.definition,
+      }).get<ISchedulersMetadata>();
       if (schedulersMetadata) {
 
         const keys = Object.keys(schedulersMetadata.properties);
         for (const propertyKey of keys) {
           const scheduler = schedulersMetadata.properties[propertyKey];
-          this.schedule(target, propertyKey, scheduler);
+          this.schedule(de.definition, propertyKey, scheduler);
         }
       }
     }
@@ -55,7 +58,7 @@ export class CronProvider implements IProvider {
         const logger = child.get(Logger).as("Scheduler");
         try {
           logger.debug("start scheduled job");
-          await child.get(target)[propertyKey]();
+          await child.invoke(target, propertyKey, []);
           logger.info("end scheduled job");
         } catch (e) {
           logger.warn("job has failed", e);

@@ -5,7 +5,7 @@ import { olyReactRouterKeys } from "../constants/keys";
  * Page options.
  */
 export interface IPageOptions {
-  path: string;
+  path?: string;
   children?: Function[];
   data?: any;
   name?: string;
@@ -16,7 +16,7 @@ export class PageDecorator implements IDecorator {
 
   private options: IPageOptions;
 
-  public constructor(options: string | IPageOptions) {
+  public constructor(options: string | IPageOptions = {}) {
     if (typeof options === "string") {
       this.options = {path: options};
     } else {
@@ -38,7 +38,7 @@ export class PageDecorator implements IDecorator {
       abstract: this.options.abstract === true,
       children: this.options.children,
       name: this.options.name || propertyKey,
-      url: this.options.path,
+      url: this.options.path || "",
     });
   }
 

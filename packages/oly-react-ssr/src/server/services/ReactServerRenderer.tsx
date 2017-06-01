@@ -1,4 +1,4 @@
-import { inject, Kernel, state } from "oly-core";
+import { _, inject, Kernel, state } from "oly-core";
 import { IKoaContext } from "oly-http";
 import { AppContext, View } from "oly-react";
 import * as React from "react";
@@ -86,7 +86,7 @@ export class ReactServerRenderer {
         <strong>Looks like something went wrong!</strong>
         <div></div>
         ${
-      !this.kernel.isProduction()
+      !_.isProduction()
         ? `<pre style="overflow-x: auto; padding: 10px; font-size: 12px">${error.stack || error.message || error}</pre>`
         : ""}
         </div>

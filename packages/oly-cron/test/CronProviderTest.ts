@@ -1,4 +1,4 @@
-import { _, inject } from "oly-core";
+import { _ } from "oly-core";
 import { attachKernel } from "oly-test";
 import { CronProvider } from "../src/CronProvider";
 import { cron } from "../src/decorators/cron";
@@ -10,26 +10,18 @@ class App {
   @cron("* * * * * *")
   repeat() {
     stack.push("OK");
-    if (stack.length === 2) {
+    if (stack.length === 1) {
       throw new Error("LOL");
     }
   }
 }
 
-class Mockery {
-  @inject cron: CronProvider;
-
-  onConfigure() {
-    (this.cron as any).jobs[0].cronTime.getTimeout = () => 50;
-  }
-}
-
 describe("CronProvider", () => {
 
-  attachKernel().with(Mockery, App);
+  attachKernel().with(App, CronProvider);
 
   it("should tick once", async () => {
-    await _.timeout(250);
-    expect(stack.length).toBeGreaterThanOrEqual(3);
+    await _.timeout(2200);
+    expect(stack.length).toBeGreaterThanOrEqual(2);
   });
 });

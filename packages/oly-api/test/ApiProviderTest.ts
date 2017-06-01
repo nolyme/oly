@@ -7,7 +7,7 @@ import { A1, A2, A3, A4 } from "./fixtures";
 
 describe("ApiProvider", () => {
 
-  const kernel = attachKernel({OLY_HTTP_SERVER_PORT: 19219, OLY_LOGGER_LEVEL: "TRACE"})
+  const kernel = attachKernel({OLY_HTTP_SERVER_PORT: 19219})
     .with({provide: Logger, use: MutedLogger})
     .with(A1, A2, A3, A4);
   const server = kernel.get(ApiProvider);

@@ -18,16 +18,16 @@ export abstract class Repository<T extends IDocument> {
 
   protected type: Class<T>;
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  @inject(MongoProvider)
+  @inject
   protected database: MongoProvider;
 
-  @inject(JsonService)
+  @inject
   protected jsonService: JsonService;
 
   /**

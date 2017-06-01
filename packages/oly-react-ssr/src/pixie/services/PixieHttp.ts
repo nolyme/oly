@@ -1,4 +1,4 @@
-import { CommonUtil as _, env, inject, Kernel } from "oly-core";
+import { _, env, inject, Kernel } from "oly-core";
 import { HttpClient, IHttpRequest } from "oly-http";
 import { Pixie } from "./Pixie";
 import { PixieSession } from "./PixieSession";

@@ -1,5 +1,4 @@
-import { _, Class, inject, Kernel, Logger, Meta, olyCoreEvents, olyCoreKeys } from "oly-core";
-import { IStateMutate } from "oly-core/lib/interfaces/store";
+import { _, Class, inject, IStateMutateEvent, Kernel, Logger, Meta, olyCoreEvents, olyCoreKeys } from "oly-core";
 import { olyReactEvents } from "../constants/events";
 import { olyReactKeys } from "../constants/keys";
 import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty } from "../interfaces";
@@ -61,7 +60,7 @@ export class ComponentInjector {
         }
 
         const eventPropertyKey = propertyKey + "$$refresh";
-        instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutate) {
+        instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutateEvent) {
           if (event.key === (state.name || _.identity(target, propertyKey))) {
             this.setState({[event.key]: event.newValue});
           }

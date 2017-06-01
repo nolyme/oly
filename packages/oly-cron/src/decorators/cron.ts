@@ -1,7 +1,6 @@
 import { IDecorator, Meta } from "oly-core";
 import { olyCronKeys } from "../constants/keys";
 
-
 export class CronDecorator implements IDecorator {
 
   public constructor(private cron: string) {

@@ -1,5 +1,5 @@
 import { readFile } from "fs";
-import { inject, Kernel } from "oly-core";
+import { _, inject, Kernel } from "oly-core";
 import { serve } from "oly-http";
 
 export class ReactStaticService {
@@ -13,7 +13,7 @@ export class ReactStaticService {
    * @param www   Directory path where point is available
    */
   public useStatic(www: string): any {
-    const cache = this.kernel.isProduction() ? 1000 * 60 * 60 * 24 : 0;
+    const cache = _.isProduction() ? 1000 * 60 * 60 * 24 : 0;
     return serve(www, {index: false, maxage: cache});
   }
 

@@ -1,4 +1,4 @@
-import { _, FunctionOf } from "oly-core";
+import { _, Class } from "oly-core";
 import {
   Disposable,
   getParams,
@@ -12,7 +12,7 @@ import {
 
 export class ServerLocationServices implements LocationServices, Disposable {
 
-  public static of(requestUrl: string): FunctionOf<ServerLocationServices> {
+  public static of(requestUrl: string): Class<ServerLocationServices> {
     return class extends ServerLocationServices { // tslint:disable-line
       public requestUrl = requestUrl;
     };
