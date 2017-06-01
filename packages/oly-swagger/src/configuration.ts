@@ -1,8 +1,8 @@
-import { Kernel } from "oly-core";
+import { _, Kernel } from "oly-core";
 import { SwaggerProvider } from "./providers/SwaggerProvider";
 
 export const USE_SWAGGER_ON_DEVELOPMENT = (kernel: Kernel) => {
-  if (!kernel.isProduction()) {
+  if (!_.isProduction()) {
     kernel.with(SwaggerProvider);
   }
 };

@@ -1,16 +1,7 @@
 /**
- * Enhance oly-api IRoute
- */
-declare module "oly-api/lib/interfaces" {
-  export interface IRoute {
-    api: IRouteApi;
-  }
-}
-
-/**
  *
  */
-export interface IRouteApi {
+export interface IRouterPropertyApi {
   summary?: string;
   description?: string;
   security?: any[];

@@ -19,7 +19,7 @@ export interface IRouterProperty {
   method: IMethods;
   path: string;
   middlewares: Function[];
-  api: object;
+  api: any;
 }
 
 /**

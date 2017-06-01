@@ -1,8 +1,8 @@
 import { ApiProvider, KoaRouterBuilder } from "oly-api";
-import { _, IDeclarations, inject, Kernel, Logger } from "oly-core";
+import { IDeclarations, inject, Kernel, Logger } from "oly-core";
 import { HttpServerProvider, serve } from "oly-http";
 import { JsonService } from "oly-mapper";
-import { RouterMetadataUtil } from "oly-router";
+import { MetaRouter } from "oly-router";
 import { join } from "path";
 
 /**
@@ -17,22 +17,22 @@ export class SwaggerProvider {
    */
   public swagger: any;
 
-  @inject(JsonService)
+  @inject
   protected jsonService: JsonService;
 
-  @inject(HttpServerProvider)
+  @inject
   protected httpServerProvider: HttpServerProvider;
 
-  @inject(KoaRouterBuilder)
+  @inject
   protected koaRouterBuilder: KoaRouterBuilder;
 
-  @inject(ApiProvider)
+  @inject
   protected apiProvider: ApiProvider;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
   /**
@@ -57,7 +57,7 @@ export class SwaggerProvider {
     };
 
     for (const dep of deps) {
-      if (RouterMetadataUtil.hasRouter(dep.definition)) {
+      if (MetaRouter.get(dep.definition)) {
 
         const router = this.koaRouterBuilder.createFromDefinition(dep.definition);
 
@@ -166,17 +166,18 @@ export class SwaggerProvider {
    */
   private getRouteByLayer(Type: any, layer: any): any {
 
-    const router = RouterMetadataUtil.getRouter(Type);
+    const router = MetaRouter.get(Type);
+    if (router) {
+      for (const propertyKey of Object.keys(router.properties)) {
+        const r = router.properties[propertyKey];
 
-    for (const propertyKey of Object.keys(router.routes)) {
-      const r = router.routes[propertyKey];
+        if (r.method === "DEL" && (router.target.prefix || "") + r.path === layer.path) {
+          return Object.assign({}, r, {propertyKey});
+        }
 
-      if (r.method === "DEL" && (router.prefix || "") + r.path === layer.path) {
-        return Object.assign({}, r, {propertyKey});
-      }
-
-      if (r.method === layer.methods[layer.methods.length - 1] && (router.prefix || "") + r.path === layer.path) {
-        return Object.assign({}, r, {propertyKey});
+        if (r.method === layer.methods[layer.methods.length - 1] && (router.target.prefix || "") + r.path === layer.path) {
+          return Object.assign({}, r, {propertyKey});
+        }
       }
     }
   }

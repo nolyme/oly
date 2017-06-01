@@ -1,15 +1,23 @@
-import { RouterMetadataUtil } from "oly-router";
+import { IDecorator, Meta } from "oly-core";
+import { olyRouterKeys } from "oly-router";
 import { IRouteApi } from "../interfaces";
 
-/**
- * @experimental
- */
-export const api = (options: IRouteApi): PropertyDecorator => {
-  return (target: object, propertyKey: string): void => {
+export type IApiOptions = Partial<IRouteApi>;
 
-    const router = RouterMetadataUtil.getRouter(target.constructor);
+export class ApiDecorator implements IDecorator {
 
-    RouterMetadataUtil.setRoute(router, propertyKey, {api: options});
-    RouterMetadataUtil.setRouter(target.constructor, router);
-  };
-};
+  public constructor(private options: IApiOptions = {}) {
+  }
+
+  public asMethod(target: object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void {
+    Meta.of({key: olyRouterKeys.router, target, propertyKey}).set({
+      api: this.options,
+    });
+  }
+
+  public asProperty(target: object, propertyKey: string): void {
+    this.asMethod(target, propertyKey, {});
+  }
+}
+
+export const api = Meta.decoratorWithOptions<IApiOptions>(ApiDecorator);
