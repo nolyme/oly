@@ -1,5 +1,5 @@
 import { env, state } from "oly-core";
-import { layout, page, page404, path } from "oly-react";
+import { layout, page, page404, param } from "oly-react";
 import * as React from "react";
 import { IDoc, IModuleContent } from "../cli/interfaces";
 import { Home } from "./layout/Home";
@@ -26,8 +26,11 @@ export class App {
     return <Home doc={this.doc}/>;
   }
 
-  @page("/m/:module", {children: [AppModule]})
-  public modulePages(@path("module") module: string) {
+  @page({
+    children: [AppModule],
+    path: "/m/:module",
+  })
+  public modulePages(@param("module") module: string) {
     this.module = this.doc.modules.filter((m) => m.name === module)[0];
     if (!this.module) {
       return NotFound;

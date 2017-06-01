@@ -1,5 +1,5 @@
 import { state } from "oly-core";
-import { page, path } from "oly-react";
+import { page, param } from "oly-react";
 import * as React from "react";
 import { IModuleContent } from "../../cli/interfaces";
 import { NotFound } from "../layout/NotFound";
@@ -19,7 +19,7 @@ export class AppModule {
   }
 
   @page("/@/:decorator")
-  public decorator(@path("decorator") decoratorName: string) {
+  public decorator(@param("decorator") decoratorName: string) {
     const decorator = this.module.decorators.filter((s) => s.name === decoratorName)[0];
     if (!decorator) {
       return NotFound;
@@ -28,7 +28,7 @@ export class AppModule {
   }
 
   @page("/s/:service")
-  public service(@path("service") serviceName: string) {
+  public service(@param("service") serviceName: string) {
     const service = this.module.services.filter((s) => s.name === serviceName)[0];
     if (!service) {
       return NotFound;
@@ -37,8 +37,8 @@ export class AppModule {
   }
 
   @page("/s/:service/:method")
-  public serviceMethod(@path("service") serviceName: string,
-                       @path("method") methodName: string) {
+  public serviceMethod(@param("service") serviceName: string,
+                       @param("method") methodName: string) {
     const service = this.module.services.filter((s) => s.name === serviceName)[0];
     if (!service) {
       return NotFound;
