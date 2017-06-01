@@ -22,6 +22,10 @@ export class UseDecorator implements IDecorator {
       middlewares: [this.options],
     });
   }
+
+  public asProperty(target: object, propertyKey: string): void {
+    this.asMethod(target, propertyKey, {});
+  }
 }
 
 export const use = Meta.decoratorWithOptions<IUseOptions>(UseDecorator);

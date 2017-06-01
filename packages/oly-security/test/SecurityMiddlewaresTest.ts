@@ -1,11 +1,10 @@
-import { ApiProvider, get } from "oly-api";
-import { olyApiErrors } from "oly-api";
+import { ApiProvider, get, olyApiErrors } from "oly-api";
 import { HttpClient, HttpClientException } from "oly-http";
 import { attachKernel } from "oly-test";
 import { auth } from "../src";
 import { olySecurityErrors } from "../src/constants/errors";
 import { JwtAuthService } from "../src/services/JwtAuthService";
-import { JwtUtil } from "../src/utils/JwtUtil";
+import { Jwt } from "../src/utils/Jwt";
 
 class App {
 
@@ -85,7 +84,7 @@ describe("SecurityMiddlewares", () => {
   it("should reject expired token", async () => {
     kernel.state("OLY_SECURITY_TOKEN_EXPIRATION", 0);
     const token = jwt.createToken("<id>");
-    expect(JwtUtil.isValid(token)).toBeFalsy();
+    expect(Jwt.isValid(token)).toBeFalsy();
     try {
       await client.get("/", {
         headers: {

@@ -6,7 +6,6 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
     "strict": true,
     "jsx": "react"

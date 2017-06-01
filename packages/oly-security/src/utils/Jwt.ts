@@ -1,10 +1,10 @@
-import { CommonUtil } from "oly-core";
+import { _ } from "oly-core";
 import { IPayload } from "../interfaces";
 
 /**
  * Collection of one line util about Jwt.
  */
-export class JwtUtil {
+export class Jwt {
 
   /**
    * Extract payload from token.
@@ -13,7 +13,7 @@ export class JwtUtil {
    * @return          IPayload
    */
   public static parse(token: string): IPayload {
-    return JSON.parse(CommonUtil.atob(token.split(".")[1]));
+    return JSON.parse(_.atob(token.split(".")[1]));
   }
 
   /**
@@ -23,7 +23,7 @@ export class JwtUtil {
    * @return            Ttl
    */
   public static getLifeTime(token: string): number {
-    const payload = JwtUtil.parse(token);
+    const payload = Jwt.parse(token);
     return Number(payload.exp) - Number(payload.iat);
   }
 
@@ -37,7 +37,7 @@ export class JwtUtil {
     if (!token) {
       return false;
     }
-    const payload = JwtUtil.parse(token);
+    const payload = Jwt.parse(token);
     return payload.exp > (new Date().getTime() / 1000);
   }
 }

@@ -6,10 +6,11 @@
     "jest": "20.0.4",
     "lerna": "2.0.0-rc.5",
     "rimraf": "2.6.1",
-    "ts-jest": "20.0.4",
+    "ts-jest": "20.0.5",
+    "ts-node": "^3.0.4",
     "tslint": "5.3.2",
     "tslint-react": "3.0.0",
-    "typescript": "2.3.3"
+    "typescript": "2.3.4"
   },
   "scripts": {
     "docs": "node packages/oly-docs/bin/oly-docs",

@@ -1,7 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import { SignOptions, VerifyOptions } from "jsonwebtoken";
 import { UnauthorizedException } from "oly-api";
-import { CommonUtil as _, env, inject, Logger } from "oly-core";
+import { _, env, inject, Logger } from "oly-core";
 import { olySecurityErrors } from "../constants/errors";
 import { JsonWebTokenException } from "../exceptions/JsonWebTokenException";
 import { TokenExpiredException } from "../exceptions/TokenExpiredException";

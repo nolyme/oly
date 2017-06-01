@@ -11,10 +11,10 @@ import { ApiMiddlewares } from "./ApiMiddlewares";
  */
 export class KoaRouterBuilder {
 
-  @inject(JsonService)
+  @inject
   protected json: JsonService;
 
-  @inject(ApiMiddlewares)
+  @inject
   protected apiMiddlewares: ApiMiddlewares;
 
   /**
