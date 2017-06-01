@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "oly-core": "^0.10.4",
+    "oly-test": "^0.10.4",
     "sqlite3": "3.1.8"
   },
   "peerDependencies": {

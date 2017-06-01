@@ -1,11 +1,11 @@
-import { env, Function, IDeclarations, inject, Logger, state } from "oly-core";
+import { Class, env, IDeclaration, inject, IProvider, Logger, state } from "oly-core";
 import { Connection, createConnection, DriverOptions, Entity, getMetadataArgsStorage } from "typeorm";
 import { parse } from "url";
 
 /**
  * Typeorm connection manager.
  */
-export class DatabaseProvider {
+export class DatabaseProvider implements IProvider {
 
   @env("OLY_DATABASE_URL")
   public url: string;
@@ -16,11 +16,28 @@ export class DatabaseProvider {
   @env("OLY_DATABASE_SHOW_LOGS")
   public showLogs: boolean = false;
 
-  @state()
+  @state
   public connection: Connection;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
+
+  /**
+   * Hook - start
+   *
+   * @param deps  Kernel dependencies
+   */
+  public async onStart(deps: Array<IDeclaration<{ type: Class }>>): Promise<void> {
+    this.logger.info(`connect to '${this.url}' ...`);
+    this.connection = await this.createConnection(deps);
+  }
+
+  /**
+   * Hook - stop
+   */
+  public async onStop(): Promise<void> {
+    await this.connection.close();
+  }
 
   /**
    *
@@ -59,13 +76,17 @@ export class DatabaseProvider {
 
   /**
    *
-   * @param deps
+   * @param declarations
    */
-  protected getEntities(deps: IDeclarations): Function[] {
+  protected getEntities(declarations: Array<IDeclaration<{ type?: Class }>>): Function[] {
 
     const tables = getMetadataArgsStorage().tables.toArray();
-    const repositories = deps.filter((d) => !!d.instance && !!d.instance.type);
-    const entities = repositories.map((d) => d.instance.type);
+    const entities: Class[] = [];
+    for (const d of declarations) {
+      if (d.instance && d.instance.type) {
+        entities.push(d.instance.type);
+      }
+    }
 
     for (const entity of entities) {
       // ensure all @entity are resolved
@@ -94,7 +115,7 @@ export class DatabaseProvider {
    *
    * @param deps  Kernel dependencies
    */
-  protected createConnection(deps: IDeclarations): Promise<Connection> {
+  protected createConnection(deps: Array<IDeclaration<{ type: Class }>>): Promise<Connection> {
     return createConnection({
       autoSchemaSync: this.autoSync,
       driver: this.getDriver(this.url),
@@ -103,22 +124,5 @@ export class DatabaseProvider {
         logQueries: this.showLogs,
       },
     });
-  }
-
-  /**
-   * Hook - start
-   *
-   * @param deps  Kernel dependencies
-   */
-  protected async onStart(deps: IDeclarations): Promise<void> {
-    this.logger.info(`connect to '${this.url}' ...`);
-    this.connection = await this.createConnection(deps);
-  }
-
-  /**
-   * Hook - stop
-   */
-  protected async onStop(): Promise<void> {
-    await this.connection.close();
   }
 }

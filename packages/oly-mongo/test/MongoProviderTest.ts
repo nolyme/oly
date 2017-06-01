@@ -5,7 +5,7 @@ import { Repository } from "../src";
 describe("MongoProvider", () => {
 
   class MyModel {
-    @field() name: string;
+    @field name: string;
   }
 
   class MyRepository extends Repository.of(MyModel) {

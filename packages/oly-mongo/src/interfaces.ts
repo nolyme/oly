@@ -1,4 +1,5 @@
-import { ObjectID } from "mongodb";
+import { IndexOptions, ObjectID } from "mongodb";
+import { IMetadata } from "oly-core";
 
 /**
  *
@@ -15,4 +16,18 @@ export type ID = string | ObjectID;
  */
 export interface IDocument {
   _id?: string;
+}
+
+/**
+ *
+ */
+export type IIndexProperty = IndexOptions;
+
+/**
+ *
+ */
+export interface IIndexesMetadata extends IMetadata {
+  properties: {
+    [key: string]: IIndexProperty;
+  };
 }

@@ -1,4 +1,4 @@
-import { FunctionOf, inject, state } from "oly-core";
+import { Class, inject, IProvider, Kernel, state } from "oly-core";
 import { Connection, Repository as TypeRepository } from "typeorm";
 import { EntityMetadata } from "typeorm/metadata/EntityMetadata";
 import { QueryRunnerProvider } from "typeorm/query-runner/QueryRunnerProvider";
@@ -7,26 +7,26 @@ import { DatabaseProvider } from "./DatabaseProvider";
 /**
  * Hacky way to #getRepository() with class.
  */
-export abstract class Repository<T> extends TypeRepository<T> {
+export abstract class Repository<T> extends TypeRepository<T> implements IProvider {
 
-  public static of<T>(type: FunctionOf<T>): FunctionOf<Repository<T>> {
+  public static of<T>(type: Class<T>): Class<Repository<T>> {
     return class extends Repository<T> {  // tslint:disable-line
       protected type = type;
     };
   }
 
-  @state()
+  @state
   protected connection: Connection;
 
-  @state()
+  @state
   protected metadata: EntityMetadata;
 
-  @state()
+  @state
   protected queryRunnerProvider: QueryRunnerProvider;
 
-  protected type: FunctionOf<T>;
+  protected type: Class<T>;
 
-  @inject()
+  @inject
   protected databaseProvider: DatabaseProvider;
 
   /**
@@ -68,7 +68,7 @@ export abstract class Repository<T> extends TypeRepository<T> {
     return this.persist(this.create(data));
   }
 
-  protected onStart(): void {
+  public onStart(): void {
     const clone = this.databaseProvider.connection.getRepository(this.type) as any;
     this.connection = clone.connection;
     this.metadata = clone.metadata;

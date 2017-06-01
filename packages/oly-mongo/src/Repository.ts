@@ -1,8 +1,8 @@
 import { Collection, ObjectID } from "mongodb";
-import { FunctionOf, inject, Kernel, Logger, MetadataUtil } from "oly-core";
-import { FieldMetadataUtil, JsonService } from "oly-mapper";
-import { lyIndexes } from "./annotations";
-import { ID, IDocument } from "./interfaces";
+import { Class, inject, Kernel, Logger, Meta } from "oly-core";
+import { IFieldsMetadata, JsonService, olyMapperKeys } from "oly-mapper";
+import { olyMongoKeys } from "./constants/keys";
+import { ID, IDocument, IIndexesMetadata } from "./interfaces";
 import { MongoProvider } from "./MongoProvider";
 
 /**
@@ -10,13 +10,13 @@ import { MongoProvider } from "./MongoProvider";
  */
 export abstract class Repository<T extends IDocument> {
 
-  public static of<T extends IDocument>(type: FunctionOf<T>): FunctionOf<Repository<T>> {
+  public static of<T extends IDocument>(type: Class<T>): Class<Repository<T>> {
     return class extends Repository<T> { // tslint:disable-line
       protected type = type;
     };
   }
 
-  protected type: FunctionOf<T>;
+  protected type: Class<T>;
 
   @inject(Kernel)
   protected kernel: Kernel;
@@ -221,17 +221,22 @@ export abstract class Repository<T extends IDocument> {
    */
   public async sync() {
 
-    const syncType = async (Type: any, parent = "") => {
+    const syncType = async (target: any, parent = "") => {
 
-      const indexes = MetadataUtil.deep(lyIndexes, Type);
-      for (const propertyKey of Object.keys(indexes)) {
-        this.logger.debug(`index ${parent}${propertyKey}`);
-        await this.collection.createIndex(parent + propertyKey, indexes[propertyKey].options);
+      const indexesMetadata = Meta.of({key: olyMongoKeys.indexes, target}).deep<IIndexesMetadata>();
+      if (indexesMetadata) {
+        const keys = Object.keys(indexesMetadata.properties);
+        for (const propertyKey of keys) {
+          this.logger.debug(`index ${parent}${propertyKey}`);
+          await this.collection.createIndex(parent + propertyKey, indexesMetadata.properties[propertyKey]);
+        }
       }
 
-      const fields = FieldMetadataUtil.getFields(this.type);
-      for (const field of fields) {
-        if (field.type && FieldMetadataUtil.hasFields(field.type)) {
+      const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target}).deep<IFieldsMetadata>();
+      if (fieldsMetadata) {
+        const keys = Object.keys(fieldsMetadata.properties);
+        for (const propertyKey of keys) {
+          const field = fieldsMetadata.properties[propertyKey];
           await syncType(field.type, parent + field.name + ".");
         }
       }
