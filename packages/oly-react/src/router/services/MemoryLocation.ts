@@ -1,4 +1,3 @@
-import { _, Class } from "oly-core";
 import {
   Disposable,
   getParams,
@@ -8,12 +7,13 @@ import {
   MemoryLocationConfig,
   parseUrl,
   UIRouter,
-} from "oly-react";
+} from "@uirouter/core";
+import { _, Class } from "oly-core";
 
-export class ServerLocationServices implements LocationServices, Disposable {
+export class MemoryLocationServices implements LocationServices, Disposable {
 
-  public static of(requestUrl: string): Class<ServerLocationServices> {
-    return class extends ServerLocationServices { // tslint:disable-line
+  public static of(requestUrl: string): Class<MemoryLocationServices> {
+    return class extends MemoryLocationServices { // tslint:disable-line
       public requestUrl = requestUrl;
     };
   }
@@ -31,5 +31,5 @@ export class ServerLocationConfig extends MemoryLocationConfig { // tslint:disab
 }
 
 export const serverLocationPlugin: (url: string) => (router: UIRouter) => LocationPlugin = (url) => {
-  return locationPluginFactory("oly.serverLocation", false, ServerLocationServices.of(url), ServerLocationConfig);
+  return locationPluginFactory("oly.serverLocation", false, MemoryLocationServices.of(url), ServerLocationConfig);
 };

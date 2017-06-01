@@ -6,7 +6,6 @@ import { join } from "path";
 import { ReactProxyService } from "../services/ReactProxyService";
 import { ReactServerRenderer } from "../services/ReactServerRenderer";
 import { ReactStaticService } from "../services/ReactStaticService";
-import { serverLocationPlugin } from "../services/ServerLocation";
 
 /**
  *
@@ -113,7 +112,7 @@ export class ReactServerProvider implements IProvider {
 
         try {
           // find route + resolve
-          await router.listen(serverLocationPlugin(ctx.req.url || "/"));
+          await router.listen(ctx.req.url || "/");
 
           // build page
           ctx.body = renderer.render(ctx, this.template, this.mountId);

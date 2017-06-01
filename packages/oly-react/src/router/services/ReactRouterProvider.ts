@@ -18,6 +18,7 @@ import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import { IChunks, ILayer, IPagesMetadata, IPagesProperty, IRawChunk, IRouteState } from "../interfaces";
 import { DefaultNotFound } from "./DefaultNotFound";
+import { serverLocationPlugin } from "./MemoryLocation";
 
 export class ReactRouterProvider implements IProvider {
 
@@ -54,7 +55,7 @@ export class ReactRouterProvider implements IProvider {
   /**
    * Start Router5 listener.
    */
-  public listen(locationPlugin: (router: UIRouter) => LocationPlugin) {
+  public listen(locationPlugin: ((router: UIRouter) => LocationPlugin) | string) {
 
     this.uiRouter = new UIRouter();
     this.setHooks();
@@ -68,7 +69,10 @@ export class ReactRouterProvider implements IProvider {
     });
     this.uiRouter.urlService.rules.otherwise({state: "404"});
 
-    this.uiRouter.plugin(locationPlugin);
+    this.uiRouter.plugin(
+      typeof locationPlugin === "string"
+        ? serverLocationPlugin(locationPlugin)
+        : locationPlugin);
 
     this.uiRouter.urlService.listen();
     this.uiRouter.urlService.sync();
