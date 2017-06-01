@@ -1,4 +1,4 @@
-import { Function, Logger } from "oly-core";
+import { Logger } from "oly-core";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
 import { JwtAuthService } from "../services/JwtAuthService";
 

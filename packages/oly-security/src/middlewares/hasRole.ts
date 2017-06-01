@@ -1,5 +1,4 @@
 import { ForbiddenException } from "oly-api";
-import { Function } from "oly-core";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
 import { JwtAuthService } from "../services/JwtAuthService";
 import { isAuth } from "./isAuth";

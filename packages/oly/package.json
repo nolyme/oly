@@ -11,7 +11,7 @@
     "typescript"
   ],
   "dependencies": {
-    "@types/react": "15.0.24",
+    "@types/react": "15.0.25",
     "oly-api": "^0.10.4",
     "oly-core": "^0.10.4",
     "oly-http": "^0.10.4",

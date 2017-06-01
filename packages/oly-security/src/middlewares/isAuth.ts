@@ -1,5 +1,4 @@
 import { UnauthorizedException } from "oly-api";
-import { Function } from "oly-core";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
 import { JwtAuthService } from "../services/JwtAuthService";
 import { parseToken } from "./parseToken";

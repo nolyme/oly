@@ -5,7 +5,6 @@
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strict": true,
     "outDir": "lib",
     "jsx": "react"
   },

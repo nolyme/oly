@@ -1,4 +1,4 @@
-import { inject, Logger } from "oly-core";
+import { _, inject, Logger } from "oly-core";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
@@ -7,16 +7,13 @@ import * as ReactDOM from "react-dom";
  */
 export class Browser {
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  /**
-   *
-   */
   protected container: HTMLElement | null;
 
   /**
-   *
+   * Ref to window.
    */
   public get window(): Window {
     if (!this.exists()) {
@@ -26,14 +23,14 @@ export class Browser {
   }
 
   /**
-   *
+   * Ref to window.document.
    */
   public get document(): Document {
     return this.window.document;
   }
 
   /**
-   *
+   * Safe div container.
    */
   public get root(): HTMLElement {
     if (!this.container) {
@@ -43,11 +40,10 @@ export class Browser {
   }
 
   /**
-   *
+   * Check if browser window is available.
    */
   public exists(): boolean {
-    return typeof window !== "undefined"
-      && typeof document !== "undefined";
+    return _.isBrowser();
   }
 
   /**

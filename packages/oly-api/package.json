@@ -19,17 +19,16 @@
     "koa-bodyparser": "3.2.0",
     "koa-multer": "1.0.1",
     "koa-router": "7.2.0",
+    "oly-http": "^0.10.4",
     "oly-router": "^0.10.4"
   },
   "devDependencies": {
     "oly-core": "^0.10.4",
-    "oly-http": "^0.10.4",
     "oly-mapper": "^0.10.4",
     "oly-test": "^0.10.4"
   },
   "peerDependencies": {
-    "oly-core": "^0.10.4",
-    "oly-http": "^0.10.4"
+    "oly-core": "^0.10.4"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
