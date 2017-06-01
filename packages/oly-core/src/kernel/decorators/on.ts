@@ -12,6 +12,10 @@ export class OnDecorator implements IDecorator {
       name: this.name,
     });
   }
+
+  public asProperty(t: object, p: string): void {
+    this.asMethod(t, p);
+  }
 }
 
 export const on = Meta.decorator<string>(OnDecorator);

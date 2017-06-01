@@ -4,6 +4,7 @@ import { Logger } from "../logger/Logger";
 import { olyCoreErrors } from "./constants/errors";
 import { olyCoreEvents } from "./constants/events";
 import { KernelException } from "./exceptions/KernelException";
+import { Global as _ } from "./Global";
 import {
   IEventCallback,
   IEventListener,
@@ -25,7 +26,6 @@ import {
   IProvider,
 } from "./interfaces/injections";
 import { IStateMutateEvent, IStatesMetadata, IStore } from "./interfaces/states";
-import { Global as _ } from "./Global";
 
 /**
  * Kernel is a registry as context.
@@ -451,13 +451,16 @@ export class Kernel {
    * @param options         Listener options
    * @param options.unique  If yes, event will be deleted on the first call
    */
-  public on(key: string, action: IEventCallback | IEventReference, options: IKernelOnOptions = {}): IObserver {
+  public on(key: string, action: IEventCallback | IEventReference = _.noop, options: IKernelOnOptions = {}): IObserver {
     const unique = options.unique === true;
     const event = {key, action, unique};
     this.events.push(event);
     return {
       free: () => this.events.splice(this.events.indexOf(event), 1),
-      wait: () => new Promise((resolve) => this.on(key, resolve, unique)),
+      wait: () => {
+        this.events.splice(this.events.indexOf(event), 1);
+        return new Promise((resolve) => this.on(key, resolve, unique));
+      },
     };
   }
 
@@ -783,7 +786,7 @@ export class Kernel {
       const observers: IObserver[] = [];
       const target = instance.constructor as Class<T>;
       const keys = Object.keys(eventsMetadata.properties);
-
+      
       for (const propertyKey of keys) {
         const event = eventsMetadata.properties[propertyKey];
         const key = event.name || _.identity(definition, propertyKey);

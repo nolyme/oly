@@ -5,7 +5,7 @@ import { View } from "../../src/router/components/View";
 import { layout } from "../../src/router/decorators/layout";
 import { page } from "../../src/router/decorators/page";
 import { page404 } from "../../src/router/decorators/page404";
-import { path } from "../../src/router/decorators/path";
+import { param } from "../../src/router/decorators/param";
 import { query } from "../../src/router/decorators/query";
 
 export class FakeNestedApp {
@@ -16,7 +16,7 @@ export class FakeNestedApp {
   }
 
   @page("/:id")
-  public details(@path("id") id: string, @query("name") name: string) {
+  public details(@param id: string, @query("name") name: string) {
     return <div>Details({id},{name})</div>;
   }
 
@@ -51,16 +51,18 @@ export class FakeApp {
     return <div>NotFound</div>;
   }
 
-  @page("/nested", {
+  @page({
     children: [FakeNestedApp],
+    path: "/nested",
   })
   public async nested() {
     await _.timeout(10);
     return <div>Nested:<View/></div>;
   }
 
-  @page("/nested2", {
+  @page({
     children: [Fake2],
+    path: "/nested2",
   })
   public nested2() {
     return <div>Nested2:<View/></div>;

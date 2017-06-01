@@ -1,4 +1,4 @@
-/**
- *
- */
-export const lyPages = "ly:pages";
+export const olyReactRouterKeys = {
+
+  pages: "oly:pages",
+};

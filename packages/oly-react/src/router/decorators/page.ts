@@ -1,34 +1,50 @@
-import { Function, inject, MetadataUtil } from "oly-core";
-import { lyPages } from "../constants/keys";
-import { IPageMetadataMap, IPageOptions } from "../interfaces";
+import { IDecorator, inject, Meta } from "oly-core";
+import { olyReactRouterKeys } from "../constants/keys";
 
 /**
- * Page.
- *
- * @param url       Pathname
- * @param options
+ * Page options.
  */
-export const page = (url: string, options: IPageOptions = {}) => {
-  return (target: object, propertyKey: string) => {
+export interface IPageOptions {
+  path: string;
+  children?: Function[];
+  data?: any;
+  name?: string;
+  abstract?: boolean;
+}
 
-    const pages: IPageMetadataMap = MetadataUtil.get(lyPages, target.constructor);
+export class PageDecorator implements IDecorator {
 
-    // we secretly inject nested views inside parent, niark niark niark
-    // this is useful when child depends on providers
-    for (const child of options.children || []) {
-      inject(child)(target, `${child.name}$auto`);
+  private options: IPageOptions;
+
+  public constructor(options: string | IPageOptions) {
+    if (typeof options === "string") {
+      this.options = {path: options};
+    } else {
+      this.options = options;
+    }
+  }
+
+  public asMethod(target: object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void {
+
+    if (this.options.children) {
+      // we secretly inject nested views inside parent, niark niark niark
+      // this is useful when child depends on providers
+      for (const child of this.options.children || []) {
+        inject(child)(target, `${child.name}$auto`);
+      }
     }
 
-    pages[propertyKey] = {
-      ...pages[propertyKey],
-      abstract: options.abstract === true,
-      children: options.children,
-      name: options.name || propertyKey,
-      target: target.constructor as Function,
-      propertyKey,
-      url,
-    };
+    Meta.of({key: olyReactRouterKeys.pages, target, propertyKey}).set({
+      abstract: this.options.abstract === true,
+      children: this.options.children,
+      name: this.options.name || propertyKey,
+      url: this.options.path,
+    });
+  }
 
-    MetadataUtil.set(lyPages, pages, target.constructor);
-  };
-};
+  public asProperty(target: object, propertyKey: string): void {
+    this.asMethod(target, propertyKey, {});
+  }
+}
+
+export const page = Meta.decoratorWithOptions<string | IPageOptions>(PageDecorator);

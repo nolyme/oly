@@ -23,16 +23,16 @@ export class ReactBrowserProvider {
   @env("OLY_REACT_ROUTER_HASH")
   public readonly useHash: boolean = false;
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  @inject(Browser)
+  @inject
   protected browser: Browser;
 
-  @inject(ReactRouterProvider)
+  @inject
   protected router: ReactRouterProvider;
 
   /**

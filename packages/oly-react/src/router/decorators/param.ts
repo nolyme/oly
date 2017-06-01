@@ -1,15 +1,15 @@
 import { IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
 import { Router } from "../services/Router";
 
-export interface IQueryOptions {
+export interface IParamOptions {
   name?: string;
 }
 
-export class QueryDecorator implements IDecorator {
+export class ParamDecorator implements IDecorator {
 
-  private options: IQueryOptions;
+  private options: IParamOptions;
 
-  public constructor(options: IQueryOptions | string = {}) {
+  public constructor(options: IParamOptions | string = {}) {
     if (typeof options === "string") {
       this.options = {name: options};
     } else {
@@ -20,7 +20,7 @@ export class QueryDecorator implements IDecorator {
   public asParameter(target: object, propertyKey: string, index: number): void {
     const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
     Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
-      id: "react:query",
+      id: "react:param",
       name,
       type: Meta.designParamTypes(target, propertyKey)[index] as any,
       handler: (k: Kernel) => {
@@ -33,4 +33,4 @@ export class QueryDecorator implements IDecorator {
 /**
  *
  */
-export const query = Meta.decorator<IQueryOptions>(QueryDecorator);
+export const param = Meta.decorator<IParamOptions>(ParamDecorator);

@@ -1,31 +1,31 @@
-import { CommonUtil, MetadataUtil } from "oly-core";
-import { lyActions } from "../constants";
-import { IActionMetadataMap } from "../interfaces";
+import { IDecorator, Meta } from "oly-core";
+import { olyReactKeys } from "../constants/keys";
 
-/**
- * Bind function and handle exceptions.
- */
-export const action = (target: object | string, propertyKey?: string): any => {
+export interface IActionOptions {
+  name?: string;
+}
 
-  if (typeof target === "object" && !!propertyKey) {
-    return $action(null)(target, propertyKey);
+export class ActionDecorator implements IDecorator {
+
+  private options: IActionOptions;
+
+  public constructor(options: IActionOptions | string = {}) {
+    if (typeof options === "string") {
+      this.options = {name: options};
+    } else {
+      this.options = options;
+    }
   }
 
-  return $action(target as string);
-};
-
-const $action = (name: string | null) => (target2: any, propertyKey2: string) => {
-
-  const actions: IActionMetadataMap = MetadataUtil.get(lyActions, target2.constructor);
-  const newName = name || CommonUtil.identity(target2.constructor, propertyKey2);
-
-  if (!actions[propertyKey2]) {
-    actions[propertyKey2] = {
-      name: newName,
-    };
-  } else {
-    actions[propertyKey2].name = newName;
+  public asMethod(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void {
+    Meta.of({key: olyReactKeys.actions, target, propertyKey}).set({
+      name: this.options.name || propertyKey,
+    });
   }
 
-  MetadataUtil.set(lyActions, actions, target2.constructor);
-};
+  public asProperty(target: Object, propertyKey: string): void {
+    this.asMethod(target, propertyKey, {});
+  }
+}
+
+export const action = Meta.decorator<IActionOptions>(ActionDecorator);

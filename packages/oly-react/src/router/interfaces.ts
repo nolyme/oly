@@ -1,5 +1,5 @@
 import { StateObject } from "@uirouter/core";
-import { Function } from "oly-core";
+import { Class, IMetadata } from "oly-core";
 import { ComponentClass } from "react";
 
 /**
@@ -25,34 +25,17 @@ export interface ILayer {
 }
 
 /**
- * Page options.
- */
-export interface IPageOptions {
-  children?: Function[];
-  data?: any;
-  name?: string;
-  abstract?: boolean;
-}
-
-/**
  * Page metadata.
  */
-export interface IPageMetadata {
+export interface IPagesProperty {
   abstract: boolean;
   url: string;
   name: string;
-  target: Function;
-  propertyKey: string;
-  children?: Function[];
-  args: Array<{
-    type: "path" | "query";
-    name: string;
-  }>;
+  children?: Class[];
 }
 
-/**
- * Page metadata map.
- */
-export interface IPageMetadataMap {
-  [propertyKey: string]: IPageMetadata;
+export interface IPagesMetadata extends IMetadata {
+  properties: {
+    [key: string]: IPagesProperty;
+  };
 }

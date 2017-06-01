@@ -1,7 +1,6 @@
 import { Kernel } from "oly-core";
+import * as PropTypes from "prop-types";
 import * as React from "react";
-
-const PropTypes = require("prop-types"); // tslint:disable-line
 
 /**
  *
@@ -34,9 +33,9 @@ export class AppContext extends React.Component<IAppContextProps, {}> {
   /**
    * Render children
    */
-  public render() {
+  public render(): JSX.Element | null {
     if (!this.props.children) {
-      return <div/>;
+      return null;
     }
     if (Array.isArray(this.props.children)) {
       return <div>{this.props.children}</div>;

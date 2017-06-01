@@ -1,4 +1,4 @@
-export const olyReactEvents = {
+export const olyReactRouterEvents = {
 
   /**
    *
@@ -16,7 +16,7 @@ export const olyReactEvents = {
   TRANSITION_RENDER: "oly:transition:render",
 
   /**
-   * @target ReactRouterProvider
+   *
    */
   TRANSITION_END: "oly:transition:end",
 };

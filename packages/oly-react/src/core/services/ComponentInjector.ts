@@ -1,20 +1,8 @@
-import {
-  _,
-  IAnyDefinition,
-  Function,
-  IEventMetadataMap,
-  inject,
-  IStateMutate,
-  IVirtualStateMetadataMap,
-  Kernel,
-  Logger,
-  lyEvents,
-  lyStates,
-  MetadataUtil,
-  olyCoreEvents,
-} from "oly-core";
-import { ACTIONS_ERROR, ACTIONS_SUCCESS, lyActions } from "../constants";
-import { IActionMetadata, IActionMetadataMap, IActionResult, IActionResultError } from "../interfaces";
+import { _, Class, inject, Kernel, Logger, Meta, olyCoreEvents, olyCoreKeys } from "oly-core";
+import { IStateMutate } from "oly-core/lib/interfaces/store";
+import { olyReactEvents } from "../constants/events";
+import { olyReactKeys } from "../constants/keys";
+import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty } from "../interfaces";
 
 /**
  * It is an extension of the Kernel.
@@ -33,7 +21,7 @@ import { IActionMetadata, IActionMetadataMap, IActionResult, IActionResultError 
  */
 export class ComponentInjector {
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
   /**
@@ -42,7 +30,7 @@ export class ComponentInjector {
    * @param definition    Component definition
    * @param instance      Instance
    */
-  public inject(definition: IAnyDefinition, instance: object) {
+  public inject(definition: Class, instance: object) {
 
     // pre-process states (before the real kernel#processStates())
     this.processStates(definition, instance);
@@ -58,60 +46,67 @@ export class ComponentInjector {
   /**
    * Add an @on("state:mutate") to re-renderer the component on mutation.
    *
-   * @param definition  React component
+   * @param target      React component
    * @param instance    Instance
    */
-  public processStates(definition: IAnyDefinition, instance: object) {
-    const states: IVirtualStateMetadataMap = MetadataUtil.get(lyStates, definition, {});
-    const keys = Object.keys(states);
+  public processStates(target: Class, instance: object) {
 
-    for (const propertyKey of keys) {
-      const state = states[propertyKey];
-      if (state.readonly) {
-        continue;
-      }
-
-      const events: IEventMetadataMap = MetadataUtil.get(lyEvents, instance.constructor);
-      events[propertyKey + "$$refresh"] = {name: olyCoreEvents.STATE_MUTATE};
-      MetadataUtil.set(lyEvents, events, instance.constructor);
-
-      instance[propertyKey + "$$refresh"] = function refreshHandler(this: any, event: IStateMutate) {
-        if (event.key === (state.name || _.identity(definition, propertyKey))) {
-          this.setState({[event.key]: event.newValue});
+    const statesMetadata = Meta.of({key: olyCoreKeys.states, target}).get();
+    if (statesMetadata) {
+      const keys = Object.keys(statesMetadata.properties);
+      for (const propertyKey of keys) {
+        const state = statesMetadata.properties[propertyKey];
+        if (state.readonly) {
+          continue;
         }
-      };
+
+        const eventPropertyKey = propertyKey + "$$refresh";
+        instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutate) {
+          if (event.key === (state.name || _.identity(target, propertyKey))) {
+            this.setState({[event.key]: event.newValue});
+          }
+        };
+
+        Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey: eventPropertyKey}).set({
+          name: olyCoreEvents.STATE_MUTATE,
+        });
+      }
     }
   }
 
   /**
    * Wrap a method.
    *
-   * @param definition    React component
+   * @param target        React component
    * @param instance      Instance
    */
-  public processActions(definition: IAnyDefinition, instance: object) {
-    const actions: IActionMetadataMap = MetadataUtil.get(lyActions, definition, {});
+  public processActions(target: Class, instance: object) {
+
     const logger = this.kernel.get(Logger).as("Actions");
+    const actionsMetadata = Meta.of({key: olyReactKeys.actions, target}).get<IActionsMetadata>();
+    if (actionsMetadata) {
+      const keys = Object.keys(actionsMetadata.properties);
+      for (const propertyKey of keys) {
 
-    for (const propertyKey of Object.keys(actions)) {
-      const action = actions[propertyKey];
-      const resolve = this.actionResolveFactory(logger, definition, action);
-      const reject = this.actionRejectFactory(logger, definition, action);
+        const action = actionsMetadata.properties[propertyKey];
+        const resolve = this.actionResolveFactory(logger, target, action);
+        const reject = this.actionRejectFactory(logger, target, action);
 
-      instance[propertyKey + "$$copy"] = instance[propertyKey];
-      instance[propertyKey] = function actionWrapper(event: any) {
-        try {
-          logger.trace(`run ${action.name}`);
-          const data = instance[propertyKey + "$$copy"].apply(instance, arguments);
-          if (!!data && !!data.then && !!data.catch) {
-            return data.then(resolve).catch(reject);
-          } else {
-            return resolve(data);
+        instance[propertyKey + "$$copy"] = instance[propertyKey];
+        instance[propertyKey] = function actionWrapper(event: any) {
+          try {
+            logger.trace(`run ${action.name}`);
+            const data = instance[propertyKey + "$$copy"].apply(instance, arguments);
+            if (!!data && !!data.then && !!data.catch) {
+              return data.then(resolve).catch(reject);
+            } else {
+              return resolve(data);
+            }
+          } catch (e) {
+            reject(e);
           }
-        } catch (e) {
-          reject(e);
-        }
-      };
+        };
+      }
     }
   }
 
@@ -132,7 +127,7 @@ export class ComponentInjector {
    * @param action
    * @return {(data:any)=>any}
    */
-  protected actionResolveFactory(logger: Logger, definition: Function, action: IActionMetadata) {
+  protected actionResolveFactory(logger: Logger, definition: Function, action: IActionsProperty) {
     return (data: any) => {
 
       logger.debug(`action ${action.name} is done`);
@@ -143,7 +138,7 @@ export class ComponentInjector {
         data,
       };
 
-      this.kernel.emit(ACTIONS_SUCCESS, actionResult);
+      this.kernel.emit(olyReactEvents.ACTIONS_SUCCESS, actionResult);
 
       // you should't returns data, this is useless
       // -> catch data with emitter
@@ -158,7 +153,7 @@ export class ComponentInjector {
    * @param action
    * @return {(e:Error)=>undefined}
    */
-  protected actionRejectFactory(logger: Logger, definition: Function, action: IActionMetadata) {
+  protected actionRejectFactory(logger: Logger, definition: Function, action: IActionsProperty) {
     return (e: Error) => {
 
       logger.warn(`action ${action.name} has failed`, e);
@@ -169,7 +164,7 @@ export class ComponentInjector {
         error: e,
       };
 
-      this.kernel.emit(ACTIONS_ERROR, actionResult);
+      this.kernel.emit(olyReactEvents.ACTIONS_ERROR, actionResult);
 
       // do not throw the error, this is useless
     };

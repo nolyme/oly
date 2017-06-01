@@ -1,4 +1,4 @@
-import { Function } from "oly-core";
+import { IMetadata } from "oly-core";
 import { ComponentClass, StatelessComponent } from "react";
 
 /**
@@ -29,13 +29,15 @@ export interface IActionResult<T> {
 /**
  *
  */
-export interface IActionMetadata {
+export interface IActionsProperty {
   name: string;
 }
 
 /**
  *
  */
-export interface IActionMetadataMap {
-  [key: string]: IActionMetadata;
+export interface IActionsMetadata extends IMetadata {
+  properties: {
+    [key: string]: IActionsProperty;
+  };
 }

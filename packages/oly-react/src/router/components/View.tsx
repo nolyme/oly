@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";
 import { attach } from "../../core/decorators/attach";
-import { olyReactEvents } from "../constants/events";
+import { olyReactRouterEvents } from "../constants/events";
 import { ILayer } from "../interfaces";
 import { ReactRouterProvider } from "../services/ReactRouterProvider";
 
@@ -65,7 +65,7 @@ export class View extends Component<IViewProps, IViewState> {
   /**
    * Refresh the chunk here
    */
-  @on(olyReactEvents.TRANSITION_RENDER)
+  @on(olyReactRouterEvents.TRANSITION_RENDER)
   public onTransitionEnd(): Promise<void> {
     if (this.layer && this.layer.chunks[this.name] !== this.state.content) {
       this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);

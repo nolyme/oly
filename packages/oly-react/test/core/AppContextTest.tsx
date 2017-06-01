@@ -2,13 +2,13 @@
  * @jest-environment jsdom
  */
 
-import { _, env, inject, Kernel, on, state } from "oly-core";
+import { _, env, Exception, inject, Kernel, on, state } from "oly-core";
 import { createKernel } from "oly-test";
 import * as React from "react";
 import { Component } from "react";
 import { render } from "react-dom";
 import { AppContext } from "../../src/core";
-import { ACTIONS_ERROR, ACTIONS_SUCCESS } from "../../src/core/constants";
+import { olyReactEvents } from "../../src/core/constants/events";
 import { action } from "../../src/core/decorators/action";
 import { attach, connect } from "../../src/core/decorators/attach";
 import { styles } from "../../src/core/decorators/styles";
@@ -18,6 +18,9 @@ class PersonService {
   createPerson() {
     return {name: "Luc"};
   }
+}
+
+class GrootException extends Exception {
 }
 
 @connect
@@ -64,7 +67,7 @@ class B extends Component<any, any> {
 
   @action
   renameActionLikeACow() {
-    throw new Error("I am Groot");
+    throw new GrootException("I am Groot");
   }
 
   componentWillMount() {
@@ -103,12 +106,8 @@ const dom = {
 
 describe("AppContext", () => {
 
-  beforeAll(() => {
+  beforeEach(() => {
     render(<AppContext kernel={kernel}><B/></AppContext>, dom.container);
-  });
-
-  it("empty AppContext", () => {
-    expect(dom.get("strong").textContent).toBe("Francis");
   });
 
   it("componentWillMount can initialize state", () => {
@@ -125,7 +124,7 @@ describe("AppContext", () => {
     setTimeout(() => {
       dom.get("#btn1").click();
     });
-    const result: IActionResult<{ name: string }> = await kernel.on(ACTIONS_SUCCESS, _.noop).wait();
+    const result: IActionResult<{ name: string }> = await kernel.on(olyReactEvents.ACTIONS_SUCCESS, _.noop).wait();
     expect(dom.get("strong").textContent).toBe("Luc");
     expect(result.data.name).toEqual("Luc");
   });
@@ -155,7 +154,7 @@ describe("AppContext", () => {
     setTimeout(() => {
       dom.get("#btn2").click();
     }, 10);
-    const result: IActionResultError = await kernel.on(ACTIONS_ERROR, _.noop).wait();
+    const result: IActionResultError = await kernel.on(olyReactEvents.ACTIONS_ERROR, _.noop).wait();
     expect(result.error.message).toBe("I am Groot");
   });
 
@@ -163,7 +162,7 @@ describe("AppContext", () => {
     setTimeout(() => {
       dom.get("#btn3").click();
     }, 10);
-    const result: IActionResult<{ name: string }> = await kernel.on(ACTIONS_SUCCESS, _.noop).wait();
+    const result: IActionResult<{ name: string }> = await kernel.on(olyReactEvents.ACTIONS_SUCCESS, _.noop).wait();
     expect(dom.get("strong").textContent).toBe("Luc");
     expect(result.data.name).toEqual("Luc");
   });

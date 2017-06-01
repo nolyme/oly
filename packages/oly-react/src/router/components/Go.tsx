@@ -3,7 +3,7 @@ import * as React from "react";
 import { Component, createElement, HTMLAttributes } from "react";
 import { action } from "../../core/decorators/action";
 import { attach } from "../../core/decorators/attach";
-import { olyReactEvents } from "../constants/events";
+import { olyReactRouterEvents } from "../constants/events";
 import { Router } from "../services/Router";
 
 /**
@@ -47,7 +47,7 @@ export class Go extends Component<IGoProps, IGoState> {
   /**
    *
    */
-  @on(olyReactEvents.TRANSITION_END)
+  @on(olyReactRouterEvents.TRANSITION_END)
   public onTransitionEnd() {
     const active = this.router.isActive(this.props.to);
     if (this.state.active !== active) {

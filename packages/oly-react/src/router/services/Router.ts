@@ -1,15 +1,15 @@
 import { HrefOptions, TransitionOptions } from "@uirouter/core";
 import { _, inject, Kernel } from "oly-core";
-import { olyReactEvents } from "../constants/events";
+import { olyReactRouterEvents } from "../constants/events";
 import { IRouteState } from "../interfaces";
 import { ReactRouterProvider } from "./ReactRouterProvider";
 
 export class Router {
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
-  @inject(ReactRouterProvider)
+  @inject
   protected routerProvider: ReactRouterProvider;
 
   /**
@@ -48,7 +48,7 @@ export class Router {
       throw new Error("Go requires a routeName, not an url");
     }
     return this.routerProvider.uiRouter.stateService.go(routeName, params, options).then(() => {
-      return this.kernel.on(olyReactEvents.TRANSITION_END, _.noop).wait();
+      return this.kernel.on(olyReactRouterEvents.TRANSITION_END, _.noop).wait();
     });
   }
 
@@ -57,7 +57,7 @@ export class Router {
    */
   public reload(): Promise<void> {
     return this.routerProvider.uiRouter.stateService.reload().then(() => {
-      return this.kernel.on(olyReactEvents.TRANSITION_END, _.noop).wait();
+      return this.kernel.on(olyReactRouterEvents.TRANSITION_END, _.noop).wait();
     });
   }
 

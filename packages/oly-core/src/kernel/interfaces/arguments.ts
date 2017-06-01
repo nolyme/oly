@@ -2,6 +2,8 @@ import { IMetadata } from "../../decorator/interfaces";
 import { Kernel } from "../Kernel";
 
 export interface IArgumentArg {
+  id?: string;
+  name?: string;
   type: any;
   handler: (kernel: Kernel) => any;
 }

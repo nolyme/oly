@@ -1,13 +1,25 @@
 import { $injector, $q, LocationPlugin, services, StateDeclaration, Transition, UIRouter } from "@uirouter/core";
-import { _, IAnyDefinition, Function, IDeclarations, inject, Kernel, Logger, MetadataUtil, state } from "oly-core";
+import {
+  _,
+  Class,
+  IArgumentsMetadata,
+  IDeclarations,
+  inject,
+  IProvider,
+  Kernel,
+  Logger,
+  Meta,
+  olyCoreKeys,
+  state,
+} from "oly-core";
 import { createElement } from "react";
 import { Layer } from "../components/Layer";
-import { olyReactEvents } from "../constants/events";
-import { lyPages } from "../constants/keys";
-import { IChunks, ILayer, IPageMetadata, IPageMetadataMap, IRawChunk, IRouteState } from "../interfaces";
+import { olyReactRouterEvents } from "../constants/events";
+import { olyReactRouterKeys } from "../constants/keys";
+import { IChunks, ILayer, IPagesMetadata, IPagesProperty, IRawChunk, IRouteState } from "../interfaces";
 import { DefaultNotFound } from "./DefaultNotFound";
 
-export class ReactRouterProvider {
+export class ReactRouterProvider implements IProvider {
 
   /**
    * This is the current stack.
@@ -27,10 +39,10 @@ export class ReactRouterProvider {
    */
   public resolveLevelCounter: number = 0;
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
   /**
@@ -62,8 +74,8 @@ export class ReactRouterProvider {
     this.uiRouter.urlService.sync();
 
     return new Promise((resolve, reject) => {
-      this.kernel.on(olyReactEvents.TRANSITION_END, resolve);
-      this.kernel.on(olyReactEvents.TRANSITION_ERROR, reject);
+      this.kernel.on(olyReactRouterEvents.TRANSITION_END, resolve);
+      this.kernel.on(olyReactRouterEvents.TRANSITION_ERROR, reject);
     });
   }
 
@@ -73,23 +85,29 @@ export class ReactRouterProvider {
    * @param definition    Annotate class.
    * @param parent
    */
-  public register(definition: Function, parent?: IPageMetadata): void {
+  public register(definition: Class, parent?: IPagesProperty): void {
 
-    const pages: IPageMetadataMap = MetadataUtil.get(lyPages, definition);
-    const layout: IPageMetadata | null = Object.keys(pages)
-      .map((key) => pages[key])
-      .filter((page) => page.url === ":layout:")[0];
+    const pagesMetadata = Meta.of({key: olyReactRouterKeys.pages, target: definition}).deep<IPagesMetadata>();
+    if (pagesMetadata) {
+      const keys = Object.keys(pagesMetadata.properties);
+      let layout;
 
-    if (layout) {
-      this.addStateDeclaration({...layout, url: "", abstract: true}, parent);
-    }
+      for (const propertyKey of keys) {
+        const page: IPagesProperty = pagesMetadata.properties[propertyKey];
+        if (page.url === ":layout:") {
+          layout = page;
+          this.addStateDeclaration(definition, propertyKey, {...page, url: "", abstract: true}, parent);
+          break;
+        }
+      }
 
-    for (const propertyKey of Object.keys(pages)) {
-      const page: IPageMetadata = pages[propertyKey];
-      this.addStateDeclaration(page, layout || parent);
-      if (Array.isArray(page.children)) {
-        for (const child of page.children) {
-          this.register(child, page);
+      for (const propertyKey of keys) {
+        const page: IPagesProperty = pagesMetadata.properties[propertyKey];
+        this.addStateDeclaration(definition, propertyKey, page, layout || parent);
+        if (Array.isArray(page.children)) {
+          for (const child of page.children) {
+            this.register(child, page);
+          }
         }
       }
     }
@@ -102,7 +120,7 @@ export class ReactRouterProvider {
   public scan(declarations: IDeclarations): void {
 
     const pageDeclarations = declarations
-      .filter((declaration) => MetadataUtil.has(lyPages, declaration.definition));
+      .filter((declaration) => Meta.of({key: olyReactRouterKeys.pages, target: declaration.definition}).has());
 
     for (const pageDeclaration of pageDeclarations) {
       if (!this.hasParent(pageDeclarations, pageDeclaration.definition)) {
@@ -112,31 +130,47 @@ export class ReactRouterProvider {
   }
 
   /**
+   * Hook - start.
    *
+   * @param declarations
+   */
+  public onStart(declarations: IDeclarations): any {
+
+    this.stateDeclarations = [];
+    this.register(DefaultNotFound);
+    this.scan(declarations);
+  }
+
+  /**
+   *
+   * @param target
+   * @param propertyKey
    * @param meta
    * @param parent
    */
-  protected addStateDeclaration(meta: IPageMetadata, parent?: IPageMetadata): void {
+  protected addStateDeclaration(target: Class,
+                                propertyKey: string,
+                                meta: IPagesProperty,
+                                parent?: IPagesProperty): void {
 
     if (meta.url[0] === ":") {
       return;
     }
 
-    if (meta.name === "404") {
-      const item = this.stateDeclarations.filter((s) => s.name === "404")[0];
-      if (item) {
-        this.stateDeclarations.splice(this.stateDeclarations.indexOf(item), 1);
-      }
+    const index = this.stateDeclarations.findIndex((s) => s.name === meta.name);
+    if (index > -1) {
+      this.logger.debug(`Override route ${meta.url} (${meta.name}) -> ${_.identity(target, propertyKey)}`);
+      this.stateDeclarations.splice(index, 1);
+    } else {
+      this.logger.debug(`Add route ${meta.url} (${meta.name}) -> ${_.identity(target, propertyKey)}`);
     }
-
-    this.logger.debug(`Add route ${meta.url} (${meta.name}) -> ${_.identity(meta.target, meta.propertyKey)}`);
 
     const stateDeclaration: StateDeclaration = {
       name: meta.name,
       parent: parent ? parent.name : undefined,
       data: {
-        target: meta.target,
-        propertyKey: meta.propertyKey,
+        target,
+        propertyKey,
       },
       url: meta.url,
     };
@@ -145,9 +179,10 @@ export class ReactRouterProvider {
       stateDeclaration.abstract = true;
     }
 
-    if (meta.args) {
-      const queryParams = Array.isArray(meta.args)
-        ? meta.args.filter((arg) => arg.type === "query")
+    const argumentsMetadata = Meta.of({key: olyCoreKeys.arguments, target}).deep<IArgumentsMetadata>();
+    if (argumentsMetadata && argumentsMetadata.args[propertyKey]) {
+      const queryParams = argumentsMetadata.args[propertyKey]
+        ? argumentsMetadata.args[propertyKey].filter((arg) => arg.id === "react:query")
         : [];
 
       if (queryParams.length > 0 && typeof stateDeclaration.url === "string") {
@@ -170,17 +205,20 @@ export class ReactRouterProvider {
    * @param pageDeclarations      All declarations
    * @param definition            The target
    */
-  protected hasParent(pageDeclarations: IDeclarations, definition: IAnyDefinition) {
+  protected hasParent(pageDeclarations: IDeclarations, definition: Class) {
     return pageDeclarations
-        .filter((p) => p.definition !== definition)
-        .map((p) => MetadataUtil.get(lyPages, p.definition) as IPageMetadataMap)
-        .filter((p) => {
-          for (const key of Object.keys(p)) {
-            if (Array.isArray(p[key].children) && p[key].children!.indexOf(definition) > -1) {
+      .filter((p) => p.definition !== definition)
+      .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())
+      .filter((p) => {
+        if (p) {
+          const keys = Object.keys(p.properties);
+          for (const key of keys) {
+            if (Array.isArray(p.properties[key].children) && p.properties[key].children!.indexOf(definition) > -1) {
               return true;
             }
           }
-        }).length > 0;
+        }
+      }).length > 0;
   }
 
   /**
@@ -189,21 +227,12 @@ export class ReactRouterProvider {
    * @param definition    Class to instantiate
    * @param propertyKey   Property name to call
    */
-  protected createPageResolver(definition: Function,
+  protected createPageResolver(definition: Class,
                                propertyKey: string): () => Promise<IChunks> {
     return () => {
 
       this.logger.trace("resolve " + _.identity(definition, propertyKey));
-      const meta: IPageMetadataMap = MetadataUtil.deep(lyPages, definition);
-      const instance = this.kernel.get(definition);
-      const params = this.uiRouter.stateService.transition.injector().get("$stateParams");
-      console.log(this.uiRouter.stateService.transition.$to());
-      const action = instance[propertyKey];
-      const args: any[] = Array.isArray(meta[propertyKey].args)
-        ? meta[propertyKey].args.map((arg) => params[arg.name])
-        : [];
-
-      return new Promise<IChunks>((resolve) => resolve(action.apply(instance, args)))
+      return new Promise<IChunks>((resolve) => resolve(this.kernel.invoke(definition, propertyKey, [])))
         .then((rawChunk: IRawChunk) => {
 
           if (typeof rawChunk === "function") {
@@ -237,18 +266,6 @@ export class ReactRouterProvider {
   }
 
   /**
-   * Hook - start.
-   *
-   * @param declarations
-   */
-  protected onStart(declarations: IDeclarations): any {
-
-    this.stateDeclarations = [];
-    this.register(DefaultNotFound);
-    this.scan(declarations);
-  }
-
-  /**
    *
    */
   protected setHooks() {
@@ -279,7 +296,7 @@ export class ReactRouterProvider {
 
     this.uiRouter.stateService.defaultErrorHandler((error) => {
       this.logger.warn("Transition has failed", error.detail);
-      return this.kernel.emit(olyReactEvents.TRANSITION_ERROR, error.detail);
+      return this.kernel.emit(olyReactRouterEvents.TRANSITION_ERROR, error.detail);
     });
   }
 
@@ -290,7 +307,7 @@ export class ReactRouterProvider {
    */
   protected onTransitionStart(transition: Transition): Promise<void> {
     this.logger.trace("transition start");
-    return this.kernel.emit(olyReactEvents.TRANSITION_BEGIN, transition);
+    return this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN, transition);
   }
 
   protected getName(state: IRouteState): string {
@@ -326,10 +343,10 @@ export class ReactRouterProvider {
     }
 
     this.layers = copy;
-    return this.kernel.emit(olyReactEvents.TRANSITION_RENDER).then(() => {
+    return this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER).then(() => {
       this.logger.trace(`transition end (layers=${this.layers.length})`);
 
-      return this.kernel.emit(olyReactEvents.TRANSITION_END, transition);
+      return this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
     });
   }
 }

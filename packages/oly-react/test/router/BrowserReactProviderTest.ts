@@ -4,7 +4,7 @@
 import { pushStateLocationPlugin } from "@uirouter/core";
 import { _ } from "oly-core";
 import { attachKernel } from "oly-test";
-import { olyReactEvents } from "../../src";
+import { olyReactRouterEvents } from "../../src";
 import { Browser } from "../../src/router/services/Browser";
 import { ReactBrowserProvider } from "../../src/router/services/ReactBrowserProvider";
 import { ReactRouterProvider } from "../../src/router/services/ReactRouterProvider";
@@ -13,7 +13,7 @@ import { FakeApp } from "./fixtures";
 
 describe("BrowserReactProvider", () => {
 
-  const kernel = attachKernel({OLY_LOGGER_LEVEL: "TRACE"})
+  const kernel = attachKernel()
     .with(FakeApp, ReactBrowserProvider);
 
   const browser = kernel.get(Browser);
@@ -44,7 +44,7 @@ describe("BrowserReactProvider", () => {
     await router.go("back");
     const go: any = browser.root.querySelector("#go");
     go.click();
-    await kernel.on(olyReactEvents.TRANSITION_END, _.noop).wait();
+    await kernel.on(olyReactRouterEvents.TRANSITION_END, _.noop).wait();
     expect(browser.root.textContent).toBe("Layout:Home");
   });
 

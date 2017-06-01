@@ -1,4 +1,4 @@
 /**
  *
  */
-export const olyReactError = {};
+export const olyReactRouterError = {};

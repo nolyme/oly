@@ -1,4 +1,3 @@
-import { Function } from "oly-core";
 import * as React from "react";
 
 /**
