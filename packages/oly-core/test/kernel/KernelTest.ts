@@ -65,8 +65,7 @@ describe("Kernel", () => {
       }
 
       expect(createKernel().get(Parent).a).toBe("a");
-      expect(() => createKernel().get(Child).a)
-        .toThrow(olyCoreErrors.envNotDefined("B"));
+      expect(() => createKernel().get(Child).a).toThrow(olyCoreErrors.envNotDefined("B"));
     });
 
     it("should swap 'provide' with 'use'", () => {
@@ -224,6 +223,20 @@ describe("Kernel", () => {
         .start();
 
       expect(k.get(A).b.d).toBe("f");
+    });
+    it("should use parent", () => {
+      class A {
+        b = "c";
+      }
+
+      class E {
+        @inject a: A;
+      }
+
+      class E2 extends E {
+      }
+
+      expect(createKernel().get(E2).a.b).toBe("c");
     });
   });
 

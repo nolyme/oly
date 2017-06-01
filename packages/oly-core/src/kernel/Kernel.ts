@@ -222,8 +222,8 @@ export class Kernel {
 
     return _.cascade(declarations
       .map((d) => () => {
-        this.getLogger().debug("configure " + d.definition.name);
         if (d.instance && d.instance.onConfigure) {
+          this.getLogger().debug("configure " + d.definition.name);
           return d.instance.onConfigure(this.declarations);
         }
       }),
@@ -524,7 +524,7 @@ export class Kernel {
       throw new KernelException(olyCoreErrors.isNotFunction(propertyKey, typeof action));
     }
 
-    const meta = Meta.of({key: olyCoreKeys.arguments, target}).get<IArgumentsMetadata>();
+    const meta = Meta.of({key: olyCoreKeys.arguments, target}).deep<IArgumentsMetadata>();
     const args: any[] = meta && meta.args[propertyKey]
       ? meta.args[propertyKey].map((data) => data.handler(this))
       : [];
@@ -552,12 +552,12 @@ export class Kernel {
     const injectableMetadata = Meta.of({
       key: olyCoreKeys.injectable,
       target: target.use || target.provide,
-    }).get<IInjectableMetadata>();
+    }).deep<IInjectableMetadata>();
 
     const injectionsMetadata = Meta.of({
       key: olyCoreKeys.injections,
       target: target.provide,
-    }).get<IInjectionsMetadata>();
+    }).deep<IInjectionsMetadata>();
 
     const singleton = injectableMetadata
       ? injectableMetadata.target.singleton !== false
@@ -686,7 +686,7 @@ export class Kernel {
    */
   protected processInjections<T>(definition: Class<T>, instance: T): T {
 
-    const injections = Meta.of({key: olyCoreKeys.injections, target: definition}).get<IInjectionsMetadata>();
+    const injections = Meta.of({key: olyCoreKeys.injections, target: definition}).deep<IInjectionsMetadata>();
     if (injections) {
 
       const keys = Object.keys(injections.properties);
@@ -730,7 +730,7 @@ export class Kernel {
    */
   protected processStates<T>(definition: Class<T>, instance: T): T {
 
-    const statesMetadata = Meta.of({key: olyCoreKeys.states, target: definition}).get<IStatesMetadata>();
+    const statesMetadata = Meta.of({key: olyCoreKeys.states, target: definition}).deep<IStatesMetadata>();
     if (statesMetadata) {
 
       const keys = Object.keys(statesMetadata.properties);
@@ -777,7 +777,7 @@ export class Kernel {
    */
   protected processEvents<T extends IListener>(definition: Class<T>, instance: T): T {
 
-    const eventsMetadata = Meta.of({key: olyCoreKeys.events, target: definition}).get<IEventsMetadata>();
+    const eventsMetadata = Meta.of({key: olyCoreKeys.events, target: definition}).deep<IEventsMetadata>();
     if (eventsMetadata) {
 
       const observers: IObserver[] = [];

@@ -79,6 +79,20 @@ export class Meta {
   }
 
   /**
+   * Wat?
+   *
+   * @param func    Cool function
+   */
+  public static getParamNames(func: (...args: any[]) => any): string[] {
+    const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+    const ARGUMENT_NAMES = /([^\s,]+)/g;
+    const fnStr = func.toString().replace(STRIP_COMMENTS, "");
+    return fnStr
+      .slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")"))
+      .match(ARGUMENT_NAMES) || [];
+  }
+
+  /**
    *
    * @param target
    * @param propertyKey
@@ -191,9 +205,9 @@ export class Meta {
   /**
    *
    */
-  public get target() {
+  public get target(): Function {
     if (this.isClass) {
-      return this.identifier.target;
+      return this.identifier.target as Function;
     }
     return this.identifier.target.constructor;
   }
@@ -230,6 +244,31 @@ export class Meta {
    */
   public get<T extends IMetadata>(): T | null {
     return Meta.reflect.getOwnMetadata(this.identifier.key, this.target);
+  }
+
+  /**
+   *
+   */
+  public deep<T extends IMetadata>(): T | null {
+    const $deep = (key: string, target: Function): T | null => {
+      const meta = Meta.reflect.getOwnMetadata(key, target);
+
+      if (target.prototype
+        && target.prototype.__proto__
+        && target.prototype.__proto__.constructor) {
+        const parent = target.prototype.__proto__.constructor;
+        const metaParent = $deep(key, parent);
+        if (!meta) {
+          return metaParent;
+        } else {
+          return Object.assign({}, metaParent, meta);
+        }
+      }
+
+      return meta;
+    };
+
+    return $deep(this.identifier.key, this.target);
   }
 
   /**

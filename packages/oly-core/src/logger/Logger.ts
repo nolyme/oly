@@ -2,6 +2,7 @@ import * as chalk from "chalk";
 import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
 import { Kernel } from "../kernel/Kernel";
+import { _ } from "../kernel/utils/CommonUtil";
 import { LogLevels } from "./LogLevels";
 
 /**
@@ -135,7 +136,11 @@ export class Logger {
    * @param text
    */
   protected appender(text: string): void {
-    console.log(text); // tslint:disable-line
+    if (_.isBrowser()) {
+      console.log(text); // tslint:disable-line
+    } else {
+      process.stdout.write(text + "\n");
+    }
   }
 
   /**
