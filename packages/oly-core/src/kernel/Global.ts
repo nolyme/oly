@@ -1,13 +1,9 @@
-/**
- * Collection of internal utils.
- */
-import { IDeclaration, IDeclarations } from "../interfaces/injections";
+import * as merge from "deepmerge";
 
-export class CommonUtil {
+export class Global {
 
-  /**
-   * noop
-   */
+  public static merge = merge;
+
   public static noop: any = () => null;
 
   public static isProduction(): boolean {
@@ -20,6 +16,18 @@ export class CommonUtil {
 
   public static isBrowser(): boolean {
     return typeof window === "object" && typeof window.document === "object";
+  }
+
+  public static get(key: string): any {
+    const g: any = Global ? global : window;
+    g.oly = g.oly || {};
+    return g.oly[key];
+  }
+
+  public static set(key: string, value: any): void {
+    const g: any = typeof window === "undefined" ? global : window;
+    g.oly = g.oly || {};
+    g.oly[key] = value;
   }
 
   /**
@@ -132,7 +140,6 @@ export class CommonUtil {
    * Run promises one by one.
    * Used for chained #onStart.
    *
-   * @internal
    * @param promises    Array of promises
    */
   public static cascade(promises: Array<() => Promise<any>>) {
@@ -151,9 +158,8 @@ export class CommonUtil {
 
   /**
    * Generic bubble sort.
-   * Used for sorted kernel dependencies.
+   * Used to sort kernel dependencies.
    *
-   * @internal
    * @param arr   Array, entries
    * @param fn    Comparator, function used for compare
    */
@@ -178,46 +184,14 @@ export class CommonUtil {
   }
 
   /**
-   * Bubble sort declarations by requirement.
-   * Used by #start() and #stop().
-   */
-  public static sortDeclarations(declarations: IDeclarations): IDeclarations {
-    return _.bubble(declarations, (list, index) => {
-      const findDefinitionInTree = (declaration: IDeclaration<any>, definition: Function) => {
-
-        if (_.isEqualClass(declaration.definition, definition)) {
-          return true;
-        }
-
-        for (const child of declaration.children) {
-          const childDependency = declarations.find((d: IDeclaration<any>) =>
-            _.isEqualClass(d.definition, child.type));
-          if (!!childDependency && findDefinitionInTree(childDependency, definition)) {
-            return true;
-          }
-        }
-
-        return false;
-      };
-      return findDefinitionInTree(list[index], list[index + 1].definition);
-    });
-  }
-
-  /**
    * Check if a definition can be named as IProvider.
    * Providers can't be injected after #start().
-   * This function has been updated a lot of time since the beginning... :-D
-   *
-   * History:
-   * - post2016: check only #onStart()
-   * -  pre2017: check #onStart(),#onStop(),@state
-   * - post2017: check #onStart(),#onStop(),#onConfigure()
    *
    * It's just a protection to avoid some shitty behavior.
    *
    * @param definition  Class definition
    */
-  public static isProvider(definition: Function) {
+  public static isProvider(definition: Function): boolean {
 
     if (
       !!definition.prototype.onConfigure ||
@@ -231,7 +205,4 @@ export class CommonUtil {
   }
 }
 
-/**
- * @alias
- */
-export const _ = CommonUtil;
+export const _ = Global;

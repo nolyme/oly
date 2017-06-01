@@ -1,10 +1,10 @@
 import { Message } from "amqplib";
-import { Class, IDeclarations, inject, Kernel, Logger, Meta } from "oly-core";
+import { Class, IDeclarations, inject, IProvider, Kernel, Logger, Meta } from "oly-core";
 import { olyAmqpKeys } from "../constants/keys";
 import { ITasksMetadata } from "../interfaces";
 import { AmqpProvider } from "./AmqpProvider";
 
-export class WorkerProvider {
+export class WorkerProvider implements IProvider {
 
   @inject
   protected readonly amqp: AmqpProvider;
@@ -42,7 +42,7 @@ export class WorkerProvider {
    *
    * @param declarations
    */
-  protected async onStart(declarations: IDeclarations) {
+  public async onStart(declarations: IDeclarations) {
     await this.scan(declarations);
   }
 

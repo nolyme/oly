@@ -25,7 +25,7 @@ import {
   IProvider,
 } from "./interfaces/injections";
 import { IStateMutateEvent, IStatesMetadata, IStore } from "./interfaces/states";
-import { CommonUtil as _ } from "./utils/CommonUtil";
+import { Global as _ } from "./Global";
 
 /**
  * Kernel is a registry as context.
@@ -218,7 +218,7 @@ export class Kernel {
 
     this.started = true;
 
-    const declarations = _.sortDeclarations(this.declarations);
+    const declarations = this.sortDeclarations(this.declarations);
 
     return _.cascade(declarations
       .map((d) => () => {
@@ -253,7 +253,7 @@ export class Kernel {
 
     this.getLogger().trace("stop kernel");
 
-    return _.cascade(_.sortDeclarations(this.declarations)
+    return _.cascade(this.sortDeclarations(this.declarations)
       .reverse()
       .map((d) => () => {
         if (d.instance && d.instance.onStop) {
@@ -526,7 +526,7 @@ export class Kernel {
 
     const meta = Meta.of({key: olyCoreKeys.arguments, target}).deep<IArgumentsMetadata>();
     const args: any[] = meta && meta.args[propertyKey]
-      ? meta.args[propertyKey].map((data) => data.handler(this))
+      ? meta.args[propertyKey].map((data) => data && data.handler(this))
       : [];
 
     this.getLogger().info(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
@@ -657,7 +657,7 @@ export class Kernel {
 
     const meta = Meta.of({key: olyCoreKeys.arguments, target: definition}).get<IArgumentsMetadata>();
     const args: any[] = meta && meta.args.$constructor
-      ? meta.args.$constructor.map((data) => data.handler(this))
+      ? meta.args.$constructor.map((data) => data && data.handler(this))
       : [];
 
     return (
@@ -820,6 +820,32 @@ export class Kernel {
       definition.provide = injectableMetadata.target.provide;
       this.forceProvideDecorator(definition);
     }
+  }
+
+  /**
+   * Bubble sort declarations by requirement.
+   * Used by #start() and #stop().
+   */
+  protected sortDeclarations(declarations: IDeclarations): IDeclarations {
+    return _.bubble(declarations, (list, index) => {
+      const findDefinitionInTree = (declaration: IDeclaration<any>, definition: Function) => {
+
+        if (_.isEqualClass(declaration.definition, definition)) {
+          return true;
+        }
+
+        for (const child of declaration.children) {
+          const childDependency = declarations.find((d: IDeclaration<any>) =>
+            _.isEqualClass(d.definition, child.type));
+          if (!!childDependency && findDefinitionInTree(childDependency, definition)) {
+            return true;
+          }
+        }
+
+        return false;
+      };
+      return findDefinitionInTree(list[index], list[index + 1].definition);
+    });
   }
 
   /**

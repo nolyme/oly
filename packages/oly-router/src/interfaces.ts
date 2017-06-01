@@ -1,31 +1,33 @@
+import { IMetadata } from "oly-core";
+
 /**
- * HttpMethods.
+ *
  */
 export type IMethods = "GET" | "POST" | "DEL" | "PUT" | "PATCH";
 
 /**
- * Route metadata.
+ *
  */
-export interface IRouteMetadata {
+export interface IRouterTarget {
+  prefix: string;
+}
+
+/**
+ *
+ */
+export interface IRouterProperty {
   method: IMethods;
   path: string;
   middlewares: any[];
   api: any;
-  args: {
-    [key: number]: {
-      body?: any;
-      query?: string;
-      path?: string;
-    },
-  };
 }
 
 /**
- * Router metadata.
+ *
  */
-export interface IRouterMetadata {
-  prefix: string;
-  routes: {
-    [key: string]: IRouteMetadata;
+export interface IRouterMetadata extends IMetadata {
+  target: IRouterTarget;
+  properties: {
+    [key: string]: IRouterProperty;
   };
 }

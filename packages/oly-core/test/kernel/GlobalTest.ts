@@ -1,29 +1,29 @@
 import { deepEqual, equal } from "assert";
-import { _, CommonUtil } from "../../../src/kernel/utils/CommonUtil";
+import { _ } from "../../src/kernel/Global";
 
-describe("CommonUtil", () => {
+describe("Global", () => {
   describe(".shortid()", () => {
     it("should generate random 12 chars", () => {
-      equal(CommonUtil.shortid().length, 12);
+      equal(_.shortid().length, 12);
     });
     it("should generate random 8 chars", () => {
-      equal(CommonUtil.shortid(8).length, 8);
+      equal(_.shortid(8).length, 8);
     });
   });
   describe(".timeout()", () => {
     it("should sleep ~20ms (delta: 10ms)", async () => {
       const before = Date.now();
-      await CommonUtil.timeout(20);
+      await _.timeout(20);
       const now = Date.now() - before;
       equal(now > 10, true);
     });
   });
   describe(".promise()", () => {
     it("should create promise", () => {
-      equal(typeof CommonUtil.promise(0).then, "function");
+      equal(typeof _.promise(0).then, "function");
     });
     it("should do nothing", () => {
-      equal(typeof CommonUtil.promise(Promise.resolve(0)).then, "function");
+      equal(typeof _.promise(Promise.resolve(0)).then, "function");
     });
   });
   describe(".isEqualClass()", () => {
@@ -38,10 +38,10 @@ describe("CommonUtil", () => {
       }
     };
     it("should accept classes", () => {
-      expect(CommonUtil.isEqualClass(f1(), f1())).toBeTruthy();
+      expect(_.isEqualClass(f1(), f1())).toBeTruthy();
     });
     it("should accept classes with != ref", () => {
-      expect(CommonUtil.isEqualClass(f1(), f2())).toBeTruthy();
+      expect(_.isEqualClass(f1(), f2())).toBeTruthy();
     });
   });
   describe(".cascade()", () => {
@@ -53,7 +53,7 @@ describe("CommonUtil", () => {
         () => new Promise((r) => r(stack.push("C"))),
         () => new Promise((r) => r(stack.push("D"))),
       ];
-      await CommonUtil.cascade(tasks);
+      await _.cascade(tasks);
       equal(stack.join(""), "ABCD");
     });
   });
@@ -61,7 +61,7 @@ describe("CommonUtil", () => {
     it("should bubble sort array", () => {
       const deps = [0, 1, 4, 19, 120, 3, 5, 0, 1];
       const cmp = (target: number[], i: number) => !!target[i + 1] && target[i] < target[i + 1];
-      deepEqual(CommonUtil.bubble(deps, cmp), [0, 0, 1, 1, 3, 4, 5, 19, 120].reverse());
+      deepEqual(_.bubble(deps, cmp), [0, 0, 1, 1, 3, 4, 5, 19, 120].reverse());
     });
   });
   describe(".template()", () => {

@@ -1,7 +1,7 @@
 import { Channel, connect, Connection, Options, Replies } from "amqplib";
-import { env, inject, Kernel, Logger, state } from "oly-core";
+import { env, inject, IProvider, Kernel, Logger, state } from "oly-core";
 
-export class AmqpProvider {
+export class AmqpProvider implements IProvider {
 
   /**
    *
@@ -50,7 +50,7 @@ export class AmqpProvider {
   /**
    *
    */
-  protected async onStart() {
+  public async onStart() {
     this.logger.info(`connect to ${this.url}`);
     this.connection = await connect(this.url);
     this.channel = await this.connection.createChannel();
@@ -59,7 +59,7 @@ export class AmqpProvider {
   /**
    *
    */
-  protected async onStop() {
+  public async onStop() {
     this.logger.info(`close connection`);
     await this.channel.close();
     await this.connection.close();

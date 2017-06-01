@@ -1,12 +1,12 @@
 import { CronJob } from "cron";
-import { Class, env, IDeclarations, inject, Kernel, Logger, Meta, state } from "oly-core";
+import { Class, env, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
 import { olyCronKeys } from "./constants/keys";
 import { IScheduler, ISchedulersMetadata } from "./interfaces";
 
 /**
  *
  */
-export class CronProvider {
+export class CronProvider implements IProvider {
 
   @env("OLY_CRON_TIMEZONE")
   public timezone: string = "";
@@ -24,7 +24,7 @@ export class CronProvider {
    *
    * @param declarations
    */
-  protected onConfigure(declarations: IDeclarations) {
+  public scan(declarations: IDeclarations) {
     this.jobs = [];
     for (const {definition: target} of declarations) {
       const schedulersMetadata = Meta.of({key: olyCronKeys.schedulers, target}).get<ISchedulersMetadata>();
@@ -39,24 +39,13 @@ export class CronProvider {
     }
   }
 
-  protected onStart() {
-    this.jobs.forEach((job) => job.start());
-  }
-
-  /**
-   *
-   */
-  protected onStop() {
-    this.jobs.forEach((job) => job.stop());
-  }
-
   /**
    *
    * @param target
    * @param propertyKey
    * @param scheduler
    */
-  private schedule(target: Class, propertyKey: string, scheduler: IScheduler) {
+  public schedule(target: Class, propertyKey: string, scheduler: IScheduler) {
 
     this.logger.debug(`schedule ${target.name}.${propertyKey}`);
     this.jobs.push(new CronJob({
@@ -74,5 +63,17 @@ export class CronProvider {
       },
       timeZone: this.timezone,
     }));
+  }
+
+  public onStart(declarations: IDeclarations) {
+    this.scan(declarations);
+    this.jobs.forEach((job) => job.start());
+  }
+
+  /**
+   *
+   */
+  public onStop() {
+    this.jobs.forEach((job) => job.stop());
   }
 }

@@ -2,7 +2,7 @@ import { IDecorator } from "../../decorator/interfaces";
 import { Meta } from "../../decorator/Meta";
 import { olyCoreKeys } from "../constants/keys";
 import { Kernel } from "../Kernel";
-import { _ } from "../utils/CommonUtil";
+import { _ } from "../Global";
 
 export class StateDecorator implements IDecorator {
 

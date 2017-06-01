@@ -1,3 +1,4 @@
+import { _ } from "../kernel/Global";
 import {
   IDecorator,
   IDecoratorConstructor,
@@ -16,12 +17,12 @@ export class Meta {
    *
    */
   public static get reflect() {
-    const g: any = typeof window === "undefined" ? global : window;
-    if (!g.Reflect || !g.Reflect.decorate) {
+    const R = _.get("Reflect");
+    if (!R || !R.decorate) {
       require("reflect-metadata");
-      g.Reflect = Reflect;
+      _.set("Reflect", Reflect);
     }
-    return g.Reflect;
+    return _.get("Reflect");
   }
 
   /**
@@ -250,25 +251,25 @@ export class Meta {
    *
    */
   public deep<T extends IMetadata>(): T | null {
-    const $deep = (key: string, target: Function): T | null => {
-      const meta = Meta.reflect.getOwnMetadata(key, target);
+    const $deep = <T extends IMetadata>(key: string, target: Function): T | null => {
+      const meta: T = Meta.reflect.getOwnMetadata(key, target);
 
       if (target.prototype
         && target.prototype.__proto__
         && target.prototype.__proto__.constructor) {
-        const parent = target.prototype.__proto__.constructor;
-        const metaParent = $deep(key, parent);
+        const metaParent = $deep<T>(key, target.prototype.__proto__.constructor);
         if (!meta) {
           return metaParent;
-        } else {
-          return Object.assign({}, metaParent, meta);
+        }
+        if (metaParent) {
+          return _.merge(metaParent, meta);
         }
       }
 
       return meta;
     };
 
-    return $deep(this.identifier.key, this.target);
+    return $deep<T>(this.identifier.key, this.target);
   }
 
   /**
@@ -286,18 +287,11 @@ export class Meta {
       };
     } else if (this.isProperty) {
       this.data.properties[this.propertyKey] = this.data.properties[this.propertyKey] || {};
-      this.data.properties[this.propertyKey] = {
-        ...this.data.properties[this.propertyKey],
-        ...data,
-      };
+      this.data.properties[this.propertyKey] = _.merge(this.data.properties[this.propertyKey], data);
     } else if (this.isParameter) {
       this.data.args[this.propertyKey] = this.data.args[this.propertyKey] || [];
-      this.data.args[this.propertyKey][this.index] =
-        this.data.args[this.propertyKey][this.index] || {};
-      this.data.args[this.propertyKey][this.index] = {
-        ...this.data.args[this.propertyKey][this.index],
-        ...data,
-      };
+      this.data.args[this.propertyKey][this.index] = this.data.args[this.propertyKey][this.index] || {};
+      this.data.args[this.propertyKey][this.index] = _.merge(this.data.args[this.propertyKey][this.index], data);
     }
 
     Meta.reflect.defineMetadata(this.identifier.key, this.data, this.target);

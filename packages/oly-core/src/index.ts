@@ -8,7 +8,7 @@ export * from "./kernel/decorators/env";
 export * from "./kernel/decorators/inject";
 export * from "./kernel/decorators/injectable";
 export * from "./kernel/decorators/on";
-export * from "./kernel/utils/CommonUtil";
+export * from "./kernel/Global";
 export * from "./kernel/constants/keys";
 export * from "./kernel/constants/errors";
 export * from "./kernel/constants/events";

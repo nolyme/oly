@@ -1,26 +1,29 @@
-import { Function, injectable } from "oly-core";
-import { RouterMetadataUtil } from "../utils/RouterMetadataUtil";
+import { IDecorator, Meta } from "oly-core";
+import { olyRouterKeys } from "../constants/keys";
 
-/**
- * Example of router decorator.
- *
- * ```typescript
- *  @router("/")
- * class A {}
- * ```
- *
- * @decorator         Class
- * @param prefix      Define a prefix before each route of the router
- */
-export const router = (prefix?: string): ClassDecorator => {
-  return (target: Function): Function => {
+export interface IRouterOptions {
+  prefix?: string;
+}
 
-    if (!!prefix) {
-      const routerMetadata = RouterMetadataUtil.getRouter(target);
-      routerMetadata.prefix = prefix;
-      RouterMetadataUtil.setRouter(target, routerMetadata);
+export class RouterDecorator implements IDecorator {
+
+  private options: IRouterOptions;
+
+  public constructor(options: IRouterOptions | string = {}) {
+    if (typeof options === "string") {
+      this.options = {
+        prefix: options,
+      };
+    } else {
+      this.options = options;
     }
+  }
 
-    return injectable()(target);
-  };
-};
+  public asClass(target: Function): void {
+    Meta.of({key: olyRouterKeys.router, target}).set({
+      prefix: this.options.prefix || "/",
+    });
+  }
+}
+
+export const router = Meta.decorator(RouterDecorator);

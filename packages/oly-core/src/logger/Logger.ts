@@ -2,7 +2,7 @@ import * as chalk from "chalk";
 import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
 import { Kernel } from "../kernel/Kernel";
-import { _ } from "../kernel/utils/CommonUtil";
+import { _ } from "../kernel/Global";
 import { LogLevels } from "./LogLevels";
 
 /**
