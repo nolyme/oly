@@ -1,8 +1,8 @@
 import { IDecorator, Meta } from "oly-core";
 import { olyRouterKeys } from "oly-router";
-import { IRouteApi } from "../interfaces";
+import { IRouterPropertyApi } from "../interfaces";
 
-export type IApiOptions = Partial<IRouteApi>;
+export type IApiOptions = Partial<IRouterPropertyApi>;
 
 export class ApiDecorator implements IDecorator {
 
