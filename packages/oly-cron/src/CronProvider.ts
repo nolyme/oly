@@ -1,5 +1,5 @@
 import { CronJob } from "cron";
-import { env, IClass, IDeclarations, inject, Kernel, Logger, MetadataUtil as m, state } from "oly-core";
+import { env, Function, IDeclarations, inject, Kernel, Logger, MetadataUtil as m, state } from "oly-core";
 import { lySchedulers } from "./constants";
 import { ISchedulerMetadata, ISchedulerMetadataMap } from "./interfaces";
 
@@ -51,7 +51,7 @@ export class CronProvider {
    * @param propertyKey
    * @param scheduler
    */
-  private schedule(definition: IClass, propertyKey: string, scheduler: ISchedulerMetadata) {
+  private schedule(definition: Function, propertyKey: string, scheduler: ISchedulerMetadata) {
 
     this.logger.debug(`schedule ${definition.name}.${propertyKey}`);
     this.jobs.push(new CronJob({
