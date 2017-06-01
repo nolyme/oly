@@ -1,4 +1,4 @@
-import { IClass, inject, MetadataUtil } from "oly-core";
+import { Function, inject, MetadataUtil } from "oly-core";
 import { lyPages } from "../constants/keys";
 import { IPageMetadataMap, IPageOptions } from "../interfaces";
 
@@ -24,7 +24,7 @@ export const page = (url: string, options: IPageOptions = {}) => {
       abstract: options.abstract === true,
       children: options.children,
       name: options.name || propertyKey,
-      target: target.constructor as IClass,
+      target: target.constructor as Function,
       propertyKey,
       url,
     };

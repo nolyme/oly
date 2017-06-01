@@ -6,7 +6,8 @@ import { inject, Logger } from "oly-core";
  */
 export class FileService {
 
-  @inject protected logger: Logger;
+  @inject
+  protected logger: Logger;
 
   /**
    * Check if file exists.

@@ -1,7 +1,7 @@
 import { CronJob } from "cron";
-import { env, Function, IDeclarations, inject, Kernel, Logger, MetadataUtil as m, state } from "oly-core";
-import { lySchedulers } from "./constants";
-import { ISchedulerMetadata, ISchedulerMetadataMap } from "./interfaces";
+import { Class, env, IDeclarations, inject, Kernel, Logger, Meta, state } from "oly-core";
+import { olyCronKeys } from "./constants/keys";
+import { IScheduler, ISchedulersMetadata } from "./interfaces";
 
 /**
  *
@@ -11,27 +11,32 @@ export class CronProvider {
   @env("OLY_CRON_TIMEZONE")
   public timezone: string = "";
 
-  @state()
+  @state
   public jobs: CronJob[];
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
   /**
    *
-   * @param deps
+   * @param declarations
    */
-  protected onConfigure(deps: IDeclarations) {
+  protected onConfigure(declarations: IDeclarations) {
     this.jobs = [];
-    return deps
-      .filter((dep) => m.has(lySchedulers, dep.definition))
-      .map((dep) => ({schedulers: m.deep(lySchedulers, dep.definition) as ISchedulerMetadataMap, dep}))
-      .map(({schedulers, dep}) => Object.keys(schedulers).map((key) => ({key, value: schedulers[key], dep})))
-      .reduce((array, deps2) => array.concat(deps2), [])
-      .forEach(({key, value, dep: {definition}}) => this.schedule(definition, key, value));
+    for (const {definition: target} of declarations) {
+      const schedulersMetadata = Meta.of({key: olyCronKeys.schedulers, target}).get<ISchedulersMetadata>();
+      if (schedulersMetadata) {
+
+        const keys = Object.keys(schedulersMetadata.properties);
+        for (const propertyKey of keys) {
+          const scheduler = schedulersMetadata.properties[propertyKey];
+          this.schedule(target, propertyKey, scheduler);
+        }
+      }
+    }
   }
 
   protected onStart() {
@@ -47,21 +52,21 @@ export class CronProvider {
 
   /**
    *
-   * @param definition
+   * @param target
    * @param propertyKey
    * @param scheduler
    */
-  private schedule(definition: Function, propertyKey: string, scheduler: ISchedulerMetadata) {
+  private schedule(target: Class, propertyKey: string, scheduler: IScheduler) {
 
-    this.logger.debug(`schedule ${definition.name}.${propertyKey}`);
+    this.logger.debug(`schedule ${target.name}.${propertyKey}`);
     this.jobs.push(new CronJob({
-      cronTime: scheduler,
+      cronTime: scheduler.cron,
       onTick: async () => {
         const child = this.kernel.fork();
         const logger = child.get(Logger).as("Scheduler");
         try {
           logger.debug("start scheduled job");
-          await child.get(definition)[propertyKey]();
+          await child.get(target)[propertyKey]();
           logger.info("end scheduled job");
         } catch (e) {
           logger.warn("job has failed", e);

@@ -25,16 +25,10 @@ export class WorkspaceProvider {
   @env("WORKSPACE_DIRECTORY_RESET")
   public readonly reset: boolean = false;
 
-  /**
-   *
-   */
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  /**
-   *
-   */
-  @inject(FileService)
+  @inject
   protected file: FileService;
 
   /**
@@ -70,7 +64,7 @@ export class WorkspaceProvider {
   /**
    *
    */
-  protected async onStart(): Promise<void> {
+  public async onStart(): Promise<void> {
     if (this.reset) {
       await this.file.remove(this.directory);
     }
@@ -82,7 +76,7 @@ export class WorkspaceProvider {
   /**
    *
    */
-  protected async onStop(): Promise<void> {
+  public async onStop(): Promise<void> {
     await this.file.remove(this.tmpDirectory);
     if (this.reset) {
       await this.file.remove(this.directory);

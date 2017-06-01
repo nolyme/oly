@@ -1,5 +1,5 @@
 import { Db, MongoClient } from "mongodb";
-import { env, IClassOf, IDeclarations, inject, Logger, state } from "oly-core";
+import { env, FunctionOf, IDeclarations, inject, Logger, state } from "oly-core";
 import { IDocument } from "./interfaces";
 import { Repository } from "./Repository";
 
@@ -32,7 +32,7 @@ export class MongoProvider {
    *
    * @param documentType Model Definition
    */
-  public repository<T extends IDocument>(documentType: IClassOf<T>): Repository<T> {
+  public repository<T extends IDocument>(documentType: FunctionOf<T>): Repository<T> {
     return new class InlineRepository extends Repository<T> { // tslint:disable-line
       protected type = documentType;
     };

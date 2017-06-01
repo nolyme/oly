@@ -1,4 +1,4 @@
-import { IClass, injectable } from "oly-core";
+import { Function, injectable } from "oly-core";
 import { RouterMetadataUtil } from "../utils/RouterMetadataUtil";
 
 /**
@@ -13,7 +13,7 @@ import { RouterMetadataUtil } from "../utils/RouterMetadataUtil";
  * @param prefix      Define a prefix before each route of the router
  */
 export const router = (prefix?: string): ClassDecorator => {
-  return (target: IClass): IClass => {
+  return (target: Function): Function => {
 
     if (!!prefix) {
       const routerMetadata = RouterMetadataUtil.getRouter(target);

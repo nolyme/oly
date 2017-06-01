@@ -11,6 +11,7 @@ import {
   IEventsMetadata,
   IKernelEmitOptions,
   IKernelOnOptions,
+  IListener,
   IObserver,
 } from "./interfaces/events";
 import {
@@ -18,7 +19,7 @@ import {
   IDeclaration,
   IDeclarations,
   IDefinition,
-  IFactoryOf,
+  IFactory,
   IInjectableMetadata,
   IKernelGetOptions,
   IProvider,
@@ -513,7 +514,7 @@ export class Kernel {
    * @param propertyKey
    * @param additionalArguments
    */
-  public invoke<T>(definition: Class<T> | T, propertyKey: keyof T, additionalArguments: any[] = []): Promise<any> {
+  public invoke<T>(definition: Class<T> | T, propertyKey: keyof T, additionalArguments: any[] = []): any {
 
     const target = typeof definition === "object" ? definition.constructor as Class<T> : definition;
     const instance: T = typeof definition === "object" ? definition : this.get(target);
@@ -530,7 +531,7 @@ export class Kernel {
 
     this.getLogger().info(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
 
-    return new Promise<any>((resolve) => resolve(action.apply(instance, args.concat(additionalArguments))));
+    return action.apply(instance, args.concat(additionalArguments));
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -598,7 +599,7 @@ export class Kernel {
    * - However state is kept.
    *
    */
-  protected removeDependency(declaration: IDeclaration): void {
+  protected removeDependency(declaration: IDeclaration<IListener>): void {
     const index = this.declarations.indexOf(declaration);
     if (index > -1) {
       this.declarations.splice(index, 1);
@@ -633,7 +634,7 @@ export class Kernel {
 
       // /!\ WHEN SWAP, parentDependency = TARGET ! < not the new and shiny version >
 
-      const instance: T = (func as IFactoryOf<T>)(this, parent);
+      const instance: T = (func as IFactory<T>)(this, parent);
 
       return this.inject<T>(instance.constructor as Class<T>, instance);
     }
@@ -774,7 +775,7 @@ export class Kernel {
    * @param definition    IDefinition with event metadata
    * @param instance      Instance to decorate
    */
-  protected processEvents<T>(definition: Class<T>, instance: T): T {
+  protected processEvents<T extends IListener>(definition: Class<T>, instance: T): T {
 
     const eventsMetadata = Meta.of({key: olyCoreKeys.events, target: definition}).get<IEventsMetadata>();
     if (eventsMetadata) {
@@ -791,7 +792,7 @@ export class Kernel {
 
       if (observers.length > 0) {
         // this is currently used by oly-react
-        instance["__free__"] = () => { // tslint:disable-line
+        instance.__free__ = () => {
           observers.forEach((obs) => obs.free());
         };
       }

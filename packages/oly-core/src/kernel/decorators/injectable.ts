@@ -1,11 +1,11 @@
 import { IDecorator } from "../../decorator/interfaces";
 import { Meta } from "../../decorator/Meta";
 import { olyCoreKeys } from "../constants/keys";
-import { Class, IFactoryOf } from "../interfaces/injections";
+import { Class, IFactory } from "../interfaces/injections";
 
 export interface IInjectableOptions {
   singleton?: boolean;
-  use?: IFactoryOf<any>;
+  use?: IFactory<any>;
   provide?: Class<any>;
 }
 

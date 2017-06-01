@@ -1,3 +1,6 @@
+import { Class } from "../kernel/interfaces/injections";
+import { Kernel } from "../kernel/Kernel";
+
 /**
  *
  */
@@ -52,4 +55,15 @@ export interface IMetadata {
   args: {
     [key: string]: any[];
   };
+}
+
+/**
+ *
+ */
+export interface IAspectParameter {
+  call: (valid?: boolean) => void;
+  arguments: any[];
+  kernel?: Kernel;
+  target: Class;
+  propertyKey: string;
 }

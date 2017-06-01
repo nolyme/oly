@@ -1,7 +1,7 @@
 import { _, inject } from "oly-core";
 import { attachKernel } from "oly-test";
-import { cron } from "../src";
 import { CronProvider } from "../src/CronProvider";
+import { cron } from "../src/decorators/cron";
 
 const stack: any[] = [];
 

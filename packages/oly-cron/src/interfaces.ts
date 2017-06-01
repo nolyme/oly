@@ -1,11 +1,11 @@
-/**
- * Default Scheduler options
- */
-export type ISchedulerMetadata = string;
+import { IMetadata } from "oly-core";
 
-/**
- * Metadata interface
- */
-export interface ISchedulerMetadataMap {
-  [key: string]: ISchedulerMetadata;
+export interface IScheduler {
+  cron: string;
+}
+
+export interface ISchedulersMetadata extends IMetadata {
+  properties: {
+    [key: string]: IScheduler;
+  };
 }

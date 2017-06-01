@@ -1,26 +1,23 @@
-import { inject } from "oly-core";
-import { check, run } from "oly-test";
+import { attachKernel } from "oly-test";
 import { FileService } from "../src";
 import { WorkspaceProvider } from "../src/WorkspaceProvider";
 
-@run({
-  WORKSPACE_DIRECTORY: "out",
-  WORKSPACE_DIRECTORY_RESET: true,
-  WORKSPACE_TMP: "test",
-})
-export class WorkspaceProviderTest {
+describe("WorkspaceProvider", () => {
+  const kernel = attachKernel({
+    WORKSPACE_DIRECTORY: "out",
+    WORKSPACE_DIRECTORY_RESET: true,
+    WORKSPACE_TMP: "test",
+  });
+  const workspaceProvider = kernel.get(WorkspaceProvider);
+  const fileService = kernel.get(FileService);
 
-  @inject workspace: WorkspaceProvider;
-  @inject file: FileService;
-
-  @check
-  async create() {
+  it("should create a file", async () => {
     const content = "Hello!";
-    const filepath = this.workspace.rand(".txt");
-    await this.file.write(filepath, content);
-    expect(await this.file.exists(filepath)).toBeTruthy();
-    expect(await this.file.read(filepath, {encoding: "UTF-8"})).toBe(content);
-    await this.file.remove(filepath);
-    expect(await this.file.exists(filepath)).toBeFalsy();
-  }
-}
+    const filepath = workspaceProvider.rand(".txt");
+    await fileService.write(filepath, content);
+    expect(await fileService.exists(filepath)).toBeTruthy();
+    expect(await fileService.read(filepath, {encoding: "UTF-8"})).toBe(content);
+    await fileService.remove(filepath);
+    expect(await fileService.exists(filepath)).toBeFalsy();
+  });
+});

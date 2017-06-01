@@ -1,13 +1,13 @@
 import { createServer, Server } from "http";
 import * as Koa from "koa";
-import { env, IAnyFunction, inject, Kernel, Logger, state } from "oly-core";
+import { env, inject, IProvider, Kernel, Logger, state } from "oly-core";
 import { IKoaMiddleware } from "../interfaces";
 import { context } from "../middlewares";
 
 /**
  * Default http server provider
  */
-export class HttpServerProvider {
+export class HttpServerProvider implements IProvider {
 
   /**
    *
@@ -25,26 +25,26 @@ export class HttpServerProvider {
    * Kernel.
    * We use kernel here to fork context on each request.
    */
-  @inject(Kernel)
+  @inject
   protected readonly kernel: Kernel;
 
   /**
    * Logger.
    */
-  @inject(Logger)
+  @inject
   protected readonly logger: Logger;
 
   /**
    * Koa application.
    * Http Server is provided with Koa.
    */
-  @state()
+  @state
   protected readonly app: Koa;
 
   /**
    * NodeJS Http Server instance.
    */
-  @state()
+  @state
   protected http: Server;
 
   /**
@@ -74,17 +74,10 @@ export class HttpServerProvider {
   }
 
   /**
-   *
-   */
-  protected createServer(): Server {
-    return require("http-shutdown")(createServer(this.app.callback()));
-  }
-
-  /**
    * Start the http server.
    * Listen new connections.
    */
-  protected onStart(): Promise<void> {
+  public onStart(): Promise<void> {
 
     // override koa context with our forked kernel
     // we fork kernel to protect the main layer
@@ -107,7 +100,7 @@ export class HttpServerProvider {
    * Stop http server.
    * We don't wait the callback.
    */
-  protected onStop(): Promise<void> {
+  public onStop(): Promise<void> {
 
     // stop server
     this.logger.info("kill server");
@@ -115,11 +108,18 @@ export class HttpServerProvider {
       err ? reject(err) : resolve();
     }));
   }
+
+  /**
+   *
+   */
+  protected createServer(): Server {
+    return require("http-shutdown")(createServer(this.app.callback()));
+  }
 }
 
 // override default interface
 declare module "http" {
   interface Server { // tslint:disable-line
-    shutdown: IAnyFunction;
+    shutdown: Function;
   }
 }

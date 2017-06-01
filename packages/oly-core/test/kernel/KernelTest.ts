@@ -616,7 +616,7 @@ describe("Kernel", () => {
   });
 
   describe("#invoke()", () => {
-    it("should create arguments", async () => {
+    it("should create arguments", () => {
 
       class A {
         b = "c";
@@ -638,11 +638,11 @@ describe("Kernel", () => {
       const b = k.get(B);
       expect(b.a).toBe("G");
       expect(b.e).toBeUndefined();
-      await k.invoke(B, "c");
+      k.invoke(B, "c");
       expect(b.e).toBe("c");
-      expect(await k.invoke(new B("0"), "c")).toBe("c");
+      expect(k.invoke(new B("0"), "c")).toBe("c");
     });
-    it("should have additionalArguments", async () => {
+    it("should have additionalArguments", () => {
       class A {
         b: string;
 
@@ -654,7 +654,7 @@ describe("Kernel", () => {
       const k = createKernel();
       const a = k.get(A);
       expect(a.b).toBeUndefined();
-      await k.invoke(A, "c", ["e"]);
+      k.invoke(A, "c", ["e"]);
       expect(a.b).toBe("e");
     });
   });

@@ -1,5 +1,5 @@
 import { $injector, $q, LocationPlugin, services, StateDeclaration, Transition, UIRouter } from "@uirouter/core";
-import { _, IAnyDefinition, IClass, IDeclarations, inject, Kernel, Logger, MetadataUtil, state } from "oly-core";
+import { _, IAnyDefinition, Function, IDeclarations, inject, Kernel, Logger, MetadataUtil, state } from "oly-core";
 import { createElement } from "react";
 import { Layer } from "../components/Layer";
 import { olyReactEvents } from "../constants/events";
@@ -73,7 +73,7 @@ export class ReactRouterProvider {
    * @param definition    Annotate class.
    * @param parent
    */
-  public register(definition: IClass, parent?: IPageMetadata): void {
+  public register(definition: Function, parent?: IPageMetadata): void {
 
     const pages: IPageMetadataMap = MetadataUtil.get(lyPages, definition);
     const layout: IPageMetadata | null = Object.keys(pages)
@@ -189,7 +189,7 @@ export class ReactRouterProvider {
    * @param definition    Class to instantiate
    * @param propertyKey   Property name to call
    */
-  protected createPageResolver(definition: IClass,
+  protected createPageResolver(definition: Function,
                                propertyKey: string): () => Promise<IChunks> {
     return () => {
 

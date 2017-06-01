@@ -1,4 +1,4 @@
-import { _, Exception, IAnyFunction, IClass, Logger } from "oly-core";
+import { _, Exception, Function, Logger } from "oly-core";
 import { HttpServerException, IKoaContext, IKoaMiddleware } from "oly-http";
 import { IRouteMetadata } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
@@ -31,7 +31,7 @@ export class ApiMiddlewares {
    * Basic error handler.
    */
   public errorHandler(): IKoaMiddleware {
-    return (ctx: IKoaContext, next: IAnyFunction) => {
+    return (ctx: IKoaContext, next: Function) => {
       return next().then(() => {
 
         // override koa 404 by our 404 Exception
@@ -55,7 +55,7 @@ export class ApiMiddlewares {
    * Simple request logger.
    */
   public log(): IKoaMiddleware {
-    return (ctx: IKoaContext, next: IAnyFunction) => {
+    return (ctx: IKoaContext, next: Function) => {
 
       const logger = ctx.kernel.get(Logger).as("KoaRouter");
 
@@ -91,7 +91,7 @@ export class ApiMiddlewares {
    * @param propertyKey   Name of the method to run
    * @param route         Optional IRouteMetadata used for params injection
    */
-  public invoke(definition: IClass, propertyKey: string, route?: IRouteMetadata): IKoaMiddleware {
+  public invoke(definition: Function, propertyKey: string, route?: IRouteMetadata): IKoaMiddleware {
     return (ctx: IKoaContext) => {
 
       // inject all "light deps" of the controller

@@ -1,4 +1,4 @@
-import { IClass, MetadataUtil } from "oly-core";
+import { Function, MetadataUtil } from "oly-core";
 import { arg } from "oly-router";
 
 /**
@@ -18,7 +18,7 @@ import { arg } from "oly-router";
  * }
  * ```
  */
-export const body = (type?: IClass): ParameterDecorator => {
+export const body = (type?: Function): ParameterDecorator => {
   return (target: object, propertyKey: string, parameterIndex: number): void => {
     return arg({
       body: type || MetadataUtil.getPropParamTypes(target, propertyKey)[parameterIndex],

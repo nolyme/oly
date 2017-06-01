@@ -1,4 +1,4 @@
-import { IAnyFunction, Logger } from "oly-core";
+import { Function, Logger } from "oly-core";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
 import { JwtAuthService } from "../services/JwtAuthService";
 
@@ -6,7 +6,7 @@ import { JwtAuthService } from "../services/JwtAuthService";
  *
  */
 export const parseToken = (): IKoaMiddleware => {
-  return async function parseTokenMiddleware(ctx: IKoaContext, next: IAnyFunction) {
+  return async function parseTokenMiddleware(ctx: IKoaContext, next: Function) {
 
     const authorization = ctx.request.header.authorization;
     const tokenName = ctx.kernel.env("OLY_PIXIE_COOKIE");

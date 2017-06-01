@@ -1,5 +1,5 @@
 import * as koaBodyParser from "koa-bodyparser";
-import { env, IClass, IDeclarations, inject, Logger } from "oly-core";
+import { env, Function, IDeclarations, inject, Logger } from "oly-core";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
 import { RouterMetadataUtil } from "oly-router";
 import { MethodNotAllowedException } from "../exceptions/MethodNotAllowedException";
@@ -59,7 +59,7 @@ export class ApiProvider {
    *
    * @param definition   Class with Router Metadata
    */
-  public register(definition: IClass): this {
+  public register(definition: Function): this {
     const router = this.koaRouterBuilder.createFromDefinition(definition);
     return this
       .logRouter(router, definition)
@@ -120,7 +120,7 @@ export class ApiProvider {
    * @param router         Koa router instance
    * @param definition     Dependency definition used with this router
    */
-  protected logRouter(router: IKoaRouter, definition: IClass): this {
+  protected logRouter(router: IKoaRouter, definition: Function): this {
     this.logger.trace(`prepare ${definition.name}`);
     for (const layer of router.stack) {
       const method = layer.methods[layer.methods.length - 1];

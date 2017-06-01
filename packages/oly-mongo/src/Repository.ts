@@ -1,5 +1,5 @@
 import { Collection, ObjectID } from "mongodb";
-import { IClassOf, inject, Kernel, Logger, MetadataUtil } from "oly-core";
+import { FunctionOf, inject, Kernel, Logger, MetadataUtil } from "oly-core";
 import { FieldMetadataUtil, JsonService } from "oly-mapper";
 import { lyIndexes } from "./annotations";
 import { ID, IDocument } from "./interfaces";
@@ -10,13 +10,13 @@ import { MongoProvider } from "./MongoProvider";
  */
 export abstract class Repository<T extends IDocument> {
 
-  public static of<T extends IDocument>(type: IClassOf<T>): IClassOf<Repository<T>> {
+  public static of<T extends IDocument>(type: FunctionOf<T>): FunctionOf<Repository<T>> {
     return class extends Repository<T> { // tslint:disable-line
       protected type = type;
     };
   }
 
-  protected type: IClassOf<T>;
+  protected type: FunctionOf<T>;
 
   @inject(Kernel)
   protected kernel: Kernel;

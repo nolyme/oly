@@ -1,4 +1,4 @@
-import { IClass, Kernel, MetadataUtil } from "oly-core";
+import { Function, Kernel, MetadataUtil } from "oly-core";
 import { Pixie } from "./services/Pixie";
 import { PixieHttp } from "./services/PixieHttp";
 
@@ -9,7 +9,7 @@ import { PixieHttp } from "./services/PixieHttp";
  * @param provide
  * @experimental
  */
-export const USE_TUNNEL = (use: IClass, provide: IClass) => (kernel: Kernel) => {
+export const USE_TUNNEL = (use: Function, provide: Function) => (kernel: Kernel) => {
   const pixie = kernel.get(Pixie);
   const http = kernel.get(PixieHttp);
   const ctrl = kernel.get(use, {register: false});

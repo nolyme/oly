@@ -7,13 +7,13 @@ import { JsonSchemaReader } from "./JsonSchemaReader";
 
 export class JsonValidator {
 
-  @state()
+  @state
   public ajv: Ajv.Ajv = this.createAjv();
 
-  @state()
+  @state
   protected cache: Array<[Function, ValidateFunction]> = [];
 
-  @inject(JsonSchemaReader)
+  @inject
   protected schemaReader: JsonSchemaReader;
 
   /**

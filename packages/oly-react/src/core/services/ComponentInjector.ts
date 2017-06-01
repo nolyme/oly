@@ -1,7 +1,7 @@
 import {
   _,
   IAnyDefinition,
-  IClass,
+  Function,
   IEventMetadataMap,
   inject,
   IStateMutate,
@@ -132,7 +132,7 @@ export class ComponentInjector {
    * @param action
    * @return {(data:any)=>any}
    */
-  protected actionResolveFactory(logger: Logger, definition: IClass, action: IActionMetadata) {
+  protected actionResolveFactory(logger: Logger, definition: Function, action: IActionMetadata) {
     return (data: any) => {
 
       logger.debug(`action ${action.name} is done`);
@@ -158,7 +158,7 @@ export class ComponentInjector {
    * @param action
    * @return {(e:Error)=>undefined}
    */
-  protected actionRejectFactory(logger: Logger, definition: IClass, action: IActionMetadata) {
+  protected actionRejectFactory(logger: Logger, definition: Function, action: IActionMetadata) {
     return (e: Error) => {
 
       logger.warn(`action ${action.name} has failed`, e);

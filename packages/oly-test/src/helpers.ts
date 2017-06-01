@@ -1,4 +1,4 @@
-import { IClass, IStore, Kernel } from "oly-core";
+import { IStore, Kernel } from "oly-core";
 
 /**
  *
@@ -21,7 +21,7 @@ const setContext = (target: any, kernelInstance?: Kernel) => {
  *
  * @param kernel    Kernel to use
  */
-export const run = (kernel: Kernel | IStore) => (target: IClass) => {
+export const run = (kernel: Kernel | IStore) => (target: Function) => {
   if (kernel instanceof Kernel) {
     return setContext(target, kernel);
   } else {

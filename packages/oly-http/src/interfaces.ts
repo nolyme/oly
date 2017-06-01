@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import * as Koa from "koa";
-import { IAnyFunction, Kernel } from "oly-core";
+import { Kernel } from "oly-core";
 import { ZlibOptions } from "zlib";
 
 /**
@@ -66,7 +66,7 @@ export interface ICompressOptions extends ZlibOptions {
  */
 export interface ICorsOptions {
   // `Access-Control-Allow-Origin`, default is '*'
-  origin?: string | IAnyFunction;
+  origin?: string | Function;
   // `Access-Control-Allow-Methods`, default is 'GET,HEAD,PUT,POST,DELETE,PATCH'
   allowMethods?: string | string[];
   // `Access-Control-Expose-Headers`

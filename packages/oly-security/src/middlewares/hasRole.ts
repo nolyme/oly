@@ -1,5 +1,5 @@
 import { ForbiddenException } from "oly-api";
-import { IAnyFunction } from "oly-core";
+import { Function } from "oly-core";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
 import { JwtAuthService } from "../services/JwtAuthService";
 import { isAuth } from "./isAuth";
@@ -9,7 +9,7 @@ import { isAuth } from "./isAuth";
  * @param roles
  */
 export const hasRole = (...roles: string[]): IKoaMiddleware => {
-  return async function hasRoleMiddleware(ctx: IKoaContext, next: IAnyFunction) {
+  return async function hasRoleMiddleware(ctx: IKoaContext, next: Function) {
 
     await isAuth()(ctx, () => Promise.resolve());
 

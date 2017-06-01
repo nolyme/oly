@@ -1,4 +1,4 @@
-import { IClassOf, inject, state } from "oly-core";
+import { FunctionOf, inject, state } from "oly-core";
 import { Connection, Repository as TypeRepository } from "typeorm";
 import { EntityMetadata } from "typeorm/metadata/EntityMetadata";
 import { QueryRunnerProvider } from "typeorm/query-runner/QueryRunnerProvider";
@@ -9,7 +9,7 @@ import { DatabaseProvider } from "./DatabaseProvider";
  */
 export abstract class Repository<T> extends TypeRepository<T> {
 
-  public static of<T>(type: IClassOf<T>): IClassOf<Repository<T>> {
+  public static of<T>(type: FunctionOf<T>): FunctionOf<Repository<T>> {
     return class extends Repository<T> {  // tslint:disable-line
       protected type = type;
     };
@@ -24,7 +24,7 @@ export abstract class Repository<T> extends TypeRepository<T> {
   @state()
   protected queryRunnerProvider: QueryRunnerProvider;
 
-  protected type: IClassOf<T>;
+  protected type: FunctionOf<T>;
 
   @inject()
   protected databaseProvider: DatabaseProvider;

@@ -62,3 +62,10 @@ export interface IKernelEmitOptions {
   parent?: boolean;
   fork?: boolean;
 }
+
+export interface IListener {
+
+  // internal free function
+  // remove all listener
+  __free__?(): void;
+}

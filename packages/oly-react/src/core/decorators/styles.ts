@@ -1,4 +1,4 @@
-import { IAnyFunction } from "oly-core";
+import { Function } from "oly-core";
 import * as React from "react";
 
 /**
@@ -6,7 +6,7 @@ import * as React from "react";
  *
  * @param func
  */
-export const styles = (func: IAnyFunction) => {
+export const styles = (func: Function) => {
   return (target: React.ComponentClass<any> | React.StatelessComponent<any>) => {
     // ...
   };

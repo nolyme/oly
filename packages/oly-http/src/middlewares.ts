@@ -1,4 +1,4 @@
-import { IAnyFunction, Kernel } from "oly-core";
+import { Kernel } from "oly-core";
 import { ICompressOptions, ICorsOptions, IKoaContext, IKoaMiddleware, IServeOptions } from "./interfaces";
 
 // --
@@ -56,7 +56,7 @@ export const helmet = (opt: object = {}): IKoaMiddleware => koaHelmet(opt || {no
  * @param kernel    Kernel to fork
  * @middleware
  */
-export const context = (kernel: Kernel) => (ctx: IKoaContext, next: IAnyFunction) => {
+export const context = (kernel: Kernel) => (ctx: IKoaContext, next: Function) => {
   ctx.kernel = kernel.fork();
   return next();
 };

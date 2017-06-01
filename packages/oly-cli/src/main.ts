@@ -1,4 +1,3 @@
-import "shelljs/global";
 import { commands } from "./commands";
 import { ensureDependencies } from "./dependencies";
 

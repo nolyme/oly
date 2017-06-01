@@ -12,7 +12,7 @@ export class HttpClient {
   @state
   protected axios: AxiosInstance = this.createAxios();
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
   /**

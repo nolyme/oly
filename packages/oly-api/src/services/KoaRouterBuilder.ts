@@ -1,5 +1,5 @@
 import * as KoaRouter from "koa-router";
-import { IClass, inject } from "oly-core";
+import { Function, inject } from "oly-core";
 import { IKoaContext } from "oly-http";
 import { FieldMetadataUtil, IType, JsonService, TypeUtil } from "oly-mapper";
 import { IRouteMetadata, RouterMetadataUtil } from "oly-router";
@@ -24,7 +24,7 @@ export class KoaRouterBuilder {
    *
    * @param definition   Annotated class with router metadata
    */
-  public createFromDefinition(definition: IClass): KoaRouter {
+  public createFromDefinition(definition: Function): KoaRouter {
 
     const routerMetadata = RouterMetadataUtil.getRouter(definition);
     const prefix = (!!routerMetadata.prefix && routerMetadata.prefix !== "/")
@@ -160,7 +160,7 @@ export class KoaRouterBuilder {
       return TypeUtil.forceNumber(value);
     } else if (FieldMetadataUtil.hasFields(type)) {
       try {
-        return this.json.build(type as IClass, value); // TODO: ValidationException() + .reason or field
+        return this.json.build(type as Function, value); // TODO: ValidationException() + .reason or field
       } catch (e) {
         throw new BadRequestException(e, olyApiErrors.validationHasFailed());
       }

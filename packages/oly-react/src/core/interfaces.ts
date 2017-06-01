@@ -1,4 +1,4 @@
-import { IClass } from "oly-core";
+import { Function } from "oly-core";
 import { ComponentClass, StatelessComponent } from "react";
 
 /**
@@ -12,7 +12,7 @@ export type RouteComponent =
  *
  */
 export interface IActionResultError {
-  component: IClass;
+  component: Function;
   action: string;
   error: Error;
 }
@@ -21,7 +21,7 @@ export interface IActionResultError {
  *
  */
 export interface IActionResult<T> {
-  component: IClass;
+  component: Function;
   action: string;
   data: T;
 }

@@ -1,4 +1,4 @@
-import { _, IAnyFunction, IClass, MetadataUtil } from "oly-core";
+import { _, Function, Function, MetadataUtil } from "oly-core";
 import { lyRouter } from "../constants";
 import { IRouteMetadata, IRouterMetadata } from "../interfaces";
 
@@ -12,7 +12,7 @@ export class RouterMetadataUtil {
    *
    * @param target    Class
    */
-  public static getRouter(target: IClass | IAnyFunction): IRouterMetadata {
+  public static getRouter(target: Function | Function): IRouterMetadata {
     const router: IRouterMetadata = MetadataUtil.get(lyRouter, target);
     router.routes = router.routes || {};
     return router;
@@ -24,7 +24,7 @@ export class RouterMetadataUtil {
    * @param target    Class
    * @param router    Router metadata
    */
-  public static setRouter(target: IClass | IAnyFunction, router: IRouterMetadata): void {
+  public static setRouter(target: Function | Function, router: IRouterMetadata): void {
     MetadataUtil.set(lyRouter, router, target);
   }
 
@@ -33,7 +33,7 @@ export class RouterMetadataUtil {
    *
    * @param target    Class
    */
-  public static hasRouter(target: IClass | IAnyFunction): boolean {
+  public static hasRouter(target: Function | Function): boolean {
     return MetadataUtil.has(lyRouter, target);
   }
 

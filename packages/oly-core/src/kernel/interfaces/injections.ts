@@ -12,7 +12,7 @@ export interface IDeclaration<T extends IProvider = IProvider> {
   // cached instance
   instance?: T;
   // how to create our instance
-  use: Class<T> | IFactoryOf<T>;
+  use: Class<T> | IFactory<T>;
   // who rely on it
   children: Array<{
     // definition
@@ -33,7 +33,7 @@ export interface IDefinition<T extends IProvider = IProvider> {
   // definition identifier
   provide: Class<T>;
   // the used definition/factory. default is value of `provide`
-  use?: Class<T> | IFactoryOf<T>;
+  use?: Class<T> | IFactory<T>;
 }
 
 /**
@@ -44,9 +44,9 @@ export interface IInjectableMetadata extends IMetadata {
     // provide only one instance, default to true
     singleton?: boolean;
     // specify a custom instance factory
-    use?: IFactoryOf<any>;
+    use?: IFactory;
     // force the definition identifier
-    provide?: Class<any>;
+    provide?: Class;
   };
 }
 
@@ -57,7 +57,7 @@ export interface IInjectionsMetadata extends IMetadata {
   properties: {
     [key: string]: {
       // definition
-      type: Class<any>;
+      type: Class;
     };
   };
 }
@@ -75,12 +75,12 @@ export interface IKernelGetOptions {
  * Typed factory of a class.
  * This is used by Kernel for Factory injections.
  */
-export type IFactoryOf<T> = (kernel: Kernel, parent?: Function) => T;
+export type IFactory<T = any> = (kernel: Kernel, parent?: Function) => T;
 
 /**
  *
  */
-export interface Class<T = object> { // tslint:disable-line
+export interface Class<T = any> { // tslint:disable-line
   name: string;
 
   new(...args: any[]): T;
@@ -94,15 +94,11 @@ export interface Class<T = object> { // tslint:disable-line
 export interface IProvider {
 
   // before onStart(), A -> Z
-  onConfigure?(deps: Array<IDeclaration<any>>): any;
+  onConfigure?(declarations: IDeclarations): any;
 
   // when you Kernel#start(), Z -> A
-  onStart?(deps: Array<IDeclaration<any>>): any;
+  onStart?(declarations: IDeclarations): any;
 
   // when you Kernel#stop(), Z -> A
-  onStop?(deps: Array<IDeclaration<any>>): any;
-
-  // internal free function
-  // remove all listener
-  __free__?(): void;
+  onStop?(declarations: IDeclarations): any;
 }
