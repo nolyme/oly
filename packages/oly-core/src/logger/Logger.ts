@@ -2,10 +2,10 @@ import * as chalk from "chalk";
 import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
 import { parent } from "../kernel/decorators/parent";
+import { state } from "../kernel/decorators/state";
 import { _ } from "../kernel/Global";
 import { Class } from "../kernel/interfaces/injections";
 import { LogLevels } from "./LogLevels";
-import { state } from "../kernel/decorators/state";
 
 /**
  * Main oly logger
