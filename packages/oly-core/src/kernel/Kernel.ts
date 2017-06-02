@@ -83,7 +83,7 @@ export class Kernel {
    *
    * This is your only way to identify a context.
    */
-  private readonly id: string;
+  public readonly id: string;
 
   /**
    * Events registry.
