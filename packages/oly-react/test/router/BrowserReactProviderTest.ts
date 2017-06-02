@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-import { pushStateLocationPlugin } from "@uirouter/core";
 import { _ } from "oly-core";
 import { attachKernel } from "oly-test";
 import { olyReactRouterEvents } from "../../src";
@@ -50,8 +49,7 @@ describe("BrowserReactProvider", () => {
 
   it("should returns 404", async () => {
     const routerProvider = kernel.get(ReactRouterProvider);
-    browser.window.history.pushState({}, "", "/wat");
-    await routerProvider.listen(pushStateLocationPlugin);
+    await routerProvider.listen("/wat");
     expect(browser.root.textContent).toBe("Layout:NotFound");
   });
 });
