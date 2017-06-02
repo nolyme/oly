@@ -12,7 +12,7 @@ import { FakeApp } from "./fixtures";
 
 describe("BrowserReactProvider", () => {
 
-  const kernel = attachKernel()
+  const kernel = attachKernel({OLY_LOGGER_LEVEL: "TRACE"})
     .with(FakeApp, ReactBrowserProvider);
 
   const browser = kernel.get(Browser);
@@ -23,14 +23,14 @@ describe("BrowserReactProvider", () => {
   });
 
   it("should returns nested", async () => {
-    expect(router.current.name).toBe("home");
+    expect(router.current.route.node.name).toBe("home");
     await router.go("list");
-    expect(router.current.name).toBe("list");
+    expect(router.current.route.node.name).toBe("list");
     expect(browser.root.textContent).toBe("Layout:Nested:List");
   });
 
   it("should returns params", async () => {
-    await router.go("details", {id: "1", name: "lol"});
+    await router.go({to: "details", params: {id: "1"}, query: {name: "lol"}});
     expect(browser.root.textContent).toBe("Layout:Nested:Details(1,lol)");
   });
 
@@ -49,7 +49,7 @@ describe("BrowserReactProvider", () => {
 
   it("should returns 404", async () => {
     const routerProvider = kernel.get(ReactRouterProvider);
-    await routerProvider.listen("/wat");
+    await routerProvider.transition("/wat");
     expect(browser.root.textContent).toBe("Layout:NotFound");
   });
 });

@@ -44,10 +44,10 @@ export class View extends Component<IViewProps, IViewState> {
   @env("OLY_REACT_SHOW_VIEWS")
   public readonly show: boolean = false;
 
-  @inject(Logger)
+  @inject
   public logger: Logger;
 
-  @inject(ReactRouterProvider)
+  @inject
   public routerProvider: ReactRouterProvider;
 
   public index: number;
@@ -66,7 +66,7 @@ export class View extends Component<IViewProps, IViewState> {
    * Refresh the chunk here
    */
   @on(olyReactRouterEvents.TRANSITION_RENDER)
-  public onTransitionEnd(): Promise<void> {
+  public onTransitionRender(index: number): Promise<void> {
     if (this.layer && this.layer.chunks[this.name] !== this.state.content) {
       this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
       const content = this.layer.chunks[this.name];
@@ -81,7 +81,10 @@ export class View extends Component<IViewProps, IViewState> {
    *
    */
   public componentWillMount(): void {
-    this.index = (this.props.index != null ? this.props.index : this.context.layer) || 0;
+    this.index = (this.props.index != null ? this.props.index : this.context.layer);
+    if (typeof this.index === "undefined") {
+      throw new Error("Can't get an index");
+    }
     this.logger.trace(`init view ${this.id} ${this.index} (${this.name})`);
     this.state = {
       content: this.layer ? this.layer.chunks[this.name] : null,

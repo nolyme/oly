@@ -1,15 +1,17 @@
-import { env, inject, Kernel, Logger } from "oly-core";
+import { createBrowserHistory, createHashHistory } from "history";
+import { env, inject, IProvider, Kernel, Logger, on } from "oly-core";
 import { createElement } from "react";
 import { AppContext } from "../../core/components/AppContext";
 import { View } from "../components/View";
+import { olyReactRouterEvents } from "../constants/events";
+import { ITransition, ITransitionType } from "../interfaces";
 import { Browser } from "./Browser";
-import { hashLocationPlugin, pushStateLocationPlugin } from "./Locations";
 import { ReactRouterProvider } from "./ReactRouterProvider";
 
 /**
  *
  */
-export class ReactBrowserProvider {
+export class ReactBrowserProvider implements IProvider {
 
   /**
    *
@@ -38,28 +40,66 @@ export class ReactBrowserProvider {
   /**
    * Hook - start
    */
-  protected onStart(): Promise<void> {
+  public onStart(): Promise<void> {
 
-    const locationService = this.useHash
-      ? hashLocationPlugin
-      : pushStateLocationPlugin;
+    this.createHistory();
 
-    // when you go to "/" in hash mode, there is no route
-    // so we redirect "/" to "/#/"
-    if (this.useHash && !this.browser.window.location.hash) {
-      this.browser.window.location.hash = "#/";
-    }
+    this.browser.history.block(((location: any, action: ITransitionType) => {
+      if (action === "POP") {
+        return location.pathname;
+      }
+    }) as any);
 
-    return this.router.listen(locationService).then(() => {
+    return this.router.transition({
+      to: this.browser.history.location.pathname,
+      type: "NONE",
+    }).then(() => {
       this.logger.info("render react view");
-      this.render();
+      this.mount();
     });
+  }
+
+  @on(olyReactRouterEvents.TRANSITION_END)
+  protected onTransitionEnd(transition: ITransition) {
+    if (transition.type === "PUSH") {
+      this.browser.history.push(transition.to.path);
+    } else if (transition.type === "REPLACE") {
+      this.browser.history.replace(transition.to.path);
+    }
+  }
+
+  protected createHistory() {
+    const self = this;
+    if (this.useHash) {
+      this.browser.history = createHashHistory({
+        getUserConfirmation: this.createProxyHistory(),
+      });
+    } else {
+      this.browser.history = createBrowserHistory({
+        getUserConfirmation: this.createProxyHistory(),
+      });
+    }
+  }
+
+  protected createProxyHistory() {
+    return (message: string, callback: Function) => {
+      if (message) {
+        this.router.transition({
+          to: message,
+          type: "POP",
+        }).then(() => {
+          callback(true);
+        }).catch(() => {
+          callback(false);
+        });
+      }
+    };
   }
 
   /**
    * Mount the app.
    */
-  protected render(): void {
+  protected mount(): void {
     this.browser.render(this.rootElement, this.mountId);
   }
 
@@ -67,6 +107,6 @@ export class ReactBrowserProvider {
    *
    */
   public get rootElement(): JSX.Element {
-    return createElement(AppContext, {kernel: this.kernel}, createElement(View));
+    return createElement(AppContext, {kernel: this.kernel}, createElement(View, {index: 0}));
   }
 }

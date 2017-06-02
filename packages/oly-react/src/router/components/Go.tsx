@@ -41,7 +41,10 @@ export class Go extends Component<IGoProps, IGoState> {
   @action
   public handleClick(e: any): Promise<any> {
     e.preventDefault();
-    return this.router.go(this.props.to, this.props.params);
+    return this.router.go({
+      to: this.props.to,
+      params: this.props.params,
+    });
   }
 
   /**
@@ -73,7 +76,7 @@ export class Go extends Component<IGoProps, IGoState> {
     return createElement("a" as any, {
       className: this.state.active ? "active" : undefined,
       ...rest,
-      href: this.router.href(to, params),
+      href: this.router.href({to, params}),
       onClick: this.handleClick,
     }, this.props.children);
   }

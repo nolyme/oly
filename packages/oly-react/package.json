@@ -12,8 +12,11 @@
     "react"
   ],
   "dependencies": {
+    "@types/history": "^4.5.1",
     "@types/prop-types": "15.5.1",
     "@types/react-dom": "15.5.0",
+    "history": "^4.6.1",
+    "path-to-regexp": "^1.7.0",
     "prop-types": "15.5.10",
     "react-dom": "15.5.4"
   },

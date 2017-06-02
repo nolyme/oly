@@ -38,7 +38,7 @@ export class PageDecorator implements IDecorator {
       abstract: this.options.abstract === true,
       children: this.options.children,
       name: this.options.name || propertyKey,
-      url: this.options.path || "",
+      path: this.options.path || "",
     });
   }
 

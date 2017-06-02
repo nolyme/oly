@@ -1,4 +1,5 @@
 import { Class, IMetadata } from "oly-core";
+import { PathRegExp } from "path-to-regexp";
 import { ComponentClass } from "react";
 
 /**
@@ -11,18 +12,53 @@ export type IChunks = { [key: string]: JSX.Element }; // tslint:disable-line
  */
 export type IRawChunk = JSX.Element | ComponentClass<any> | IChunks;
 
-/**
- *
- */
-export interface IRouteState {
+export type ITransitionType = "PUSH" | "POP" | "REPLACE" | "NONE";
+
+export interface ITransition {
+  from?: IMatch;
+  to: IMatch;
+  type: ITransitionType;
+}
+
+export interface INode {
   name: string;
-  parent?: IRouteState;
+  path: string;
+  abstract?: boolean;
+  parent?: string;
+  target: Class;
+  propertyKey: string;
+}
+
+export interface IRoute {
+  node: INode;
+  stack: INode[];
+  regexp: PathRegExp;
+  path: string;
+}
+
+export interface IHrefQuery {
+  to: string;
+  params?: object;
+  type?: ITransitionType;
+  query?: object;
+}
+
+export interface IMatch {
+  path: string;
+  route: IRoute;
+  query: {
+    [key: string]: string;
+  };
+  params: {
+    [key: string]: string;
+  };
 }
 
 /**
  * Layer description.
  */
 export interface ILayer {
+  node: INode;
   chunks: IChunks;
 }
 
@@ -30,9 +66,9 @@ export interface ILayer {
  * Page metadata.
  */
 export interface IPagesProperty {
-  abstract: boolean;
-  url: string;
   name: string;
+  path: string;
+  abstract?: boolean;
   children?: Class[];
 }
 

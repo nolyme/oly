@@ -8,14 +8,14 @@ import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty }
  * The injection system is not enough because React does not give access to its Factory.
  * We process an instance on the #componentWillMount() via @attach.
  * Processing allowed all features:
- * - @on, @inject, @state, @env
+ * - @on, @inject, @node, @env
  *
  * However, as we don't know WHEN component is created (by React), we can't create a real dependency tree.
  * This is why, you can't declare providers inside a React Component. (Unless if you make a implicit declaration.)
  *
- * Finally, we enhance @state and create a new feature: @action.
+ * Finally, we enhance @node and create a new feature: @action.
  *
- * Decorator @state decorator will create also a refreshHandler with @on to re-render on each mutation.
+ * Decorator @node decorator will create also a refreshHandler with @on to re-render on each mutation.
  * Decorator @action wraps a method and allows logging/global try-catch/autobind.
  */
 export class ComponentInjector {
@@ -43,7 +43,7 @@ export class ComponentInjector {
   }
 
   /**
-   * Add an @on("state:mutate") to re-renderer the component on mutation.
+   * Add an @on("node:mutate") to re-renderer the component on mutation.
    *
    * @param target      React component
    * @param instance    Instance

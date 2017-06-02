@@ -110,11 +110,11 @@ describe("AppContext", () => {
     render(<AppContext kernel={kernel}><B/></AppContext>, dom.container);
   });
 
-  it("componentWillMount can initialize state", () => {
+  it("componentWillMount can initialize node", () => {
     expect(dom.get("strong").textContent).toBe("Francis");
   });
 
-  it("state mutation update component", async () => {
+  it("node mutation update component", async () => {
     kernel.state("person", {name: "Paul"});
     await _.timeout(1);
     expect(dom.get("strong").textContent).toBe("Paul");

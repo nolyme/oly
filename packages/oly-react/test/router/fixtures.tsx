@@ -15,14 +15,14 @@ export class FakeNestedApp {
     return <div>List</div>;
   }
 
-  @page("/:id")
-  public details(@param id: string, @query("name") name: string) {
-    return <div>Details({id},{name})</div>;
-  }
-
   @page("/back")
   public back() {
     return <div><Go id="go" to="home">Back</Go></div>;
+  }
+
+  @page("/:id")
+  public details(@param id: string, @query("name") name: string) {
+    return <div>Details({id},{name})</div>;
   }
 }
 
@@ -46,11 +46,6 @@ export class FakeApp {
     return <div>Home</div>;
   }
 
-  @page404
-  public notFound() {
-    return <div>NotFound</div>;
-  }
-
   @page({
     children: [FakeNestedApp],
     path: "/nested",
@@ -66,5 +61,10 @@ export class FakeApp {
   })
   public nested2() {
     return <div>Nested2:<View/></div>;
+  }
+
+  @page404
+  public notFound() {
+    return <div>NotFound</div>;
   }
 }
