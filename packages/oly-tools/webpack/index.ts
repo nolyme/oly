@@ -89,7 +89,7 @@ export interface IToolsOptions {
   timeout?: number;
   /**
    * Opens a new browser tab when Webpack loads.
-   * Default is true.
+   * Default is false.
    */
   open?: boolean;
   /**
@@ -97,6 +97,10 @@ export interface IToolsOptions {
    * Default is false.
    */
   nyan?: boolean;
+  /**
+   * Enable source map loader.
+   */
+  sourceMapLoader?: boolean;
   /**
    * Override typescript loader.
    */
@@ -202,6 +206,14 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     ],
   };
 
+  if (options.sourceMapLoader === true) {
+    config.module.rules.push({
+      test: /\.js$/,
+      use: ["source-map-loader"],
+      enforce: "pre",
+    });
+  }
+
   // Plugins
 
   config.plugins = [
@@ -235,7 +247,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     );
   }
 
-  if (options.open !== false) {
+  if (options.open === true) {
     config.plugins.push(new OpenBrowserPlugin());
   }
 
