@@ -1,5 +1,5 @@
 import { inject } from "oly-core";
-import { action, attach, Go, Router } from "oly-react";
+import { action, attach, Go, ITransition, Router } from "oly-react";
 import * as React from "react";
 import { IDoc, IModuleContent } from "../../cli/interfaces";
 import { Search } from "./Search";
@@ -10,12 +10,12 @@ export class Header extends React.Component<{ doc: IDoc }, {}> {
   @inject private router: Router;
 
   @action
-  public handleTabChange(module: string) {
-    return this.router.go("moduleIndex", {module});
+  public handleTabChange(module: string): Promise<ITransition> {
+    return this.router.go({to: "moduleIndex", params: {module}});
   }
 
   public getSelectedId() {
-    const path = this.router.current.name;
+    const path = this.router.current.path;
     if (path.indexOf("/m/") === -1) {
       return "/";
     }

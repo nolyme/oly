@@ -159,6 +159,7 @@ export class Kirk {
         const path = this.join(parents);
         const route: IRoute = {
           node,
+          name: nodes.map((s) => s.path).join("."),
           stack: parents,
           path,
           regexp: pathToRegexp(path),
@@ -169,6 +170,7 @@ export class Kirk {
         const path = this.join(parents);
         const route: IRoute = {
           node,
+          name: nodes.map((s) => s.path).join("."),
           stack: parents,
           path,
         };

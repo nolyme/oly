@@ -21,7 +21,7 @@ describe("HelmetServiceProvider", () => {
         </Helmet>
         bottom
       </div>
-    );
+    )
   }
 
   const kernel = new Kernel({
