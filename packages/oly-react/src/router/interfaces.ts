@@ -32,7 +32,7 @@ export interface INode {
 export interface IRoute {
   node: INode;
   stack: INode[];
-  regexp: PathRegExp;
+  regexp?: PathRegExp;
   path: string;
 }
 

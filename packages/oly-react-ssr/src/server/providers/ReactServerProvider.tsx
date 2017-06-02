@@ -112,7 +112,7 @@ export class ReactServerProvider implements IProvider {
 
         try {
           // find route + resolve
-          await router.listen(ctx.req.url || "/");
+          await router.transition(ctx.req.url || "/");
 
           // build page
           ctx.body = renderer.render(ctx, this.template, this.mountId);

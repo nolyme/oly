@@ -98,7 +98,7 @@ export class ReactRouterProvider implements IProvider {
       return transition;
 
     } catch (e) {
-      this.logger.warn("Transition has failed");
+      this.logger.warn("transition has failed");
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_ERROR, e);
       throw e;
     }
@@ -122,7 +122,7 @@ export class ReactRouterProvider implements IProvider {
     }
 
     this.routes = this.kirk.createRoutes(nodes);
-    this.routes.forEach((route) => {
+    this.routes.filter((route) => route.regexp).forEach((route) => {
       this.logger.debug(`create route ${route.node.name} -> ${route.path} (${route.stack.length})`);
     });
   }

@@ -24,13 +24,7 @@ export class Kirk {
     if (options.to[0] === "/") { // do not process query nor param here
       url = options.to;
     } else {
-      for (const route of routes) {
-        // first, check as node name
-        if (route.node.name === options.to) {
-          url = route.path;
-          break;
-        }
-      }
+      url = this.findRouteByName(routes, options.to);
     }
 
     if (!url) {
@@ -116,19 +110,21 @@ export class Kirk {
     const [pathWithoutQuery] = path.split("?");
 
     for (const route of routes) {
-      const result = route.regexp.exec(pathWithoutQuery);
-      if (!result) {
-        continue;
+      if (route.regexp) {
+        const result = route.regexp.exec(pathWithoutQuery);
+        if (!result) {
+          continue;
+        }
+        return {
+          path,
+          route,
+          query: this.query(path),
+          params: route.regexp.keys.reduce((p, key, i) => {
+            p[key.name] = result[i + 1];
+            return p;
+          }, {}),
+        };
       }
-      return {
-        path,
-        route,
-        query: this.query(path),
-        params: route.regexp.keys.reduce((p, key, i) => {
-          p[key.name] = result[i + 1];
-          return p;
-        }, {}),
-      };
     }
     throw new Error(`There is no route for ${path}, you should add a 404 handler to avoid this error`);
   }
@@ -139,9 +135,25 @@ export class Kirk {
    * @param nodes
    */
   public createRoutes(nodes: INode[]): IRoute[] {
+
     const routes: IRoute[] = [];
-    // TODO: sort stack by params (any/:id should be after any/any)
-    nodes.forEach((node) => {
+    const sorted = nodes.sort((a, b) => {
+      if (a.path.match(/\*/mgi)) {
+        return 1;
+      }
+      if (b.path.match(/\*/mgi)) {
+        return -1;
+      }
+      if (a.path.match(/:/mgi)) {
+        return 1;
+      }
+      if (b.path.match(/:/mgi)) {
+        return -1;
+      }
+      return 0;
+    });
+
+    sorted.forEach((node) => {
       if (!node.abstract && node.path) {
         const parents = this.parents(nodes, node);
         const path = this.join(parents);
@@ -152,8 +164,48 @@ export class Kirk {
           regexp: pathToRegexp(path),
         };
         routes.push(route);
+      } else {
+        const parents = this.parents(nodes, node);
+        const path = this.join(parents);
+        const route: IRoute = {
+          node,
+          stack: parents,
+          path,
+        };
+        routes.push(route);
       }
     });
     return routes;
+  }
+
+  /**
+   *
+   */
+  public findRouteByName(routes: IRoute[], pathname: string): string | undefined {
+    const parts = pathname.split(".");
+    const size = parts.length - 1;
+    if (size === 0) {
+      for (const route of routes) {
+        // first, check as node name
+        if (route.node.name === pathname) {
+          return route.path;
+        }
+      }
+    } else {
+      let url: string = "";
+      for (let i = 0; i < size + 1; i++) {
+        const check: string = url;
+        for (const route of routes) {
+          if (route.node.name === parts[i]) {
+            url = route.path;
+            break;
+          }
+        }
+        if (check === url) {
+          return;
+        }
+      }
+      return url;
+    }
   }
 }

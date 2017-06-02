@@ -67,7 +67,7 @@ export class View extends Component<IViewProps, IViewState> {
    */
   @on(olyReactRouterEvents.TRANSITION_RENDER)
   public onTransitionRender(index: number): Promise<void> {
-    if (this.layer && this.layer.chunks[this.name] !== this.state.content) {
+    if (this.layer && this.layer.chunks[this.name] !== this.state.content && index === this.index) {
       this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
       const content = this.layer.chunks[this.name];
       return new Promise<void>((resolve) =>
