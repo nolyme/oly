@@ -66,7 +66,7 @@ export interface IInjectionsMetadata extends IMetadata {
  * Kernel#get() options.
  */
 export interface IKernelGetOptions {
-  parent?: Function;
+  parent?: Class;
   register?: boolean;
   instance?: any;
 }
@@ -75,7 +75,7 @@ export interface IKernelGetOptions {
  * Typed factory of a class.
  * This is used by Kernel for Factory injections.
  */
-export type IFactory<T = any> = (kernel: Kernel, parent?: Function) => T;
+export type IFactory<T = any> = (kernel: Kernel, parent?: Class) => T;
 
 /**
  *

@@ -1,22 +1,21 @@
 import * as chalk from "chalk";
 import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
+import { parent } from "../kernel/decorators/parent";
 import { _ } from "../kernel/Global";
-import { Kernel } from "../kernel/Kernel";
+import { Class } from "../kernel/interfaces/injections";
 import { LogLevels } from "./LogLevels";
+import { state } from "../kernel/decorators/state";
 
 /**
  * Main oly logger
  */
 @injectable({
   singleton: false,
-  use: (kernel: Kernel, parent?: Function) => {
-    return new Logger(kernel.id).as(parent ? parent.name : "");
-  },
 })
 export class Logger {
 
-  public static DEFAULT_NAME = "Unknown";
+  public static DEFAULT_NAME = "Component";
 
   /**
    * Used by this.chalk.
@@ -33,7 +32,7 @@ export class Logger {
    * Set a name to your app.
    */
   @env("OLY_APP_NAME")
-  protected appName: string = "MyApp";
+  protected appName: string = "App";
 
   /**
    * Set the level of your logger.
@@ -41,9 +40,18 @@ export class Logger {
   @env("OLY_LOGGER_LEVEL")
   protected logLevel: string = "INFO";
 
+  /**
+   *
+   */
+  @state("OLY_KERNEL_ID")
+  protected contextId: string = "";
+
   protected componentName: string = Logger.DEFAULT_NAME;
 
-  public constructor(protected contextId: string = "") {
+  public constructor(@parent parent?: Class) {
+    if (parent) {
+      this.componentName = parent.name;
+    }
   }
 
   /**
@@ -68,7 +76,7 @@ export class Logger {
    */
   public trace(message: string, data?: object) {
     if (LogLevels[this.logLevel] <= LogLevels.TRACE) {
-      this.appender(this.format("TRACE", message, data));
+      this.appender(this.format("TRACE", message, data), "TRACE");
     }
   }
 
@@ -80,7 +88,7 @@ export class Logger {
    */
   public debug(message: string, data?: object) {
     if (LogLevels[this.logLevel] <= LogLevels.DEBUG) {
-      this.appender(this.format("DEBUG", message, data));
+      this.appender(this.format("DEBUG", message, data), "DEBUG");
     }
   }
 
@@ -92,7 +100,7 @@ export class Logger {
    */
   public info(message: string, data?: object) {
     if (LogLevels[this.logLevel] <= LogLevels.INFO) {
-      this.appender(this.format("INFO", message, data));
+      this.appender(this.format("INFO", message, data), "INFO");
     }
   }
 
@@ -105,10 +113,10 @@ export class Logger {
   public warn(message: string, data?: object) {
     if (LogLevels[this.logLevel] <= LogLevels.WARN) {
       if (data && data instanceof Error) {
-        this.appender(this.format("WARN", message));
-        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n");
+        this.appender(this.format("WARN", message), "WARN");
+        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n", "WARN");
       } else {
-        this.appender(this.format("WARN", message, data));
+        this.appender(this.format("WARN", message, data), "WARN");
       }
     }
   }
@@ -122,10 +130,10 @@ export class Logger {
   public error(message: string, data?: object) {
     if (LogLevels[this.logLevel] <= LogLevels.ERROR) {
       if (data && data instanceof Error) {
-        this.appender(this.format("ERROR", message));
-        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n");
+        this.appender(this.format("ERROR", message), "ERROR");
+        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n", "ERROR");
       } else {
-        this.appender(this.format("ERROR", message, data));
+        this.appender(this.format("ERROR", message, data), "ERROR");
       }
     }
   }
@@ -134,8 +142,9 @@ export class Logger {
    * Output.
    *
    * @param text
+   * @param level
    */
-  protected appender(text: string): void {
+  protected appender(text: string, level?: string): void {
     if (_.isBrowser()) {
       console.log(text); // tslint:disable-line
     } else {
@@ -154,7 +163,7 @@ export class Logger {
     const now = new Date().toLocaleString();
     return ""
       + "[" + this.chalk.grey(now) + "] "
-      + chalk[Logger.colors[type]](type) + " "
+      + this.chalk[Logger.colors[type]](type) + " "
       + this.chalk.bold(this.appName + "(") + ""
       + this.contextId + this.chalk.bold(")") + " "
       + this.chalk.bold(this.componentName + ":") + " "

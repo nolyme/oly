@@ -35,7 +35,7 @@ describe("Kernel", () => {
       const kernel = createKernel({A: "B"});
       const a = kernel.get(A, {register: false});
 
-      expect(a.kernel.id).toBe(kernel.id);
+      expect(a.kernel.env("OLY_KERNEL_ID")).toBe(kernel.env("OLY_KERNEL_ID"));
       expect(a.kernel.state("A")).toBe("B");
     });
 
@@ -618,7 +618,7 @@ describe("Kernel", () => {
 
         @on
         b() {
-          return this.k.id;
+          return this.k.env("OLY_KERNEL_ID");
         }
       }
 

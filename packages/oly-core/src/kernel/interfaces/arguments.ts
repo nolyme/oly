@@ -5,7 +5,7 @@ export interface IArgumentArg {
   id?: string;
   name?: string;
   type: any;
-  handler: (kernel: Kernel) => any;
+  handler: (kernel: Kernel, additionalArguments: any[]) => any;
 }
 
 export interface IArgumentsMetadata extends IMetadata {

@@ -83,12 +83,12 @@ export class Kernel {
    *
    * This is your only way to identify a context.
    */
-  public readonly id: string;
+  private readonly id: string;
 
   /**
    * Events registry.
    */
-  protected events: IEventListener[] = [];
+  private events: IEventListener[] = [];
 
   /**
    * Declarations registry.
@@ -140,7 +140,7 @@ export class Kernel {
     this.store = {};
 
     for (const key of Object.keys(store)) {
-      this.state(key, store[key]);
+      this.store[key] = store[key];
     }
 
     if (!!parent) {
@@ -160,6 +160,8 @@ export class Kernel {
       this.declarations = [];
       this.started = false;
     }
+
+    this.store.OLY_KERNEL_ID = this.id;
   }
 
   /**
@@ -281,11 +283,11 @@ export class Kernel {
    */
   public with(...definitions: Array<Class | IDefinition>): Kernel {
 
-    for (const injectable of definitions) {
-      if (!injectable) {
+    for (const definition of definitions) {
+      if (!definition) {
         throw new KernelException(olyCoreErrors.injectableIsNull());
       }
-      this.get(injectable);
+      this.get(definition);
     }
 
     return this;
@@ -373,14 +375,20 @@ export class Kernel {
    * References can be updated. This is the power of @state, everybody has the same value at the same time.
    * An event is fired on each mutation: "state:mutate" {@see IStateMutateEvent}.
    *
-   * @param identifier   Identifier as string who defined the value
-   * @param newValue     Optional new value (setter mode)
+   * @param identifier    Identifier as string who defined the value
+   * @param newValue      Optional new value (setter mode)
    */
   public state(identifier: string, newValue?: any): any {
 
-    if (!!this.parent) {
+    if (typeof this.store[identifier] !== "undefined" && typeof newValue === "undefined") {
+      return this.store[identifier];
+    }
+
+    if (this.parent) {
       const parentValue = this.parent.state(identifier);
       if (typeof parentValue !== "undefined") {
+
+        // TODO: disabled by default (and allowed with something like @state({inherit: true}))
         if (typeof newValue !== "undefined") {
           return this.parent.state(identifier, newValue);
         }
@@ -529,10 +537,10 @@ export class Kernel {
 
     const meta = Meta.of({key: olyCoreKeys.arguments, target}).deep<IArgumentsMetadata>();
     const args: any[] = meta && meta.args[propertyKey]
-      ? meta.args[propertyKey].map((data) => data && data.handler(this))
+      ? meta.args[propertyKey].map((data) => data && data.handler(this, additionalArguments))
       : [];
 
-    this.getLogger().info(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
+    this.getLogger().debug(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
 
     return action.apply(instance, args.concat(additionalArguments));
   }
@@ -546,7 +554,7 @@ export class Kernel {
    *
    * @param target  IDeclaration candidate
    */
-  protected createDependency<T>(target: IDefinition<T>): IDeclaration<T> {
+  private createDependency<T>(target: IDefinition<T>): IDeclaration<T> {
 
     if (typeof target.use !== "undefined" && typeof target.use !== "function") {
       throw new KernelException(olyCoreErrors.isNotFunction("use", typeof target.use));
@@ -602,7 +610,7 @@ export class Kernel {
    * - However state is kept.
    *
    */
-  protected removeDependency(declaration: IDeclaration<IListener>): void {
+  private removeDependency(declaration: IDeclaration<IListener>): void {
     const index = this.declarations.indexOf(declaration);
     if (index > -1) {
       this.declarations.splice(index, 1);
@@ -626,7 +634,7 @@ export class Kernel {
    * @param dependency  Kernel dependency
    * @param parent      Instance who requires this instance
    */
-  protected createInstance<T>(dependency: IDeclaration<T>, parent?: Function) {
+  private createInstance<T>(dependency: IDeclaration<T>, parent?: Class) {
 
     const func = dependency.use as any;
 
@@ -642,7 +650,7 @@ export class Kernel {
       return this.inject<T>(instance.constructor as Class<T>, instance);
     }
 
-    return this.inject<T>(dependency.use as Class<T>);
+    return this.inject<T>(dependency.use as Class<T>, undefined, parent);
   }
 
   /**
@@ -654,13 +662,14 @@ export class Kernel {
    *
    * @param definition    IDefinition (e.g description of the instance)
    * @param instance      Instance to use, optional
+   * @param parent
    * @returns {T}         The new instance
    */
-  protected inject<T>(definition: Class<T>, instance?: T): T {
+  private inject<T>(definition: Class<T>, instance?: T, parent?: Class): T {
 
-    const meta = Meta.of({key: olyCoreKeys.arguments, target: definition}).get<IArgumentsMetadata>();
+    const meta = Meta.of({key: olyCoreKeys.arguments, target: definition}).deep<IArgumentsMetadata>();
     const args: any[] = meta && meta.args.$constructor
-      ? meta.args.$constructor.map((data) => data && data.handler(this))
+      ? meta.args.$constructor.map((data) => data && data.handler(this, [parent]))
       : [];
 
     return (
@@ -687,7 +696,7 @@ export class Kernel {
    * @param definition   Function/Class/Definition with IInjectionsMetadata
    * @param instance     Instance which will be processed
    */
-  protected processInjections<T>(definition: Class<T>, instance: T): T {
+  private processInjections<T>(definition: Class<T>, instance: T): T {
 
     const injections = Meta.of({key: olyCoreKeys.injections, target: definition}).deep<IInjectionsMetadata>();
     if (injections) {
@@ -705,9 +714,9 @@ export class Kernel {
             const injectable = Meta.of({
               key: olyCoreKeys.injectable,
               target: injection.type,
-            }).get<IInjectableMetadata>();
+            }).deep<IInjectableMetadata>();
 
-            if (injectable && injectable.target.singleton) {
+            if (injectable && injectable.target.singleton === false) {
               Object.defineProperty(instance, propertyKey, {
                 get: () => value,
               });
@@ -731,7 +740,7 @@ export class Kernel {
    * @param definition   IDefinition with @state / @env
    * @param instance     Instance to processed
    */
-  protected processStates<T>(definition: Class<T>, instance: T): T {
+  private processStates<T>(definition: Class<T>, instance: T): T {
 
     const statesMetadata = Meta.of({key: olyCoreKeys.states, target: definition}).deep<IStatesMetadata>();
     if (statesMetadata) {
@@ -778,7 +787,7 @@ export class Kernel {
    * @param definition    IDefinition with event metadata
    * @param instance      Instance to decorate
    */
-  protected processEvents<T extends IListener>(definition: Class<T>, instance: T): T {
+  private processEvents<T extends IListener>(definition: Class<T>, instance: T): T {
 
     const eventsMetadata = Meta.of({key: olyCoreKeys.events, target: definition}).deep<IEventsMetadata>();
     if (eventsMetadata) {
@@ -813,7 +822,7 @@ export class Kernel {
    *
    * @param definition    Definition
    */
-  protected forceProvideDecorator<T>(definition: IDefinition) {
+  private forceProvideDecorator<T>(definition: IDefinition) {
     const injectableMetadata = Meta.of({
       key: olyCoreKeys.injectable,
       target: definition.provide,
@@ -829,7 +838,7 @@ export class Kernel {
    * Bubble sort declarations by requirement.
    * Used by #start() and #stop().
    */
-  protected sortDeclarations(declarations: IDeclarations): IDeclarations {
+  private sortDeclarations(declarations: IDeclarations): IDeclarations {
     return _.bubble(declarations, (list, index) => {
       const findDefinitionInTree = (declaration: IDeclaration<any>, definition: Function) => {
 
@@ -854,9 +863,9 @@ export class Kernel {
   /**
    * Internal logger.
    */
-  protected getLogger() {
+  private getLogger() {
     if (!this.logger) {
-      this.logger = this.inject(Logger, new Logger(this.id).as("Kernel"));
+      this.logger = this.get(Logger, {parent: Kernel});
     }
     return this.logger;
   }
