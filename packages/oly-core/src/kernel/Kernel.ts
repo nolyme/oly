@@ -1,6 +1,6 @@
-import { Meta } from "../decorator/Meta";
 import { IArgumentsMetadata, IInjectionsMetadata, olyCoreKeys } from "../index";
 import { Logger } from "../logger/Logger";
+import { Meta } from "../meta/Meta";
 import { olyCoreErrors } from "./constants/errors";
 import { olyCoreEvents } from "./constants/events";
 import { KernelException } from "./exceptions/KernelException";
@@ -74,6 +74,19 @@ export class Kernel {
    */
   public static create(store?: IStore) {
     return new Kernel(store);
+  }
+
+  /**
+   *
+   */
+  public static test(store: IStore = {}) {
+    store.OLY_LOGGER_LEVEL = store.OLY_LOGGER_LEVEL || "ERROR";
+    const kernel = new Kernel(store);
+    if (_.isTest() && beforeAll && afterAll) {
+      beforeAll(() => kernel.start());
+      afterAll(() => kernel.stop());
+    }
+    return kernel;
   }
 
   /**

@@ -1,5 +1,5 @@
-import { IDecorator } from "../../decorator/interfaces";
-import { Meta } from "../../decorator/Meta";
+import { IDecorator } from "../../meta/interfaces";
+import { Meta } from "../../meta/Meta";
 import { olyCoreKeys } from "../constants/keys";
 
 export class OnDecorator implements IDecorator {
@@ -18,4 +18,7 @@ export class OnDecorator implements IDecorator {
   }
 }
 
+/**
+ * Event listener decorator.
+ */
 export const on = Meta.decorator<string>(OnDecorator);

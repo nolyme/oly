@@ -1,4 +1,4 @@
-import { IMetadata } from "../../decorator/interfaces";
+import { IMetadata } from "../../meta/interfaces";
 
 /**
  *

@@ -15,7 +15,7 @@ import {
 export class Meta {
 
   /**
-   *
+   * Ensure one instance of Reflect polyfill.
    */
   public static get reflect() {
     const R = _.get("Reflect");

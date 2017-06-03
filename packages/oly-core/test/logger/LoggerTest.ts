@@ -1,10 +1,10 @@
 import { deepEqual } from "assert";
-import { Meta } from "../../src/decorator/Meta";
 import { olyCoreKeys } from "../../src/kernel/constants/keys";
 import { inject } from "../../src/kernel/decorators/inject";
 import { IInjectableMetadata } from "../../src/kernel/interfaces/injections";
+import { Kernel } from "../../src/kernel/Kernel";
 import { Logger } from "../../src/logger/Logger";
-import { createKernel } from "../helpers";
+import { Meta } from "../../src/meta/Meta";
 
 describe("Logger", () => {
 
@@ -28,21 +28,23 @@ describe("Logger", () => {
     logger.error("4");
     deepEqual(stack, ["INFO2", "WARN3", "ERROR4"]);
   });
+
   it("should be injectable", () => {
     class A {
       @inject logger: Logger;
     }
 
-    const k = createKernel({
+    const k = Kernel.create({
       OLY_APP_NAME: "TEST",
       OLY_LOGGER_LEVEL: "ERROR",
     });
     const a = k.get(A);
-    expect(a.logger["contextId"]).toBe(k.env("OLY_KERNEL_ID"));  // tslint:disable-line
-    expect(a.logger["componentName"]).toBe("A");  // tslint:disable-line
-    expect(a.logger["appName"]).toBe("TEST");    // tslint:disable-line
-    expect(a.logger["logLevel"]).toBe("ERROR");  // tslint:disable-line
+    expect(a.logger["contextId"]).toBe(k.env("OLY_KERNEL_ID"));
+    expect(a.logger["componentName"]).toBe("A");
+    expect(a.logger["appName"]).toBe("TEST");
+    expect(a.logger["logLevel"]).toBe("ERROR");
   });
+
   it("should be swappable", () => {
     const stack: string[] = [];
 
@@ -75,7 +77,7 @@ describe("Logger", () => {
       }
     }
 
-    const k = createKernel({
+    const k = Kernel.create({
       OLY_APP_NAME: "TEST",
       OLY_LOGGER_LEVEL: "TRACE",
     });
@@ -91,10 +93,10 @@ describe("Logger", () => {
     a.test();
     expect(FakeLogger.i).toBe(2);
 
-    expect(a.logger["contextId"]).toBe(k.env("OLY_KERNEL_ID"));  // tslint:disable-line
-    expect(a.logger["componentName"]).toBe("A");                // tslint:disable-line
-    expect(a.logger["appName"]).toBe("TEST");             // tslint:disable-line
-    expect(a.logger["logLevel"]).toBe("TRACE");  // tslint:disable-line
+    expect(a.logger["contextId"]).toBe(k.env("OLY_KERNEL_ID"));
+    expect(a.logger["componentName"]).toBe("A");
+    expect(a.logger["appName"]).toBe("TEST");
+    expect(a.logger["logLevel"]).toBe("TRACE");
 
     const meta = Meta.of({key: olyCoreKeys.injectable, target: FakeLogger}).get<IInjectableMetadata>();
     const metaExtended = Meta.of({key: olyCoreKeys.injectable, target: FakeLogger}).deep<IInjectableMetadata>();

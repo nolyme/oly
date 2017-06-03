@@ -1,5 +1,5 @@
-import { IDecorator } from "../../decorator/interfaces";
-import { Meta } from "../../decorator/Meta";
+import { IDecorator } from "../../meta/interfaces";
+import { Meta } from "../../meta/Meta";
 import { olyCoreKeys } from "../constants/keys";
 import { Class, IFactory } from "../interfaces/injections";
 
@@ -22,4 +22,7 @@ export class InjectableDecorator implements IDecorator {
   }
 }
 
+/**
+ * Service configuration decorator.
+ */
 export const injectable = Meta.decoratorWithOptions<IInjectableOptions>(InjectableDecorator);

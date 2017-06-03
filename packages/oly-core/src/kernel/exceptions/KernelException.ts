@@ -1,4 +1,4 @@
-import { Exception } from "../../exception/Exception";
+import { Exception } from "../../error/Exception";
 
 /**
  * Example of Exception override.

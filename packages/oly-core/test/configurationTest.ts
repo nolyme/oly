@@ -8,7 +8,9 @@ describe("USE_PROCESS_ENV()", () => {
     process.env.OLY_LOGGER_LEVEL = "ERROR";
     process.env.HELLO = "ERROR";
 
-    const kernel = new Kernel({OLY_LOGGER_LEVEL: "DEBUG", HELLO: "WORLD"}).configure(USE_PROCESS_ENV);
+    const kernel = Kernel
+      .create({HELLO: "WORLD", OLY_LOGGER_LEVEL: "DEBUG"})
+      .configure(USE_PROCESS_ENV);
 
     equal(kernel.env("OLY_LOGGER_LEVEL"), "ERROR");
     equal(kernel.env("HELLO"), "ERROR");

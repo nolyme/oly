@@ -1,8 +1,9 @@
 /**
- * It's an enhancement of Error with toJSON, cause, ...
- * It's totally BROKEN in es5. sorry.
+ * It's an enhancement of Error with toJSON and cause.
+ * It's totally BROKEN in es5. sorry... :(
  *
  * Exception has a real #toJSON(). It can be stringify.
+ * It's useful when http, debug and message.
  * ```typescript
  * console.log(JSON.stringify(new Exception("A")));
  * ```
@@ -33,7 +34,11 @@
  * }
  * ```
  *
- * You can use `instanceof` without fear.
+ * You can use `instanceof` without fear server-side.
+ * Browser side, you should use name comparison.
+ * ```typescript
+ * e.name === "Exception"
+ * ```
  */
 export class Exception extends Error {
 
@@ -103,16 +108,9 @@ export class Exception extends Error {
   }
 
   /**
-   *
-   */
-  public get stack() {
-    return this.getStackTrace();
-  }
-
-  /**
    * Get the long stack trace.
    */
-  public getStackTrace(): string {
+  public getLongStackTrace(): string {
 
     let level = 0;
     let parent = this as any;

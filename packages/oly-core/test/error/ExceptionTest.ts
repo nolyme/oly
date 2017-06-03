@@ -1,4 +1,4 @@
-import { Exception } from "../../src/exception/Exception";
+import { Exception } from "../../src/error/Exception";
 import { olyCoreErrors } from "../../src/kernel/constants/errors";
 import { KernelException } from "../../src/kernel/exceptions/KernelException";
 

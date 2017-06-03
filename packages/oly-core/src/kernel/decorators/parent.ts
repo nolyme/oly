@@ -1,5 +1,5 @@
-import { IDecorator } from "../../decorator/interfaces";
-import { Meta } from "../../decorator/Meta";
+import { IDecorator } from "../../meta/interfaces";
+import { Meta } from "../../meta/Meta";
 import { olyCoreKeys } from "../constants/keys";
 import { Class } from "../interfaces/injections";
 import { Kernel } from "../Kernel";
@@ -16,6 +16,6 @@ export class ParentDecorator implements IDecorator {
 }
 
 /**
- *
+ * Argument decorator: get the parent.
  */
 export const parent = Meta.decoratorWithoutOptions(ParentDecorator);

@@ -2,7 +2,7 @@ import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
 import { parent } from "../kernel/decorators/parent";
 import { state } from "../kernel/decorators/state";
-import { _ } from "../kernel/Global";
+import { _, Global } from "../kernel/Global";
 import { Class } from "../kernel/interfaces/injections";
 import { ILogLevel, LogLevels } from "./LogLevels";
 
@@ -17,6 +17,7 @@ export class Logger {
   public static DEFAULT_NAME = "Component";
 
   public static ansi = require("ansicolor");
+  public static supportsColor = require("supports-color");
 
   /**
    * Used by Logger.ansi.
@@ -142,7 +143,7 @@ export class Logger {
     if (LogLevels[this.logLevel] <= LogLevels[type]) {
       if (data && data instanceof Error) {
         this.appender(type, this.format(type, message));
-        this.appender("ERROR", data);
+        this.appender(type, data);
       } else {
         this.appender(type, this.format(type, message, data));
       }
@@ -166,18 +167,12 @@ export class Logger {
     if (text instanceof Error) {
       output.apply(console, [text]);
     } else {
-      if (_.isBrowser()) {
-        if (this.hasColor) {
-          output.apply(console, Logger.ansi.parse(text).asChromeConsoleLogArguments);
-        } else {
-          output.apply(console, [text]);
-        }
+      if (Logger.supportsColor && this.hasColor) {
+        output.apply(console, [text]);
+      } else if (_.isBrowser() && this.hasColor) {
+        output.apply(console, Logger.ansi.parse(text).asChromeConsoleLogArguments);
       } else {
-        if (process.argv.indexOf("--no-color") > -1 || this.hasColor === false) {
-          output.apply(console, [Logger.ansi.strip(text)]);
-        } else {
-          output.apply(console, [text]);
-        }
+        output.apply(console, [Logger.ansi.strip(text)]);
       }
     }
   }

@@ -16,4 +16,7 @@ export class TimeDecorator extends AspectDecorator {
   }
 }
 
+/**
+ * Debug time of a function.
+ */
 export const time = Meta.decorator(TimeDecorator);
