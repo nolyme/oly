@@ -12,7 +12,7 @@ describe("Logger", () => {
     const stack: string[] = [];
 
     class FakeLogger extends Logger {
-      appender(msg: string) {
+      appender(type: string, msg: string) {
         return stack.push(msg);
       }
 
@@ -55,7 +55,7 @@ describe("Logger", () => {
         FakeLogger.i++;
       }
 
-      appender(msg: string) {
+      appender(type: string, msg: string) {
         return stack.push(msg);
       }
 

@@ -1,11 +1,10 @@
-import * as chalk from "chalk";
 import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
 import { parent } from "../kernel/decorators/parent";
 import { state } from "../kernel/decorators/state";
 import { _ } from "../kernel/Global";
 import { Class } from "../kernel/interfaces/injections";
-import { LogLevels } from "./LogLevels";
+import { ILogLevel, LogLevels } from "./LogLevels";
 
 /**
  * Main oly logger
@@ -17,8 +16,10 @@ export class Logger {
 
   public static DEFAULT_NAME = "Component";
 
+  public static ansi = require("ansicolor");
+
   /**
-   * Used by this.chalk.
+   * Used by Logger.ansi.
    */
   public static colors = {
     DEBUG: "cyan",
@@ -41,13 +42,26 @@ export class Logger {
   protected logLevel: string = "INFO";
 
   /**
+   * Set the level of your logger.
+   */
+  @env("OLY_LOGGER_COLOR")
+  protected hasColor: boolean = true;
+
+  /**
    *
    */
   @state("OLY_KERNEL_ID")
   protected contextId: string = "";
 
+  /**
+   *
+   */
   protected componentName: string = Logger.DEFAULT_NAME;
 
+  /**
+   *
+   * @param parent
+   */
   public constructor(@parent parent?: Class) {
     if (parent) {
       this.componentName = parent.name;
@@ -75,9 +89,7 @@ export class Logger {
    * @param data      Additional data
    */
   public trace(message: string, data?: object) {
-    if (LogLevels[this.logLevel] <= LogLevels.TRACE) {
-      this.appender(this.format("TRACE", message, data), "TRACE");
-    }
+    this.log("TRACE", message, data);
   }
 
   /**
@@ -87,9 +99,7 @@ export class Logger {
    * @param data      Additional data
    */
   public debug(message: string, data?: object) {
-    if (LogLevels[this.logLevel] <= LogLevels.DEBUG) {
-      this.appender(this.format("DEBUG", message, data), "DEBUG");
-    }
+    this.log("DEBUG", message, data);
   }
 
   /**
@@ -99,9 +109,7 @@ export class Logger {
    * @param data      Additional data
    */
   public info(message: string, data?: object) {
-    if (LogLevels[this.logLevel] <= LogLevels.INFO) {
-      this.appender(this.format("INFO", message, data), "INFO");
-    }
+    this.log("INFO", message, data);
   }
 
   /**
@@ -111,14 +119,7 @@ export class Logger {
    * @param data      Additional data
    */
   public warn(message: string, data?: object) {
-    if (LogLevels[this.logLevel] <= LogLevels.WARN) {
-      if (data && data instanceof Error) {
-        this.appender(this.format("WARN", message), "WARN");
-        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n", "WARN");
-      } else {
-        this.appender(this.format("WARN", message, data), "WARN");
-      }
-    }
+    this.log("WARN", message, data);
   }
 
   /**
@@ -128,12 +129,22 @@ export class Logger {
    * @param data      Additional data like Error
    */
   public error(message: string, data?: object) {
-    if (LogLevels[this.logLevel] <= LogLevels.ERROR) {
+    this.log("ERROR", message, data);
+  }
+
+  /**
+   *
+   * @param type
+   * @param message
+   * @param data
+   */
+  protected log(type: ILogLevel, message: string, data?: object) {
+    if (LogLevels[this.logLevel] <= LogLevels[type]) {
       if (data && data instanceof Error) {
-        this.appender(this.format("ERROR", message), "ERROR");
-        this.appender("\n " + this.chalk.red(data.stack || "?") + " \n\n", "ERROR");
+        this.appender(type, this.format(type, message));
+        this.appender("ERROR", data);
       } else {
-        this.appender(this.format("ERROR", message, data), "ERROR");
+        this.appender(type, this.format(type, message, data));
       }
     }
   }
@@ -141,14 +152,33 @@ export class Logger {
   /**
    * Output.
    *
+   * @param type
    * @param text
-   * @param level
    */
-  protected appender(text: string, level?: string): void {
-    if (_.isBrowser()) {
-      console.log(text); // tslint:disable-line
+  protected appender(type: ILogLevel, text: string | Error): void {
+
+    if (type === "TRACE") {
+      type = "DEBUG";
+    }
+
+    const output = console[type.toLowerCase()] || console.log;
+
+    if (text instanceof Error) {
+      output.apply(console, [text]);
     } else {
-      process.stdout.write(text + "\n");
+      if (_.isBrowser()) {
+        if (this.hasColor) {
+          output.apply(console, Logger.ansi.parse(text).asChromeConsoleLogArguments);
+        } else {
+          output.apply(console, [text]);
+        }
+      } else {
+        if (process.argv.indexOf("--no-color") > -1 || this.hasColor === false) {
+          output.apply(console, [Logger.ansi.strip(text)]);
+        } else {
+          output.apply(console, [text]);
+        }
+      }
     }
   }
 
@@ -160,21 +190,13 @@ export class Logger {
    * @param data      Extended data
    */
   protected format(type: string, message: string, data?: object): string {
-    const now = new Date().toLocaleString();
+    const now = _.isBrowser() ? new Date().toLocaleTimeString() : new Date().toLocaleString();
     return ""
-      + "[" + this.chalk.grey(now) + "] "
-      + this.chalk[Logger.colors[type]](type) + " "
-      + this.chalk.bold(this.appName + "(") + ""
-      + this.contextId + this.chalk.bold(")") + " "
-      + this.chalk.bold(this.componentName + ":") + " "
-      + ("\"" + message + "\" ")
-      + this.chalk.gray(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
-  }
-
-  /**
-   * Chalk factory.
-   */
-  protected get chalk() {
-    return chalk;
+      + "[" + Logger.ansi.dim(now) + "] "
+      + Logger.ansi[Logger.colors[type]](type) + " "
+      + Logger.ansi.bright(this.appName + "(") + this.contextId + Logger.ansi.bright(")") + " "
+      + Logger.ansi.bright(this.componentName + ":\n") + " "
+      + Logger.ansi.italic("\"" + message + "\" ")
+      + Logger.ansi.dim(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
 }

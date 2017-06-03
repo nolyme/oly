@@ -1,6 +1,6 @@
 import { injectable } from "../kernel/decorators/injectable";
 import { Logger } from "./Logger";
-import { LogLevels } from "./LogLevels";
+import { ILogLevel, LogLevels } from "./LogLevels";
 
 /**
  * Display {json: message} instead of classic format.
@@ -15,15 +15,28 @@ import { LogLevels } from "./LogLevels";
 })
 export class JsonLogger extends Logger {
 
-  public error(message: any, data?: object) {
-    if (LogLevels[this.logLevel] <= LogLevels.ERROR) {
-      this.appender(this.format("ERROR", message, data));
+  protected log(type: ILogLevel, message: string, data?: object) {
+    if (LogLevels[this.logLevel] <= type) {
+      this.appender(type, this.format(type, message, data));
     }
   }
 
+  protected appender(type: string, message: any) {
+    console.log.apply(console, [Logger.ansi.strip(message)]);
+  }
+
   protected format(type: string, message: string, data?: object) {
-    return `{"date":"${new Date().toISOString()}","lvl":"${type}","app": "${this.appName}", `
-      + `"ctx":"${this.contextId}","dep":"${this.componentName}", "msg":"${message}"`
-      + (!!data ? `,"ext":${JSON.stringify(data)}}` : "}");
+    const log: any = {
+      dat: new Date().toISOString(),
+      lvl: type,
+      app: this.appName,
+      ctx: this.contextId,
+      dep: this.componentName,
+      msg: message,
+    };
+    if (data) {
+      log.ext = data;
+    }
+    return JSON.stringify(log);
   }
 }

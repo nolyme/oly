@@ -8,3 +8,5 @@ export enum LogLevels {
   WARN,
   ERROR,
 }
+
+export type ILogLevel = "TRACE" | "DEBUG" | "INFO" | "WARN" | "ERROR";

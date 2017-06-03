@@ -424,15 +424,13 @@ export class Kernel {
    * @param key         Identifier as string who defined the value
    * @param forceType   Convert string on given type (number or boolean only) when it's possible
    */
-  public env(key: string, forceType?: Function | Function): any {
+  public env(key: string, forceType?: Function): any {
     const value = this.state(key);
 
     if (typeof value === "string") {
-      if (forceType && forceType === Boolean && value === "true") {
-        return true;
-      } else if (forceType && forceType === Boolean && value === "false") {
-        return false;
-      } else if (forceType && forceType === Number && !isNaN(value as any)) {
+      if (forceType && forceType === Boolean) {
+        return !(value === "0" || value === "false");
+      } else if (forceType && forceType === Number) {
         return Number(value);
       } else {
         return _.template(value, this.store);
