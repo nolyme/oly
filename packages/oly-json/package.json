@@ -1,6 +1,6 @@
 {
-  "name": "oly-mapper",
-  "description": "oly-mapper",
+  "name": "oly-json",
+  "description": "oly-json",
   "version": "0.10.4",
   "license": "MIT",
   "main": "lib/index.js",
@@ -17,8 +17,7 @@
   },
   "devDependencies": {
     "ajv-i18n": "2.0.1",
-    "oly-core": "^0.10.4",
-    "oly-test": "^0.10.4"
+    "oly-core": "^0.10.4"
   },
   "peerDependencies": {
     "oly-core": "^0.10.4"

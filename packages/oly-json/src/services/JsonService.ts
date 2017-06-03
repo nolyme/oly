@@ -1,9 +1,9 @@
 import { Class, inject } from "oly-core";
-import { IJsonSchema } from "./interfaces";
-import { JsonMapper } from "./services/JsonMapper";
-import { JsonSanitizer } from "./services/JsonSanitizer";
-import { JsonSchemaReader } from "./services/JsonSchemaReader";
-import { JsonValidator } from "./services/JsonValidator";
+import { IJsonSchema } from "../interfaces";
+import { JsonMapper } from "./JsonMapper";
+import { JsonSanitizer } from "./JsonSanitizer";
+import { JsonSchemaReader } from "./JsonSchemaReader";
+import { JsonValidator } from "./JsonValidator";
 
 /**
  * Allow to parse object and array of objects

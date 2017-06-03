@@ -1,11 +1,10 @@
-import "oly-core/node_modules/reflect-metadata";
-import { attachKernel } from "oly-test";
+import { Kernel } from "oly-core";
 import { JsonMapper } from "../src/services/JsonMapper";
 import { Address, Person, Status } from "./fixtures";
 
 describe("JsonMapper", () => {
 
-  const kernel = attachKernel();
+  const kernel = Kernel.test();
   const mapper = kernel.get(JsonMapper);
   const now = new Date();
   const data = JSON.stringify({

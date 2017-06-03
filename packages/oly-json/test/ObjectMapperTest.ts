@@ -1,9 +1,8 @@
-import { deepEqual, equal } from "assert";
-import { createKernel } from "oly-test";
+import { Kernel } from "oly-core";
 import { array } from "../src";
 import { field } from "../src/decorators/field";
 import { ValidationException } from "../src/exceptions/ValidationException";
-import { JsonService } from "../src/JsonService";
+import { JsonService } from "../src/services/JsonService";
 import { JsonValidator } from "../src/services/JsonValidator";
 
 describe("ObjectMapper", () => {
@@ -41,14 +40,14 @@ describe("ObjectMapper", () => {
       },
     };
 
-    const json = createKernel().get(JsonService);
+    const json = Kernel.test().get(JsonService);
     const obj = json.build(Data, JSON.stringify(raw));
 
-    equal(obj.msg, "hello world a1true");
-    equal(obj.arr1.join(""), "ab");
-    equal(obj.arr2[0].upper, "TEST");
+    expect(obj.msg).toBe("hello world a1true");
+    expect(obj.arr1.join("")).toBe("ab");
+    expect(obj.arr2[0].upper).toBe("TEST");
 
-    deepEqual(json.schema(Data), {
+    expect(json.schema(Data)).toEqual({
       name: "Data",
       properties: {
         arr1: {items: [{type: "string"}], type: "array"},
@@ -107,7 +106,7 @@ describe("ObjectMapper", () => {
       @field() password: string;
     }
 
-    const json = createKernel().get(JsonValidator);
+    const json = Kernel.create().get(JsonValidator);
     const entry = {
       username: 2,
     };

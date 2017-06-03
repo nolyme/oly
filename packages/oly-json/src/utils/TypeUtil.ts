@@ -30,7 +30,7 @@ export class TypeUtil {
 
   public static forceBoolean(value: any): boolean {
     if (typeof value === "string") {
-      return value === "true";
+      return !(value === "false" || value === "0");
     }
     return !!value;
   }
@@ -55,6 +55,6 @@ export class TypeUtil {
     } else if (typeof value === "string") {
       return JSON.parse(value);
     }
-    throw new Error(`You can force ${typeof value} into object`);
+    throw new Error(`You can't map ${typeof value} to object`);
   }
 }
