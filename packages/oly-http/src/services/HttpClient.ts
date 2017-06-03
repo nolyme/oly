@@ -121,7 +121,8 @@ export class HttpClient {
       throw new Exception(error.message);
     }
 
-    this.logger.debug(`request ${options.method || "GET"} ${options.url} has failed`, error.response.data);
+    this.logger.debug(`request ${options.method || "GET"} ${options.url} has failed`,
+      {response: error.response.data});
 
     throw new HttpClientException(error);
   }

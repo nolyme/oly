@@ -1,4 +1,4 @@
-import { attachKernel } from "oly-test";
+import { Kernel } from "oly-core";
 import { IKoaContext } from "../src";
 import { HttpClientException } from "../src/exceptions/HttpClientException";
 import { HttpServerException } from "../src/exceptions/HttpServerException";
@@ -14,7 +14,7 @@ describe("HttpServerProvider", () => {
   }
 
   const message = "OK";
-  const kernel = attachKernel({
+  const kernel = Kernel.test({
     OLY_HTTP_SERVER_PORT: 6093,
   });
 

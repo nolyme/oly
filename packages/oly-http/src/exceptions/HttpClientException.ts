@@ -25,11 +25,7 @@ export class HttpClientException extends Exception {
       this.status = source.response.data.status;
       this.name = source.response.data.name;
     } else {
-      if (typeof source.response.data === "string") {
-        this.message = source.response.data;
-      } else {
-        this.message = olyHttpErrors.requestHasFailed(source.config.method, source.config.url);
-      }
+      this.message = olyHttpErrors.requestHasFailed(source.config.method, source.config.url);
       this.status = source.response.status;
     }
   }

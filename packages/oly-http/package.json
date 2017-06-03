@@ -25,8 +25,7 @@
     "koa-static": "3.0.0"
   },
   "devDependencies": {
-    "oly-core": "^0.10.4",
-    "oly-test": "^0.10.4"
+    "oly-core": "^0.10.4"
   },
   "peerDependencies": {
     "oly-core": "^0.10.4"
@@ -34,6 +33,7 @@
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
+    "watch": "tsc -w",
     "test": "jest"
   },
   "jest": {
