@@ -1,8 +1,24 @@
 import { attachKernel } from "oly-test";
-import { INode } from "../../src/router/interfaces";
+import { INode, IRoute } from "../../src/router/interfaces";
 import { Kirk } from "../../src/router/services/Kirk";
 
 describe("Kirk", () => {
+
+  const shuffle = <T>(a: T[]): T[] => {
+    for (let i = a.length; i; i--) {
+      const j = Math.floor(Math.random() * i);
+      [a[i - 1], a[j]] = [a[j], a[i - 1]];
+    }
+    return a;
+  };
+
+  const node = (name: string, path: string, op: Partial<INode> = {}): INode => ({
+    name,
+    path,
+    ...op,
+    target: Invokable,
+    propertyKey: "count",
+  });
 
   class Invokable {
     static count = 0;
@@ -12,30 +28,57 @@ describe("Kirk", () => {
     }
   }
 
-  const route = (name: string, path: string, op: Partial<INode> = {}): INode => ({
-    name,
-    path,
-    ...op,
-    target: Invokable,
-    propertyKey: "count",
-  });
-  const kirk = attachKernel().get(Kirk);
-  const routes = kirk.createRoutes([
-    route("404", "/*"),
-    route("byId", "/:id", {parent: "users"}),
-    route("about", "/about"),
-    route("users", "/users", {abstract: true}),
-    route("home", "/"),
+  const nodes = shuffle([
+    node("root", ""),
+    node("home", "/", {parent: "root"}),
+    node("about", "/about", {parent: "root"}),
+    node("users", "/users", {abstract: true, parent: "root"}),
+    node("list", "/list", {parent: "users"}),
+    node("byId", "/:userId", {parent: "users"}),
+    node("articles", "/articles", {abstract: true, parent: "root"}),
+    node("byId", "/:articleId", {parent: "articles"}),
+    node("404", "/*", {parent: "root"}),
   ]);
+
+  const kirk = attachKernel().get(Kirk);
+  const routes = kirk.createRoutes(nodes);
+  const notAbstract = (r: IRoute) => !r.abstract;
 
   describe("#createRoutes", () => {
     it("should create routes", () => {
-      expect(routes.filter((r) => !r.abstract).map((r) => r.path)).toEqual([
-        "/", "/about", "/users/:id", "/*",
+      expect(routes.filter(notAbstract).map((r) => r.path)).toEqual([
+        "/",
+        "/users/list",
+        "/about",
+        "/users/:userId",
+        "/articles/:articleId",
+        "/*",
       ]);
-      expect(routes.filter((r) => !r.abstract).map((r) => r.name)).toEqual([
-        "home", "about", "users.byId", "404",
+      expect(routes.filter(notAbstract).map((r) => r.name)).toEqual([
+        "root.home",
+        "root.users.list",
+        "root.about",
+        "root.users.byId",
+        "root.articles.byId",
+        "root.404",
       ]);
+    });
+  });
+  describe("#href()", () => {
+    it("should avoid conflict", () => {
+      // userId is always before articleId (size)
+      expect(kirk.href(routes, "byId")).toBe("/users/:userId");
+      expect(kirk.href(routes, "articles.byId")).toBe("/articles/:articleId");
+      expect(kirk.href(routes, "root.articles.byId")).toBe("/articles/:articleId");
+      expect(kirk.href(routes, "/articles/:articleId")).toBe("/articles/:articleId");
+      expect(kirk.href(routes, "users.byId")).toBe("/users/:userId");
+      expect(kirk.href(routes, "/users/:userId")).toBe("/users/:userId");
+    });
+    it("should fill when possible", () => {
+      expect(kirk.href(routes, {to: "users.byId", params: {userId: 1}})).toBe("/users/1");
+      expect(kirk.href(routes, {to: "/users/:userId", params: {userId: 1}})).toBe("/users/1");
+      expect(kirk.href(routes, {to: "/users/:userId", params: {userId: 1}, query: {refresh: "true"}}))
+        .toBe("/users/1?refresh=true");
     });
   });
 });

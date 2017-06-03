@@ -140,12 +140,28 @@ export class Kirk {
     const routes: IRoute[] = [];
     const sorted = nodes.sort((a, b) => {
       if (a.path.match(/\*/mgi)) {
+        if (b.path.match(/\*/mgi)) {
+          if (a.path.length < b.path.length) {
+            return -1;
+          }
+          if (a.path.length > b.path.length) {
+            return 1;
+          }
+        }
         return 1;
       }
       if (b.path.match(/\*/mgi)) {
         return -1;
       }
       if (a.path.match(/:/mgi)) {
+        if (b.path.match(/:/mgi)) {
+          if (a.path.length < b.path.length) {
+            return -1;
+          }
+          if (a.path.length > b.path.length) {
+            return 1;
+          }
+        }
         return 1;
       }
       if (b.path.match(/:/mgi)) {
@@ -195,15 +211,18 @@ export class Kirk {
       }
     } else {
       let url: string = "";
+      let last: string | undefined;
       for (let i = 0; i < size + 1; i++) {
-        const check: string = url;
+        let updated = false;
         for (const route of routes) {
-          if (route.node.name === parts[i]) {
+          if (route.node.name === parts[i] && (!last || route.node.parent === last)) {
             url = route.path;
+            last = route.node.name;
+            updated = true;
             break;
           }
         }
-        if (check === url) {
+        if (!updated) {
           return;
         }
       }

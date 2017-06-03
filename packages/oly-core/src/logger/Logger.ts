@@ -194,8 +194,10 @@ export class Logger {
     return ""
       + "[" + Logger.ansi.dim(now) + "] "
       + Logger.ansi[Logger.colors[type]](type) + " "
-      + Logger.ansi.bright(this.appName + "(") + this.contextId + Logger.ansi.bright(")") + " "
-      + Logger.ansi.bright(this.componentName + ":\n") + " "
+      + (!_.isBrowser()
+        ? Logger.ansi.bright(this.appName + "(") + this.contextId + Logger.ansi.bright(")") + " "
+        : "")
+      + Logger.ansi.bright(this.componentName + ":") + " "
       + Logger.ansi.italic("\"" + message + "\" ")
       + Logger.ansi.dim(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
