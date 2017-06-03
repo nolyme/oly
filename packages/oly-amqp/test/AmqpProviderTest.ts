@@ -1,39 +1,34 @@
-const g: any = global;
-
-g.beforeAll = g.beforeAll || g.before;
-g.afterAll = g.afterAll || g.after;
-
-import { _, Exception } from "oly-core";
-import { attachKernel } from "oly-test";
+import { _, Exception, Kernel } from "oly-core";
 import { task } from "../src";
 import { IMessage } from "../src/interfaces";
 import { AmqpProvider } from "../src/providers/AmqpProvider";
 import { WorkerProvider } from "../src/providers/WorkerProvider";
 
-class Tasks {
-  static stack: IMessage[] = [];
-
-  @task("abc.queue")
-  abc(message: IMessage) {
-    if (Tasks.stack.length === 1) {
-      throw new Exception("boom");
-    }
-    Tasks.stack.push(message);
-  }
-}
-
-const kernel = attachKernel().with(WorkerProvider, Tasks);
-const amqp = kernel.get(AmqpProvider);
-
 describe("AmqpProvider", () => {
+
+  class Tasks {
+    static stack: IMessage[] = [];
+
+    @task("abc.queue")
+    abc(message: IMessage) {
+      if (Tasks.stack.length === 1) {
+        throw new Exception("boom");
+      }
+      Tasks.stack.push(message);
+    }
+  }
+
+  const kernel = Kernel.test().with(WorkerProvider, Tasks);
+
+  const amqp = kernel.get(AmqpProvider);
 
   it("should publish a message", async () => {
     await amqp.purge("abc.queue");
     await amqp.publish("abc.queue", "Hello");
     await amqp.publish("abc.queue", "Hello");
     await _.timeout(500);
-    //expect(Tasks.stack.length).toBe(1);
-    //equal(Tasks.stack[0].properties.correlationId).toBe(kernel.id);
-    //equal(Tasks.stack[0].content.toString("UTF-8")).toBe("Hello");
+    expect(Tasks.stack.length).toBe(1);
+    expect(Tasks.stack[0].properties.correlationId).toBe(kernel.id);
+    expect(Tasks.stack[0].content.toString("UTF-8")).toBe("Hello");
   });
 });

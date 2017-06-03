@@ -1,6 +1,6 @@
 import { Collection, ObjectID } from "mongodb";
 import { Class, inject, Kernel, Logger, Meta } from "oly-core";
-import { IFieldsMetadata, JsonService, olyMapperKeys } from "oly-mapper";
+import { IFieldsMetadata, JsonService, olyMapperKeys } from "oly-json";
 import { olyMongoKeys } from "./constants/keys";
 import { ID, IDocument, IIndexesMetadata } from "./interfaces";
 import { MongoProvider } from "./MongoProvider";

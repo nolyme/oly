@@ -105,11 +105,18 @@ export class View extends Component<IViewProps, IViewState> {
     if (this.state.content) {
       this.logger.trace(`render view ${this.id} ${this.index} (${this.name})`);
       if (this.show) {
+        const node = this.routerProvider.layers[this.index].node;
         return (
-          <fieldset>
-            <legend>Layer[{this.index}].{this.name}</legend>
-            {this.state.content}
-          </fieldset>
+          <details style={{background: "rgba(0, 0, 0, 0.05)"}}>
+            <summary
+              style={{padding: "4px", background: "grey", color: "white", cursor: "pointer"}}
+            >
+              layer[{this.index}].{this.name}: {_.identity(node.target, node.propertyKey)}
+            </summary>
+            <div style={{padding: "10px"}}>
+              {this.state.content}
+            </div>
+          </details>
         );
       }
       return this.state.content;

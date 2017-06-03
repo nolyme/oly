@@ -32,10 +32,6 @@ export const commands: ICommands = {
     help: "exec webpack-dev-server",
     alias: "webpack-dev-server",
   },
-  "lint": {
-    help: "exec tslint",
-    exec: (args: string[]) => spawnExecutable(getLocalBinary("tslint"), [...args, "src/**/*.ts"]),
-  },
   "tsc": {
     help: "exec tsc",
     ensure: ["typescript"],
@@ -44,10 +40,6 @@ export const commands: ICommands = {
   "ts-node": {
     ensure: ["typescript", "ts-node"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("ts-node"), args),
-  },
-  "tslint": {
-    ensure: ["typescript", "tslint"],
-    exec: (args: string[]) => spawnExecutable(getLocalBinary("tslint"), args),
   },
   "jest": {
     ensure: ["typescript", "jest", "@types/jest", "ts-jest"],

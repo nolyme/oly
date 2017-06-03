@@ -1,5 +1,4 @@
-import { attach, View } from "oly-react";
-import { Helmet } from "oly-react-ssr";
+import { attach, Helmet, View } from "oly-react";
 import * as React from "react";
 import { IDoc } from "../../cli/interfaces";
 import { Breadcrumbs } from "./Breadcrumbs";

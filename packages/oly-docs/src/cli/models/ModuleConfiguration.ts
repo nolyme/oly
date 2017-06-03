@@ -1,4 +1,4 @@
-import { array, field } from "oly-mapper";
+import { array, field } from "oly-json";
 
 export class ModuleConfiguration {
 

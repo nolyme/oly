@@ -47,4 +47,4 @@ export class PageDecorator implements IDecorator {
   }
 }
 
-export const page = Meta.decoratorWithOptions<string | IPageOptions>(PageDecorator);
+export const page = Meta.decorator<string | IPageOptions>(PageDecorator);

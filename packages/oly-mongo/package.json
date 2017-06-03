@@ -18,12 +18,11 @@
   },
   "devDependencies": {
     "oly-core": "^0.10.4",
-    "oly-mapper": "^0.10.4",
-    "oly-test": "^0.10.4"
+    "oly-json": "^0.10.4"
   },
   "peerDependencies": {
     "oly-core": "^0.10.4",
-    "oly-mapper": "^0.10.4"
+    "oly-json": "^0.10.4"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

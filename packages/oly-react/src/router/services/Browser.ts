@@ -1,10 +1,20 @@
-import { createBrowserHistory, History, Location } from "history";
+import { createBrowserHistory, History } from "history";
 import { _, inject, Logger } from "oly-core";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 /**
+ * It's a safe browser to avoid the use of global variables in universal env.
  *
+ * ```typescript
+ * browser.exists()
+ * ```
+ *
+ * There is also a ref to the last mount app.
+ *
+ * ```typescript
+ * browser.root // React App
+ * ```
  */
 export class Browser {
 
@@ -50,6 +60,7 @@ export class Browser {
   }
 
   /**
+   * Exec ReactDOM.render and ensure that the mountId exists.
    *
    * @param element
    * @param mountId

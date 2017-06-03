@@ -59,15 +59,23 @@ export class ReactBrowserProvider implements IProvider {
     });
   }
 
-  @on(olyReactRouterEvents.TRANSITION_END)
+  /**
+   * Each time the ReactRouterProvider requests a render, we update the history.
+   */
+  @on(olyReactRouterEvents.TRANSITION_RENDER)
   protected onTransitionEnd(transition: ITransition) {
     if (transition.type === "PUSH") {
+      this.logger.trace(`push '${transition.to.path}' history`);
       this.browser.history.push(transition.to.path);
     } else if (transition.type === "REPLACE") {
+      this.logger.trace(`replace '${transition.to.path}' history`);
       this.browser.history.replace(transition.to.path);
     }
   }
 
+  /**
+   *
+   */
   protected createHistory() {
     if (this.useHash) {
       this.browser.history = createHashHistory({
@@ -80,9 +88,13 @@ export class ReactBrowserProvider implements IProvider {
     }
   }
 
+  /**
+   *
+   */
   protected createHistoryInterceptor() {
     return (message: string, callback: Function) => {
       if (message) {
+        this.logger.trace(`intercept history ${message}`);
         this.router.transition({
           to: message,
           type: "POP",
@@ -103,7 +115,7 @@ export class ReactBrowserProvider implements IProvider {
   }
 
   /**
-   *
+   * Create JSX root element.
    */
   public get rootElement(): JSX.Element {
     return createElement(AppContext, {kernel: this.kernel}, createElement(View, {index: 0}));

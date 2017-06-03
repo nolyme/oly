@@ -20,6 +20,10 @@ export interface ITransition {
   type: ITransitionType;
 }
 
+export interface ITransitionError extends ITransition {
+  error: Error;
+}
+
 export interface INode {
   name: string;
   path: string;

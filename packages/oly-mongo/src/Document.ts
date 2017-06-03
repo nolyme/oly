@@ -1,4 +1,4 @@
-import { field } from "oly-mapper";
+import { field } from "oly-json";
 import { IDocument } from "./interfaces";
 
 /**

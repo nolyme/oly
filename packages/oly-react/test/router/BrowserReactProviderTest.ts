@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { attachKernel } from "oly-test";
+import { Kernel } from "oly-core";
 import { olyReactRouterEvents } from "../../src";
 import { Browser } from "../../src/router/services/Browser";
 import { ReactBrowserProvider } from "../../src/router/services/ReactBrowserProvider";
@@ -11,7 +11,7 @@ import { App } from "./fixtures";
 
 describe("BrowserReactProvider", () => {
 
-  const kernel = attachKernel({OLY_LOGGER_LEVEL: "TRACE"})
+  const kernel = Kernel.test()
     .with(App, ReactBrowserProvider);
 
   const browser = kernel.get(Browser);

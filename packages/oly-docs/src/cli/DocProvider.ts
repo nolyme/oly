@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
 import { env, inject, Logger } from "oly-core";
-import { JsonService } from "oly-mapper";
+import { JsonService } from "oly-json";
 import { resolve } from "path";
 import { Application, ProjectReflection } from "typedoc";
 import { DeclarationReflection } from "typedoc/dist/lib/models";

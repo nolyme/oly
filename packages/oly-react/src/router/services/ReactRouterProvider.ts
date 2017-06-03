@@ -1,10 +1,7 @@
-import { _, Class, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
-import { createElement } from "react";
-import { Layer } from "../components/Layer";
+import { Class, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import {
-  IChunks,
   IHrefQuery,
   ILayer,
   IMatch,
@@ -13,8 +10,11 @@ import {
   IPagesProperty,
   IRoute,
   ITransition,
+  ITransitionError,
 } from "../interfaces";
-import { Kirk } from "./Kirk";
+import { ReactRouterMatcher } from "./business/ReactRouterMatcher";
+import { ReactRouterResolver } from "./business/ReactRouterResolver";
+import { DefaultErrorHandler } from "./DefaultErrorHandler";
 
 export class ReactRouterProvider implements IProvider {
 
@@ -37,41 +37,41 @@ export class ReactRouterProvider implements IProvider {
   protected routes: IRoute[];
 
   @inject
-  protected kirk: Kirk;
+  protected matcher: ReactRouterMatcher;
+
+  @inject
+  protected resolver: ReactRouterResolver;
 
   public href(query: IHrefQuery | string): string | undefined {
-    return this.kirk.href(this.routes, query, this.match);
+    return this.matcher.href(this.routes, query, this.match);
   }
 
-  public async transition(query: string | IHrefQuery): Promise<ITransition> {
+  public async transition(query: string | IHrefQuery): Promise<ITransition | undefined> {
 
     const options = typeof query === "string" ? {to: query} : query;
-    const name = (options.type || "PUSH") + " -> " + options.to;
+
+    this.logger.debug(`begin transition`, {query});
+    await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
+
+    // match
+    const href = this.href(options);
+    if (!href) {
+      throw new Exception(`Can't find href of '${options.to}'`);
+    }
+
+    const match = this.matcher.match(this.routes, href);
+    const transition: ITransition = {
+      type: options.type || "PUSH",
+      from: this.match,
+      to: match,
+    };
+
+    this.logger.trace(`match ${options.to} -> ${match.route.node.name}`);
+
     try {
 
-      this.logger.debug(`begin transition`, {query});
-
-      // prepare
-      await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
-
-      // match
-
-      const current = this.match ? this.match.route.node : undefined;
-      const url = this.href(options);
-      if (!url) {
-        throw new Exception(`Can't find href of '${options.to}'`);
-      }
-      const match = this.kirk.match(this.routes, url);
-
-      this.logger.trace(`match ${match.route.node.name} -> ${match.path}`);
-
-      const stack = match.route.stack;
       const newLayers: ILayer[] = [];
-      const transition: ITransition = {
-        type: (typeof query === "object" && query.type) || "PUSH",
-        from: this.match,
-        to: match,
-      };
+      const stack = transition.to.route.stack;
 
       // merge
       let newLevel: number = -1;
@@ -79,35 +79,52 @@ export class ReactRouterProvider implements IProvider {
         if (this.layers[i] && this.layers[i].node === stack[i]) {
           newLayers.push(this.layers[i]);
         } else {
-          newLayers.push({
-            node: stack[i],
-            // resolve
-            chunks: await this.resolve(transition, i),
-          });
-          if (newLevel === -1) {
-            newLevel = i;
+          const chunks = await this.resolver.resolve(transition, i);
+          if (chunks) {
+            newLayers.push({
+              node: stack[i],
+              // resolve
+              chunks,
+            });
+            if (newLevel === -1) {
+              newLevel = i;
+            }
+          } else {
+            this.logger.debug(`transition is aborted, sorry`);
+            await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+            return;
           }
         }
       }
 
-      // commit
       this.layers = newLayers;
       this.match = match;
-
-      // render
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, newLevel);
-
-      // done!
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
-
       this.logger.debug(`transition is done`);
-
       return transition;
 
-    } catch (e) {
-      this.logger.warn(`transition '${name}' has failed`);
-      await this.kernel.emit(olyReactRouterEvents.TRANSITION_ERROR, e);
-      throw e;
+    } catch (error) {
+
+      this.logger.warn(`transition to '${options.to}' has failed`);
+
+      const errorHandler = this.routes.find((r) => r.name === "error") as IRoute;
+      const errorTransition: ITransitionError = {
+        ...transition,
+        to: {
+          ...transition.to,
+          route: errorHandler,
+        },
+        error,
+      };
+
+      const chunks = await this.resolver.resolve(errorTransition, 0);
+      if (chunks) {
+        this.layers = [{node: errorHandler.node, chunks}];
+        await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, 0);
+      }
+
+      await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, errorTransition);
     }
   }
 
@@ -128,49 +145,10 @@ export class ReactRouterProvider implements IProvider {
       }
     }
 
-    this.routes = this.kirk.createRoutes(nodes);
+    this.routes = this.matcher.createRoutes(nodes.concat(...this.createNodes(DefaultErrorHandler)));
     this.routes.filter((route) => route.regexp).forEach((route) => {
       this.logger.debug(`create route ${route.node.name} -> ${route.path} (${route.stack.length})`);
     });
-  }
-
-  /**
-   *
-   * @param transition
-   * @param index
-   */
-  public async resolve(transition: ITransition, index: number): Promise<IChunks> {
-
-    const target = transition.to.route.stack[index].target;
-    const propertyKey = transition.to.route.stack[index].propertyKey;
-
-    this.logger.trace("resolve " + _.identity(target, propertyKey));
-
-    let raw = await this.kernel.invoke(target, propertyKey, [transition, index]);
-
-    this.logger.trace("resolve " + _.identity(target, propertyKey) + " OK");
-
-    if (typeof raw === "function") {
-      raw = {main: createElement(raw)};
-    } else if (typeof raw === "object") {
-      if (raw["$$typeof"]) { // tslint:disable-line
-        raw = {main: raw};
-      } else {
-        for (const key of Object.keys(raw)) {
-          raw[key] = typeof raw[key] === "function"
-            ? createElement(raw[key])
-            : raw[key];
-        }
-      }
-    } else {
-      raw = {main: createElement("div", {}, raw)};
-    }
-
-    for (const key of Object.keys(raw)) {
-      raw[key] = createElement(Layer, {id: index + 1}, raw[key]);
-    }
-
-    return raw;
   }
 
   /**
@@ -196,12 +174,14 @@ export class ReactRouterProvider implements IProvider {
     if (pagesMetadata) {
       const keys = Object.keys(pagesMetadata.properties);
 
+      // handle "layout" use case
       let layout;
       for (const propertyKey of keys) {
         const page: IPagesProperty = pagesMetadata.properties[propertyKey];
         if (page.path === ":layout:") {
           layout = page;
           nodes.push({
+            abstract: true,
             name: page.name,
             path: "",
             parent: parent ? parent.name : undefined,
@@ -214,18 +194,29 @@ export class ReactRouterProvider implements IProvider {
 
       for (const propertyKey of keys) {
         const page: IPagesProperty = pagesMetadata.properties[propertyKey];
-        const parentNode = layout || parent;
-        nodes.push({
-          name: page.name,
-          path: page.path,
-          abstract: Array.isArray(page.children) || page.abstract,
-          parent: parentNode ? parentNode.name : undefined,
-          target,
-          propertyKey,
-        });
-        if (Array.isArray(page.children)) {
-          for (const child of page.children) {
-            nodes.push(...this.createNodes(child, page));
+        // handle "error" use case
+        if (page.name === "error") {
+          nodes.push({
+            name: page.name,
+            path: "",
+            abstract: false,
+            target,
+            propertyKey,
+          });
+        } else if (page.path !== ":layout:") {
+          const parentNode = layout || parent;
+          nodes.push({
+            name: page.name,
+            path: page.path,
+            abstract: Array.isArray(page.children) || page.abstract,
+            parent: (parentNode ? parentNode.name : undefined),
+            target,
+            propertyKey,
+          });
+          if (Array.isArray(page.children)) {
+            for (const child of page.children) {
+              nodes.push(...this.createNodes(child, page));
+            }
           }
         }
       }

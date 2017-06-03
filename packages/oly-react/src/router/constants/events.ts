@@ -8,11 +8,6 @@ export const olyReactRouterEvents = {
   /**
    *
    */
-  TRANSITION_ERROR: "oly:transition:error",
-
-  /**
-   *
-   */
   TRANSITION_RENDER: "oly:transition:render",
 
   /**

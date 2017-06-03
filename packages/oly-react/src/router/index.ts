@@ -5,7 +5,6 @@ export * from "./components/View";
 export * from "./constants/keys";
 export * from "./constants/errors";
 export * from "./constants/events";
-export * from "./decorators/page404";
 export * from "./decorators/page";
 export * from "./decorators/layout";
 export * from "./decorators/param";

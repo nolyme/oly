@@ -1,5 +1,5 @@
-import { field } from "oly-mapper";
-import { attachKernel } from "oly-test";
+import { Kernel } from "oly-core";
+import { field } from "oly-json";
 import { Repository } from "../src";
 
 describe("MongoProvider", () => {
@@ -11,7 +11,7 @@ describe("MongoProvider", () => {
   class MyRepository extends Repository.of(MyModel) {
   }
 
-  const kernel = attachKernel();
+  const kernel = Kernel.test();
   const myRepository = kernel.get(MyRepository);
 
   it("should save data", async () => {

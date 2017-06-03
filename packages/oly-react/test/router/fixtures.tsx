@@ -4,7 +4,6 @@ import { Go } from "../../src/router/components/Go";
 import { View } from "../../src/router/components/View";
 import { layout } from "../../src/router/decorators/layout";
 import { page } from "../../src/router/decorators/page";
-import { page404 } from "../../src/router/decorators/page404";
 import { param } from "../../src/router/decorators/param";
 import { query } from "../../src/router/decorators/query";
 
@@ -15,14 +14,14 @@ export class UserApp {
     return <div>List</div>;
   }
 
-  @page("/:id")
-  public details(@param id: string, @query("name") name: string) {
-    return <div>Details({id},{name})</div>;
-  }
-
   @page("/back")
   public back() {
     return <div><Go id="go" to="home">Back</Go></div>;
+  }
+
+  @page("/:id")
+  public details(@param id: string, @query("name") name: string) {
+    return <div>Details({id},{name})</div>;
   }
 }
 
@@ -46,11 +45,6 @@ export class App {
     return <div>Home</div>;
   }
 
-  @page404
-  public notFound() {
-    return <div>NotFound</div>;
-  }
-
   @page({
     children: [UserApp],
     path: "/users",
@@ -66,5 +60,10 @@ export class App {
   })
   public shop() {
     return <View/>;
+  }
+
+  @page("/*")
+  public notFound() {
+    return <div>NotFound</div>;
   }
 }

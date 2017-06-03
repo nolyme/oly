@@ -3,7 +3,6 @@
  */
 
 import { _, env, Exception, inject, Kernel, on, state } from "oly-core";
-import { createKernel } from "oly-test";
 import * as React from "react";
 import { Component } from "react";
 import { render } from "react-dom";
@@ -14,97 +13,97 @@ import { attach, connect } from "../../src/core/decorators/attach";
 import { styles } from "../../src/core/decorators/styles";
 import { IActionResult, IActionResultError } from "../../src/core/interfaces";
 
-class PersonService {
-  createPerson() {
-    return {name: "Luc"};
-  }
-}
-
-class GrootException extends Exception {
-}
-
-@connect
-class A extends Component<any, any> {
-  @inject(Kernel) kernel: Kernel;
-
-  @on("plus")
-  inc() {
-    const counter = this.kernel.state("counter") || 0;
-    this.kernel.state("counter", counter + 1);
-  }
-
-  render() {
-    return (<div id="A">A</div>);
-  }
-}
-
-@attach
-@styles(() => null)
-class B extends Component<any, any> {
-
-  @env("DEFAULT_NAME") defaultName: string;
-
-  @inject kernel: Kernel;
-
-  @inject personService: PersonService;
-
-  @state("person") person: { name: string };
-
-  @state("open") open: boolean;
-
-  @on("rename") renameHandler = (name: string) => this.person = {name};
-
-  @action
-  renameAction() {
-    return this.person = this.personService.createPerson();
-  }
-
-  @action
-  async renameActionAsync() {
-    await _.timeout(1);
-    return this.person = this.personService.createPerson();
-  }
-
-  @action
-  renameActionLikeACow() {
-    throw new GrootException("I am Groot");
-  }
-
-  componentWillMount() {
-    this.person = {name: this.defaultName};
-  }
-
-  render() {
-    return (
-      <div>
-        <button id="btn1" onClick={this.renameAction}>rename</button>
-        <button id="btn2" onClick={this.renameActionLikeACow}>rename</button>
-        <button id="btn3" onClick={this.renameActionAsync}>rename</button>
-        <strong>
-          {this.person.name}
-        </strong>
-        {this.open && <A/>}
-      </div>
-    );
-  }
-}
-
-const kernel = createKernel({DEFAULT_NAME: "Francis"});
-const container = document.createElement("div");
-container.setAttribute("id", "app");
-document.body.appendChild(container);
-const dom = {
-  container,
-  get: (query: string): HTMLElement => {
-    const el = container.querySelector(query);
-    if (!el) {
-      throw new Error(`Element not found (query='${query}')`);
-    }
-    return el as HTMLElement;
-  },
-};
-
 describe("AppContext", () => {
+
+  class PersonService {
+    createPerson() {
+      return {name: "Luc"};
+    }
+  }
+
+  class GrootException extends Exception {
+  }
+
+  @connect
+  class A extends Component<any, any> {
+    @inject(Kernel) kernel: Kernel;
+
+    @on("plus")
+    inc() {
+      const counter = this.kernel.state("counter") || 0;
+      this.kernel.state("counter", counter + 1);
+    }
+
+    render() {
+      return (<div id="A">A</div>);
+    }
+  }
+
+  @attach
+  @styles(() => null)
+  class B extends Component<any, any> {
+
+    @env("DEFAULT_NAME") defaultName: string;
+
+    @inject kernel: Kernel;
+
+    @inject personService: PersonService;
+
+    @state("person") person: { name: string };
+
+    @state("open") open: boolean;
+
+    @on("rename") renameHandler = (name: string) => this.person = {name};
+
+    @action
+    renameAction() {
+      return this.person = this.personService.createPerson();
+    }
+
+    @action
+    async renameActionAsync() {
+      await _.timeout(1);
+      return this.person = this.personService.createPerson();
+    }
+
+    @action
+    renameActionLikeACow() {
+      throw new GrootException("I am Groot");
+    }
+
+    componentWillMount() {
+      this.person = {name: this.defaultName};
+    }
+
+    render() {
+      return (
+        <div>
+          <button id="btn1" onClick={this.renameAction}>rename</button>
+          <button id="btn2" onClick={this.renameActionLikeACow}>rename</button>
+          <button id="btn3" onClick={this.renameActionAsync}>rename</button>
+          <strong>
+            {this.person.name}
+          </strong>
+          {this.open && <A/>}
+        </div>
+      );
+    }
+  }
+
+  const kernel = Kernel.test({DEFAULT_NAME: "Francis"});
+  const container = document.createElement("div");
+  container.setAttribute("id", "app");
+  document.body.appendChild(container);
+  const dom = {
+    container,
+    get: (query: string): HTMLElement => {
+      const el = container.querySelector(query);
+      if (!el) {
+        throw new Error(`Element not found (query='${query}')`);
+      }
+      return el as HTMLElement;
+    },
+  };
 
   beforeEach(() => {
     render(<AppContext kernel={kernel}><B/></AppContext>, dom.container);
