@@ -30,6 +30,7 @@ export interface INode {
 }
 
 export interface IRoute {
+  abstract?: boolean;
   node: INode;
   name: string;
   stack: INode[];

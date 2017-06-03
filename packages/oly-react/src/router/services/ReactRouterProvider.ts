@@ -1,4 +1,4 @@
-import { _, Class, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { _, Class, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
 import { createElement } from "react";
 import { Layer } from "../components/Layer";
 import { olyReactRouterEvents } from "../constants/events";
@@ -39,11 +39,14 @@ export class ReactRouterProvider implements IProvider {
   @inject
   protected kirk: Kirk;
 
-  public href(query: IHrefQuery | string): string {
-    return this.kirk.url(this.routes, query, this.match);
+  public href(query: IHrefQuery | string): string | undefined {
+    return this.kirk.href(this.routes, query, this.match);
   }
 
   public async transition(query: string | IHrefQuery): Promise<ITransition> {
+
+    const options = typeof query === "string" ? {to: query} : query;
+    const name = (options.type || "PUSH") + " -> " + options.to;
     try {
 
       this.logger.debug(`begin transition`, {query});
@@ -52,8 +55,12 @@ export class ReactRouterProvider implements IProvider {
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
 
       // match
+
       const current = this.match ? this.match.route.node : undefined;
-      const url = this.href(query);
+      const url = this.href(options);
+      if (!url) {
+        throw new Exception(`Can't find href of '${options.to}'`);
+      }
       const match = this.kirk.match(this.routes, url);
 
       this.logger.trace(`match ${match.route.node.name} -> ${match.path}`);
@@ -98,7 +105,7 @@ export class ReactRouterProvider implements IProvider {
       return transition;
 
     } catch (e) {
-      this.logger.warn("transition has failed");
+      this.logger.warn(`transition '${name}' has failed`);
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_ERROR, e);
       throw e;
     }

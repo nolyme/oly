@@ -69,19 +69,18 @@ export class ReactBrowserProvider implements IProvider {
   }
 
   protected createHistory() {
-    const self = this;
     if (this.useHash) {
       this.browser.history = createHashHistory({
-        getUserConfirmation: this.createProxyHistory(),
+        getUserConfirmation: this.createHistoryInterceptor(),
       });
     } else {
       this.browser.history = createBrowserHistory({
-        getUserConfirmation: this.createProxyHistory(),
+        getUserConfirmation: this.createHistoryInterceptor(),
       });
     }
   }
 
-  protected createProxyHistory() {
+  protected createHistoryInterceptor() {
     return (message: string, callback: Function) => {
       if (message) {
         this.router.transition({

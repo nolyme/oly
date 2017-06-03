@@ -1,6 +1,7 @@
-import { Exception, inject, Logger } from "oly-core";
+import { inject, Logger } from "oly-core";
 import * as pathToRegexp from "path-to-regexp";
 import { compile } from "path-to-regexp";
+import { KirkException } from "../exceptions/KirkException";
 import { IHrefQuery, IMatch, INode, IRoute } from "../interfaces";
 
 export class Kirk {
@@ -16,7 +17,7 @@ export class Kirk {
    * @param context
    * @return {string}
    */
-  public url(routes: IRoute[], go: IHrefQuery | string, context?: IMatch): string {
+  public href(routes: IRoute[], go: IHrefQuery | string, context?: IMatch): string | undefined {
 
     const options: IHrefQuery = typeof go === "object" ? go : {to: go};
     let url;
@@ -28,7 +29,7 @@ export class Kirk {
     }
 
     if (!url) {
-      throw new Exception(`Can't find an url for the query '${options.to}'`);
+      return;
     }
 
     // check params
@@ -62,7 +63,7 @@ export class Kirk {
       if (parent) {
         parents.unshift(parent);
       } else {
-        throw new Exception(`Parent '${parents[0].parent}' of state '${parents[0].name}' doesn't exists`);
+        throw new KirkException(`Parent '${parents[0].parent}' of state '${parents[0].name}' doesn't exists`);
       }
     }
     return parents;
@@ -126,7 +127,7 @@ export class Kirk {
         };
       }
     }
-    throw new Error(`There is no route for ${path}, you should add a 404 handler to avoid this error`);
+    throw new KirkException(`There is no route for ${path}, you should add a 404 handler to avoid this error`);
   }
 
   /**
@@ -150,33 +151,32 @@ export class Kirk {
       if (b.path.match(/:/mgi)) {
         return -1;
       }
+      if (a.path.length < b.path.length) {
+        return -1;
+      }
+      if (a.path.length > b.path.length) {
+        return 1;
+      }
       return 0;
     });
 
     sorted.forEach((node) => {
+      const parents = this.parents(nodes, node);
+      const path = this.join(parents);
+      const route: IRoute = {
+        node,
+        name: parents.map((s) => s.name).join("."),
+        stack: parents,
+        path,
+      };
       if (!node.abstract && node.path) {
-        const parents = this.parents(nodes, node);
-        const path = this.join(parents);
-        const route: IRoute = {
-          node,
-          name: nodes.map((s) => s.path).join("."),
-          stack: parents,
-          path,
-          regexp: pathToRegexp(path),
-        };
-        routes.push(route);
+        route.regexp = pathToRegexp(path);
       } else {
-        const parents = this.parents(nodes, node);
-        const path = this.join(parents);
-        const route: IRoute = {
-          node,
-          name: nodes.map((s) => s.path).join("."),
-          stack: parents,
-          path,
-        };
-        routes.push(route);
+        route.abstract = true;
       }
+      routes.push(route);
     });
+
     return routes;
   }
 

@@ -155,7 +155,7 @@ export class ComponentInjector {
   protected actionRejectFactory(logger: Logger, definition: Function, action: IActionsProperty) {
     return (e: Error) => {
 
-      logger.warn(`action ${action.name} has failed`, e);
+      logger.warn(`action '${action.name}' has failed`, e);
 
       const actionResult: IActionResultError = {
         action: action.name,

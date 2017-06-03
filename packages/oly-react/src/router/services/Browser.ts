@@ -1,4 +1,4 @@
-import { createBrowserHistory, History } from "history";
+import { createBrowserHistory, History, Location } from "history";
 import { _, inject, Logger } from "oly-core";
 import * as React from "react";
 import * as ReactDOM from "react-dom";

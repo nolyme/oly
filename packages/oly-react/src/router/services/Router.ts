@@ -1,5 +1,6 @@
 import { Exception, inject, Kernel } from "oly-core";
-import { IHrefQuery, IMatch, IRoute, ITransition } from "../interfaces";
+import { IHrefQuery, IMatch, ITransition } from "../interfaces";
+import { Browser } from "./Browser";
 import { ReactRouterProvider } from "./ReactRouterProvider";
 
 export class Router {
@@ -9,6 +10,9 @@ export class Router {
 
   @inject
   protected routerProvider: ReactRouterProvider;
+
+  @inject
+  protected browser: Browser;
 
   /**
    * Get the current route node definition.
@@ -33,7 +37,15 @@ export class Router {
 
   public reload(): Promise<ITransition> {
     this.routerProvider.layers = [];
-    return this.go(this.current.path);
+    return this.go({to: this.current.path, type: "REPLACE"});
+  }
+
+  public forward(): void {
+    this.browser.history.goForward();
+  }
+
+  public back(): void {
+    this.browser.history.goBack();
   }
 
   /**
@@ -41,7 +53,7 @@ export class Router {
    *
    * @param query
    */
-  public href(query: string | IHrefQuery): string {
+  public href(query: string | IHrefQuery): string | undefined {
     return this.routerProvider.href(query);
   }
 
@@ -50,7 +62,8 @@ export class Router {
    *
    * @param routeName
    */
-  public isActive(routeName: string | IRoute): boolean {
-    return false; // TODO
+  public isActive(routeName: string | IHrefQuery): boolean {
+    const href = this.routerProvider.href(routeName);
+    return this.current.path === href;
   }
 }

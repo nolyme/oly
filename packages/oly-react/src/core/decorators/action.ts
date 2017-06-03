@@ -1,4 +1,4 @@
-import { IDecorator, Meta } from "oly-core";
+import { Global, IDecorator, Meta } from "oly-core";
 import { olyReactKeys } from "../constants/keys";
 
 export interface IActionOptions {
@@ -19,7 +19,7 @@ export class ActionDecorator implements IDecorator {
 
   public asMethod(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void {
     Meta.of({key: olyReactKeys.actions, target, propertyKey}).set({
-      name: this.options.name || propertyKey,
+      name: this.options.name || Global.identity(target, propertyKey),
     });
   }
 
