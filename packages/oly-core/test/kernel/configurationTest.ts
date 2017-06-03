@@ -1,6 +1,6 @@
 import { equal } from "assert";
-import { USE_PROCESS_ENV } from "../src/kernel/configuration";
-import { Kernel } from "../src/kernel/Kernel";
+import { USE_PROCESS_ENV } from "../../src/kernel/configuration";
+import { Kernel } from "../../src/kernel/Kernel";
 
 describe("USE_PROCESS_ENV()", () => {
   it("should use global process.env", () => {
