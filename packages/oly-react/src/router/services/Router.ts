@@ -1,7 +1,7 @@
 import { Exception, inject, Kernel } from "oly-core";
 import { IHrefQuery, IMatch, ITransition } from "../interfaces";
-import { Browser } from "./Browser";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
+import { Browser } from "./Browser";
 
 export class Router {
 

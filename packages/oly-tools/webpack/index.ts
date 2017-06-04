@@ -144,7 +144,10 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
   const config: Configuration = {};
   const root = options.root || process.cwd();
-  const isProduction = (process.argv.indexOf("-p") > -1) || options.production === true;
+  const isProduction =
+    (process.argv.indexOf("-p") > -1)
+    || process.env.NODE_ENV === "production"
+    || options.production === true;
 
   options.extract = options.extract !== false;
   options.timeout = options.timeout || 300;
@@ -283,7 +286,9 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         exclude: /node_modules\/(?!oly|ajv|ansicolor)/,
         loader: "babel-loader",
         options: {
-          presets: ["babel-preset-es2015"].map(require.resolve),
+          presets: [
+            [require.resolve("babel-preset-es2015"), {modules: false}],
+          ],
         },
       });
       if (typeof config.entry === "string") {
@@ -305,11 +310,14 @@ export function createConfiguration(options: IToolsOptions): Configuration {
             keep_fnames: true,
             screw_ie8: true,
           },
-          sourceMap: true,
         }),
       );
     }
   }
+
+  config.node = {
+    Buffer: false,
+  };
 
   // Dev Server
 
@@ -339,10 +347,14 @@ function typescriptLoaderFactory(isProduction: boolean = false, useBabel: boolea
         // speedup compile time, our ide will check error for us beside
         transpileOnly: true,
         useBabel: isProduction && useBabel,
-        babelCore: __dirname + "/../node_modules/babel-core",
         babelOptions: {
-          presets: ["babel-preset-es2015"].map(require.resolve),
+          presets: [
+            [require.resolve("babel-preset-es2015"), {modules: false}],
+          ],
         },
+        moduleResolution: "node",
+        module: "es2015",
+        target: "es2015",
       },
     }],
   };

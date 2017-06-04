@@ -48,7 +48,7 @@ export class ReactRouterProvider implements IProvider {
 
   public async transition(query: string | IHrefQuery): Promise<ITransition | undefined> {
 
-    const options = typeof query === "string" ? { to: query } : query;
+    const options = typeof query === "string" ? {to: query} : query;
 
     // convert the "query" to a valid url
     const href = this.href(options);
@@ -143,7 +143,7 @@ export class ReactRouterProvider implements IProvider {
 
       const chunks = await this.resolver.resolve(errorTransition, 0);
       if (chunks) {
-        this.layers = [{ node: errorHandler.node, chunks }];
+        this.layers = [{node: errorHandler.node, chunks}];
         await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
           transition: errorTransition,
           level: 0,
@@ -163,7 +163,7 @@ export class ReactRouterProvider implements IProvider {
 
     const nodes: INode[] = [];
     const pageDeclarations = declarations.filter((declaration) =>
-      Meta.of({ key: olyReactRouterKeys.pages, target: declaration.definition }).has());
+      Meta.of({key: olyReactRouterKeys.pages, target: declaration.definition}).has());
 
     for (const pageDeclaration of pageDeclarations) {
       if (!this.hasParent(pageDeclarations, pageDeclaration.definition)) {
@@ -196,7 +196,7 @@ export class ReactRouterProvider implements IProvider {
   protected createNodes(target: Class, parent?: IPagesProperty): INode[] {
 
     const nodes: INode[] = [];
-    const pagesMetadata = Meta.of({ key: olyReactRouterKeys.pages, target }).deep<IPagesMetadata>();
+    const pagesMetadata = Meta.of({key: olyReactRouterKeys.pages, target}).deep<IPagesMetadata>();
     if (pagesMetadata) {
       const keys = Object.keys(pagesMetadata.properties);
 
@@ -286,7 +286,7 @@ export class ReactRouterProvider implements IProvider {
   protected hasParent(pageDeclarations: IDeclarations, definition: Class): boolean {
     return pageDeclarations
       .filter((p) => p.definition !== definition)
-      .map((p) => Meta.of({ key: olyReactRouterKeys.pages, target: p.definition }).deep<IPagesMetadata>())
+      .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())
       .filter((p) => {
         if (p) {
           const keys = Object.keys(p.properties);

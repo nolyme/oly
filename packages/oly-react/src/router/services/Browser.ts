@@ -1,4 +1,4 @@
-import { createBrowserHistory, History } from "history";
+import { History } from "history";
 import { _, inject, Logger } from "oly-core";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -18,7 +18,7 @@ import * as ReactDOM from "react-dom";
  */
 export class Browser {
 
-  public history: History = createBrowserHistory();
+  public history: History;
 
   @inject
   protected logger: Logger;

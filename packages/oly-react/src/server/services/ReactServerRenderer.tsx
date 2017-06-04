@@ -66,14 +66,6 @@ export class ReactServerRenderer {
   /**
    * In very few cases, SSR can failed.
    *
-   * ```
-   * class MyRenderer extends ReactServerRenderer {
-   *  renderError(ctx, template, id, error) {
-   *    return ``; // wat u want
-   *  }
-   * }
-   * ```
-   *
    * @param ctx         Koa Context with Kernel
    * @param mountId
    * @param template    App template with styles + scripts

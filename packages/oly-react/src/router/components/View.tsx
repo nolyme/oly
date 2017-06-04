@@ -1,4 +1,4 @@
-import { _, env, inject, IStateMutateEvent, Logger, olyCoreEvents, on } from "oly-core";
+import { _, env, inject, Logger, on } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";
@@ -27,7 +27,7 @@ export interface IViewProps {
  *
  */
 @attach
-export class View extends Component<IViewProps, {}> {
+export class View extends Component<IViewProps, { content: any }> {
 
   public static contextTypes = {
     layer: PropTypes.number,
@@ -58,23 +58,17 @@ export class View extends Component<IViewProps, {}> {
     return this.layer ? this.layer.chunks[this.name] : undefined;
   }
 
-  @on(olyCoreEvents.STATE_MUTATE)
-  public onStateMutate(ev: IStateMutateEvent) {
-    if (ev.key === "OLY_REACT_SHOW_VIEWS" && this.index === 0) {
-      this.forceUpdate();
-    }
-  }
-
   /**
    * Refresh the chunk here
    */
   @on(olyReactRouterEvents.TRANSITION_RENDER)
   public onTransitionRender({level}: ITransitionRenderEvent): Promise<void> {
-    if (this.layer && level === this.index) {
+    if (this.layer
+      && level === this.index
+      && this.content !== this.state.content) {
       this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
-      const content = this.layer.chunks[this.name];
       return new Promise<void>((resolve) =>
-        this.setState({content}, () => resolve()),
+        this.setState({content: this.content}, () => resolve()),
       );
     }
     return Promise.resolve();
@@ -90,7 +84,7 @@ export class View extends Component<IViewProps, {}> {
     }
     this.logger.trace(`init view ${this.id} ${this.index} (${this.name})`);
     this.state = {
-      content: this.layer ? this.layer.chunks[this.name] : null,
+      content: this.content,
     };
   }
 
