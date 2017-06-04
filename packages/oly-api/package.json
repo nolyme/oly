@@ -1,6 +1,6 @@
 {
-  "name": "oly-rest",
-  "description": "oly-rest",
+  "name": "oly-api",
+  "description": "oly-api",
   "version": "0.11.0",
   "license": "MIT",
   "main": "lib/index.js",
@@ -24,8 +24,7 @@
     "koa-multer": "1.0.1",
     "koa-router": "7.2.0",
     "oly-http": "^0.11.0",
-    "oly-json": "^0.11.0",
-    "oly-router": "^0.10.4"
+    "oly-json": "^0.11.0"
   },
   "devDependencies": {
     "oly-core": "^0.11.0"
