@@ -134,15 +134,17 @@ describe("AppContext", () => {
   });
 
   it("kernel __free__", async () => {
+    kernel.state("counter", null);
     kernel.state("counter", 0);
-    kernel.state("open", true);
+    kernel.state("open", null);
+    kernel.state("open", true); // mhhhhhhh, we need to do that (no refresh on init)
     await _.timeout(1);
     await kernel.emit("plus");
-    expect(dom.container.querySelector("#A")).not.toBe(null);
+    expect(dom.container.querySelector("#A")).not.toBeNull();
     expect(kernel.state("counter")).toBe(1);
     kernel.state("open", false);
     await _.timeout(1);
-    expect(dom.container.querySelector("#A")).toBe(null);
+    expect(dom.container.querySelector("#A")).toBeNull();
 
     // Emitting "plus" here has not effect, no more component are subscribed to this event.
     await kernel.emit("plus");

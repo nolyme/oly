@@ -62,7 +62,7 @@ export class ComponentInjector {
         const eventPropertyKey = propertyKey + "$$refresh";
         instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutateEvent) {
           if (
-            event.oldValue !== undefined // skip initialization
+            typeof event.oldValue !== "undefined" // skip initialization
             && event.key === (state.name || _.identity(target, propertyKey))
           ) {
             this.setState({[event.key]: event.newValue});
