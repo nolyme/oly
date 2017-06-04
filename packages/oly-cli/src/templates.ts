@@ -55,7 +55,7 @@ export const initServer = (): void => {
   copyFiles("server");
   mergePackageJson({
     scripts: {
-      watch: "nodemon -e 'ts-node -F' src/main.server.ts",
+      watch: "nodemon -x 'ts-node -F' src/main.server.ts",
       compile: "tsc",
     },
   });
