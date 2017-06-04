@@ -1,4 +1,4 @@
-import { _, env, inject, Logger, on } from "oly-core";
+import { _, env, inject, IStateMutateEvent, Logger, olyCoreEvents, on } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";
@@ -58,16 +58,23 @@ export class View extends Component<IViewProps, {}> {
     return this.layer ? this.layer.chunks[this.name] : undefined;
   }
 
+  @on(olyCoreEvents.STATE_MUTATE)
+  public onStateMutate(ev: IStateMutateEvent) {
+    if (ev.key === "OLY_REACT_SHOW_VIEWS" && this.index === 0) {
+      this.forceUpdate();
+    }
+  }
+
   /**
    * Refresh the chunk here
    */
   @on(olyReactRouterEvents.TRANSITION_RENDER)
-  public onTransitionRender({ level }: ITransitionRenderEvent): Promise<void> {
+  public onTransitionRender({level}: ITransitionRenderEvent): Promise<void> {
     if (this.layer && level === this.index) {
       this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
       const content = this.layer.chunks[this.name];
       return new Promise<void>((resolve) =>
-        this.setState({ content }, () => resolve()),
+        this.setState({content}, () => resolve()),
       );
     }
     return Promise.resolve();
@@ -103,13 +110,13 @@ export class View extends Component<IViewProps, {}> {
       if (this.show) {
         const node = this.routerProvider.layers[this.index].node;
         return (
-          <details style={{ background: "rgba(0, 0, 0, 0.05)" }}>
+          <details style={{background: "rgba(0, 0, 0, 0.05)"}}>
             <summary
-              style={{ padding: "4px", background: "grey", color: "white", cursor: "pointer" }}
+              style={{padding: "4px", background: "grey", color: "white", cursor: "pointer"}}
             >
               layer[{this.index}].{this.name}: {_.identity(node.target, node.propertyKey)}
             </summary>
-            <div style={{ padding: "10px" }}>
+            <div style={{padding: "10px"}}>
               {this.content}
             </div>
           </details>

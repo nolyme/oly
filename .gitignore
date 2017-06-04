@@ -5,6 +5,7 @@
 /packages/*/esm
 /packages/*/lib
 /packages/*/out
+/packages/*/www
 /packages/*/coverage
 /.idea
 *.log

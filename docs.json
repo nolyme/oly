@@ -19,16 +19,7 @@
       ]
     },
     {
-      "name": "oly-http",
-      "icon": "globe",
-      "decorators": [],
-      "services": [
-        "providers/HttpServerProvider.ts",
-        "services/HttpClient.ts"
-      ]
-    },
-    {
-      "name": "oly-mapper",
+      "name": "oly-json",
       "icon": "flows",
       "decorators": [
         "decorators/array.ts",

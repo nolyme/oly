@@ -6,7 +6,7 @@ import { Application, ProjectReflection } from "typedoc";
 import { DeclarationReflection } from "typedoc/dist/lib/models";
 import { DocBuilder } from "./DocBuilder";
 import { DocParser } from "./DocParser";
-import { IDocs, IDocDecorator, IDocEnv, IDocService, IModuleContent } from "./interfaces";
+import { IDocDecorator, IDocEnv, IDocs, IDocService, IModuleContent } from "./interfaces";
 import { Configuration } from "./models/Configuration";
 import { ModuleConfiguration } from "./models/ModuleConfiguration";
 

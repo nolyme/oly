@@ -1,0 +1,38 @@
+@import "../styles/variables";
+
+.header {
+
+  &.pt-navbar.pt-dark {
+    background: linear-gradient(to bottom, $pt-intent-primary, darken($pt-intent-primary, 10%));
+    border-bottom: 1px solid $white;
+    .pt-tab {
+      padding: 0;
+      width: 64px;
+      text-align: center;
+      margin-right: 0;
+      &.title {
+        height: 50px;
+        font-weight: 200;
+        font-size: 24px;
+        line-height: 46px;
+      }
+      &.with-icon {
+        font-size: 10px;
+        text-transform: uppercase;
+      }
+    }
+    .pt-tab[aria-selected="true"], .pt-tab:not([aria-disabled="true"]):hover {
+      color: $white;
+      background: rgba($white, .1);
+    }
+    .pt-tab-indicator {
+      background-color: $white;
+    }
+  }
+
+  @media (max-width: $tablet) {
+    .pt-align-right {
+      display: none;
+    }
+  }
+}

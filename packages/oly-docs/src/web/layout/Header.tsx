@@ -1,11 +1,12 @@
 import { Tab2, Tabs2 } from "@blueprintjs/core";
 import { inject, on, state } from "oly-core";
-import { action, attach, ITransition, olyReactRouterEvents, Router } from "oly-react";
+import { action, attach, ITransition, olyReactRouterEvents, Router, styles } from "oly-react";
 import * as React from "react";
 import { IDocs, IModuleContent } from "../../cli/interfaces";
 import { Search } from "./Search";
 
 @attach
+@styles(() => require("./Header.scss"))
 export class Header extends React.Component<{}, {}> {
 
   @inject private router: Router;
@@ -52,7 +53,7 @@ export class Header extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <nav className="pt-navbar pt-dark">
+      <nav className="header pt-navbar pt-dark">
         <div className="container">
           <div className="pt-navbar-group pt-align-left">
             <Tabs2

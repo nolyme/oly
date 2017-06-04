@@ -1,5 +1,5 @@
-import { inject } from "oly-core";
-import { attach, Go, Router, styles } from "oly-react";
+import { inject, on } from "oly-core";
+import { attach, Browser, Go, olyReactRouterEvents, Router, styles } from "oly-react";
 import * as React from "react";
 
 @attach
@@ -7,6 +7,8 @@ import * as React from "react";
 export class Breadcrumbs extends React.Component<{}, {}> {
 
   @inject private router: Router;
+  @inject private browser: Browser;
+
   private steps: string[];
   private stepsAllowed: string[];
 
@@ -21,8 +23,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   };
 
   public transform(value: string): string {
-    const history: any = this.router;
-    const kvs = Object.keys(history.params).map((key) => ({key, value: history.params[key]}));
+    const kvs = Object.keys(this.router.current.params).map((key) => ({key, value: this.router.current.params[key]}));
     const match = kvs.filter((kv) => kv.value === value)[0];
     if (!match) {
       return value;
@@ -35,12 +36,17 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   }
 
   public build() {
-    this.steps = location.pathname.split("/").filter((s) => !!s);
+    this.steps = this.router.current.path.split("/").filter((s) => !!s);
     this.stepsAllowed = this.steps.filter((s) => this.blackList.indexOf(s) === -1);
   }
 
   public chain(item: any): string {
     return this.steps.slice(0, this.steps.indexOf(item) + 1).join("/");
+  }
+
+  @on(olyReactRouterEvents.TRANSITION_RENDER)
+  public onTransitionRender() {
+    this.forceUpdate();
   }
 
   public render() {

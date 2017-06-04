@@ -9,8 +9,7 @@ export const commands: ICommands = {
         .map((arg) => initCommands[arg])
         .filter((cmd) => !!cmd && !!cmd.exec);
       if (cmds.length > 0) {
-        cmds.forEach((cmd) =>
-          cmd.exec && cmd.exec(args));
+        cmds.forEach((cmd) => cmd.exec && cmd.exec(args));
       } else {
         showHelp(initCommands);
       }

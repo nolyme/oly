@@ -10,5 +10,9 @@ export default () => {
     nyan: true,
   });
 
+  if (config.output) {
+    delete config.output.publicPath;
+  }
+
   return config;
 };
