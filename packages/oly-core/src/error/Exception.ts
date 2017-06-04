@@ -71,12 +71,11 @@ export class Exception extends Error {
    * @param message       Optional message if not set as source
    */
   public constructor(cause?: string | Throwable, message?: string) {
+    super();
 
     const sourceMessage = (typeof cause === "string"
       ? cause
       : message) || Exception.DEFAULT_MESSAGE;
-
-    super(sourceMessage);
 
     this.name = (this.constructor as any).name || "Error";
     // because we have a virtual message and a virtual stack
