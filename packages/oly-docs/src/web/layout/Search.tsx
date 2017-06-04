@@ -2,7 +2,7 @@ import { Popover, Position } from "@blueprintjs/core";
 import { action, attach, Go, styles } from "oly-react";
 import * as React from "react";
 import { ChangeEvent } from "react";
-import { IDoc } from "../../cli/interfaces";
+import { IDocs } from "../../cli/interfaces";
 
 export interface IResult {
   name: string;
@@ -17,7 +17,7 @@ export interface IState {
 
 @attach
 @styles(() => require("./Search.scss"))
-export class Search extends React.Component<{ doc: IDoc }, IState> {
+export class Search extends React.Component<{ docs: IDocs }, IState> {
 
   public state: IState = {query: "", results: null};
 
@@ -46,14 +46,14 @@ export class Search extends React.Component<{ doc: IDoc }, IState> {
       if (!results.filter((r) => r.href === result.href)[0]) {
         results.push(result);
       }
-      const end = results.length > 4;
+      const end = results.length > 8;
       if (end) {
         this.setState({query, results});
         return true;
       }
       return false;
     };
-    for (const m of this.props.doc.modules) {
+    for (const m of this.props.docs.modules) {
       for (const d of m.decorators) {
         const dId = d.name.toUpperCase();
         const dId2 = "@" + dId;

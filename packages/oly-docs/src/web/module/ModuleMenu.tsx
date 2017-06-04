@@ -25,7 +25,7 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, { is
           <div key={s.name}>
             <Go to={this.rel(`s/${s.name}`)}>{s.name}</Go>
             {s.methods.map((m) => (
-              <div key={m.name} style={{paddingLeft: "10px", fontSize: "12px"}}>
+              <div key={m.name} style={{ paddingLeft: "10px", fontSize: "12px" }}>
                 <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
               </div>
             ))}
@@ -39,9 +39,10 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, { is
     if (this.props.module.decorators.length === 0) {
       return;
     }
+    const onClick = () => this.setState({ isDecoratorsOpen: !this.state.isDecoratorsOpen });
     return (
       <div>
-        <div onClick={() => this.setState({isDecoratorsOpen: !this.state.isDecoratorsOpen})}>
+        <div onClick={onClick}>
           Decorators
         </div>
         <Collapse isOpen={this.state.isDecoratorsOpen}>
@@ -57,7 +58,7 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, { is
 
   public render() {
     return (
-      <div style={{width: "200px"}}>
+      <div style={{ width: "200px" }}>
         <div><Go to={this.rel()}>General</Go></div>
         {this.renderServices()}
         {this.renderDecorators()}

@@ -46,7 +46,7 @@ export interface IModuleContent {
   decorators: IDocDecorator[];
 }
 
-export interface IDoc {
+export interface IDocs {
   name: string;
   home: string;
   version: string;

@@ -1,6 +1,6 @@
 import { Kernel } from "oly-core";
 import { INode, IRoute } from "../../src/router/interfaces";
-import { ReactRouterMatcher } from "../../src/router/services/business/ReactRouterMatcher";
+import { ReactRouterMatcher } from "../../src/router/services/ReactRouterMatcher";
 
 describe("ReactRouterMatcher", () => {
 

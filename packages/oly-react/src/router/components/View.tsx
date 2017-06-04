@@ -4,8 +4,8 @@ import * as React from "react";
 import { Children, Component } from "react";
 import { attach } from "../../core/decorators/attach";
 import { olyReactRouterEvents } from "../constants/events";
-import { ILayer } from "../interfaces";
-import { ReactRouterProvider } from "../services/ReactRouterProvider";
+import { ILayer, ITransitionRenderEvent } from "../interfaces";
+import { ReactRouterProvider } from "../providers/ReactRouterProvider";
 
 /**
  *
@@ -23,19 +23,11 @@ export interface IViewProps {
   name?: string;
 }
 
-export interface IViewState {
-
-  /**
-   *
-   */
-  content: JSX.Element | null;
-}
-
 /**
  *
  */
 @attach
-export class View extends Component<IViewProps, IViewState> {
+export class View extends Component<IViewProps, {}> {
 
   public static contextTypes = {
     layer: PropTypes.number,
@@ -58,20 +50,24 @@ export class View extends Component<IViewProps, IViewState> {
     return this.props.name || "main";
   }
 
-  public get layer(): ILayer | null {
+  public get layer(): ILayer | undefined {
     return this.routerProvider.layers[this.index];
+  }
+
+  public get content(): JSX.Element | undefined {
+    return this.layer ? this.layer.chunks[this.name] : undefined;
   }
 
   /**
    * Refresh the chunk here
    */
   @on(olyReactRouterEvents.TRANSITION_RENDER)
-  public onTransitionRender(index: number): Promise<void> {
-    if (this.layer && this.layer.chunks[this.name] !== this.state.content && index === this.index) {
+  public onTransitionRender({ level }: ITransitionRenderEvent): Promise<void> {
+    if (this.layer && level === this.index) {
       this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
       const content = this.layer.chunks[this.name];
       return new Promise<void>((resolve) =>
-        this.setState({content}, () => resolve()),
+        this.setState({ content }, () => resolve()),
       );
     }
     return Promise.resolve();
@@ -102,24 +98,24 @@ export class View extends Component<IViewProps, IViewState> {
    *
    */
   public render(): JSX.Element | null {
-    if (this.state.content) {
+    if (this.content) {
       this.logger.trace(`render view ${this.id} ${this.index} (${this.name})`);
       if (this.show) {
         const node = this.routerProvider.layers[this.index].node;
         return (
-          <details style={{background: "rgba(0, 0, 0, 0.05)"}}>
+          <details style={{ background: "rgba(0, 0, 0, 0.05)" }}>
             <summary
-              style={{padding: "4px", background: "grey", color: "white", cursor: "pointer"}}
+              style={{ padding: "4px", background: "grey", color: "white", cursor: "pointer" }}
             >
               layer[{this.index}].{this.name}: {_.identity(node.target, node.propertyKey)}
             </summary>
-            <div style={{padding: "10px"}}>
-              {this.state.content}
+            <div style={{ padding: "10px" }}>
+              {this.content}
             </div>
           </details>
         );
       }
-      return this.state.content;
+      return this.content;
     }
     if (this.props.children) {
       return Children.only(this.props.children);

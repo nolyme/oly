@@ -1,9 +1,9 @@
 import { Kernel } from "oly-core";
-import { DocProvider } from "./DocProvider";
+import { DocProvider } from "./cli/DocProvider";
 
 new Kernel({
   ...process.env,
-  OLY_APP_NAME: "OlyDocs",
+  OLY_APP_NAME: "Docs",
 })
   .with(DocProvider)
   .start()

@@ -4,8 +4,8 @@
 import { Kernel } from "oly-core";
 import { olyReactRouterEvents } from "../../src";
 import { Browser } from "../../src/router/services/Browser";
-import { ReactBrowserProvider } from "../../src/router/services/ReactBrowserProvider";
-import { ReactRouterProvider } from "../../src/router/services/ReactRouterProvider";
+import { ReactBrowserProvider } from "../../src/router/providers/ReactBrowserProvider";
+import { ReactRouterProvider } from "../../src/router/providers/ReactRouterProvider";
 import { Router } from "../../src/router/services/Router";
 import { App } from "./fixtures";
 

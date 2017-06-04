@@ -7,14 +7,14 @@ import { olyReactRouterKeys } from "../constants/keys";
 export interface IPageOptions {
   path?: string;
   children?: Function[];
-  data?: any;
+  layout?: boolean;
   name?: string;
   abstract?: boolean;
 }
 
 export class PageDecorator implements IDecorator {
 
-  private options: IPageOptions;
+  protected options: IPageOptions;
 
   public constructor(options: string | IPageOptions = {}) {
     if (typeof options === "string") {
@@ -36,6 +36,7 @@ export class PageDecorator implements IDecorator {
 
     Meta.of({key: olyReactRouterKeys.pages, target, propertyKey}).set({
       abstract: this.options.abstract === true,
+      layout: this.options.abstract === true,
       children: this.options.children,
       name: this.options.name || propertyKey,
       path: this.options.path || "",

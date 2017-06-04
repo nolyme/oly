@@ -1,20 +1,31 @@
 import { state } from "oly-core";
-import { page, param } from "oly-react";
+import { layout, page, param } from "oly-react";
 import * as React from "react";
-import { IModuleContent } from "../../cli/interfaces";
+import { IDocs, IModuleContent } from "../../cli/interfaces";
 import { NotFound } from "../layout/NotFound";
 import { ApiDecorator } from "./ApiDecorator";
 import { ApiService } from "./ApiService";
 import { ApiServiceMethod } from "./ApiServiceMethod";
+import { Module } from "./Module";
 import { ModuleIndex } from "./ModuleIndex";
 
-export class AppModule {
+export class ModuleApplication {
 
-  @state("App.module")
-  private module: IModuleContent;
+  @state("DOCS") docs: IDocs;
+
+  module: IModuleContent;
+
+  @layout("/m/:module")
+  public moduleById(@param("module") moduleName: string) {
+    this.module = this.docs.modules.filter((m) => m.name === moduleName)[0];
+    if (!this.module) {
+      return NotFound;
+    }
+    return <Module module={this.module}/>;
+  }
 
   @page("/")
-  public moduleIndex() {
+  public index() {
     return <ModuleIndex module={this.module}/>;
   }
 

@@ -41,6 +41,9 @@ export class Go extends Component<IGoProps, IGoState> {
   @action
   public onClick(e: any): Promise<any> {
     e.preventDefault();
+    if (this.props.onClick) {
+      this.props.onClick(e);
+    }
     return this.router.go({
       to: this.props.to,
       params: this.props.params,

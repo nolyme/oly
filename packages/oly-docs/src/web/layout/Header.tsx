@@ -1,17 +1,25 @@
-import { inject } from "oly-core";
-import { action, attach, Go, ITransition, Router } from "oly-react";
+import { Tab2, Tabs2 } from "@blueprintjs/core";
+import { inject, on, state } from "oly-core";
+import { action, attach, ITransition, olyReactRouterEvents, Router } from "oly-react";
 import * as React from "react";
-import { IDoc, IModuleContent } from "../../cli/interfaces";
+import { IDocs, IModuleContent } from "../../cli/interfaces";
 import { Search } from "./Search";
 
 @attach
-export class Header extends React.Component<{ doc: IDoc }, {}> {
+export class Header extends React.Component<{}, {}> {
 
   @inject private router: Router;
 
+  @state("DOCS") private docs: IDocs;
+
   @action
   public handleTabChange(module: string): Promise<ITransition> {
-    return this.router.go({to: "moduleIndex", params: {module}});
+    return this.router.go({to: module});
+  }
+
+  @on(olyReactRouterEvents.TRANSITION_END)
+  public onTransitionEnd() {
+    this.forceUpdate();
   }
 
   public getSelectedId() {
@@ -33,7 +41,12 @@ export class Header extends React.Component<{ doc: IDoc }, {}> {
 
   public renderTab(m: IModuleContent) {
     return (
-      <Go to="moduleIndex" key={m.name} params={{module: m.name}}>{m.name}</Go>
+      <Tab2
+        className="with-icon"
+        id={`/m/${m.name}`}
+        key={m.name}
+        title={this.renderTabTitle(m)}
+      />
     );
   }
 
@@ -42,11 +55,18 @@ export class Header extends React.Component<{ doc: IDoc }, {}> {
       <nav className="pt-navbar pt-dark">
         <div className="container">
           <div className="pt-navbar-group pt-align-left">
-            <Go to="home">Home</Go>
-            {this.props.doc.modules.map((m) => this.renderTab(m))}
+            <Tabs2
+              onChange={this.handleTabChange}
+              id="TabsHeader"
+              selectedTabId={this.getSelectedId()}
+              defaultSelectedTabId={this.getSelectedId()}
+            >
+              <Tab2 id="/" title={<div>o<span style={{fontStyle: "italic"}}>l</span>y</div>} className="title"/>
+              {this.docs.modules.map((m) => this.renderTab(m))}
+            </Tabs2>
           </div>
           <div className="pt-navbar-group pt-align-right">
-            <Search doc={this.props.doc}/>
+            <Search docs={this.docs}/>
             <a
               className="pt-button pt-minimal pt-icon-git-repo"
               href="https://github.com/nolyme/oly"

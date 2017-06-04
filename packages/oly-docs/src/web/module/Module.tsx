@@ -1,11 +1,12 @@
 import { attach } from "oly-react";
 import { View } from "oly-react/src/router/components/View";
 import * as React from "react";
+import { Component } from "react";
 import { IModuleContent } from "../../cli/interfaces";
 import { ModuleMenu } from "./ModuleMenu";
 
 @attach
-export class Module extends React.Component<{ module: IModuleContent }, {}> {
+export class Module extends Component<{ module: IModuleContent }, {}> {
 
   public render() {
     return (

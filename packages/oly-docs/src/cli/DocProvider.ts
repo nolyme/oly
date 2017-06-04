@@ -6,7 +6,7 @@ import { Application, ProjectReflection } from "typedoc";
 import { DeclarationReflection } from "typedoc/dist/lib/models";
 import { DocBuilder } from "./DocBuilder";
 import { DocParser } from "./DocParser";
-import { IDoc, IDocDecorator, IDocEnv, IDocService, IModuleContent } from "./interfaces";
+import { IDocs, IDocDecorator, IDocEnv, IDocService, IModuleContent } from "./interfaces";
 import { Configuration } from "./models/Configuration";
 import { ModuleConfiguration } from "./models/ModuleConfiguration";
 
@@ -35,7 +35,7 @@ export class DocProvider {
       this.logger.debug(`module ${m.name} is created`);
     }
 
-    const doc: IDoc = {
+    const doc: IDocs = {
       home: this.parser.mark(readFileSync(resolve(this.cwd, config.home || "README.md"), "UTF-8")),
       modules,
       name: config.name,

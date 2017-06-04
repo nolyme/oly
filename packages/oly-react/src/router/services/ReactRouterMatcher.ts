@@ -1,8 +1,8 @@
 import { inject, Logger } from "oly-core";
 import * as pathToRegexp from "path-to-regexp";
 import { compile } from "path-to-regexp";
-import { MatcherException } from "../../exceptions/MatcherException";
-import { IHrefQuery, IMatch, INode, IRoute } from "../../interfaces";
+import { MatcherException } from "../exceptions/MatcherException";
+import { IHrefQuery, IMatch, INode, IRoute } from "../interfaces";
 
 export class ReactRouterMatcher {
 
@@ -19,7 +19,7 @@ export class ReactRouterMatcher {
    */
   public href(routes: IRoute[], go: IHrefQuery | string, context?: IMatch): string | undefined {
 
-    const options: IHrefQuery = typeof go === "object" ? go : {to: go};
+    const options: IHrefQuery = typeof go === "object" ? go : { to: go };
     let url;
 
     if (options.to[0] === "/") { // do not process query nor param here
@@ -158,6 +158,37 @@ export class ReactRouterMatcher {
     });
 
     return routes;
+  }
+
+  /**
+   * Compare two nodes with params.
+   * This is useful when node have path variable (params).
+   * We need to compile the local node path and compare with the two set of params.
+   *
+   * This use case is only browser-side.
+   *
+   * @param {IMatch} match1   Params 1
+   * @param {IMatch} match2   Params 2
+   * @returns {boolean}       true if node1 === node2
+   *
+   * @memberof ReactRouterMatcher
+   */
+  public isEqualMatchLevel(match1: IMatch, match2: IMatch, level: number): boolean {
+
+    if (match1.route !== match2.route) {
+      return false;
+    }
+
+    if (match1.route.stack[level] !== match2.route.stack[level]) {
+      return false;
+    }
+
+    const n1 = match1.route.stack[level];
+    if (n1.path.includes(":")) {
+      return compile(n1.path)(match1.params) === compile(n1.path)(match2.params);
+    }
+
+    return true;
   }
 
   /**

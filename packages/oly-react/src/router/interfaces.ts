@@ -24,6 +24,11 @@ export interface ITransitionError extends ITransition {
   error: Error;
 }
 
+export interface ITransitionRenderEvent {
+  transition: ITransition;
+  level: number;
+}
+
 export interface INode {
   name: string;
   path: string;
@@ -74,6 +79,7 @@ export interface ILayer {
 export interface IPagesProperty {
   name: string;
   path: string;
+  layout?: boolean;
   abstract?: boolean;
   children?: Class[];
 }

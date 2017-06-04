@@ -11,5 +11,5 @@ export * from "./decorators/param";
 export * from "./decorators/query";
 export * from "./services/Router";
 export * from "./services/Browser";
-export * from "./services/ReactRouterProvider";
-export * from "./services/ReactBrowserProvider";
+export * from "./providers/ReactRouterProvider";
+export * from "./providers/ReactBrowserProvider";

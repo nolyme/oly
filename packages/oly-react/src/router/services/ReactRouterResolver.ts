@@ -1,7 +1,7 @@
 import { _, inject, Kernel, Logger } from "oly-core";
 import { createElement } from "react";
-import { Layer } from "../../components/Layer";
-import { IChunks, ITransition } from "../../interfaces";
+import { Layer } from "../components/Layer";
+import { IChunks, ITransition } from "../interfaces";
 
 export class ReactRouterResolver {
 

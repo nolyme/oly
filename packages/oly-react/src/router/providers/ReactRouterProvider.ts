@@ -12,9 +12,9 @@ import {
   ITransition,
   ITransitionError,
 } from "../interfaces";
-import { ReactRouterMatcher } from "./business/ReactRouterMatcher";
-import { ReactRouterResolver } from "./business/ReactRouterResolver";
-import { DefaultErrorHandler } from "./DefaultErrorHandler";
+import { DefaultErrorHandler } from "../services/DefaultErrorHandler";
+import { ReactRouterMatcher } from "../services/ReactRouterMatcher";
+import { ReactRouterResolver } from "../services/ReactRouterResolver";
 
 export class ReactRouterProvider implements IProvider {
 
@@ -48,12 +48,9 @@ export class ReactRouterProvider implements IProvider {
 
   public async transition(query: string | IHrefQuery): Promise<ITransition | undefined> {
 
-    const options = typeof query === "string" ? {to: query} : query;
+    const options = typeof query === "string" ? { to: query } : query;
 
-    this.logger.debug(`begin transition`, {query});
-    await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
-
-    // match
+    // convert the "query" to a valid url
     const href = this.href(options);
     if (!href) {
       throw new Exception(`Can't find href of '${options.to}'`);
@@ -66,17 +63,34 @@ export class ReactRouterProvider implements IProvider {
       to: match,
     };
 
-    this.logger.trace(`match ${options.to} -> ${match.route.node.name}`);
+    // now, we are safe, TRANSITION CAN BEGIN!
+    this.logger.info(`begin transition -> ${transition.type} ${match.route.node.name}`, { query });
+    await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
 
     try {
 
       const newLayers: ILayer[] = [];
-      const stack = transition.to.route.stack;
+      const stack = match.route.stack;
 
-      // merge
+      // merge newLayers with oldLayers
+      // if it's a new layer, we resolve the node associated
+      // resolves can failed, this is the reason of the try/catch
+
+      // keep in memory the first new level layer
+      // it's useful for the <View>
       let newLevel: number = -1;
       for (let i = 0; i < stack.length; i++) {
-        if (this.layers[i] && this.layers[i].node === stack[i]) {
+
+        // we can re-use layer if:
+        // 1. we have already a layer at this level
+        // 2. the layer node is equal to the new layer node
+        // 3. old params equals new params
+        if (
+          newLevel === -1
+          && this.match
+          && this.layers[i]
+          && this.layers[i].node === stack[i]
+          && this.matcher.isEqualMatchLevel(this.match, match, i)) {
           newLayers.push(this.layers[i]);
         } else {
           const chunks = await this.resolver.resolve(transition, i);
@@ -90,18 +104,27 @@ export class ReactRouterProvider implements IProvider {
               newLevel = i;
             }
           } else {
-            this.logger.debug(`transition is aborted, sorry`);
+            this.logger.info(`transition is aborted, layer ${i} has return no chunks`);
             await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
             return;
           }
         }
       }
 
+      if (newLevel === -1) {
+        this.logger.info(`transition is aborted, nothing to update`);
+        await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+        return;
+      }
+
       this.layers = newLayers;
       this.match = match;
-      await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, newLevel);
+      await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
+        transition,
+        level: newLevel,
+      });
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
-      this.logger.debug(`transition is done`);
+      this.logger.info(`transition is done`);
       return transition;
 
     } catch (error) {
@@ -120,8 +143,11 @@ export class ReactRouterProvider implements IProvider {
 
       const chunks = await this.resolver.resolve(errorTransition, 0);
       if (chunks) {
-        this.layers = [{node: errorHandler.node, chunks}];
-        await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, 0);
+        this.layers = [{ node: errorHandler.node, chunks }];
+        await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
+          transition: errorTransition,
+          level: 0,
+        });
       }
 
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, errorTransition);
@@ -137,7 +163,7 @@ export class ReactRouterProvider implements IProvider {
 
     const nodes: INode[] = [];
     const pageDeclarations = declarations.filter((declaration) =>
-      Meta.of({key: olyReactRouterKeys.pages, target: declaration.definition}).has());
+      Meta.of({ key: olyReactRouterKeys.pages, target: declaration.definition }).has());
 
     for (const pageDeclaration of pageDeclarations) {
       if (!this.hasParent(pageDeclarations, pageDeclaration.definition)) {
@@ -170,7 +196,7 @@ export class ReactRouterProvider implements IProvider {
   protected createNodes(target: Class, parent?: IPagesProperty): INode[] {
 
     const nodes: INode[] = [];
-    const pagesMetadata = Meta.of({key: olyReactRouterKeys.pages, target}).deep<IPagesMetadata>();
+    const pagesMetadata = Meta.of({ key: olyReactRouterKeys.pages, target }).deep<IPagesMetadata>();
     if (pagesMetadata) {
       const keys = Object.keys(pagesMetadata.properties);
 
@@ -178,16 +204,21 @@ export class ReactRouterProvider implements IProvider {
       let layout;
       for (const propertyKey of keys) {
         const page: IPagesProperty = pagesMetadata.properties[propertyKey];
-        if (page.path === ":layout:") {
+        if (page.layout) {
           layout = page;
           nodes.push({
             abstract: true,
             name: page.name,
-            path: "",
+            path: page.path,
             parent: parent ? parent.name : undefined,
             target,
             propertyKey,
           });
+          if (Array.isArray(page.children)) {
+            for (const child of page.children) {
+              nodes.push(...this.createNodes(child, page));
+            }
+          }
           break;
         }
       }
@@ -203,7 +234,7 @@ export class ReactRouterProvider implements IProvider {
             target,
             propertyKey,
           });
-        } else if (page.path !== ":layout:") {
+        } else if (!page.layout) {
           const parentNode = layout || parent;
           nodes.push({
             name: page.name,
@@ -226,6 +257,27 @@ export class ReactRouterProvider implements IProvider {
   }
 
   /**
+   * Very tiny object comparator.
+   * Used to check the equality of two node params.
+   *
+   * @protected
+   * @param {object} obj1
+   * @param {object} obj2
+   * @returns {boolean}
+   *
+   * @memberof ReactRouterProvider
+   */
+  protected isEqualParams(obj1: object, obj2: object): boolean {
+    const keys = Object.keys(obj1);
+    for (const key of keys) {
+      if (obj1[key] !== obj2[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * Check if definition is a child of someone.
    *
    * @param pageDeclarations      All declarations
@@ -234,7 +286,7 @@ export class ReactRouterProvider implements IProvider {
   protected hasParent(pageDeclarations: IDeclarations, definition: Class): boolean {
     return pageDeclarations
       .filter((p) => p.definition !== definition)
-      .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())
+      .map((p) => Meta.of({ key: olyReactRouterKeys.pages, target: p.definition }).deep<IPagesMetadata>())
       .filter((p) => {
         if (p) {
           const keys = Object.keys(p.properties);
