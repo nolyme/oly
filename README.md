@@ -26,7 +26,7 @@ Kernel
 npm i -g typescript
 tsc --init
 ```
-2. Enable decorators in your `tsconfig.json`.
+2. Enable decorators & jsx in your `tsconfig.json`.
 ```json
 {
   "compilerOptions": {

@@ -8,7 +8,9 @@
     "emitDecoratorMetadata": true,
     "suppressImplicitAnyIndexErrors": true,
     "strict": true,
-    "jsx": "react"
+    "jsx": "react",
+    "importHelpers": true,
+    "noEmitHelpers": true
   },
   "exclude": [
     "node_modules"

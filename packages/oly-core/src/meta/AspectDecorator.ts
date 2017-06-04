@@ -23,12 +23,13 @@ export abstract class AspectDecorator implements IDecorator {
     });
 
     i.value = function oly$proxy(this: any) {
+      const args = arguments;
       let response;
       let done = false;
       const trigger = (valid?: boolean) => {
         done = true;
         if (valid !== false) {
-          response = action.apply(this, arguments);
+          response = action.apply(this, args);
         }
       };
       self.asProxy({
@@ -36,7 +37,7 @@ export abstract class AspectDecorator implements IDecorator {
         call: trigger,
         target: t.constructor,
         propertyKey: p,
-        arguments: Array.from(arguments),
+        arguments: Array.from(args),
       });
       if (!done) {
         trigger();

@@ -11,6 +11,4 @@ import { route } from "../../router/decorators/route";
  *
  * @param path    Relative path
  */
-
-
 export const del = (path: string) => route({method: "DEL", path});

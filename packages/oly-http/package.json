@@ -7,6 +7,7 @@
   "browser": "lib/index.browser.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
+  "module": "esm/index.browser.js",
   "keywords": [
     "oly",
     "typescript",
@@ -32,7 +33,7 @@
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
-    "build": "tsc",
+    "build": "tsc && tsc --outDir esm -m es2015 --target es2015 --moduleResolution node",
     "watch": "tsc -w",
     "test": "jest"
   },

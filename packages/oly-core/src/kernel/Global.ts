@@ -2,9 +2,11 @@ import * as merge from "deepmerge";
 
 export class Global {
 
-  public static merge = merge;
+  public static noop: any = () => undefined;
 
-  public static noop: any = () => null;
+  public static merge(...obj: object[]): any {
+    return merge.all(obj);
+  }
 
   public static isProduction(): boolean {
     return process.env.NODE_ENV === "production";
@@ -117,6 +119,13 @@ export class Global {
     }
 
     if (typeof type1.name === "string" && (type1.name === type2.name)) {
+      const keys1 = Object.getOwnPropertyNames(type1.prototype);
+      const keys2 = Object.getOwnPropertyNames(type2.prototype);
+      for (let i = 0; i < keys1.length; i++) {
+        if (keys1[i] !== keys2[i]) {
+          return false;
+        }
+      }
       return ("" + type1) === ("" + type2);
     }
 

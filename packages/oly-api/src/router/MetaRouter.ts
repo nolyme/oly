@@ -4,7 +4,7 @@ import { IRouterMetadata } from "./interfaces";
 
 export class MetaRouter {
 
-  public static get(target: Class): IRouterMetadata | null {
+  public static get(target: Class): IRouterMetadata | undefined {
     return Meta.of({key: olyRouterKeys.router, target}).deep<IRouterMetadata>();
   }
 }

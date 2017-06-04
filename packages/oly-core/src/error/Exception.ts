@@ -62,7 +62,7 @@ export class Exception extends Error {
    * Our witness error.
    * It's useful because we have a virtual #stack and #message.
    */
-  private source: Error & { idm?: boolean };
+  private source: Error & { isMutable?: boolean };
 
   /**
    * Create a new exception.
@@ -71,23 +71,24 @@ export class Exception extends Error {
    * @param message       Optional message if not set as source
    */
   public constructor(cause?: string | Throwable, message?: string) {
-    super();
 
-    this.name = (this.constructor as any).name;
+    const sourceMessage = (typeof cause === "string"
+      ? cause
+      : message) || Exception.DEFAULT_MESSAGE;
+
+    super(sourceMessage);
+
+    this.name = (this.constructor as any).name || "Error";
     // because we have a virtual message and a virtual stack
     this.source = new Error();
-    this.source.message = (
-        typeof cause === "string"
-          ? cause
-          : message)
-      || Exception.DEFAULT_MESSAGE;
+    this.source.message = sourceMessage;
 
     if (typeof cause !== "string" && typeof cause !== "undefined") {
       this.cause = cause;
     }
 
     // if we have a default message, it will be overridden by children "default message"
-    this.source.idm = this.source.message === Exception.DEFAULT_MESSAGE;
+    this.source.isMutable = this.source.message === Exception.DEFAULT_MESSAGE;
   }
 
   /**
@@ -102,7 +103,7 @@ export class Exception extends Error {
    * @param m
    */
   public set message(m: string) {
-    if (this.source.idm) {
+    if (this.source.isMutable) {
       this.source.message = m;
     }
   }

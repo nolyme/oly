@@ -98,6 +98,10 @@ export interface IToolsOptions {
    */
   nyan?: boolean;
   /**
+   * Use babel in production.
+   */
+  babel?: boolean;
+  /**
    * Enable source map loader.
    */
   sourceMapLoader?: boolean;
@@ -140,22 +144,25 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
   const config: Configuration = {};
   const root = options.root || process.cwd();
-  const isProduction = process.env.NODE_ENV === "production" || options.production === true;
+  const isProduction = (process.argv.indexOf("-p") > -1) || options.production === true;
 
   options.extract = options.extract !== false;
   options.timeout = options.timeout || 300;
   options.entry = options.entry || "./src/index.ts";
   options.dist = options.dist || resolve(root, "www");
   options.template = options.template || resolve(__dirname, "index.html");
-  options.fontLoader = options.fontLoader || fontLoaderFactory(isProduction);
-  options.imageLoader = options.imageLoader || imageLoaderFactory(isProduction);
-  options.typescriptLoader = options.typescriptLoader || typescriptLoaderFactory();
+  options.fontLoader = options.fontLoader
+    || fontLoaderFactory(isProduction);
+  options.imageLoader = options.imageLoader
+    || imageLoaderFactory(isProduction);
+  options.typescriptLoader = options.typescriptLoader
+    || typescriptLoaderFactory(isProduction, options.babel);
 
   // default style loader does not use autoprefixer
   options.styleLoader = options.styleLoader || cssLoaderFactory();
 
   // devtool accepts a string to define type of source-map
-  config.devtool = "source-map";
+  config.devtool = isProduction ? false : "source-map";
 
   // set a default context (base)
   // it's basically your root directory
@@ -180,6 +187,10 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       join(__dirname, "../node_modules"),
     ],
   };
+
+  if (isProduction && config.resolve.mainFields) {
+    config.resolve.mainFields.unshift("jsnext:main");
+  }
 
   config.resolveLoader = {
     modules: [
@@ -264,20 +275,40 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         debug: false,
         minimize: true,
       }),
-      // TODO: uglify es6
-      // new UglifyJsPlugin({
-      //   beautify: false,
-      //   comments: false,
-      //   compress: {
-      //     screw_ie8: true,
-      //     warnings: false,
-      //   },
-      //   mangle: {
-      //     keep_fnames: true,
-      //     screw_ie8: true,
-      //   },
-      // }),
     );
+
+    if (options.babel) {
+      config.module.rules.push({
+        test: /\.js$/,
+        exclude: /node_modules\/(?!oly|ajv|ansicolor)/,
+        loader: "babel-loader",
+        options: {
+          presets: ["babel-preset-es2015"].map(require.resolve),
+        },
+      });
+      if (typeof config.entry === "string") {
+        config.entry = ["babel-polyfill", config.entry];
+      } else if (Array.isArray(config.entry)) {
+        config.entry.unshift("babel-polyfill");
+      } else {
+        config["polyfill"] = "babel-polyfill";
+      }
+      config.plugins.push(
+        new UglifyJsPlugin({
+          beautify: false,
+          comments: false,
+          compress: {
+            screw_ie8: true,
+            warnings: false,
+          },
+          mangle: {
+            keep_fnames: true,
+            screw_ie8: true,
+          },
+          sourceMap: true,
+        }),
+      );
+    }
   }
 
   // Dev Server
@@ -297,7 +328,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 /**
  * Typescript loader factory
  */
-function typescriptLoaderFactory(options: object = {}): Rule {
+function typescriptLoaderFactory(isProduction: boolean = false, useBabel: boolean = false): Rule {
   return {
     exclude: /node_modules/,
     test: /\.tsx?$/,
@@ -307,7 +338,11 @@ function typescriptLoaderFactory(options: object = {}): Rule {
         silent: true,
         // speedup compile time, our ide will check error for us beside
         transpileOnly: true,
-        ...options,
+        useBabel: isProduction && useBabel,
+        babelCore: __dirname + "/../node_modules/babel-core",
+        babelOptions: {
+          presets: ["babel-preset-es2015"].map(require.resolve),
+        },
       },
     }],
   };

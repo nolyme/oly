@@ -64,7 +64,7 @@ export class ReactRouterProvider implements IProvider {
     };
 
     // now, we are safe, TRANSITION CAN BEGIN!
-    this.logger.info(`begin transition -> ${transition.type} ${match.route.node.name}`, { query });
+    this.logger.info(`begin transition -> ${transition.type} ${match.route.node.name}`);
     await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
 
     try {

@@ -252,15 +252,15 @@ export class Meta {
   /**
    *
    */
-  public get<T extends IMetadata>(): T | null {
+  public get<T extends IMetadata>(): T | undefined {
     return Meta.reflect.getOwnMetadata(this.identifier.key, this.target);
   }
 
   /**
    *
    */
-  public deep<T extends IMetadata>(): T | null {
-    const $deep = <T extends IMetadata>(key: string, target: Function): T | null => {
+  public deep<T extends IMetadata>(): T | undefined {
+    const $deep = <T extends IMetadata>(key: string, target: Function): T | undefined => {
       const meta: T = Meta.reflect.getOwnMetadata(key, target);
 
       if (target.prototype
