@@ -6,7 +6,6 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
-  "module": "esm/index.js",
   "keywords": [
     "oly",
     "typescript",
@@ -25,7 +24,8 @@
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
-    "build": "tsc && tsc --outDir esm -m es2015 --target es2015 --moduleResolution node",
+    "build": "tsc",
+    "watch": "tsc -w",
     "test": "jest"
   },
   "jest": {

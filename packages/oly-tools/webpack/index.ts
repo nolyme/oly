@@ -9,8 +9,6 @@ import { join, resolve } from "path";
 import * as _webpack from "webpack";
 import { Configuration, Entry, Rule } from "webpack";
 
-export { Configuration, NewModule } from "webpack";
-
 const {
   LoaderOptionsPlugin,
   DefinePlugin,
@@ -19,6 +17,11 @@ const {
   },
 } = _webpack;
 
+export { Configuration, NewModule } from "webpack";
+
+/**
+ * Loaders ref.
+ */
 export const loaders = {
   lessLoaderFactory,
   sassLoaderFactory,
@@ -28,6 +31,9 @@ export const loaders = {
   fontLoaderFactory,
 };
 
+/**
+ * Plugins ref.
+ */
 export const plugins = {
   ExtractTextPlugin,
   HtmlWebpackPlugin,
@@ -35,11 +41,18 @@ export const plugins = {
   CleanWebpackPlugin,
 };
 
+/**
+ * Autoprefix ref.
+ */
 export const autoprefixer = _autoprefixer;
+
+/**
+ * Webpack ref.
+ */
 export const webpack = _webpack;
 
 /**
- * Easy and simple configuration.
+ * Easy configuration.
  */
 export interface IToolsOptions {
 
@@ -47,76 +60,90 @@ export interface IToolsOptions {
    * Required webpack file entries.
    */
   entry: string | string[] | Entry;
+
   /**
    * Current working directory.
    * Default is `process.cwd()`.
    */
   root?: string;
+
   /**
    * Enable css extractor.
    * Default is true.
    */
   extract?: boolean;
+
   /**
-   * Force production mode.
+   * Enable prod mode.
    * This will minimize bundle size but make compilation slower.
    * This options is also available with env variables.
+   *
    * ```
-   * NODE_ENV=production
+   * NODE_ENV=production webpack
+   * # or
+   * webpack -p
    * ```
+   *
    * Default is false.
    */
   production?: boolean;
+
   /**
    * Path to the dist directory.
    * Default is `${root}/www`.
    */
   dist?: string;
+
   /**
    * Path to the assets directory.
    * Assets are copied without any transformations in the dist directory.
    * Disable by default.
    */
   assets?: string;
+
   /**
    * Absolute path to the `index.html`.
    * Default is `oly-tools/webpack/index.html`
    */
   template?: string;
-  /**
-   * Delay between webpackDevServer reload.
-   */
-  timeout?: number;
+
   /**
    * Opens a new browser tab when Webpack loads.
    * Default is false.
    */
   open?: boolean;
+
   /**
    * Display nyan cat during the compilation.
    * Default is false.
    */
   nyan?: boolean;
+
   /**
    * Use babel in production.
    */
   babel?: boolean;
+
   /**
    * Enable source map loader.
    */
   sourceMapLoader?: boolean;
+
   /**
    * Override typescript loader.
    */
   typescriptLoader?: Rule;
+
   /**
    * Override font loader.
    */
   fontLoader?: Rule;
+
   /**
    * Override image loader.
    */
   imageLoader?: Rule;
+
   /**
    * Override style loader.
    */
@@ -137,6 +164,19 @@ export interface IToolsOptions {
  * Even if it's cool to have a ready2go webpack configuration,
  * you should avoid this function and make your own configuration.
  *
+ * ```typescript
+ * export default (env: string) => {
+ *
+ *  const config = createConfiguration({
+ *   entry: "./src/main.browser.tsx",
+ *  });
+ *
+ *  // edit config here
+ *
+ *  return config;
+ * }
+ * ```
+ *
  * @param options {IToolsOptions}
  * @return {Configuration}
  */
@@ -150,7 +190,6 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     || options.production === true;
 
   options.extract = options.extract !== false;
-  options.timeout = options.timeout || 300;
   options.entry = options.entry || "./src/index.ts";
   options.dist = options.dist || resolve(root, "www");
   options.template = options.template || resolve(__dirname, "index.html");
@@ -165,11 +204,10 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   options.styleLoader = options.styleLoader || cssLoaderFactory();
 
   // devtool accepts a string to define type of source-map
-  config.devtool = isProduction ? false : "source-map";
+  config.devtool = "source-map";
 
   // set a default context (base)
   // it's basically your root directory
-  // context are required in some case
   config.context = root;
 
   // Files
@@ -180,8 +218,10 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
   // resolve provides options to navigate into node_modules/sources
   config.resolve = {
+
     // i have added ts and tsx for our typescript project
     extensions: [".webpack.js", ".js", ".web.js", ".ts", ".tsx"],
+
     // i have added 'webpack' in first to keep the compatibility with webpack1
     mainFields: ["webpack", "browser", "module", "main"],
     modules: [
@@ -190,10 +230,6 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       join(__dirname, "../node_modules"),
     ],
   };
-
-  if (isProduction && config.resolve.mainFields) {
-    config.resolve.mainFields.unshift("jsnext:main");
-  }
 
   config.resolveLoader = {
     modules: [
@@ -220,6 +256,9 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     ],
   };
 
+  //
+  // Enable source map in /node_modules/
+  //
   if (options.sourceMapLoader === true) {
     config.module.rules.push({
       test: /\.js$/,
@@ -233,7 +272,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   config.plugins = [
     // important for react, useful for projects
     // 'process.env.NODE_ENV' will be replaced by true/false
-    // this is cool for mask logs, speedup stuffs, ...
+    // this is cool for mask logs, speedup stuffs, ...and uglify dead_code !
     new DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(isProduction ? "production" : "development"),
@@ -272,7 +311,9 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   }
 
   if (isProduction) {
+
     config.bail = true;
+
     config.plugins.push(
       new LoaderOptionsPlugin({
         debug: false,
@@ -280,14 +321,18 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       }),
     );
 
+    //
+    // ie11 compat mode
+    // VERY IS TRICKY AND BUGGY
+    //
     if (options.babel) {
       config.module.rules.push({
         test: /\.js$/,
-        exclude: /node_modules\/(?!oly|ajv|ansicolor)/,
+        exclude: /node_modules\/(?!oly|ajv|ansicolor)/, // TODO: easy configurable
         loader: "babel-loader",
         options: {
           presets: [
-            [require.resolve("babel-preset-es2015"), {modules: false}],
+            [require.resolve("babel-preset-es2015")],
           ],
         },
       });
@@ -298,6 +343,11 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       } else {
         config["polyfill"] = "babel-polyfill";
       }
+
+      //
+      // WARNING:
+      // for now, we can't uglify code in es6 :((
+      //
       config.plugins.push(
         new UglifyJsPlugin({
           beautify: false,
@@ -315,6 +365,8 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     }
   }
 
+  // Axios & some universal libs use Buffer in their code
+  // Webpack see this and try to emulate Buffer with a big code
   config.node = {
     Buffer: false,
   };
@@ -322,12 +374,9 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   // Dev Server
 
   config.devServer = {
-    historyApiFallback: true,
+    historyApiFallback: true,    // pushState mode
     inline: true,
     stats: "errors-only",
-    watchOptions: {
-      aggregateTimeout: options.timeout,
-    },
   };
 
   return config;
@@ -349,12 +398,9 @@ function typescriptLoaderFactory(isProduction: boolean = false, useBabel: boolea
         useBabel: isProduction && useBabel,
         babelOptions: {
           presets: [
-            [require.resolve("babel-preset-es2015"), {modules: false}],
+            [require.resolve("babel-preset-es2015")],
           ],
         },
-        moduleResolution: "node",
-        module: "es2015",
-        target: "es2015",
       },
     }],
   };

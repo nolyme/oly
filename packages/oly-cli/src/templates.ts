@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
+import { Global } from "oly-core";
 import { cp } from "shelljs";
 import { ICommands, pkgPath, root } from "./constants";
 import { ensureDependencies } from "./dependencies";
@@ -9,7 +10,7 @@ export const mergePackageJson = (newPkg: object) => {
     : {};
   writeFileSync(
     pkgPath,
-    JSON.stringify((Object as any).assign(pkg, newPkg), null, "  "),
+    JSON.stringify(Global.merge(pkg, newPkg), null, "  "),
     "UTF-8");
 };
 

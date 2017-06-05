@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@types/shelljs": "0.7.1",
+    "oly-core": "^0.11.1",
     "shelljs": "0.7.7"
   }
 }

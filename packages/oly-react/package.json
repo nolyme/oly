@@ -7,7 +7,6 @@
   "browser": "lib/index.browser.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
-  "module": "esm/index.browser.js",
   "keywords": [
     "oly",
     "typescript",
@@ -15,10 +14,10 @@
     "ssr"
   ],
   "dependencies": {
-    "@types/history": "^4.5.1",
+    "@types/history": "4.5.1",
     "@types/prop-types": "15.5.1",
     "@types/react-dom": "15.5.0",
-    "@types/react-helmet": "^5.0.2",
+    "@types/react-helmet": "5.0.2",
     "cheerio": "0.22.0",
     "history": "4.6.1",
     "oly-http": "^0.11.1",
@@ -39,8 +38,8 @@
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
-    "build": "tsc && tsc --outDir esm -m es2015 --target es2015 --moduleResolution node",
-    "watch": "tsc --watch",
+    "build": "tsc",
+    "watch": "tsc -w",
     "test": "jest"
   },
   "jest": {

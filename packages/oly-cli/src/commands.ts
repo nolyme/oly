@@ -33,23 +33,18 @@ export const commands: ICommands = {
   },
   "tsc": {
     help: "exec tsc",
-    ensure: ["typescript"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("tsc"), args),
   },
   "ts-node": {
-    ensure: ["typescript", "ts-node"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("ts-node"), args),
   },
   "jest": {
-    ensure: ["typescript", "jest", "@types/jest", "ts-jest"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("jest"), args),
   },
   "webpack": {
-    ensure: ["typescript", "oly-tools", "ts-node", "webpack"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("webpack"), args),
   },
   "webpack-dev-server": {
-    ensure: ["typescript", "oly-tools", "ts-node", "webpack", "webpack-dev-server"],
     exec: (args: string[]) => spawnExecutable(getLocalBinary("webpack-dev-server"), args),
   },
   "help": {

@@ -28,4 +28,7 @@ export class UseDecorator implements IDecorator {
   }
 }
 
+/**
+ *
+ */
 export const use = Meta.decoratorWithOptions<IUseOptions>(UseDecorator);
