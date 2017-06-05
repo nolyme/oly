@@ -56,7 +56,7 @@ export const initServer = (): void => {
   copyFiles("server");
   mergePackageJson({
     scripts: {
-      watch: "nodemon -x 'ts-node -F' src/main.server.ts",
+      watch: "nodemon -e ts,tsx -x 'ts-node -F' src/main.server.ts",
       compile: "tsc",
     },
   });
@@ -83,7 +83,7 @@ export const initTest = () => {
 };
 
 export const initCommands: ICommands = {
-  "--browser": {
+  "--client": {
     help: "simple browser file with react/webpack",
     exec: () => initBrowser(),
   },
