@@ -13,7 +13,7 @@ export class HttpServerProvider implements IProvider {
    *
    */
   @env("OLY_HTTP_SERVER_HOST")
-  protected readonly host: string = "0.0.0.0";
+  protected readonly host: string = "127.0.0.1";
 
   /**
    *
