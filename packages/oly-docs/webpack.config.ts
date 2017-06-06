@@ -6,7 +6,6 @@ export default (env: string = "development") => {
     entry: ["./src/main.browser.ts"],
     template: "./src/web/index.html",
     assets: "./src/web/assets",
-    babel: true,
     production: env === "production",
     styleLoader: loaders.sassLoaderFactory(),
   });
