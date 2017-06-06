@@ -1,4 +1,5 @@
 import * as _autoprefixer from "autoprefixer";
+import * as BabiliPlugin from "babili-webpack-plugin";
 import * as CleanWebpackPlugin from "clean-webpack-plugin";
 import * as CopyPlugin from "copy-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
@@ -120,14 +121,9 @@ export interface IToolsOptions {
   nyan?: boolean;
 
   /**
-   * Use babel in production.
-   */
-  babel?: boolean;
-
-  /**
    * Enable source map loader.
    */
-  sourceMapLoader?: boolean;
+  useSourceMapLoader?: boolean;
 
   /**
    * Override typescript loader.
@@ -198,7 +194,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   options.imageLoader = options.imageLoader
     || imageLoaderFactory(isProduction);
   options.typescriptLoader = options.typescriptLoader
-    || typescriptLoaderFactory(isProduction, options.babel);
+    || typescriptLoaderFactory();
 
   // default style loader does not use autoprefixer
   options.styleLoader = options.styleLoader || cssLoaderFactory();
@@ -259,7 +255,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   //
   // Enable source map in /node_modules/
   //
-  if (options.sourceMapLoader === true) {
+  if (options.useSourceMapLoader === true) {
     config.module.rules.push({
       test: /\.js$/,
       use: ["source-map-loader"],
@@ -321,48 +317,28 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       }),
     );
 
-    //
-    // ie11 compat mode
-    // VERY IS TRICKY AND BUGGY
-    //
-    if (options.babel) {
-      config.module.rules.push({
-        test: /\.js$/,
-        exclude: /node_modules\/(?!oly|ajv|ansicolor)/, // TODO: easy configurable
-        loader: "babel-loader",
-        options: {
-          presets: [
-            [require.resolve("babel-preset-es2015")],
-          ],
-        },
-      });
-      if (typeof config.entry === "string") {
-        config.entry = ["babel-polyfill", config.entry];
-      } else if (Array.isArray(config.entry)) {
-        config.entry.unshift("babel-polyfill");
-      } else {
-        config["polyfill"] = "babel-polyfill";
-      }
+    config.plugins.push(
+      new BabiliPlugin({}),
+    );
 
-      //
-      // WARNING:
-      // for now, we can't uglify code in es6 :((
-      //
-      config.plugins.push(
-        new UglifyJsPlugin({
-          beautify: false,
-          comments: false,
-          compress: {
-            screw_ie8: true,
-            warnings: false,
-          },
-          mangle: {
-            keep_fnames: true,
-            screw_ie8: true,
-          },
-        }),
-      );
-    }
+    //
+    // WARNING:
+    // for now, we can't uglify code in es6 :((
+    //
+    // config.plugins.push(
+    //   new UglifyJsPlugin({
+    //     beautify: false,
+    //     comments: false,
+    //     compress: {
+    //       screw_ie8: true,
+    //       warnings: false,
+    //     },
+    //     mangle: {
+    //       keep_fnames: true,
+    //       screw_ie8: true,
+    //     },
+    //   }),
+    // );
   }
 
   // Axios & some universal libs use Buffer in their code
@@ -385,7 +361,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 /**
  * Typescript loader factory
  */
-function typescriptLoaderFactory(isProduction: boolean = false, useBabel: boolean = false): Rule {
+function typescriptLoaderFactory(): Rule {
   return {
     exclude: /node_modules/,
     test: /\.tsx?$/,
@@ -395,12 +371,6 @@ function typescriptLoaderFactory(isProduction: boolean = false, useBabel: boolea
         silent: true,
         // speedup compile time, our ide will check error for us beside
         transpileOnly: true,
-        useBabel: isProduction && useBabel,
-        babelOptions: {
-          presets: [
-            [require.resolve("babel-preset-es2015")],
-          ],
-        },
       },
     }],
   };

@@ -21,6 +21,13 @@ export const copyFiles = (type = "project"): void => {
   }
 };
 
+export const initProject = () => {
+  ensureDependencies([
+    "typescript",
+  ]);
+  copyFiles("project");
+};
+
 export const initBrowser = (): void => {
   ensureDependencies([
     "typescript",
@@ -83,6 +90,10 @@ export const initTest = () => {
 };
 
 export const initCommands: ICommands = {
+  "--minimal": {
+    help: "just typescript",
+    exec: () => initProject(),
+  },
   "--client": {
     help: "simple browser file with react/webpack",
     exec: () => initBrowser(),
