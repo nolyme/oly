@@ -15,7 +15,6 @@
     "@types/webpack": "2.2.15",
     "bourbon": "4.3.4",
     "highlight.js": "9.12.0",
-    "lato-font": "3.0.0",
     "marked": "0.3.6",
     "oly-core": "^0.11.1",
     "oly-http": "^0.11.1",
@@ -25,9 +24,8 @@
     "react-addons-css-transition-group": "15.5.2",
     "react-dom": "15.5.4",
     "source-map-support": "0.4.15",
-    "typedoc": "0.7.1"
-  },
-  "devDependencies": {
+    "typedoc": "0.7.1",
+    "babel-core": "^6.24.1",
     "node-sass": "4.5.3",
     "oly-tools": "^0.11.1",
     "sass-loader": "6.0.5",
@@ -40,6 +38,7 @@
     "dev": "webpack-dev-server",
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
+    "watch": "tsc -w",
     "test": "echo"
   },
   "jest": {

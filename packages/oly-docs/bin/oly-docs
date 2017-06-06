@@ -2,4 +2,5 @@
 "use strict";
 
 require("source-map-support/register");
-require("../lib/main.cli");
+require("ts-node/register");
+require("../src/main.cli");

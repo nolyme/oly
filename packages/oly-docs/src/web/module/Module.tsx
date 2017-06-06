@@ -1,5 +1,5 @@
 import { attach } from "oly-react";
-import { View } from "oly-react/src/router/components/View";
+import { View } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
 import { IModuleContent } from "../../cli/interfaces";

@@ -1,18 +1,19 @@
 import { createConfiguration, loaders } from "oly-tools";
 
-export default () => {
+export default (env: string = "development") => {
 
-  const config = createConfiguration({
+  const config: any = createConfiguration({
     entry: ["./src/main.browser.ts"],
     template: "./src/web/index.html",
-    styleLoader: loaders.sassLoaderFactory(),
     assets: "./src/web/assets",
-    nyan: true,
+    babel: true,
+    production: env === "production",
+    styleLoader: loaders.sassLoaderFactory(),
   });
 
-  if (config.output) {
-    delete config.output.publicPath;
-  }
+  config.context = __dirname;
+
+  delete config.output.publicPath;
 
   return config;
 };

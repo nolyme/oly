@@ -62,7 +62,7 @@ export class Header extends React.Component<{}, {}> {
               selectedTabId={this.getSelectedId()}
               defaultSelectedTabId={this.getSelectedId()}
             >
-              <Tab2 id="/" title={<div>o<span style={{fontStyle: "italic"}}>l</span>y</div>} className="title"/>
+              <Tab2 id="/" title={"🦊"} className="title"/>
               {this.docs.modules.map((m) => this.renderTab(m))}
             </Tabs2>
           </div>

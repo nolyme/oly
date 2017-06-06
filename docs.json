@@ -1,8 +1,5 @@
 {
   "name": "oly",
-  "manuals": [
-    "manuals/concepts.md"
-  ],
   "modules": [
     {
       "name": "oly-core",
@@ -16,53 +13,6 @@
       "services": [
         "Kernel.ts",
         "logger/Logger.ts"
-      ]
-    },
-    {
-      "name": "oly-json",
-      "icon": "flows",
-      "decorators": [
-        "decorators/array.ts",
-        "decorators/field.ts",
-        "decorators/date.ts"
-      ],
-      "services": [
-        "JsonService.ts"
-      ]
-    },
-    {
-      "name": "oly-api",
-      "icon": "send-to-graph",
-      "decorators": [
-        "decorators/get",
-        "decorators/put",
-        "decorators/post",
-        "decorators/del",
-        "decorators/path",
-        "decorators/header",
-        "decorators/query",
-        "decorators/body",
-        "decorators/use"
-      ],
-      "services": [
-        "providers/ApiProvider.ts"
-      ]
-    },
-    {
-      "name": "oly-react",
-      "icon": "control",
-      "decorators": [
-        "core/decorators/action",
-        "core/decorators/attach",
-        "router/decorators/page",
-        "router/decorators/layout",
-        "router/decorators/query",
-        "router/decorators/path"
-      ],
-      "services": [
-        "router/services/ReactBrowserProvider.ts",
-        "router/services/Browser.ts",
-        "router/services/Router.ts"
       ]
     }
   ]

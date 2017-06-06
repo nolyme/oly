@@ -3,7 +3,7 @@
 .header {
 
   &.pt-navbar.pt-dark {
-    background: linear-gradient(to bottom, $pt-intent-primary, darken($pt-intent-primary, 10%));
+    background: linear-gradient(to bottom, $pt-intent-primary, darken($pt-intent-primary, 5%));
     border-bottom: 1px solid $white;
     .pt-tab {
       padding: 0;

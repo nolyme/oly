@@ -42,13 +42,10 @@ export class DocProvider {
       version: config.version || pkg.version,
     };
 
-    if (this.asJs) {
-      this.logger.debug(`write as js`);
-      writeFileSync(resolve(output, "docs.js"), "window.DOCS = " + JSON.stringify(doc), "UTF-8");
-    } else {
-      this.logger.debug(`write docs with webpack`);
-      await this.builder.build(output, doc);
-    }
+    this.logger.debug(`write as js`);
+    writeFileSync(resolve(output, "docs.js"), "window.DOCS = " + JSON.stringify(doc), "UTF-8");
+    this.logger.debug(`write docs with webpack`);
+    await this.builder.build(output, doc);
     this.logger.debug(`everything is great, have a nice day`);
   }
 

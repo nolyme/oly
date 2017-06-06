@@ -6,6 +6,7 @@
 
 # FUTURE
 
+- our "ansi color"
 - oly-orm with objection.js + oly-json, not typeorm
 - pixie auto route
 - json @check [prop+arg] (with context)

@@ -13,8 +13,7 @@
     "typescript": "2.3.4"
   },
   "scripts": {
-    "docs": "node packages/oly-docs/bin/oly-docs",
-    "docs:dev": "JS=true DIRECTORY_OUT=packages/oly-docs/src/web/assets node packages/oly-docs/bin/oly-docs",
+    "docs": "packages/oly-docs/bin/oly-docs",
     "all": "lerna run clean && lerna bootstrap && lerna run build && lerna run test",
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
@@ -32,8 +31,6 @@
     },
     "collectCoverageFrom": [
       "packages/**/src/**/*.{ts,tsx}",
-      "!packages/oly/**/*.{ts,tsx}",
-      "!packages/oly-test/src/**/*.{ts,tsx}",
       "!packages/oly-docs/src/**/*.{ts,tsx}",
       "!packages/oly-cli/**/*.{ts,tsx}",
       "!packages/oly-tools/**/*.{ts,tsx}"

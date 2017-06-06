@@ -1,6 +1,7 @@
 import { inject, Logger } from "oly-core";
 import { resolve } from "path";
 import * as webpack from "webpack";
+import webpackConfig from "../../webpack.config";
 import { IDocs } from "./interfaces";
 
 export class DocBuilder {
@@ -24,21 +25,9 @@ export class DocBuilder {
 
   private createWebpackConfiguration(output: string, doc: IDocs): object {
     this.logger.debug("create webpack config");
-    const tools = require("oly-tools");
-    const config = tools.createConfiguration({
-      dist: output,
-      entry: [
-        "oly-core/polyfill",
-        "./web/main.ts",
-        "./web/main.scss",
-      ],
-      root: resolve(__dirname, ".."),
-      styleLoader: tools.loaders.sassLoaderFactory(),
-    });
-    config.resolve.modules.push(resolve(__dirname, "../node_modules"));
-    config.plugins.push(new webpack.DefinePlugin({
-      "process.env.DOC": JSON.stringify(doc),
-    }));
+    const config = webpackConfig("production");
+
+    config.resolve.modules.push(resolve(__dirname, "../../node_modules"));
 
     return config;
   }
