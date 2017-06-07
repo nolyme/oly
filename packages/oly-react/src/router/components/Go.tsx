@@ -20,6 +20,11 @@ export interface IGoProps extends HTMLAttributes<HTMLElement> {
    *
    */
   params?: object;
+
+  /**
+   *
+   */
+  query?: object;
 }
 
 export interface IGoState {
@@ -44,10 +49,8 @@ export class Go extends Component<IGoProps, IGoState> {
     if (this.props.onClick) {
       this.props.onClick(e);
     }
-    return this.router.go({
-      to: this.props.to,
-      params: this.props.params,
-    });
+    const {to, params, query} = this.props;
+    return this.router.go({to, params, query});
   }
 
   /**
@@ -55,7 +58,8 @@ export class Go extends Component<IGoProps, IGoState> {
    */
   @on(olyReactRouterEvents.TRANSITION_END)
   public onTransitionEnd() {
-    const active = this.router.isActive(this.props.to);
+    const {to, params, query} = this.props;
+    const active = this.router.isActive({to, params, query});
     if (this.state.active !== active) {
       this.setState({active});
     }
@@ -65,8 +69,9 @@ export class Go extends Component<IGoProps, IGoState> {
    *
    */
   public componentWillMount() {
+    const {to, params, query} = this.props;
     this.state = {
-      active: this.router.isActive(this.props.to),
+      active: this.router.isActive({to, params, query}),
     };
   }
 
@@ -74,11 +79,11 @@ export class Go extends Component<IGoProps, IGoState> {
    *
    */
   public render(): JSX.Element {
-    const {to, params, ...rest} = this.props;
+    const {to, params, query, ...rest} = this.props;
     return createElement("a" as any, {
       className: this.state.active ? "active" : undefined,
       ...rest,
-      href: this.router.href({to, params}),
+      href: this.router.href({to, params, query}),
       onClick: this.onClick,
     }, this.props.children);
   }

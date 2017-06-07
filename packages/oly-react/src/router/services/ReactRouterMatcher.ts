@@ -1,4 +1,4 @@
-import { inject, Logger } from "oly-core";
+import { Global, inject, Logger } from "oly-core";
 import * as pathToRegexp from "path-to-regexp";
 import { compile } from "path-to-regexp";
 import { MatcherException } from "../exceptions/MatcherException";
@@ -19,7 +19,7 @@ export class ReactRouterMatcher {
    */
   public href(routes: IRoute[], go: IHrefQuery | string, context?: IMatch): string | undefined {
 
-    const options: IHrefQuery = typeof go === "object" ? go : { to: go };
+    const options: IHrefQuery = typeof go === "object" ? go : {to: go};
     let url;
 
     if (options.to[0] === "/") { // do not process query nor param here
@@ -32,9 +32,15 @@ export class ReactRouterMatcher {
       return;
     }
 
-    // check params
-    if (options.params) {
-      url = compile(url)(options.params);
+    const params = context ? context.params : {};
+    try {
+      if (options.params) {
+        url = compile(url)(Global.merge(params, options.params));
+      } else {
+        url = compile(url)(params);
+      }
+    } catch (e) {
+      this.logger.warn(`Parameters are missing in ${url}`, e);
     }
 
     // check query
