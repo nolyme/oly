@@ -64,6 +64,10 @@ export class Router {
    */
   public isActive(routeName: string | IHrefQuery): boolean {
     const href = this.routerProvider.href(routeName);
-    return this.current.path === href;
+    if (!href) {
+      return false;
+    }
+    const current = this.current.path.replace(/\/$/, "");
+    return current === href.replace(/\/$/, "");
   }
 }
