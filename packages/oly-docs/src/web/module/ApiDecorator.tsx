@@ -9,7 +9,9 @@ export class ApiDecorator extends Component<{ module: IModuleContent; decorator:
   public render() {
     return (
       <div>
-        Decorator {this.props.decorator.name}
+        <small className="pt-text-muted">Decorator</small>
+        <h3>@{this.props.decorator.name}</h3>
+        <br/>
         <div dangerouslySetInnerHTML={{__html: this.props.decorator.description}}/>
       </div>
     );

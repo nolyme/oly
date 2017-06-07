@@ -25,7 +25,6 @@
     "react-dom": "15.5.4",
     "source-map-support": "0.4.15",
     "typedoc": "0.7.1",
-    "babel-core": "^6.24.1",
     "node-sass": "4.5.3",
     "oly-tools": "^0.11.1",
     "sass-loader": "6.0.5",

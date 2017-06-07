@@ -53,7 +53,7 @@ export class Header extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <nav className="header pt-navbar pt-dark">
+      <nav className="header pt-navbar">
         <div className="container">
           <div className="pt-navbar-group pt-align-left">
             <Tabs2
@@ -62,7 +62,7 @@ export class Header extends React.Component<{}, {}> {
               selectedTabId={this.getSelectedId()}
               defaultSelectedTabId={this.getSelectedId()}
             >
-              <Tab2 id="/" title={"🦊"} className="title"/>
+              <Tab2 id="/" title={<div>o<span style={{fontStyle: "italic"}}>l</span>y</div>} className="title"/>
               {this.docs.modules.map((m) => this.renderTab(m))}
             </Tabs2>
           </div>

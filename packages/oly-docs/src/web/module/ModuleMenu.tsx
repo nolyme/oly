@@ -59,9 +59,9 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, { is
   public render() {
     return (
       <div style={{ width: "200px" }}>
-        <div><Go to={this.rel()}>General</Go></div>
-        {this.renderServices()}
+        <div><Go to={this.rel()}>README</Go></div>
         {this.renderDecorators()}
+        {this.renderServices()}
       </div>
     );
   }

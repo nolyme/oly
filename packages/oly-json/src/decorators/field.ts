@@ -20,4 +20,7 @@ export class FieldDecorator implements IDecorator {
   }
 }
 
+/**
+ *
+ */
 export const field = Meta.decorator<Partial<IField> | IType>(FieldDecorator);

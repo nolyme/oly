@@ -104,7 +104,7 @@ export class View extends Component<IViewProps, { content: any }> {
       if (this.show) {
         const node = this.routerProvider.layers[this.index].node;
         return (
-          <details style={{background: "rgba(0, 0, 0, 0.05)"}}>
+          <details style={{boxShadow: "inset 0 0 0 1px rgba(128, 128, 128, 0.3)"}}>
             <summary
               style={{padding: "4px", background: "grey", color: "white", cursor: "pointer"}}
             >

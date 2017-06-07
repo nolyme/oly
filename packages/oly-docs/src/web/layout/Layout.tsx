@@ -20,8 +20,8 @@ export class Layout extends Component<{}, {}> {
           <link rel="icon" href="favicon.png" sizes="64x64" type="image/png"/>
         </Helmet>
         <Header/>
-        <div className="flex-full container">
-          <div style={{padding: "10px"}}><Breadcrumbs/></div>
+        <div className="flex-full">
+          <Breadcrumbs/>
           <View index={1}/>
         </div>
         <Footer/>

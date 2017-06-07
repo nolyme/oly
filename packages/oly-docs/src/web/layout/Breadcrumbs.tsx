@@ -51,9 +51,11 @@ export class Breadcrumbs extends React.Component<{}, {}> {
 
   public render() {
     this.build();
+    if (this.stepsAllowed.length <= 0) {
+      return <div/>;
+    }
     return (
       <div className="breadcrumbs">
-        {this.stepsAllowed.length > 0 &&
         <ul className="pt-breadcrumbs">
           <li>
             <Go className="pt-breadcrumb" to="/">
@@ -68,7 +70,6 @@ export class Breadcrumbs extends React.Component<{}, {}> {
             </li>
           ))}
         </ul>
-        }
       </div>
     );
   }

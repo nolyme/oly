@@ -2,7 +2,7 @@ import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
 import { parent } from "../kernel/decorators/parent";
 import { state } from "../kernel/decorators/state";
-import { _, Global } from "../kernel/Global";
+import { _ } from "../kernel/Global";
 import { Class } from "../kernel/interfaces/injections";
 import { ILogLevel, LogLevels } from "./LogLevels";
 
@@ -43,7 +43,7 @@ export class Logger {
   protected logLevel: string = "INFO";
 
   /**
-   * Set the level of your logger.
+   * Enable or disable color.
    */
   @env("OLY_LOGGER_COLOR")
   protected hasColor: boolean = true;

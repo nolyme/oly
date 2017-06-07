@@ -3,16 +3,48 @@
   "modules": [
     {
       "name": "oly-core",
-      "icon": "layout",
+      "icon": "sim-card",
       "decorators": [
-        "decorators/env",
-        "decorators/inject",
-        "decorators/on",
-        "decorators/state"
+        "kernel/decorators/env",
+        "kernel/decorators/inject",
+        "kernel/decorators/on",
+        "kernel/decorators/state"
       ],
       "services": [
-        "Kernel.ts",
+        "kernel/Kernel.ts",
         "logger/Logger.ts"
+      ]
+    },
+    {
+      "name": "oly-json",
+      "icon": "ninja",
+      "decorators": [
+        "decorators/field",
+        "decorators/array"
+      ],
+      "services": [
+        "services/JsonService.ts"
+      ]
+    },
+    {
+      "name": "oly-react",
+      "icon": "delta",
+      "decorators": [
+        "core/decorators/attach"
+      ],
+      "services": [
+        "router/services/Browser.ts"
+      ]
+    },
+    {
+      "name": "oly-api",
+      "icon": "satellite",
+      "decorators": [
+        "core/decorators/get",
+        "core/decorators/body"
+      ],
+      "services": [
+        "core/providers/ApiProvider.ts"
       ]
     }
   ]

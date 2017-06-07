@@ -12,4 +12,7 @@ export class ArrayDecorator extends FieldDecorator {
   }
 }
 
+/**
+ *
+ */
 export const array = Meta.decoratorWithOptions<IMetaArray>(ArrayDecorator);

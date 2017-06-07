@@ -2,10 +2,12 @@
 
 .header {
 
-  &.pt-navbar.pt-dark {
-    background: linear-gradient(to bottom, $pt-intent-primary, darken($pt-intent-primary, 5%));
-    border-bottom: 1px solid $white;
+  &.pt-navbar {
+    background: whitesmoke;
+    box-shadow: none;
     .pt-tab {
+      transition: all 300ms ease;
+      transform: scale(1);
       padding: 0;
       width: 64px;
       text-align: center;
@@ -20,14 +22,24 @@
         font-size: 10px;
         text-transform: uppercase;
       }
+      &:hover {
+        transform: scale(1.1);
+      }
     }
     .pt-tab[aria-selected="true"], .pt-tab:not([aria-disabled="true"]):hover {
-      color: $white;
-      background: rgba($white, .1);
+      transform: scale(1.1);
     }
     .pt-tab-indicator {
-      background-color: $white;
+      //background-color: $white;
     }
+  }
+
+  .pt-tab-indicator-wrapper .pt-tab-indicator {
+    background: linear-gradient(to right,
+      rgba($pt-intent-primary, 0.10),
+      $pt-intent-primary,
+      rgba($pt-intent-primary, 0.10));
+    height: 2px;
   }
 
   @media (max-width: $tablet) {

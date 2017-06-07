@@ -24,37 +24,22 @@ export class EnvDecorator implements IDecorator {
 }
 
 /**
- * It's like @state, but readonly and cast aware.
- * Name is also required. (and with #toLowerCase() please :-D)
  *
- * Note:
- * - Kernel throws an Error is Env has no value.
+ * Replace the given property by a virtual getter of [Kernel#env()](#/m/oly-core/s/Kernel/env).
+ * <br/>
  *
- * As property. (VIRTUAL GETTER)
- * ```typescript
- * class A { @env("B") b: string = "defaultValue" }
- * ```
+ * > This is based on [@state](#/m/oly-core/@/state), but it's always **readonly**.
+ * An error will be thrown if no value was found.
  *
- * As parameter.
+ * <br/>
  * ```typescript
  * class A {
- *   b(@env("C") c: string) {
- *   }
+ *
+ *   @env("B")
+ *   b: string = "defaultValue"
  * }
- * kernel.invoke(A, "b");
- * ```
  *
- * Cast Boolean.
- * ```typescript
- * class A { @env("B") b: boolean }
- * new Kernel({B: "true"}).get(A).b; // true
+ * Kernel.create({B: "c"}).get(A).b; // c
  * ```
- *
- * Cast Number.
- * ```typescript
- * class A { @env("B") b: number }
- * new Kernel({B: "1"}).get(A).b; // 1
- * ```
- *
  */
 export const env = Meta.decoratorWithOptions<string>(EnvDecorator);

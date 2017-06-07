@@ -44,8 +44,6 @@ export class DocProvider {
 
     this.logger.debug(`write as js`);
     writeFileSync(resolve(output, "docs.js"), "window.DOCS = " + JSON.stringify(doc), "UTF-8");
-    this.logger.debug(`write docs with webpack`);
-    await this.builder.build(output, doc);
     this.logger.debug(`everything is great, have a nice day`);
   }
 
@@ -76,11 +74,9 @@ export class DocProvider {
     this.logger.debug(`write decorators (${declarations.length})`);
     return declarations
       .map((i) => i.children[i.children.length - 1])
-      .filter((i) => i.signatures)
-      .map((i) => i.signatures[0])
       .map((i) => this.parser.mapDecorators(i))
       .map((i) => {
-        this.logger.info(`push ${i.name}`);
+        this.logger.info(`push @${i.name}`);
         return i;
       });
   }
@@ -107,7 +103,7 @@ export class DocProvider {
         .map((m) => ({
           default: m.defaultValue,
           description: this.parser.getDescription(m),
-          name: m.decorators[0].arguments.name,
+          name: m.decorators[0].arguments[Object.keys(m.decorators[0].arguments)[0]],
           optional: m.defaultValue !== undefined,
           target: m.parent.name,
           type: this.parser.getType(m.type),

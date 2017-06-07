@@ -1,8 +1,9 @@
 import { Kernel } from "oly-core";
-import { DocProvider } from "./cli/DocProvider";
+import { DocProvider } from "./cli";
 
 new Kernel({
   ...process.env,
+  OLY_LOGGER_LEVEL: process.argv.indexOf("--verbose") > -1 ? "TRACE" : "INFO",
   OLY_APP_NAME: "Docs",
 })
   .with(DocProvider)

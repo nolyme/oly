@@ -8,25 +8,21 @@ import {
 } from "typedoc/dist/lib/models";
 import { IDocDecorator, IDocEnv, IDocMethod, IDocParameter, IDocService } from "./interfaces";
 
-marked.setOptions({
-  highlight: (code) => require("highlight.js").highlightAuto(code).value,
-});
+const hljs = require("highlight.js");
+const renderer = new marked.Renderer();
+renderer.code = (code, language) => {
+  const validLang = !!(language && hljs.getLanguage(language));
+  const highlighted = validLang ? hljs.highlight(language, code).value : code;
+  return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
+};
 
 export class DocParser {
 
-  public mapDecorators(decorator: SignatureReflection): IDocDecorator {
+  public mapDecorators(decorator: DeclarationReflection): IDocDecorator {
     return {
       description: this.getDescription(decorator),
       name: decorator.name,
-      parameters: decorator.parameters
-        .map((param) => this.mapParameter(param))
-        .filter((param) => param.name !== "propertyKey")
-        .map((param) => {
-          param.type = param.type
-            .replace(" | any", "")
-            .replace("any | ", "");
-          return param;
-        }),
+      parameters: [],
     };
   }
 
@@ -170,12 +166,17 @@ export class DocParser {
   }
 
   public sanitize(text: string): string {
-
-    return text.replace(/\n$/mgi, "").trim();
+    return text.trim();
   }
 
   public mark(text: string): string {
-
-    return this.sanitize(marked(text));
+    return this.sanitize(marked(text, {
+      gfm: true,
+      tables: true,
+      breaks: true,
+      smartLists: true,
+      smartypants: true,
+      renderer,
+    }));
   }
 }

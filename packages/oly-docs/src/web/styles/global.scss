@@ -6,7 +6,7 @@ html, body, #app {
 }
 
 body {
-  background-color: whitesmoke;
+  background-color: $white;
 }
 
 .readme {
@@ -32,4 +32,13 @@ body {
 .flex-full {
   flex: 1;
   min-height: 100%;
+}
+
+.card {
+  box-shadow: none;
+}
+
+pre {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }

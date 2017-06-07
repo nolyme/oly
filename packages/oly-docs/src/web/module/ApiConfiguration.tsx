@@ -1,4 +1,4 @@
-import { attach } from "oly-react";
+import { attach, Go } from "oly-react";
 import * as React from "react";
 import { IModuleContent } from "../../cli/interfaces";
 
@@ -8,16 +8,35 @@ export class ApiConfiguration extends React.Component<{ module: IModuleContent }
   public render() {
     return (
       <div>
-        Configuration
-        <div>
+        <small>Configuration</small>
+        <table className="pt-table pt-striped pt-bordered">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Target</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
           {this.props.module.env.map((env) => (
-            <div key={env.name}>
-              {env.name}
-              {env.type}
-              {env.description}
-            </div>
+            <tr key={env.name}>
+              <td><strong>{env.name}</strong></td>
+              <td><code>{env.type}</code></td>
+              <td><Go
+                to="moduleById.service"
+                params={{module: this.props.module.name, service: env.target}}
+              >
+                {env.target}
+              </Go>
+              </td>
+              <td>{env.default}</td>
+              <td dangerouslySetInnerHTML={{__html: env.description}}/>
+            </tr>
           ))}
-        </div>
+          </tbody>
+        </table>
       </div>
     );
   }

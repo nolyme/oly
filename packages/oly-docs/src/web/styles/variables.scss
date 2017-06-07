@@ -1,5 +1,4 @@
-@import "../../../node_modules/@blueprintjs/core/dist/variables";
-@import "../../../node_modules/lato-font/scss/internal/variables";
+@import "~@blueprintjs/core/dist/variables";
 
 // paths
 $icon-font-path: "~@blueprintjs/core/resources/icons";
@@ -7,12 +6,11 @@ $icon-font-path: "~@blueprintjs/core/resources/icons";
 // colors
 $pt-app-background-color: $white;
 $pt-dark-app-background-color: $dark-gray1;
-$pt-intent-primary: $blue3;
+$pt-intent-primary: $forest3;
 $pt-link-color: $pt-intent-primary;
-$dark-popover-background-color: darken($pt-intent-primary, 20%);
 
 // responsive
-$tablet: 1000px;
+$tablet: 800px;
 
 // misc
 $pt-border-radius: 0;
