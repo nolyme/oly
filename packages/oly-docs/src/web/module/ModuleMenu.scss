@@ -1,0 +1,33 @@
+@import "../styles/variables";
+
+.ModuleMenu {
+  background: linear-gradient(to right, white, rgba($pt-intent-primary, 0.04));
+  padding: 50px 0 50px 50px;
+  border-right: 2px solid rgba($pt-intent-primary, 0.6);
+  a {
+    text-decoration: none !important;
+    display: block;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    padding: 4px 100px 4px 10px;
+    &:hover {
+      background-color: rgba($black, 0.05);
+    }
+    &.active {
+      background: linear-gradient(to right, $pt-intent-primary, rgba($pt-intent-primary, 0.6));
+      color: $white;
+    }
+  }
+}
+
+.ModuleMenu_part {
+  margin-top: 10px;
+}
+
+.ModuleMenu_head {
+  cursor: pointer;
+  opacity: 0.7;
+  &:hover {
+    opacity: 0.9;
+  }
+}

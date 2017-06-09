@@ -1,5 +1,5 @@
 import { inject, on } from "oly-core";
-import { attach, Browser, Go, olyReactRouterEvents, Router, styles } from "oly-react";
+import { attach, Browser, Go, Helmet, olyReactRouterEvents, Router, styles } from "oly-react";
 import * as React from "react";
 
 @attach
@@ -23,7 +23,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   };
 
   public transform(value: string): string {
-    const kvs = Object.keys(this.router.current.params).map((key) => ({key, value: this.router.current.params[key]}));
+    const kvs = Object.keys(this.router.current.params).map((key) => ({ key, value: this.router.current.params[key] }));
     const match = kvs.filter((kv) => kv.value === value)[0];
     if (!match) {
       return value;
@@ -52,14 +52,17 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   public render() {
     this.build();
     if (this.stepsAllowed.length <= 0) {
-      return <div/>;
+      return <div />;
     }
     return (
       <div className="breadcrumbs">
+        <Helmet>
+          <title>Docs ~ {this.stepsAllowed[this.stepsAllowed.length - 1]}</title>
+        </Helmet>
         <ul className="pt-breadcrumbs">
           <li>
             <Go className="pt-breadcrumb" to="/">
-              <span className="pt-icon-standard pt-icon-home breadcrumb-icon"/>
+              <span className="pt-icon-standard pt-icon-home breadcrumb-icon" />
             </Go>
           </li>
           {this.stepsAllowed.map((s, index) => (

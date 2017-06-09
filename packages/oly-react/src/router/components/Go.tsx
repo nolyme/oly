@@ -25,6 +25,16 @@ export interface IGoProps extends HTMLAttributes<HTMLElement> {
    *
    */
   query?: object;
+
+  /**
+   *
+   */
+  active?: string;
+
+  /**
+   *
+   */
+  strict?: boolean;
 }
 
 export interface IGoState {
@@ -59,7 +69,7 @@ export class Go extends Component<IGoProps, IGoState> {
   @on(olyReactRouterEvents.TRANSITION_END)
   public onTransitionEnd() {
     const {to, params, query} = this.props;
-    const active = this.router.isActive({to, params, query});
+    const active = this.router.isActive({to, params, query}, this.props.strict);
     if (this.state.active !== active) {
       this.setState({active});
     }
@@ -71,7 +81,7 @@ export class Go extends Component<IGoProps, IGoState> {
   public componentWillMount() {
     const {to, params, query} = this.props;
     this.state = {
-      active: this.router.isActive({to, params, query}),
+      active: this.router.isActive({to, params, query}, this.props.strict),
     };
   }
 
@@ -79,7 +89,7 @@ export class Go extends Component<IGoProps, IGoState> {
    *
    */
   public render(): JSX.Element {
-    const {to, params, query, ...rest} = this.props;
+    const {to, params, query, strict, active, ...rest} = this.props;
     return createElement("a" as any, {
       className: this.state.active ? "active" : undefined,
       ...rest,

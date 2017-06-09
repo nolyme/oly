@@ -8,6 +8,8 @@
 - pixie auto route
 - pagination
 - amqp retry
+- amqp : no time dependency
+  - Time
 
 # MAYBE
 

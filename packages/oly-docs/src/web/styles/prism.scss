@@ -1,0 +1,27 @@
+@import "~prismjs/themes/prism.css";
+@import "~prismjs/plugins/line-numbers/prism-line-numbers.css";
+
+span.token.annotation.punctuation {
+  color: #458383;
+}
+
+pre.language-typescript, pre.language-ts {
+  background-color: #f9f9f9;
+  border: 20px solid white;
+}
+
+.token.script.language-typescript {
+  color: black;
+}
+
+.token.function {
+  color: #807f17;
+}
+
+.token.atrule, .token.attr-value, .token.keyword {
+  color: #000080;
+}
+
+.token.property {
+  color: #660e7a;
+}

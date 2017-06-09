@@ -61,13 +61,21 @@ export class Router {
    * Check if a route node is active.
    *
    * @param routeName
+   * @param strict
    */
-  public isActive(routeName: string | IHrefQuery): boolean {
+  public isActive(routeName: string | IHrefQuery, strict: boolean = false): boolean {
+
     const href = this.routerProvider.href(routeName);
     if (!href) {
       return false;
     }
+
     const current = this.current.path.replace(/\/$/, "");
-    return current === href.replace(/\/$/, "");
+    const target = href.replace(/\/$/, "");
+    if (strict) {
+      return current === target;
+    }
+
+    return current.indexOf(target) === 0;
   }
 }

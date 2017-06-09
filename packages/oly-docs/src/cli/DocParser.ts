@@ -1,4 +1,5 @@
 import * as marked from "marked";
+import * as Prism from "prismjs";
 import {
   DeclarationReflection,
   ParameterReflection,
@@ -7,13 +8,16 @@ import {
   Type,
 } from "typedoc/dist/lib/models";
 import { IDocDecorator, IDocEnv, IDocMethod, IDocParameter, IDocService } from "./interfaces";
+import "./prism/tsx";
 
-const hljs = require("highlight.js");
 const renderer = new marked.Renderer();
+
 renderer.code = (code, language) => {
-  const validLang = !!(language && hljs.getLanguage(language));
-  const highlighted = validLang ? hljs.highlight(language, code).value : code;
-  return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
+  if (!language) {
+    return `<pre><code>${code}</code></pre>`;
+  }
+  const highlighted = Prism.highlight(code, Prism.languages[language]);
+  return `<pre class="language-${language}"><code class="language-${language}">${highlighted}</code></pre>`;
 };
 
 export class DocParser {

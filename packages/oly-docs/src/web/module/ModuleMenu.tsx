@@ -1,13 +1,14 @@
-import { Collapse } from "@blueprintjs/core";
-import { attach, Go } from "oly-react";
+import { attach, Go, styles } from "oly-react";
 import * as React from "react";
 import { IModuleContent } from "../../cli/interfaces";
 
 @attach
-export class ModuleMenu extends React.Component<{ module: IModuleContent }, { isDecoratorsOpen: boolean }> {
+@styles(() => require("./ModuleMenu.scss"))
+export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> {
 
   public state = {
     isDecoratorsOpen: true,
+    isServiceOpen: true,
   };
 
   public rel(path: string = ""): string {
@@ -19,16 +20,13 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, { is
       return;
     }
     return (
-      <div>
-        <div>Services</div>
+      <div className="ModuleMenu_part">
+        <div>
+          Services
+        </div>
         {this.props.module.services.map((s) => (
           <div key={s.name}>
             <Go to={this.rel(`s/${s.name}`)}>{s.name}</Go>
-            {s.methods.map((m) => (
-              <div key={m.name} style={{ paddingLeft: "10px", fontSize: "12px" }}>
-                <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
-              </div>
-            ))}
           </div>
         ))}
       </div>
@@ -39,27 +37,26 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, { is
     if (this.props.module.decorators.length === 0) {
       return;
     }
-    const onClick = () => this.setState({ isDecoratorsOpen: !this.state.isDecoratorsOpen });
     return (
-      <div>
-        <div onClick={onClick}>
+      <div className="ModuleMenu_part">
+        <div>
           Decorators
         </div>
-        <Collapse isOpen={this.state.isDecoratorsOpen}>
-          {this.props.module.decorators.map((s) => (
-            <div key={s.name}>
-              <Go to={this.rel(`@/${s.name}`)}>{"@" + s.name}</Go>
-            </div>
-          ))}
-        </Collapse>
+        {this.props.module.decorators.map((s) => (
+          <div key={s.name}>
+            <div className="aoad"/>
+            <Go to={this.rel(`@/${s.name}`)}>{"@" + s.name}</Go>
+          </div>
+        ))}
       </div>
     );
   }
 
   public render() {
     return (
-      <div style={{ width: "200px" }}>
-        <div><Go to={this.rel()}>README</Go></div>
+      <div className="ModuleMenu">
+        <div><Go strict={true} to={this.rel()}>README</Go></div>
+        <div><Go strict={true} to={"configuration"}>Configuration</Go></div>
         {this.renderDecorators()}
         {this.renderServices()}
       </div>

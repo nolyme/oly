@@ -1,5 +1,12 @@
 
 
 .Module {
+  flex: 1;
+  height: 100%;
+}
+
+.Module_view {
   padding: 50px;
+  padding-right: 150px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.02));
 }

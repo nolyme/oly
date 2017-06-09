@@ -36,11 +36,19 @@ export interface IDocEnv {
   type: string;
 }
 
+export interface IInterface {
+  name: string;
+  parents: string[];
+  properties: {
+    [key: string]: string;
+  };
+}
+
 export interface IModuleContent {
   name: string;
   icon?: string;
   home: string;
-  dependencies: string[];
+  interfaces: IInterface[];
   services: IDocService[];
   env: IDocEnv[];
   decorators: IDocDecorator[];

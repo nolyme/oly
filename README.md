@@ -4,12 +4,8 @@
 
 The set is based on known projects, such as [Koa](https://github.com/koajs/koa) and [React](https://github.com/facebook/react).
 
-o *l* y isn't a framework nor boilerplate.
-
-<br/>
-
-```typescript
-import { Kernel } from "oly/core";
+```ts
+import { Kernel } from "oly-core";
 
 Kernel
   .create({/** STORE **/})
@@ -28,13 +24,18 @@ There are a **lot** of decorators.
 
 <br/>
 
-```jsx
-import { page } from "oly/react";
+```ts
+import { page, PixieHttp } from "oly-react";
+import { Home } from "./Home";
 
 export class App {
+
+  @inject pixie: PixieHttp;
   
-  @page index() {
-    return <div>Hi!</div>;
+  @page("/")
+  async home() {
+    const data = await this.pixie.get("/data");
+    return <Home data={data} />;
   }
 }
 ```

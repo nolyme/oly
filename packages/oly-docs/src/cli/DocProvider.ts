@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { env, inject, Logger } from "oly-core";
 import { JsonService } from "oly-json";
@@ -13,7 +14,7 @@ import { ModuleConfiguration } from "./models/ModuleConfiguration";
 export class DocProvider {
 
   @env("CWD") private cwd: string = process.cwd();
-  @env("JS") private asJs: boolean = false;
+  @env("HTML") private html: boolean = false;
   @env("DIRECTORY_ROOT") private root: string = "packages";
   @env("DIRECTORY_SRC") private src: string = "src";
   @env("DIRECTORY_OUT") private out: string = "docs";
@@ -24,11 +25,18 @@ export class DocProvider {
   @inject private jsonService: JsonService;
 
   public async onStart() {
+
+    const webpackConfig = resolve(__dirname + "/../../webpack.config.ts");
     const configPath = resolve(this.cwd, "docs.json");
     const config = this.jsonService.build(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
     const pkg = require(resolve(this.cwd, "package.json"));
+
+    const command = `webpack --output-path=${output} --env=production --config=${webpackConfig}`;
+
+    this.logger.info(command);
+    execSync(command, {stdio: [0, 1, 2]});
 
     for (const m of config.modules) {
       modules.push(this.create(resolve(this.cwd, this.root, m.name), m));
@@ -36,10 +44,10 @@ export class DocProvider {
     }
 
     const doc: IDocs = {
-      home: this.parser.mark(readFileSync(resolve(this.cwd, config.home || "README.md"), "UTF-8")),
+      home: this.parser.mark(readFileSync(resolve(this.cwd, "README.md"), "UTF-8")),
       modules,
-      name: config.name,
-      version: config.version || pkg.version,
+      name: pkg.name,
+      version: pkg.version,
     };
 
     this.logger.debug(`write as js`);
@@ -59,9 +67,9 @@ export class DocProvider {
 
     return {
       decorators: this.generateDecorator(app, sources, m.decorators),
-      dependencies: m.dependencies,
+      interfaces: [],
       env: this.generateEnv(app, sources, m.services),
-      home: this.parser.mark(readFileSync(resolve(project, m.home || "README.md"), "UTF-8")),
+      home: this.parser.mark(readFileSync(resolve(project, "README.md"), "UTF-8")),
       icon: m.icon,
       name: m.name,
       services: this.generateService(app, sources, m.services),
@@ -71,7 +79,7 @@ export class DocProvider {
   private generateDecorator(app: Application, path: string, results: string[]): IDocDecorator[] {
     this.logger.debug("check decorators");
     const declarations = this.generateDeclarations(app, path, results);
-    this.logger.debug(`write decorators (${declarations.length})`);
+
     return declarations
       .map((i) => i.children[i.children.length - 1])
       .map((i) => this.parser.mapDecorators(i))
@@ -84,7 +92,7 @@ export class DocProvider {
   private generateService(app: Application, path: string, results: string[]): IDocService[] {
     this.logger.debug("check services");
     const declarations = this.generateDeclarations(app, path, results);
-    this.logger.debug(`write services (${declarations.length})`);
+
     return declarations
       .map((i) => i.children[i.children.length - 1])
       .map((i) => this.parser.mapService(i))
@@ -97,6 +105,7 @@ export class DocProvider {
   private generateEnv(app: Application, path: string, results: string[]): IDocEnv[] {
     this.logger.debug("check env");
     const declarations = this.generateDeclarations(app, path, results);
+
     return declarations.reduce<IDocEnv[]>((env, d) => env
       .concat(d.children[0].children
         .filter((m) => m.decorators && m.decorators[0].name === "env")

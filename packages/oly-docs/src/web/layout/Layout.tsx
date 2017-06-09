@@ -16,15 +16,14 @@ export class Layout extends Component<{}, {}> {
     return (
       <div className="flex flex-row">
         <Helmet>
-          <title>oly/docs</title>
-          <link rel="icon" href="favicon.png" sizes="64x64" type="image/png"/>
+          <title>Docs</title>
+          <link rel="icon" href="favicon.png" sizes="64x64" type="image/png" />
         </Helmet>
-        <Header/>
-        <div className="flex-full">
-          <Breadcrumbs/>
-          <View index={1}/>
+        <Header />
+        <div className="flex flex-row flex-full">
+          <Breadcrumbs />
+          <View index={1} />
         </div>
-        <Footer/>
       </div>
     );
   }

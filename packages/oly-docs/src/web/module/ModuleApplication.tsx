@@ -3,6 +3,7 @@ import { layout, page, param } from "oly-react";
 import * as React from "react";
 import { IDocs, IModuleContent } from "../../cli/interfaces";
 import { NotFound } from "../layout/NotFound";
+import { ApiConfiguration } from "./ApiConfiguration";
 import { ApiDecorator } from "./ApiDecorator";
 import { ApiService } from "./ApiService";
 import { ApiServiceMethod } from "./ApiServiceMethod";
@@ -27,6 +28,11 @@ export class ModuleApplication {
   @page("/")
   public index() {
     return <ModuleIndex module={this.module}/>;
+  }
+
+  @page("/configuration")
+  public configuration() {
+    return <ApiConfiguration module={this.module}/>;
   }
 
   @page("/@/:decorator")

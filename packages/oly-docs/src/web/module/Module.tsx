@@ -10,12 +10,10 @@ export class Module extends Component<{ module: IModuleContent }, {}> {
 
   public render() {
     return (
-      <div className="Module">
-        <div className="flex">
-          <ModuleMenu module={this.props.module}/>
-          <div className="flex-full">
-            <View index={2}/>
-          </div>
+      <div className="Module flex">
+        <ModuleMenu module={this.props.module}/>
+        <div className="flex-full Module_view">
+          <View index={2}/>
         </div>
       </div>
     );
