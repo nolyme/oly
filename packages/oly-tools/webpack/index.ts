@@ -121,11 +121,6 @@ export interface IToolsOptions {
   nyan?: boolean;
 
   /**
-   * Enable source map loader.
-   */
-  useSourceMapLoader?: boolean;
-
-  /**
    * Override typescript loader.
    */
   typescriptLoader?: Rule;
@@ -189,24 +184,18 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   options.entry = options.entry || "./src/index.ts";
   options.dist = options.dist || resolve(root, "www");
   options.template = options.template || resolve(__dirname, "index.html");
-  options.fontLoader = options.fontLoader
-    || fontLoaderFactory(isProduction);
-  options.imageLoader = options.imageLoader
-    || imageLoaderFactory(isProduction);
-  options.typescriptLoader = options.typescriptLoader
-    || typescriptLoaderFactory();
-
-  // default style loader does not use autoprefixer
+  options.fontLoader = options.fontLoader || fontLoaderFactory(isProduction);
+  options.imageLoader = options.imageLoader || imageLoaderFactory(isProduction);
+  options.typescriptLoader = options.typescriptLoader || typescriptLoaderFactory();
   options.styleLoader = options.styleLoader || cssLoaderFactory();
 
-  // devtool accepts a string to define type of source-map
+  // define the format of the source-map
+  // set to false for disabled it
   config.devtool = "source-map";
 
   // set a default context (base)
-  // it's basically your root directory
+  // it's the root directory for all relative path
   config.context = root;
-
-  // Files
 
   // main entry (or entries)
   // can be a single file or an object of file
@@ -215,11 +204,10 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   // resolve provides options to navigate into node_modules/sources
   config.resolve = {
 
-    // i have added ts and tsx for our typescript project
     extensions: [".webpack.js", ".js", ".web.js", ".ts", ".tsx"],
 
-    // i have added 'webpack' in first to keep the compatibility with webpack1
     mainFields: ["webpack", "browser", "module", "main"],
+
     modules: [
       "node_modules",
       join(root, "node_modules"),
@@ -228,11 +216,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   };
 
   config.resolveLoader = {
-    modules: [
-      "node_modules",
-      join(root, "node_modules"),
-      join(__dirname, "../node_modules"),
-    ],
+    modules: config.resolve.modules,
   };
 
   config.output = {
@@ -252,23 +236,11 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     ],
   };
 
-  //
-  // Enable source map in /node_modules/
-  //
-  if (options.useSourceMapLoader === true) {
-    config.module.rules.push({
-      test: /\.js$/,
-      use: ["source-map-loader"],
-      enforce: "pre",
-    });
-  }
-
   // Plugins
 
   config.plugins = [
     // important for react, useful for projects
     // 'process.env.NODE_ENV' will be replaced by true/false
-    // this is cool for mask logs, speedup stuffs, ...and uglify dead_code !
     new DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(isProduction ? "production" : "development"),
@@ -280,11 +252,8 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       filename: isProduction ? "[name].[hash].css" : "[name].css",
     }),
     // create index.html for us
-    new HtmlWebpackPlugin({template: options.template}),
-    // remove outdir
-    new CleanWebpackPlugin([options.dist], {
-      root,
-      verbose: false,
+    new HtmlWebpackPlugin({
+      template: options.template,
     }),
   ];
 
@@ -314,6 +283,11 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       new LoaderOptionsPlugin({
         debug: false,
         minimize: true,
+      }),
+      // remove outdir
+      new CleanWebpackPlugin([options.dist], {
+        root,
+        verbose: false,
       }),
     );
 
