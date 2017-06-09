@@ -27,13 +27,13 @@ export class DocProvider {
   public async onStart() {
 
     const webpackConfig = resolve(__dirname + "/../../webpack.config.ts");
+    const webpackPath = resolve(__dirname + "/../../node_modules/.bin/webpack");
     const configPath = resolve(this.cwd, "docs.json");
     const config = this.jsonService.build(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
     const pkg = require(resolve(this.cwd, "package.json"));
-
-    const command = `webpack --output-path=${output} --env=production --config=${webpackConfig}`;
+    const command = `${webpackPath} --output-path=${output} --env=production --config=${webpackConfig}`;
 
     this.logger.info(command);
     execSync(command, {stdio: [0, 1, 2]});
