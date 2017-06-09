@@ -1,4 +1,4 @@
-import { _, inject, Kernel, Logger } from "oly-core";
+import { inject, Kernel, Logger } from "oly-core";
 
 /**
  *
@@ -97,7 +97,7 @@ export class Pixie {
    * @param func    Function to call which returns a value
    * @returns       The value
    */
-  public fly<T>(key: string, func: () => Promise<T> | T) {
+  public fly<T>(key: string, func: () => Promise<T> | T): Promise<T> {
 
     const value = this.data[key];
     if (value != null) {
@@ -112,7 +112,7 @@ export class Pixie {
 
     this.logger.trace(`fly unresolved #${key}`);
 
-    return _.promise(func()).then((result: any) => {
+    return new Promise((eat) => eat(func())).then((result: any) => {
       if (!this.isBrowser()) {
         this.logger.trace(`set '${key}' with`, result);
         this.data[key] = result;

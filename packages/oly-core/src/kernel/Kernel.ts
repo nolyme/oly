@@ -472,10 +472,13 @@ export class Kernel {
    */
   public on(key: string, action: IEventCallback | IEventReference = _.noop, options: IKernelOnOptions = {}): IObserver {
     const unique = options.unique === true;
-    const event = {key, action, unique};
+    const event: IEventListener = {key, action, unique};
     this.events.push(event);
     return {
-      free: () => this.events.splice(this.events.indexOf(event), 1),
+      free: () => {
+        event.disabled = true;
+        this.events.splice(this.events.indexOf(event), 1);
+      },
       wait: () => {
         this.events.splice(this.events.indexOf(event), 1);
         return new Promise((resolve) => this.on(key, resolve, unique));
@@ -494,36 +497,41 @@ export class Kernel {
    */
   public emit(key: string, data?: any, options: IKernelEmitOptions = {}): Promise<any> {
 
-    const createAction = (event: IEventListener): Function => {
+    const createAction = (event: IEventListener, additionalArguments: any[]): Function => {
       if (typeof event.action === "function") {
-        return event.action;
+        return event.action(additionalArguments[0]);
       }
+      const propertyKey = event.action.propertyKey;
       if (options.fork) {
-        const instance = this.fork().get(event.action.target);
-        return instance[event.action.propertyKey].bind(instance);
+        return this.fork().invoke(event.action.target, propertyKey, additionalArguments);
       }
-      return event.action.instance[event.action.propertyKey].bind(event.action.instance);
+      return this.invoke(event.action.instance || event.action.target, propertyKey, additionalArguments);
     };
 
-    const promises = this.events
-      .filter((event) => event.key === key)
-      .map((event) => {
-        if (event.unique) {
-          this.events.splice(this.events.indexOf(event), 1);
+    const actions = this.events.filter((event) => event.key === key).map((event) => {
+      if (event.unique) {
+        this.events.splice(this.events.indexOf(event), 1);
+      }
+      return () => {
+        if (event.disabled) {
+          this.getLogger().trace(`event '${event.key}' is disabled`);
+          return Promise.resolve();
         }
-        return Promise.resolve()
-          .then(() => _.promise(createAction(event)(data)))
-          .catch((e) => {
-            this.getLogger().warn(`handle event['${key}'] error`, e);
-            return e;
-          });
-      });
+        // ensure promise
+        return new Promise((resolve) => {
+          resolve(createAction(event, [data]));
+        }).catch((e) => {
+          this.getLogger().warn(`handle event '${key}' error`, e);
+          return e;
+        });
+      };
+    });
 
-    if (options.parent && this.parent) {
-      promises.push(this.parent.emit(key, data, options));
+    if (options.parallel === false) {
+      return _.cascade(actions);
     }
 
-    return Promise.all<any>(promises);
+    return Promise.all<any>(actions.map((a) => a()));
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -531,27 +539,33 @@ export class Kernel {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
+   * Call a method.
    *
-   * @param definition
-   * @param propertyKey
+   * @param definition            Class or Instance, class will be instantiate.
+   * @param propertyKey           Name of the method.
    * @param additionalArguments
    */
   public invoke<T>(definition: Class<T> | T, propertyKey: keyof T, additionalArguments: any[] = []): any {
 
+    // target is captured only for extracting metadata
     const target = typeof definition === "object" ? definition.constructor as Class<T> : definition;
-    const instance: T = typeof definition === "object" ? definition : this.get(target);
-    const action: any = instance[propertyKey];
 
+    // instance can be created (e.g Controller) or directly used (e.g ReactComponent)
+    const instance: T = typeof definition === "object" ? definition : this.get(target);
+
+    // instance.propertyKey MUST BE a function
+    const action: any = instance[propertyKey];
     if (typeof action !== "function") {
       throw new KernelException(olyCoreErrors.isNotFunction(propertyKey, typeof action));
     }
 
+    // metadata will tell us arguments to inject in the call
     const meta = Meta.of({key: olyCoreKeys.arguments, target}).deep<IArgumentsMetadata>();
     const args: any[] = meta && meta.args[propertyKey]
       ? meta.args[propertyKey].map((data) => data && data.handler(this, additionalArguments))
       : [];
 
-    this.getLogger().debug(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
+    this.getLogger().trace(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
 
     return action.apply(instance, args.concat(additionalArguments));
   }

@@ -1,18 +1,14 @@
 import { Popover, Position } from "@blueprintjs/core";
+import { inject } from "oly-core";
 import { action, attach, Go, styles } from "oly-react";
 import * as React from "react";
 import { ChangeEvent } from "react";
 import { IDocs } from "../../cli/interfaces";
-
-export interface IResult {
-  name: string;
-  href: string;
-  module: string;
-}
+import { ISearchItem, ModuleService } from "../ModuleService";
 
 export interface IState {
   query: string;
-  results: IResult[] | null;
+  results: ISearchItem[] | null;
 }
 
 @attach
@@ -20,6 +16,8 @@ export interface IState {
 export class Search extends React.Component<{ docs: IDocs }, IState> {
 
   public state: IState = {query: "", results: null};
+
+  @inject private ms: ModuleService;
 
   @action
   public handlePopoverInteraction(nextOpenState: boolean) {
@@ -40,79 +38,7 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
       this.setState({query: "", results: null});
       return;
     }
-    const results: any[] = [];
-    const queryCleaned = query.trim().toUpperCase();
-    const push = (result: IResult) => {
-      if (!results.filter((r) => r.href === result.href)[0]) {
-        results.push(result);
-      }
-      const end = results.length > 8;
-      if (end) {
-        this.setState({query, results});
-        return true;
-      }
-      return false;
-    };
-    for (const m of this.props.docs.modules) {
-      for (const d of m.decorators) {
-        const dId = d.name.toUpperCase();
-        const dId2 = "@" + dId;
-        if (dId.indexOf(queryCleaned) > -1) {
-          if (push({
-              href: "/m/" + m.name + "/@/" + d.name,
-              module: m.name,
-              name: "@" + d.name,
-            })) {
-            return;
-          }
-        } else if (dId2.indexOf(queryCleaned) > -1) {
-          if (push({
-              href: "/m/" + m.name + "/@/" + d.name,
-              module: m.name,
-              name: "@" + d.name,
-            })) {
-            return;
-          }
-        }
-      }
-      for (const ev of m.env) {
-        const dEv = ev.name.toUpperCase();
-        if (dEv.indexOf(queryCleaned) > -1) {
-          if (push({
-              href: "/m/" + m.name + "/",
-              module: m.name,
-              name: ev.name.replace(/"/gmi, ""),
-            })) {
-            return;
-          }
-        }
-      }
-      for (const s of m.services) {
-        const sId = s.name.toUpperCase();
-        if (sId.indexOf(queryCleaned) > -1) {
-          if (push({
-              href: "/m/" + m.name + "/s/" + s.name,
-              module: m.name,
-              name: s.name,
-            })) {
-            return;
-          }
-        }
-        for (const me of s.methods) {
-          const meId = me.name.toUpperCase();
-          const ultraQueryCleaned = queryCleaned.replace(sId, "").replace(/[#.]/, "");
-          if (meId.indexOf(ultraQueryCleaned) > -1) {
-            if (push({
-                href: "/m/" + m.name + "/s/" + s.name + "/" + me.name,
-                module: m.name,
-                name: s.name + "#" + me.name + "()",
-              })) {
-              return;
-            }
-          }
-        }
-      }
-    }
+    const results = this.ms.search(query);
     this.setState({query, results});
   }
 

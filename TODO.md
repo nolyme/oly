@@ -9,7 +9,7 @@
 - pagination
 - amqp retry
 - amqp : no time dependency
-  - Time
+- Time Util ?
 
 # MAYBE
 
@@ -17,3 +17,4 @@
 - mongo/orm rest
 - json @check [prop+arg] (with context)
 - oly-orm with objection.js + oly-json, not typeorm
+- use "oly" pkg ?

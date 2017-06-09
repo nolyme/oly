@@ -35,8 +35,7 @@ export class DocProvider {
     const pkg = require(resolve(this.cwd, "package.json"));
     const command = `${webpackPath} --output-path=${output} --env=production --config=${webpackConfig}`;
 
-    this.logger.info(command);
-    execSync(command, {stdio: [0, 1, 2]});
+    //execSync(command, {stdio: [0, 1, 2]});
 
     for (const m of config.modules) {
       modules.push(this.create(resolve(this.cwd, this.root, m.name), m));

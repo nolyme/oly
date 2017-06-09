@@ -2,7 +2,7 @@ import { state } from "oly-core";
 import { attach, styles } from "oly-react";
 import * as React from "react";
 import { IDocs } from "../../cli/interfaces";
-import { Footer } from "./Footer";
+import { Prism } from "./Prism";
 
 @attach
 @styles(() => require("./Home.scss"))
@@ -13,7 +13,7 @@ export class Home extends React.Component<{}, {}> {
   public render() {
     return (
       <div className="Home">
-        <div dangerouslySetInnerHTML={{__html: this.docs.home}}/>
+        <Prism html={this.docs.home}/>
       </div>
     );
   }

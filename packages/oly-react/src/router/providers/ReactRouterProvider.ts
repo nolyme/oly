@@ -91,8 +91,10 @@ export class ReactRouterProvider implements IProvider {
           && this.layers[i]
           && this.layers[i].node === stack[i]
           && this.matcher.isEqualMatchLevel(this.match, match, i)) {
+          this.logger.trace(`keep layer ${i} (${this.layers[i].node.name})`);
           newLayers.push(this.layers[i]);
         } else {
+          this.logger.trace(`create layer ${i}`);
           const chunks = await this.resolver.resolve(transition, i);
           if (chunks) {
             newLayers.push({

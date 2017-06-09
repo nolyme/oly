@@ -52,18 +52,6 @@ export class Global {
   }
 
   /**
-   * Return a promise if not already a promise.
-   *
-   * @param something   Promise or Whatever
-   * @return            Promise of anything
-   */
-  public static promise(something: any): Promise<any> {
-    return (!!something && !!something.then)
-      ? something
-      : Promise.resolve(something);
-  }
-
-  /**
    * Universal atob.
    *
    * @param raw   Raw BASE64 string
@@ -149,14 +137,14 @@ export class Global {
    * Run promises one by one.
    * Used for chained #onStart.
    *
-   * @param promises    Array of promises
+   * @param tasks     Array of promises
    */
-  public static cascade(promises: Array<() => Promise<any>>) {
+  public static cascade(tasks: Array<() => Promise<any>>) {
     const wait = (): Promise<any> => {
-      if (promises.length > 0) {
-        const func = promises.shift();
-        if (!!func) {
-          return _.promise(func()).then(() => wait());
+      if (tasks.length > 0) {
+        const task = tasks.shift();
+        if (typeof task === "function") {
+          return new Promise((eat) => eat(task())).then(() => wait());
         }
         return Promise.resolve();
       }

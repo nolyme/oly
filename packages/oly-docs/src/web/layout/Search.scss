@@ -4,16 +4,16 @@
   .search-item {
     .pt-tag {
       margin-right: 10px;
+      border: 1px solid $pt-intent-primary;
+      color: $pt-intent-primary;
       width: 52px;
+      background-color: $white;
       text-align: center;
-      background-color: rgba(255, 255, 255, 0.15);
-      color: $white;
     }
     a {
       opacity: .8;
       display: block;
       height: 100%;
-      color: $white !important;
       padding: 5px 20px;
       margin: 0 4px;
       text-decoration: none !important;
@@ -21,20 +21,18 @@
       border-radius: 2px;
       &:hover {
         opacity: 1;
-        background-color: rgba($white, .2);
+        background-color: rgba($pt-intent-primary, .2);
       }
     }
   }
   .search-empty {
     padding: 10px;
     text-align: center;
-    color: whitesmoke;
   }
   &.pt-popover.pt-popover-content-sizing .pt-popover-content {
     padding: 5px 0;
     width: 285px;
     margin-left: -10px;
-    background: darken($pt-intent-primary, 15%);
     border-bottom: 1px solid $white;
   }
 }

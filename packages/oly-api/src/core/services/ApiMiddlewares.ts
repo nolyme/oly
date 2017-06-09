@@ -1,4 +1,4 @@
-import { _, Class, Logger } from "oly-core";
+import { Class, Logger } from "oly-core";
 import { HttpServerException, IKoaContext, IKoaMiddleware } from "oly-http";
 import { olyApiErrors } from "../constants/errors";
 import { NotFoundException } from "../exceptions/NotFoundException";
@@ -93,7 +93,7 @@ export class ApiMiddlewares {
 
       ctx.kernel.state("Koa.context", ctx);
 
-      return _.promise(ctx.kernel.invoke(definition, propertyKey, [ctx])).then((response) => {
+      return new Promise((eat) => eat(ctx.kernel.invoke(definition, propertyKey, [ctx]))).then((response) => {
         if (response != null) {
           // if controller returns 'something' => set to the response body
           ctx.body = response;

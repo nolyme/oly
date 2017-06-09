@@ -22,6 +22,7 @@ export interface IEventListener {
   key: string;
   action: IEventCallback | IEventReference;
   unique: boolean;
+  disabled?: boolean;
 }
 
 /**
@@ -59,8 +60,8 @@ export interface IKernelOnOptions {
  *
  */
 export interface IKernelEmitOptions {
-  parent?: boolean;
   fork?: boolean;
+  parallel?: boolean;
 }
 
 export interface IListener {

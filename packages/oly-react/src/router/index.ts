@@ -1,6 +1,7 @@
 export * from "./interfaces";
 export * from "./components/Layer";
 export * from "./components/Go";
+export * from "./components/Active";
 export * from "./components/View";
 export * from "./constants/keys";
 export * from "./constants/errors";

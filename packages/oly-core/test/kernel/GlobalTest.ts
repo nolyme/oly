@@ -18,14 +18,6 @@ describe("Global", () => {
       equal(now > 10, true);
     });
   });
-  describe(".promise()", () => {
-    it("should create promise", () => {
-      equal(typeof _.promise(0).then, "function");
-    });
-    it("should do nothing", () => {
-      equal(typeof _.promise(Promise.resolve(0)).then, "function");
-    });
-  });
   describe(".isEqualClass()", () => {
     const f1 = () => class A {
       toto() {

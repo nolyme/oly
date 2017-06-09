@@ -175,15 +175,12 @@ export class ReactRouterMatcher {
    *
    * @param {IMatch} match1   Params 1
    * @param {IMatch} match2   Params 2
+   * @param {number} level
    * @returns {boolean}       true if node1 === node2
    *
    * @memberof ReactRouterMatcher
    */
   public isEqualMatchLevel(match1: IMatch, match2: IMatch, level: number): boolean {
-
-    if (match1.route !== match2.route) {
-      return false;
-    }
 
     if (match1.route.stack[level] !== match2.route.stack[level]) {
       return false;

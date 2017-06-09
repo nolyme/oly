@@ -36,5 +36,7 @@ export class AttachDecorator implements IDecorator {
   }
 }
 
+/**
+ *
+ */
 export const attach = Meta.decoratorWithoutOptions(AttachDecorator);
-export const connect = attach;

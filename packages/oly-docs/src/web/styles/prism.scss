@@ -1,8 +1,12 @@
 @import "~prismjs/themes/prism.css";
 @import "~prismjs/plugins/line-numbers/prism-line-numbers.css";
+@import "variables";
 
-span.token.annotation.punctuation {
+.token.annotation.punctuation {
   color: #458383;
+  a {
+    color: #458383;
+  }
 }
 
 pre.language-typescript, pre.language-ts {
@@ -24,4 +28,12 @@ pre.language-typescript, pre.language-ts {
 
 .token.property {
   color: #660e7a;
+}
+
+.link {
+  text-decoration: none !important;
+  box-shadow: 0 2px 0 0px rgba($pt-intent-primary, 0.2);
+  &:hover {
+    box-shadow: 0 2px 0 0px rgba($pt-intent-primary, 0.6);
+  }
 }

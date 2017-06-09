@@ -1,6 +1,7 @@
 import { Kernel } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
+import { Children } from "react";
 
 /**
  *
@@ -40,6 +41,6 @@ export class AppContext extends React.Component<IAppContextProps, {}> {
     if (Array.isArray(this.props.children)) {
       return <div>{this.props.children}</div>;
     }
-    return this.props.children as any;
+    return Children.only(this.props.children);
   }
 }

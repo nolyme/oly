@@ -557,9 +557,10 @@ describe("Kernel", () => {
   describe("#emit()", () => {
 
     it("should wait event", async () => {
-      const k = new Kernel();
+      const k = createKernel();
       _.timeout(10).then((_) => k.emit("test:lol", {OK: true}));
-      deepEqual(await k.on("test:lol", _.noop).wait(), {OK: true});
+      expect(await k.on("test:lol").wait())
+        .toEqual({OK: true});
     });
 
     it("should process event", async () => {
@@ -611,17 +612,6 @@ describe("Kernel", () => {
       expect(await k.emit("test")).toEqual([new Error("OK")]);
     });
 
-    it("should notify parent", async () => {
-      let inc = 0;
-      const parent = createKernel();
-      parent.on("test", () => inc += 1);
-      const child = parent.fork();
-      await child.emit("test");
-      await child.emit("test", null, {parent: true});
-      await child.emit("test");
-      expect(inc).toBe(1);
-    });
-
     it("should fork kernel with events", async () => {
 
       class A {
@@ -629,7 +619,8 @@ describe("Kernel", () => {
 
         @on
         b() {
-          return this.k.env("OLY_KERNEL_ID");
+          console.log(this.k.id);
+          return this.k.id;
         }
       }
 
