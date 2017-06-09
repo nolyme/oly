@@ -2,8 +2,6 @@ import { Collapse } from "@blueprintjs/core";
 import { inject } from "oly-core";
 import { Active, attach, Go, Router, styles } from "oly-react";
 import * as React from "react";
-import { on } from "../../../../oly-core/src/kernel/decorators/on";
-import { olyReactRouterEvents } from "../../../../oly-react/src/router/constants/events";
 import { IModuleContent } from "../../cli/interfaces";
 
 @attach
@@ -23,11 +21,6 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {
 
   public rel(path: string = ""): string {
     return `/m/${this.props.module.name}/${path}`;
-  }
-
-  @on(olyReactRouterEvents.TRANSITION_END)
-  onTransitionEnd() {
-    this.forceUpdate();
   }
 
   public renderServices() {

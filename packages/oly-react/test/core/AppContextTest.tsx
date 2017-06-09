@@ -9,7 +9,7 @@ import { render } from "react-dom";
 import { AppContext } from "../../src/core";
 import { olyReactEvents } from "../../src/core/constants/events";
 import { action } from "../../src/core/decorators/action";
-import { attach, connect } from "../../src/core/decorators/attach";
+import { attach } from "../../src/core/decorators/attach";
 import { styles } from "../../src/core/decorators/styles";
 import { IActionResult, IActionResultError } from "../../src/core/interfaces";
 
@@ -24,7 +24,7 @@ describe("AppContext", () => {
   class GrootException extends Exception {
   }
 
-  @connect
+  @attach
   class A extends Component<any, any> {
     @inject(Kernel) kernel: Kernel;
 

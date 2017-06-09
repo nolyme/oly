@@ -5,10 +5,10 @@
       "name": "oly-core",
       "icon": "sim-card",
       "decorators": [
-        "kernel/decorators/env",
         "kernel/decorators/inject",
-        "kernel/decorators/on",
-        "kernel/decorators/state"
+        "kernel/decorators/state",
+        "kernel/decorators/env",
+        "kernel/decorators/on"
       ],
       "services": [
         "kernel/Kernel.ts",
