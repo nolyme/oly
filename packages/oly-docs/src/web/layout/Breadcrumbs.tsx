@@ -59,7 +59,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
     return (
       <div className="breadcrumbs">
         <Helmet>
-          <title>Docs ~ {this.stepsAllowed[this.stepsAllowed.length - 1]}</title>
+          <title>Docs ~ {this.stepsAllowed[this.stepsAllowed.length - 1] || "home"}</title>
         </Helmet>
         <ul className="pt-breadcrumbs">
           <li>

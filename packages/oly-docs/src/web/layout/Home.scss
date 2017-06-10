@@ -1,11 +1,13 @@
 @import "../styles/variables";
 
 .Home {
-
-  margin: auto;
-  padding: 50px;
-  background-color: $white;
-  max-width: 800px;
+  overflow-y: auto;
+  height: 100%;
+  > div {
+    margin: auto;
+    padding: 50px;
+    max-width: 800px;
+  }
 
   h1 {
     font-weight: lighter;

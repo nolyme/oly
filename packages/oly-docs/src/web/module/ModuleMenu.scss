@@ -30,6 +30,15 @@
   }
 }
 
+
+@media (max-width: $tablet) {
+  .ModuleMenu {
+    padding: 20px;
+    width: 200px;
+  }
+}
+
+
 .ModuleMenu_part {
   margin-top: 10px;
   .ModuleMenu_part-header {

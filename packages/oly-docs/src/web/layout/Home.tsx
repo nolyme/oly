@@ -13,7 +13,9 @@ export class Home extends React.Component<{}, {}> {
   public render() {
     return (
       <div className="Home">
-        <Prism html={this.docs.home}/>
+        <div>
+          <Prism html={this.docs.home}/>
+        </div>
       </div>
     );
   }
