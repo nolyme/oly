@@ -46,7 +46,7 @@ export class ReactRouterProvider implements IProvider {
   protected resolver: ReactRouterResolver;
 
   public href(query: IHrefQuery | string): string | undefined {
-    return this.matcher.href(this.routes, query, this.match);
+    return this.baseHref + this.matcher.href(this.routes, query, this.match);
   }
 
   public async transition(query: string | IHrefQuery): Promise<ITransition | undefined> {
