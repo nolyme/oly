@@ -22,6 +22,11 @@ export class ReactRouterMatcher {
     const options: IHrefQuery = typeof go === "object" ? go : {to: go};
     let url;
 
+    // ignore #
+    if (options.to[0] === "#") {
+      options.to = options.to.slice(1);
+    }
+
     if (options.to[0] === "/") { // do not process query nor param here
       url = options.to;
     } else {

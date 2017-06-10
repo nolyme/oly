@@ -50,8 +50,8 @@ export interface IRoute {
 export interface IHrefQuery {
   to: string;
   params?: object;
-  type?: ITransitionType;
   query?: object;
+  type?: ITransitionType;
 }
 
 export interface IMatch {

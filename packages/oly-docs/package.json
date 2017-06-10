@@ -39,7 +39,6 @@
     "dev": "webpack-dev-server",
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
-    "build:app": "webpack --env=production --output-path=../../docs",
     "watch": "tsc -w",
     "test": "echo"
   },

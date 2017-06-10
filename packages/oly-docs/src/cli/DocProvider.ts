@@ -1,11 +1,10 @@
 import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { env, Global, inject, Logger } from "oly-core";
+import { env, inject, Logger } from "oly-core";
 import { JsonService } from "oly-json";
 import { basename, resolve } from "path";
 import { Application, ProjectReflection } from "typedoc";
 import { DeclarationReflection } from "typedoc/dist/lib/models";
-import { DocBuilder } from "./DocBuilder";
 import { DocParser } from "./DocParser";
 import { IDocComponent, IDocDecorator, IDocEnv, IDocManual, IDocs, IDocService, IModuleContent } from "./interfaces";
 import { Configuration } from "./models/Configuration";
@@ -20,13 +19,12 @@ export class DocProvider {
   @env("HTML") private html: boolean = true;
 
   // internal conf, shouldn't be updated
-  @env("DIRECTORY_ROOT") private root: string = "packages";
-  @env("DIRECTORY_SRC") private src: string = "src";
-  @env("DIRECTORY_OUT") private out: string = "docs";
+  @env("ROOT") private root: string = "packages";
+  @env("SRC") private src: string = "src";
+  @env("OUT") private out: string = "docs";
 
   @inject private logger: Logger;
   @inject private parser: DocParser;
-  @inject private builder: DocBuilder;
   @inject private jsonService: JsonService;
 
   public async onStart() {
@@ -67,20 +65,8 @@ export class DocProvider {
 
     // produce .js
     this.logger.info(`write as js`);
-    const docsName = "docs." + Global.shortid() + ".js";
-    const outputDocs = resolve(output, docsName);
-    writeFileSync(outputDocs, "window.__DOCS__=" + JSON.stringify(doc) + ";");
+    writeFileSync(resolve(output, "docs.js"), "window.__DOCS__=" + JSON.stringify(doc) + ";");
 
-    // update index.html
-    if (this.html) {
-      const outputHtml = resolve(output, "index.html");
-      this.logger.info(`update ${outputHtml}`);
-      const html = readFileSync(outputHtml, "UTF-8");
-      writeFileSync(outputHtml, html.replace(
-        /<\/head>/igm,
-        `<script type="text/javascript" src="${docsName}"></script></head>`),
-        "UTF-8");
-    }
     this.logger.info(`everything is great, have a nice day`);
   }
 

@@ -14,7 +14,7 @@
   },
   "scripts": {
     "docs": "packages/oly-docs/bin/oly-docs",
-    "docs:dev": "DIRECTORY_OUT=packages/oly-docs/src/web/assets yarn docs -- --verbose",
+    "docs:dev": "HTML=false OUT=packages/oly-docs/src/web/assets yarn docs -- --verbose",
     "all": "lerna run clean && lerna bootstrap && lerna run build && lerna run test",
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
