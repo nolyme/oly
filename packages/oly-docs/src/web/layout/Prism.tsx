@@ -22,7 +22,7 @@ export class Prism extends Component<{ html: string }, {}> {
       (element, query) => {
         const [d] = this.ms.search(query);
         if (d && !this.router.isActive(d.href, true)) {
-          return `<a href="#${d.href}" class="link" >${element}</a>`;
+          return `<a href="${d.href}" class="link" >${element}</a>`;
         }
         return element;
       },
@@ -33,7 +33,7 @@ export class Prism extends Component<{ html: string }, {}> {
       (element, query) => {
         const [d] = this.ms.search(query);
         if (d && !this.router.isActive(d.href, true)) {
-          return `<a href="#${d.href}" class="link">${element}</a>`;
+          return `<a href="${d.href}" class="link">${element}</a>`;
         }
         return element;
       },
@@ -47,7 +47,7 @@ export class Prism extends Component<{ html: string }, {}> {
           const results = this.ms.search(query);
           const d = results.find((r) => r.name === query);
           if (d && !this.router.isActive(d.href, true)) {
-            return element.replace(query, `<a href="#${d.href}" class="link" style="color: black">${query}</a>`);
+            return element.replace(query, `<a href="${d.href}" class="link" style="color: black">${query}</a>`);
           }
           return element;
         },

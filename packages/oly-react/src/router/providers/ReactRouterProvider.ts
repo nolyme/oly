@@ -27,9 +27,6 @@ export class ReactRouterProvider implements IProvider {
 
   public match?: IMatch;
 
-  @env("OLY_REACT_ROUTER_BASE_HREF")
-  public baseHref: string = "";
-
   @inject
   protected kernel: Kernel;
 
@@ -46,7 +43,7 @@ export class ReactRouterProvider implements IProvider {
   protected resolver: ReactRouterResolver;
 
   public href(query: IHrefQuery | string): string | undefined {
-    return this.baseHref + this.matcher.href(this.routes, query, this.match);
+    return this.matcher.href(this.routes, query, this.match);
   }
 
   public async transition(query: string | IHrefQuery): Promise<ITransition | undefined> {
@@ -173,9 +170,6 @@ export class ReactRouterProvider implements IProvider {
     for (const pageDeclaration of pageDeclarations) {
       if (!this.hasParent(pageDeclarations, pageDeclaration.definition)) {
         nodes.push(...this.createNodes(pageDeclaration.definition));
-        for (const node of nodes) {
-          node.path = this.baseHref + node.path;
-        }
       }
     }
 

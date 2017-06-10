@@ -330,11 +330,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   // Axios & some universal libs use Buffer in their code
   // Webpack see this and try to emulate Buffer with a big code
   config.node = {
-    console: false,
-    global: false,
     process: false,
-    __filename: false,
-    __dirname: false,
     Buffer: false,
     setImmediate: false,
   };
@@ -430,8 +426,8 @@ function imageLoaderFactory(isProduction: boolean = false): Rule {
       loader: "file-loader",
       options: {
         name: isProduction
-          ? "./images/[name].[hash].[ext]"
-          : "./images/[name].[ext]",
+          ? "images/[name].[hash].[ext]"
+          : "images/[name].[ext]",
       },
     }],
   };
@@ -447,8 +443,8 @@ function fontLoaderFactory(isProduction: boolean = false) {
       loader: "file-loader",
       options: {
         name: isProduction
-          ? "./fonts/[name].[hash].[ext]"
-          : "./fonts/[name].[ext]",
+          ? "fonts/[name].[hash].[ext]"
+          : "fonts/[name].[ext]",
       },
     }],
   };

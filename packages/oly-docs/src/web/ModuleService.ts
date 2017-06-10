@@ -1,4 +1,5 @@
-import { env } from "oly-core";
+import { env, inject } from "oly-core";
+import { IHrefQuery, Router } from "oly-react";
 import { IDocs } from "../cli/interfaces";
 
 export interface ISearchItem {
@@ -7,21 +8,42 @@ export interface ISearchItem {
   name: string;
 }
 
+export interface ISearchItemOptions {
+  href: IHrefQuery;
+  module: string;
+  name: string;
+}
+
 export class ModuleService {
 
   @env("DOCS") docs: IDocs;
 
+  @inject private router: Router;
+
   public getServices(): ISearchItem[] {
     const results: ISearchItem[] = [];
-    const push = (result: ISearchItem) => {
-      if (!results.filter((r) => r.href === result.href)[0]) {
-        results.push(result);
+    const push = (result: ISearchItemOptions) => {
+      const href = this.router.href(result.href);
+      if (!href) {
+        return;
+      }
+      if (!results.filter((r) => r.href === href)[0]) {
+        results.push({
+          ...result,
+          href,
+        });
       }
     };
     for (const m of this.docs.modules) {
       for (const s of m.services) {
         push({
-          href: "/m/" + m.name + "/s/" + s.name,
+          href: {
+            to: "service",
+            params: {
+              module: m.name,
+              service: s.name,
+            },
+          },
           module: m.name,
           name: s.name,
         });
@@ -33,9 +55,16 @@ export class ModuleService {
   public search(query: string): ISearchItem[] {
     const results: ISearchItem[] = [];
     const queryCleaned = query.trim().toUpperCase();
-    const push = (result: ISearchItem) => {
-      if (!results.filter((r) => r.href === result.href)[0]) {
-        results.push(result);
+    const push = (result: ISearchItemOptions) => {
+      const href = this.router.href(result.href);
+      if (!href) {
+        return false;
+      }
+      if (!results.filter((r) => r.href === href)[0]) {
+        results.push({
+          ...result,
+          href,
+        });
       }
       return results.length > 8;
     };
@@ -45,7 +74,13 @@ export class ModuleService {
         const dId2 = "@" + dId;
         if (dId.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/@/" + d.name,
+              href: {
+                to: "decorator",
+                params: {
+                  module: m.name,
+                  decorator: d.name,
+                },
+              },
               module: m.name,
               name: "@" + d.name,
             })) {
@@ -53,7 +88,13 @@ export class ModuleService {
           }
         } else if (dId2.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/@/" + d.name,
+              href: {
+                to: "decorator",
+                params: {
+                  module: m.name,
+                  decorator: d.name,
+                },
+              },
               module: m.name,
               name: "@" + d.name,
             })) {
@@ -66,7 +107,13 @@ export class ModuleService {
         const dId2 = "<" + dId;
         if (dId.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/c/" + d.name,
+              href: {
+                to: "component",
+                params: {
+                  module: m.name,
+                  component: d.name,
+                },
+              },
               module: m.name,
               name: "<" + d.name + "/>",
             })) {
@@ -74,7 +121,13 @@ export class ModuleService {
           }
         } else if (dId2.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/c/" + d.name,
+              href: {
+                to: "component",
+                params: {
+                  module: m.name,
+                  component: d.name,
+                },
+              },
               module: m.name,
               name: "<" + d.name + "/>",
             })) {
@@ -86,7 +139,12 @@ export class ModuleService {
         const dEv = ev.name.toUpperCase();
         if (dEv.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/configuration",
+              href: {
+                to: "configuration",
+                params: {
+                  module: m.name,
+                },
+              },
               module: m.name,
               name: ev.name.replace(/"/gmi, ""),
             })) {
@@ -98,7 +156,13 @@ export class ModuleService {
         const sId = s.name.toUpperCase();
         if (sId.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/s/" + s.name,
+              href: {
+                to: "service",
+                params: {
+                  module: m.name,
+                  service: s.name,
+                },
+              },
               module: m.name,
               name: s.name,
             })) {
@@ -110,7 +174,14 @@ export class ModuleService {
           const ultraQueryCleaned = queryCleaned.replace(sId, "").replace(/[#.]/, "");
           if (meId.indexOf(ultraQueryCleaned) > -1) {
             if (push({
-                href: "/m/" + m.name + "/s/" + s.name + "/" + me.name,
+                href: {
+                  to: "method",
+                  params: {
+                    module: m.name,
+                    service: s.name,
+                    method: me.name,
+                  },
+                },
                 module: m.name,
                 name: s.name + "#" + me.name + "()",
               })) {
@@ -123,7 +194,13 @@ export class ModuleService {
         const dEv = manual.name.toUpperCase();
         if (dEv.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/m/" + manual.name,
+              href: {
+                to: "manual",
+                params: {
+                  module: m.name,
+                  manual: manual.name,
+                },
+              },
               module: m.name,
               name: manual.name + ".md",
             })) {
