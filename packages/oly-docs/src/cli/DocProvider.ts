@@ -77,12 +77,9 @@ export class DocProvider {
       const outputHtml = resolve(output, "index.html");
       this.logger.info(`update ${outputHtml}`);
       const html = readFileSync(outputHtml, "UTF-8");
-      const publicPath = argv["output-public-path"]
-        ? (argv["output-public-path"] + "/").replace(/\/\//g, "/")
-        : "";
       writeFileSync(outputHtml, html.replace(
         /<\/head>/igm,
-        `<script type="text/javascript" src="${publicPath + docsName}"></script></head>`),
+        `<script type="text/javascript" src="${docsName}"></script></head>`),
         "UTF-8");
     }
     this.logger.info(`everything is great, have a nice day`);
