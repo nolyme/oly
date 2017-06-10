@@ -1,4 +1,3 @@
-import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { env, Global, inject, Logger } from "oly-core";
 import { JsonService } from "oly-json";
@@ -46,7 +45,7 @@ export class DocProvider {
       this.logger.trace(command);
       this.logger.info("run webpack...");
       try {
-        execSync(command);
+        // execSync(command);
       } catch (e) {
         throw new Error(`Webpack has failed (${e.message})`);
       }
@@ -66,23 +65,23 @@ export class DocProvider {
     };
 
     // produce .js
-    this.logger.debug(`write as js`);
+    this.logger.info(`write as js`);
     const argv = require("minimist")(process.argv.slice(2));
     const docsName = "docs." + Global.shortid() + ".js";
-    const outputDocs = resolve(output, "docs." + Global.shortid() + ".js");
+    const outputDocs = resolve(output, docsName);
     writeFileSync(outputDocs, "window.__DOCS__=" + JSON.stringify(doc) + ";");
 
     // update index.html
     if (this.html) {
-      this.logger.debug(`update .html`);
       const outputHtml = resolve(output, "index.html");
+      this.logger.info(`update ${outputHtml}`);
       const html = readFileSync(outputHtml, "UTF-8");
-      html.replace(
+      writeFileSync(outputHtml, html.replace(
         /<\/head>/igm,
-        `<script src="${(argv["output-public-path"] || "") + docsName}"></script></head>`);
-      writeFileSync(outputHtml, html, "UTF-8");
+        `<script type="text/javascript" src="${(argv["output-public-path"] || "") + docsName}"></script></head>`),
+        "UTF-8");
     }
-    this.logger.debug(`everything is great, have a nice day`);
+    this.logger.info(`everything is great, have a nice day`);
   }
 
   private check(filepath: string): void {

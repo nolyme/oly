@@ -32,7 +32,7 @@
     },
     "collectCoverageFrom": [
       "packages/**/src/**/*.{ts,tsx}",
-      "!packages/oly-docs/src/**/*.{ts,tsx}",
+      "!packages/oly-docs/**/*.{ts,tsx}",
       "!packages/oly-cli/**/*.{ts,tsx}",
       "!packages/oly-tools/**/*.{ts,tsx}"
     ],
