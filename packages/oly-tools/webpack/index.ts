@@ -288,7 +288,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       new CleanWebpackPlugin([options.dist], {
         root,
         verbose: false,
-      }),
+      })
     );
 
     config.plugins.push(

@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { env, inject, Logger } from "oly-core";
 import { JsonService } from "oly-json";
@@ -31,10 +32,10 @@ export class DocProvider {
     const config = this.jsonService.build(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
-    const pkg = require(resolve(this.cwd, "package.json"));
+    const pkg = require(resolve(this.cwd, "lerna.json"));
     const command = `${webpackPath} --output-path=${output} --env=production --config=${webpackConfig}`;
 
-    // execSync(command, {stdio: [0, 1, 2]});
+    execSync(command, {stdio: [0, 1, 2]});
 
     for (const m of config.modules) {
       modules.push(this.create(resolve(this.cwd, this.root, m.name), m));
@@ -44,7 +45,7 @@ export class DocProvider {
     const doc: IDocs = {
       home: this.parser.mark(readFileSync(resolve(this.cwd, "README.md"), "UTF-8")),
       modules,
-      name: pkg.name,
+      name: "oly",
       version: pkg.version,
     };
 

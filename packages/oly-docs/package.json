@@ -23,7 +23,7 @@
     "oly-json": "^0.11.2",
     "oly-react": "^0.11.2",
     "oly-tools": "^0.11.2",
-    "prismjs": "^1.6.0",
+    "prismjs": "1.6.0",
     "react": "15.5.4",
     "react-addons-css-transition-group": "15.5.2",
     "react-dom": "15.5.4",
@@ -39,6 +39,7 @@
     "dev": "webpack-dev-server",
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
+    "build:app": "webpack --env=production --output-path=../../docs",
     "watch": "tsc -w",
     "test": "echo"
   },
