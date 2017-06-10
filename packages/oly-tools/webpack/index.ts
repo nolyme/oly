@@ -288,7 +288,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       new CleanWebpackPlugin([options.dist], {
         root,
         verbose: false,
-      })
+      }),
     );
 
     config.plugins.push(
@@ -345,6 +345,8 @@ function typescriptLoaderFactory(): Rule {
         silent: true,
         // speedup compile time, our ide will check error for us beside
         transpileOnly: true,
+        module: "es2015",
+        moduleResolution: "node",
       },
     }],
   };
@@ -357,7 +359,7 @@ function cssLoaderFactory(): Rule {
   return {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
-      use: [{loader: "css-loader"}],
+      use: [{loader: "css-loader", options: {sourceMap: true}}],
     }),
     test: /\.css$/,
   };
@@ -373,9 +375,9 @@ function lessLoaderFactory(lessLoaderOptions: object = {}): Rule {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
       use: [
-        {loader: "css-loader"},
-        {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
-        {loader: "less-loader", options: lessLoaderOptions},
+        {loader: "css-loader", options: {sourceMap: true}},
+        {loader: "postcss-loader", options: {sourceMap: true, plugins: () => [autoprefixer]}},
+        {loader: "less-loader", options: {sourceMap: true, ...lessLoaderOptions}},
       ],
     }),
     test: /\.(css|less)$/,
@@ -392,9 +394,9 @@ function sassLoaderFactory(sassLoaderOptions: object = {}): Rule {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
       use: [
-        {loader: "css-loader"},
-        {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
-        {loader: "sass-loader", options: sassLoaderOptions},
+        {loader: "css-loader", options: {sourceMap: true}},
+        {loader: "postcss-loader", options: {sourceMap: true, plugins: () => [autoprefixer]}},
+        {loader: "sass-loader", options: {sourceMap: true, ...sassLoaderOptions}},
       ],
     }),
     test: /\.(css|scss|sass)$/,

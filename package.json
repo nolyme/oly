@@ -13,7 +13,7 @@
     "typescript": "2.3.4"
   },
   "scripts": {
-    "docs": "packages/oly-docs/bin/oly-docs",
+    "docs": "lerna bootstrap --hoist && packages/oly-docs/bin/oly-docs",
     "docs:dev": "DIRECTORY_OUT=packages/oly-docs/src/web/assets yarn docs -- --verbose",
     "all": "lerna run clean && lerna bootstrap && lerna run build && lerna run test",
     "clean": "lerna run clean",
