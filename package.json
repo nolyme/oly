@@ -17,7 +17,7 @@
     "docs:dev": "DIRECTORY_OUT=packages/oly-docs/src/web/assets yarn docs -- --verbose",
     "all": "lerna run clean && lerna bootstrap && lerna run build && lerna run test",
     "clean": "lerna run clean",
-    "bootstrap": "lerna bootstrap --hoist",
+    "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
     "lint": "tslint --fix packages/**/src/**/*.ts",
     "test": "lerna run test",
