@@ -359,7 +359,7 @@ function cssLoaderFactory(): Rule {
   return {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
-      use: [{loader: "css-loader", options: {sourceMap: true}}],
+      use: [{loader: "css-loader"}],
     }),
     test: /\.css$/,
   };
@@ -375,9 +375,9 @@ function lessLoaderFactory(lessLoaderOptions: object = {}): Rule {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
       use: [
-        {loader: "css-loader", options: {sourceMap: true}},
-        {loader: "postcss-loader", options: {sourceMap: true, plugins: () => [autoprefixer]}},
-        {loader: "less-loader", options: {sourceMap: true, ...lessLoaderOptions}},
+        {loader: "css-loader"},
+        {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
+        {loader: "less-loader", options: lessLoaderOptions},
       ],
     }),
     test: /\.(css|less)$/,
@@ -394,9 +394,9 @@ function sassLoaderFactory(sassLoaderOptions: object = {}): Rule {
     loader: ExtractTextPlugin.extract({
       fallback: "style-loader",
       use: [
-        {loader: "css-loader", options: {sourceMap: true}},
-        {loader: "postcss-loader", options: {sourceMap: true, plugins: () => [autoprefixer]}},
-        {loader: "sass-loader", options: {sourceMap: true, ...sassLoaderOptions}},
+        {loader: "css-loader"},
+        {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
+        {loader: "sass-loader", options: sassLoaderOptions},
       ],
     }),
     test: /\.(css|scss|sass)$/,
