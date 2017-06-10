@@ -175,7 +175,7 @@ export class ModuleService {
           if (meId.indexOf(ultraQueryCleaned) > -1) {
             if (push({
                 href: {
-                  to: "method",
+                  to: "serviceMethod",
                   params: {
                     module: m.name,
                     service: s.name,

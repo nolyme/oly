@@ -1,5 +1,9 @@
+import { existsSync, readFileSync } from "fs";
 import * as marked from "marked";
+import { inject, Logger } from "oly-core";
+import { basename, resolve } from "path";
 import * as Prism from "prismjs";
+import { Application, ProjectReflection } from "typedoc";
 import {
   DeclarationReflection,
   ParameterReflection,
@@ -7,7 +11,15 @@ import {
   SignatureReflection,
   Type,
 } from "typedoc/dist/lib/models";
-import { IDocDecorator, IDocEnv, IDocMethod, IDocParameter, IDocService } from "./interfaces";
+import {
+  IDocComponent,
+  IDocDecorator,
+  IDocEnv,
+  IDocManual,
+  IDocMethod,
+  IDocParameter,
+  IDocService,
+} from "./interfaces";
 import "./prism/tsx";
 
 const renderer = new marked.Renderer();
@@ -21,6 +33,139 @@ renderer.code = (code, language) => {
 };
 
 export class DocParser {
+
+  @inject logger: Logger;
+
+  public check(filepath: string): void {
+    this.logger.trace(`read ${filepath}`);
+    if (!existsSync(filepath)) {
+      throw new Error(`Missing ${filepath}`);
+    }
+  }
+
+  public generateManuals(app: Application, path: string, results: string[] = []): IDocManual[] {
+    this.logger.debug("check manuals");
+    results.map((r) => this.check(resolve(path, r)));
+    return results.map((filepath) => {
+      return {
+        name: basename(filepath, ".md"),
+        content: this.mark(readFileSync(resolve(path, filepath), "UTF-8")),
+      };
+    });
+  }
+
+  public generateComponents(app: Application, path: string, results: string[] = []): IDocComponent[] {
+    this.logger.debug("check components");
+    results.map((r) => this.check(resolve(path, r)));
+
+    const components = this.generateDeclarations(app, path, results);
+    return components.map((c) => {
+      const clazz = c.children.find(
+        (p) => p.kindString === "Class");
+      const props = c.children.find(
+        (p) => p.kindString === "Interface" && p.name.includes("Props"));
+      if (!clazz) {
+        throw new Error("Invalid " + props);
+      }
+      this.logger.info(`push <${clazz.name}/>`);
+      return {
+        name: clazz.name,
+        description: this.getDescription(clazz),
+        props: props
+          ? props.children.filter((p) => !p.inheritedFrom).map((p) => {
+            return {
+              name: p.name,
+              description: this.getDescription(p),
+              type: this.getType(p.type),
+              optional: p.flags.isOptional || false,
+              default: "N/A",
+            };
+          })
+          : []
+        ,
+      };
+    });
+  }
+
+  public generateDecorator(app: Application, path: string, results: string[] = []): IDocDecorator[] {
+    this.logger.debug("check decorators");
+    results.map((r) => this.check(resolve(path, r)));
+    const declarations = this.generateDeclarations(app, path, results);
+
+    return declarations
+      .map((i) => i.children[i.children.length - 1])
+      .map((i) => this.mapDecorators(i))
+      .map((i) => {
+        this.logger.info(`push @${i.name}`);
+        return i;
+      });
+  }
+
+  public generateService(app: Application, path: string, results: string[] = []): IDocService[] {
+    this.logger.debug("check services");
+    results.map((r) => this.check(resolve(path, r)));
+    const declarations = this.generateDeclarations(app, path, results);
+
+    return declarations
+      .map((i) => i.children[i.children.length - 1])
+      .map((i) => this.mapService(i))
+      .map((i) => {
+        this.logger.info(`push ${i.name}`);
+        return i;
+      });
+  }
+
+  public generateEnv(app: Application, path: string, results: string[] = []): IDocEnv[] {
+    this.logger.debug("check env");
+    results.map((r) => this.check(resolve(path, r)));
+    const declarations = this.generateDeclarations(app, path, results);
+
+    const envResults: IDocEnv[] = declarations.reduce<IDocEnv[]>((env, d) => env
+      .concat(d.children[0].children
+        .filter((m) => m.decorators && m.decorators[0].name === "env")
+        .map((m) => ({
+          default: m.defaultValue,
+          description: this.getDescription(m),
+          name: m.decorators[0].arguments[Object.keys(m.decorators[0].arguments)[0]],
+          optional: m.defaultValue !== undefined,
+          target: m.parent.name,
+          type: this.getType(m.type),
+        }))), [])
+      .map((i) => {
+        i.name = i.name.replace(/"/igm, "");
+        this.logger.info(`push ${i.name}`);
+        return i;
+      });
+
+    const final: IDocEnv[] = [];
+    for (const r of envResults) {
+      if (!final.find((f) => f.name === r.name)) {
+        final.push(r);
+      } else {
+        this.logger.info(`remove duplicate ${r.name}`);
+      }
+    }
+
+    return final;
+  }
+
+  public generateDeclarations(app: Application, path: string, results: string[] = []): DeclarationReflection[] {
+
+    const files = results.map((i) => path + "/" + i.replace(/\.tsx?/mgi, ""));
+    const reflection: ProjectReflection = app.convert(files);
+
+    if (!reflection) {
+      return [];
+    }
+
+    const children = reflection.children || [];
+    if (children.length === 0) {
+      return children;
+    }
+
+    return children.filter((i: any) =>
+      files.indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
+  }
 
   public mapDecorators(decorator: DeclarationReflection): IDocDecorator {
     return {
