@@ -1,4 +1,4 @@
-import { _, env, inject, Kernel } from "oly-core";
+import { env, inject, Kernel } from "oly-core";
 import { HttpClient, IHttpRequest } from "oly-http";
 import { Pixie } from "./Pixie";
 import { PixieSession } from "./PixieSession";
@@ -12,16 +12,16 @@ export class PixieHttp {
   @env("OLY_PIXIE_HTTP_ROOT")
   public apiRoot: string = "";
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
-  @inject(Pixie)
+  @inject
   protected pixie: Pixie;
 
-  @inject(PixieSession)
+  @inject
   protected session: PixieSession;
 
-  @inject(HttpClient)
+  @inject
   protected client: HttpClient;
 
   /**
@@ -54,6 +54,7 @@ export class PixieHttp {
    *
    * @param method    Http method
    * @param url       Http url
+   * @internal
    */
   public createCacheKey(method: string, url: string) {
     return `${method} ${url.replace(/\//img, "")}`;
