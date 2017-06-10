@@ -102,6 +102,10 @@ export class Global {
       return false;
     }
 
+    if (Global.isProduction()) {
+      return type1 === type2;
+    }
+
     if (type1 === type2) {
       return true;
     }

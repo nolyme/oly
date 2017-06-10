@@ -304,7 +304,9 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     );
 
     config.plugins.push(
-      new BabiliPlugin({}),
+      new BabiliPlugin({}, {
+        comments: false,
+      }),
     );
 
     //
