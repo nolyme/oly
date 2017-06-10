@@ -21,13 +21,13 @@ export class Global {
   }
 
   public static get(key: string): any {
-    const g: any = Global ? global : window;
+    const g: any = Global.isBrowser() ? window : global;
     g.oly = g.oly || {};
     return g.oly[key];
   }
 
   public static set(key: string, value: any): void {
-    const g: any = typeof window === "undefined" ? global : window;
+    const g: any = Global.isBrowser() ? window : global;
     g.oly = g.oly || {};
     g.oly[key] = value;
   }

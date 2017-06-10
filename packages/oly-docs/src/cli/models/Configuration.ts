@@ -3,6 +3,9 @@ import { ModuleConfiguration } from "./ModuleConfiguration";
 
 export class Configuration {
 
+  @field
+  public name: string;
+
   @array({
     of: ModuleConfiguration,
   })

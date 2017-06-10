@@ -90,6 +90,12 @@ export interface IToolsOptions {
   production?: boolean;
 
   /**
+   * Add more env variable to process.env
+   * NODE_ENV is already set by 'production: true' / -p ...
+   */
+  env?: { [key: string]: string };
+
+  /**
    * Path to the dist directory.
    * Default is `${root}/www`.
    */
@@ -175,10 +181,14 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
   const config: Configuration = {};
   const root = options.root || process.cwd();
+  const env = typeof options.env === "object" ? options.env : {};
   const isProduction =
     (process.argv.indexOf("-p") > -1)
     || process.env.NODE_ENV === "production"
-    || options.production === true;
+    || options.production === true
+    || (!!env.production || env.NODE_ENV === "production");
+
+  env.NODE_ENV = isProduction ? "production" : "development";
 
   options.extract = options.extract !== false;
   options.entry = options.entry || "./src/index.ts";
@@ -220,7 +230,6 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   };
 
   config.output = {
-    publicPath: "/",
     filename: isProduction ? "[name].[hash].js" : "[name].js",
     path: options.dist,
   };
@@ -242,9 +251,12 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     // important for react, useful for projects
     // 'process.env.NODE_ENV' will be replaced by true/false
     new DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify(isProduction ? "production" : "development"),
-      },
+      "process.env": Object
+        .keys(env)
+        .reduce((o, key) => {
+          o[key] = JSON.stringify(env[key]);
+          return o;
+        }, {}),
     }),
     // extract css from js
     new ExtractTextPlugin({
@@ -318,7 +330,13 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   // Axios & some universal libs use Buffer in their code
   // Webpack see this and try to emulate Buffer with a big code
   config.node = {
+    console: false,
+    global: false,
+    process: false,
+    __filename: false,
+    __dirname: false,
     Buffer: false,
+    setImmediate: false,
   };
 
   // Dev Server
@@ -346,7 +364,6 @@ function typescriptLoaderFactory(): Rule {
         // speedup compile time, our ide will check error for us beside
         transpileOnly: true,
         module: "es2015",
-        moduleResolution: "node",
       },
     }],
   };

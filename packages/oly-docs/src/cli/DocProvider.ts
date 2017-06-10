@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { env, inject, Logger } from "oly-core";
+import { env, Global, inject, Logger } from "oly-core";
 import { JsonService } from "oly-json";
 import { basename, resolve } from "path";
 import { Application, ProjectReflection } from "typedoc";
@@ -13,8 +13,13 @@ import { ModuleConfiguration } from "./models/ModuleConfiguration";
 
 export class DocProvider {
 
+  // where to scan docs
   @env("CWD") private cwd: string = process.cwd();
-  @env("HTML") private html: boolean = false;
+
+  // run webpack ?
+  @env("HTML") private html: boolean = true;
+
+  // internal conf, shouldn't be updated
   @env("DIRECTORY_ROOT") private root: string = "packages";
   @env("DIRECTORY_SRC") private src: string = "src";
   @env("DIRECTORY_OUT") private out: string = "docs";
@@ -25,32 +30,58 @@ export class DocProvider {
   @inject private jsonService: JsonService;
 
   public async onStart() {
-
-    const webpackConfig = resolve(__dirname + "/../../webpack.config.ts");
+    const webpackArgv = process.argv.slice(2).join(" ");
+    const webpackContext = resolve(__dirname + "/../../");
+    const webpackConfig = webpackContext + "/webpack.config.ts";
     const webpackPath = resolve(__dirname + "/../../node_modules/.bin/webpack");
     const configPath = resolve(this.cwd, "docs.json");
     const config = this.jsonService.build(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
-    const pkg = require(resolve(this.cwd, "lerna.json"));
-    const command = `${webpackPath} --output-path=${output} --env=production --config=${webpackConfig}`;
+    const command = `${webpackPath} --output-path=${output} `
+      + `--config=${webpackConfig} --context=${webpackContext} ${webpackArgv}`;
 
-    execSync(command, {stdio: [0, 1, 2]});
+    // build webpack (this is not cached)
+    if (this.html) {
+      this.logger.trace(command);
+      this.logger.info("run webpack...");
+      try {
+        execSync(command);
+      } catch (e) {
+        throw new Error(`Webpack has failed (${e.message})`);
+      }
+      this.logger.info("webpack ok");
+    }
 
+    // create metadata
     for (const m of config.modules) {
       modules.push(this.create(resolve(this.cwd, this.root, m.name), m));
       this.logger.debug(`module ${m.name} is created`);
     }
-
     const doc: IDocs = {
       home: this.parser.mark(readFileSync(resolve(this.cwd, "README.md"), "UTF-8")),
       modules,
-      name: "oly",
-      version: pkg.version,
+      name: config.name,
+      version: "",
     };
 
+    // produce .js
     this.logger.debug(`write as js`);
-    writeFileSync(resolve(output, "docs.js"), "window.DOCS = " + JSON.stringify(doc), "UTF-8");
+    const argv = require("minimist")(process.argv.slice(2));
+    const docsName = "docs." + Global.shortid() + ".js";
+    const outputDocs = resolve(output, "docs." + Global.shortid() + ".js");
+    writeFileSync(outputDocs, "window.__DOCS__=" + JSON.stringify(doc) + ";");
+
+    // update index.html
+    if (this.html) {
+      this.logger.debug(`update .html`);
+      const outputHtml = resolve(output, "index.html");
+      const html = readFileSync(outputHtml, "UTF-8");
+      html.replace(
+        /<\/head>/igm,
+        `<script src="${(argv["output-public-path"] || "") + docsName}"></script></head>`);
+      writeFileSync(outputHtml, html, "UTF-8");
+    }
     this.logger.debug(`everything is great, have a nice day`);
   }
 
