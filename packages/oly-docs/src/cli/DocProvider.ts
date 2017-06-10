@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { env, Global, inject, Logger } from "oly-core";
 import { JsonService } from "oly-json";
@@ -45,7 +46,7 @@ export class DocProvider {
       this.logger.trace(command);
       this.logger.info("run webpack...");
       try {
-        // execSync(command);
+        execSync(command);
       } catch (e) {
         throw new Error(`Webpack has failed (${e.message})`);
       }

@@ -619,7 +619,6 @@ describe("Kernel", () => {
 
         @on
         b() {
-          console.log(this.k.id);
           return this.k.id;
         }
       }
