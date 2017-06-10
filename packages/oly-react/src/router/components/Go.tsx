@@ -12,27 +12,27 @@ import { Router } from "../services/Router";
 export interface IGoProps extends HTMLAttributes<HTMLElement> {
 
   /**
-   *
+   * Route name / url.
    */
   to: string;
 
   /**
-   *
+   * PathParams.
    */
   params?: object;
 
   /**
-   *
+   * QueryParams.
    */
   query?: object;
 
   /**
-   *
+   * Set "active" className.
    */
   active?: string;
 
   /**
-   *
+   * Active strict.
    */
   strict?: boolean;
 }
@@ -42,7 +42,7 @@ export interface IGoState {
 }
 
 /**
- *
+ * Wrapper of Anchor element with some specs of Router.
  */
 @attach
 export class Go extends Component<IGoProps, IGoState> {

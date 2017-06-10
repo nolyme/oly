@@ -4,11 +4,14 @@
     {
       "name": "oly-core",
       "icon": "sim-card",
+      "manuals": [
+        "docs/Intro.md"
+      ],
       "decorators": [
-        "kernel/decorators/inject",
-        "kernel/decorators/state",
-        "kernel/decorators/env",
-        "kernel/decorators/on"
+        "kernel/decorators/inject.ts",
+        "kernel/decorators/state.ts",
+        "kernel/decorators/env.ts",
+        "kernel/decorators/on.ts"
       ],
       "services": [
         "kernel/Kernel.ts",
@@ -19,32 +22,62 @@
       "name": "oly-json",
       "icon": "ninja",
       "decorators": [
-        "decorators/field",
-        "decorators/array"
+        "decorators/field.ts",
+        "decorators/array.ts"
       ],
       "services": [
         "services/JsonService.ts"
       ]
     },
     {
+      "name": "oly-http",
+      "icon": "exchange",
+      "services": [
+        "providers/HttpServerProvider.ts",
+        "services/HttpClient.ts"
+      ]
+    },
+    {
       "name": "oly-react",
       "icon": "delta",
       "decorators": [
-        "core/decorators/attach"
+        "core/decorators/attach.ts",
+        "router/decorators/page.ts"
+      ],
+      "components": [
+        "router/components/Go.tsx",
+        "router/components/View.tsx"
       ],
       "services": [
-        "router/services/Browser.ts"
+        "router/services/Router.ts",
+        "router/services/Browser.ts",
+        "router/providers/ReactRouterProvider.ts",
+        "router/providers/ReactBrowserProvider.ts",
+        "server/providers/ReactServerProvider.ts",
+        "pixie/services/PixieHttp.ts"
       ]
     },
     {
       "name": "oly-api",
       "icon": "satellite",
       "decorators": [
-        "core/decorators/get",
-        "core/decorators/body"
+        "core/decorators/get.ts",
+        "core/decorators/post.ts",
+        "core/decorators/put.ts",
+        "core/decorators/del.ts",
+        "core/decorators/body.ts",
+        "core/decorators/param.ts",
+        "core/decorators/query.ts"
       ],
       "services": [
         "core/providers/ApiProvider.ts"
+      ]
+    },
+    {
+      "name": "oly-tools",
+      "icon": "wrench",
+      "manuals": [
+        "docs/Webpack.md"
       ]
     }
   ]

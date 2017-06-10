@@ -1,7 +1,8 @@
 
 # TODO
 
-- (docs) finish oly-docs step 1. **[IN PROGRESS]**
+- (docs) ci docs. **[IN PROGRESS]**
+- (docs) add docs. **[IN PROGRESS]**
 - (*) use `/__tests__/`
 
 - Cookie.get() Cookie.set()

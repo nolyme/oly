@@ -1,13 +1,12 @@
-import { execSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { env, inject, Logger } from "oly-core";
 import { JsonService } from "oly-json";
-import { resolve } from "path";
+import { basename, resolve } from "path";
 import { Application, ProjectReflection } from "typedoc";
 import { DeclarationReflection } from "typedoc/dist/lib/models";
 import { DocBuilder } from "./DocBuilder";
 import { DocParser } from "./DocParser";
-import { IDocDecorator, IDocEnv, IDocs, IDocService, IModuleContent } from "./interfaces";
+import { IDocComponent, IDocDecorator, IDocEnv, IDocManual, IDocs, IDocService, IModuleContent } from "./interfaces";
 import { Configuration } from "./models/Configuration";
 import { ModuleConfiguration } from "./models/ModuleConfiguration";
 
@@ -35,7 +34,7 @@ export class DocProvider {
     const pkg = require(resolve(this.cwd, "package.json"));
     const command = `${webpackPath} --output-path=${output} --env=production --config=${webpackConfig}`;
 
-    //execSync(command, {stdio: [0, 1, 2]});
+    // execSync(command, {stdio: [0, 1, 2]});
 
     for (const m of config.modules) {
       modules.push(this.create(resolve(this.cwd, this.root, m.name), m));
@@ -54,10 +53,18 @@ export class DocProvider {
     this.logger.debug(`everything is great, have a nice day`);
   }
 
+  private check(filepath: string): void {
+    this.logger.trace(`read ${filepath}`);
+    if (!existsSync(filepath)) {
+      throw new Error(`Missing ${filepath}`);
+    }
+  }
+
   private create(project: string, m: ModuleConfiguration): IModuleContent {
 
     const app = new Application({
       logger: "none",
+      ignoreCompilerErrors: true,
       tsconfig: resolve(project, "tsconfig.json"),
     });
     const sources = resolve(project, this.src);
@@ -67,6 +74,8 @@ export class DocProvider {
     return {
       decorators: this.generateDecorator(app, sources, m.decorators),
       interfaces: [],
+      components: this.generateComponents(app, sources, m.components),
+      manuals: this.generateManuals(app, project, m.manuals),
       env: this.generateEnv(app, sources, m.services),
       home: this.parser.mark(readFileSync(resolve(project, "README.md"), "UTF-8")),
       icon: m.icon,
@@ -75,8 +84,53 @@ export class DocProvider {
     };
   }
 
-  private generateDecorator(app: Application, path: string, results: string[]): IDocDecorator[] {
+  private generateManuals(app: Application, path: string, results: string[] = []): IDocManual[] {
+    this.logger.debug("check manuals");
+    results.map((r) => this.check(resolve(path, r)));
+    return results.map((filepath) => {
+      return {
+        name: basename(filepath, ".md"),
+        content: this.parser.mark(readFileSync(resolve(path, filepath), "UTF-8")),
+      };
+    });
+  }
+
+  private generateComponents(app: Application, path: string, results: string[] = []): IDocComponent[] {
+    this.logger.debug("check components");
+    results.map((r) => this.check(resolve(path, r)));
+
+    const components = this.generateDeclarations(app, path, results);
+    return components.map((c) => {
+      const clazz = c.children.find(
+        (p) => p.kindString === "Class");
+      const props = c.children.find(
+        (p) => p.kindString === "Interface" && p.name.includes("Props"));
+      if (!clazz) {
+        throw new Error("Invalid " + props);
+      }
+      this.logger.info(`push <${clazz.name}/>`);
+      return {
+        name: clazz.name,
+        description: this.parser.getDescription(clazz),
+        props: props
+          ? props.children.filter((p) => !p.inheritedFrom).map((p) => {
+            return {
+              name: p.name,
+              description: this.parser.getDescription(p),
+              type: this.parser.getType(p.type),
+              optional: p.flags.isOptional || false,
+              default: "N/A",
+            };
+          })
+          : []
+        ,
+      };
+    });
+  }
+
+  private generateDecorator(app: Application, path: string, results: string[] = []): IDocDecorator[] {
     this.logger.debug("check decorators");
+    results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
 
     return declarations
@@ -88,8 +142,9 @@ export class DocProvider {
       });
   }
 
-  private generateService(app: Application, path: string, results: string[]): IDocService[] {
+  private generateService(app: Application, path: string, results: string[] = []): IDocService[] {
     this.logger.debug("check services");
+    results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
 
     return declarations
@@ -101,11 +156,12 @@ export class DocProvider {
       });
   }
 
-  private generateEnv(app: Application, path: string, results: string[]): IDocEnv[] {
+  private generateEnv(app: Application, path: string, results: string[] = []): IDocEnv[] {
     this.logger.debug("check env");
+    results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
 
-    return declarations.reduce<IDocEnv[]>((env, d) => env
+    const envResults: IDocEnv[] = declarations.reduce<IDocEnv[]>((env, d) => env
       .concat(d.children[0].children
         .filter((m) => m.decorators && m.decorators[0].name === "env")
         .map((m) => ({
@@ -121,9 +177,20 @@ export class DocProvider {
         this.logger.info(`push ${i.name}`);
         return i;
       });
+
+    const final: IDocEnv[] = [];
+    for (const r of envResults) {
+      if (!final.find((f) => f.name === r.name)) {
+        final.push(r);
+      } else {
+        this.logger.info(`remove duplicate ${r.name}`);
+      }
+    }
+
+    return final;
   }
 
-  private generateDeclarations(app: Application, path: string, results: string[]): DeclarationReflection[] {
+  private generateDeclarations(app: Application, path: string, results: string[] = []): DeclarationReflection[] {
 
     const files = results.map((i) => path + "/" + i.replace(/\.tsx?/mgi, ""));
     const reflection: ProjectReflection = app.convert(files);
@@ -137,6 +204,7 @@ export class DocProvider {
       return children;
     }
 
-    return children.filter((i: any) => files.indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
+    return children.filter((i: any) =>
+      files.indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
   }
 }

@@ -1,5 +1,6 @@
 import { Exception, inject, Kernel } from "oly-core";
 import { IHrefQuery, IMatch, ITransition } from "../interfaces";
+import { ReactBrowserProvider } from "../providers/ReactBrowserProvider";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
 import { Browser } from "./Browser";
 
@@ -10,6 +11,9 @@ export class Router {
 
   @inject
   protected routerProvider: ReactRouterProvider;
+
+  @inject
+  protected browserProvider: ReactBrowserProvider;
 
   @inject
   protected browser: Browser;
@@ -54,7 +58,11 @@ export class Router {
    * @param query
    */
   public href(query: string | IHrefQuery): string | undefined {
-    return this.routerProvider.href(query);
+    const href = this.routerProvider.href(query);
+    if (this.browserProvider.useHash) {
+      return "#" + href;
+    }
+    return href;
   }
 
   /**

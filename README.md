@@ -25,6 +25,7 @@ There are a **lot** of decorators.
 <br/>
 
 ```ts
+import { inject } from "oly-core";
 import { page, PixieHttp } from "oly-react";
 import { Home } from "./Home";
 

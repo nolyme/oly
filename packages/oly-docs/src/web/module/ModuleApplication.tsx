@@ -3,8 +3,10 @@ import { layout, page, param } from "oly-react";
 import * as React from "react";
 import { IDocs, IModuleContent } from "../../cli/interfaces";
 import { NotFound } from "../layout/NotFound";
+import { ApiComponent } from "./ApiComponent";
 import { ApiConfiguration } from "./ApiConfiguration";
 import { ApiDecorator } from "./ApiDecorator";
+import { ApiManual } from "./ApiManual";
 import { ApiService } from "./ApiService";
 import { ApiServiceMethod } from "./ApiServiceMethod";
 import { Module } from "./Module";
@@ -33,6 +35,24 @@ export class ModuleApplication {
   @page("/configuration")
   public configuration() {
     return <ApiConfiguration module={this.module}/>;
+  }
+
+  @page("/m/:manual")
+  public manual(@param("manual") manualName: string) {
+    const manual = this.module.manuals.filter((m) => m.name === manualName)[0];
+    if (!manual) {
+      return NotFound;
+    }
+    return <ApiManual module={this.module} manual={manual}/>;
+  }
+
+  @page("/c/:component")
+  public component(@param("component") componentName: string) {
+    const component = this.module.components.filter((c) => c.name === componentName)[0];
+    if (!component) {
+      return NotFound;
+    }
+    return <ApiComponent module={this.module} component={component}/>;
   }
 
   @page("/@/:decorator")

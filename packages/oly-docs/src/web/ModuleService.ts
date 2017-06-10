@@ -61,11 +61,32 @@ export class ModuleService {
           }
         }
       }
+      for (const d of m.components) {
+        const dId = d.name.toUpperCase();
+        const dId2 = "<" + dId;
+        if (dId.indexOf(queryCleaned) > -1) {
+          if (push({
+              href: "/m/" + m.name + "c" + d.name,
+              module: m.name,
+              name: "<" + d.name + "/>",
+            })) {
+            return results;
+          }
+        } else if (dId2.indexOf(queryCleaned) > -1) {
+          if (push({
+              href: "/m/" + m.name + "c" + d.name,
+              module: m.name,
+              name: "<" + d.name + "/>",
+            })) {
+            return results;
+          }
+        }
+      }
       for (const ev of m.env) {
         const dEv = ev.name.toUpperCase();
         if (dEv.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "/",
+              href: "/m/" + m.name + "/configuration",
               module: m.name,
               name: ev.name.replace(/"/gmi, ""),
             })) {
@@ -95,6 +116,18 @@ export class ModuleService {
               })) {
               return results;
             }
+          }
+        }
+      }
+      for (const manual of m.manuals) {
+        const dEv = manual.name.toUpperCase();
+        if (dEv.indexOf(queryCleaned) > -1) {
+          if (push({
+              href: "/m/" + m.name + "/m/" + manual.name,
+              module: m.name,
+              name: manual.name + ".md",
+            })) {
+            return results;
           }
         }
       }

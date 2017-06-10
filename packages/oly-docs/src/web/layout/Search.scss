@@ -7,7 +7,7 @@
       border: 1px solid $pt-intent-primary;
       color: $pt-intent-primary;
       width: 52px;
-      background-color: $white;
+      background-color: transparent;
       text-align: center;
     }
     a {
@@ -17,11 +17,16 @@
       padding: 5px 20px;
       margin: 0 4px;
       text-decoration: none !important;
-      transition: all 300ms ease;
       border-radius: 2px;
+      color: $black;
       &:hover {
         opacity: 1;
-        background-color: rgba($pt-intent-primary, .2);
+        color: $white;
+        background-color: rgba($pt-intent-primary, .8);
+        .pt-tag {
+          border-color: $white;
+          color: $white;
+        }
       }
     }
   }

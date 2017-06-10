@@ -18,10 +18,10 @@ export class Prism extends Component<{ html: string }, {}> {
       "target=\"_blank\" href=\"$1\"");
 
     html = html.replace(
-      /([A-Za-z]+#[a-z]+?)\(.*?\)/g,
+      /([A-Za-z]+#[A-Za-z]+?)\(.*?\)/g,
       (element, query) => {
         const [d] = this.ms.search(query);
-        if (d) {
+        if (d && !this.router.isActive(d.href, true)) {
           return `<a href="#${d.href}" class="link" >${element}</a>`;
         }
         return element;
@@ -33,7 +33,7 @@ export class Prism extends Component<{ html: string }, {}> {
       (element, query) => {
         const [d] = this.ms.search(query);
         if (d && !this.router.isActive(d.href, true)) {
-          return `<a href="#${d.href}" class="link" >${element}</a>`;
+          return `<a href="#${d.href}" class="link">${element}</a>`;
         }
         return element;
       },
@@ -42,9 +42,10 @@ export class Prism extends Component<{ html: string }, {}> {
     const services = this.ms.getServices();
     for (const s of services) {
       html = html.replace(
-        new RegExp(`(${s.name})\\s`, "g"),
+        new RegExp(`(${s.name})[^\\w/#]`, "g"),
         (element, query) => {
-          const [d] = this.ms.search(query);
+          const results = this.ms.search(query);
+          const d = results.find((r) => r.name === query);
           if (d && !this.router.isActive(d.href, true)) {
             return element.replace(query, `<a href="#${d.href}" class="link" style="color: black">${query}</a>`);
           }

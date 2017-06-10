@@ -21,6 +21,17 @@ export interface IDocParameter {
   default?: string;
 }
 
+export interface IDocManual {
+  content: string;
+  name: string;
+}
+
+export interface IDocComponent {
+  name: string;
+  description: string;
+  props: IDocParameter[];
+}
+
 export interface IDocDecorator {
   name: string;
   description: string;
@@ -50,6 +61,8 @@ export interface IModuleContent {
   home: string;
   interfaces: IInterface[];
   services: IDocService[];
+  manuals: IDocManual[];
+  components: IDocComponent[];
   env: IDocEnv[];
   decorators: IDocDecorator[];
 }

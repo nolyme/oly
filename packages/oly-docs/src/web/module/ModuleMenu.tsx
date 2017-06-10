@@ -1,4 +1,3 @@
-import { Collapse } from "@blueprintjs/core";
 import { inject } from "oly-core";
 import { Active, attach, Go, Router, styles } from "oly-react";
 import * as React from "react";
@@ -6,11 +5,7 @@ import { IModuleContent } from "../../cli/interfaces";
 
 @attach
 @styles(() => require("./ModuleMenu.scss"))
-export class ModuleMenu extends React.Component<{ module: IModuleContent }, {
-
-  isOpenServices: boolean;
-
-}> {
+export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> {
 
   public state = {
     isOpenServices: true,
@@ -23,19 +18,24 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {
     return `/m/${this.props.module.name}/${path}`;
   }
 
-  public renderServices() {
-    if (this.props.module.services.length === 0) {
+  public renderServices(provider: boolean = false) {
+    const services = this.props.module.services
+      .filter((s) => s.name.includes("Provider")
+        ? provider
+        : !provider);
+    if (services.length === 0) {
       return;
     }
     return (
       <div className="ModuleMenu_part">
-        <div onClick={() => this.setState({isOpenServices: !this.state.isOpenServices})}>
-          Services
+        <div className="ModuleMenu_part-header">
+          {!provider ? "Services" : "Provider"}
         </div>
-        <Collapse isOpen={this.state.isOpenServices}>
-          {this.props.module.services.map((s) => (
+        {services.map((s) => (
             <div key={s.name}>
-              <Go to="service" params={{service: s.name}}>{s.name}</Go>
+              <Go to="service" params={{service: s.name}}>
+                {s.name}
+              </Go>
               <Active href={{to: "service", params: {service: s.name}}}>
                 {s.methods.map((m) => (
                   <div key={m.name} className="sub">
@@ -45,7 +45,6 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {
               </Active>
             </div>
           ))}
-        </Collapse>
       </div>
     );
   }
@@ -56,7 +55,7 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {
     }
     return (
       <div className="ModuleMenu_part">
-        <div>
+        <div className="ModuleMenu_part-header">
           Decorators
         </div>
         {this.props.module.decorators.map((s) => (
@@ -68,6 +67,32 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {
     );
   }
 
+  public renderComponents() {
+    if (this.props.module.components.length === 0) {
+      return;
+    }
+    return (
+      <div className="ModuleMenu_part">
+        <div className="ModuleMenu_part-header">
+          Components
+        </div>
+        {this.props.module.components.map((s) => (
+          <div key={s.name}>
+            <Go to={this.rel(`c/${s.name}`)}>{"<" + s.name + "/>"}</Go>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  public renderManuals() {
+    return this.props.module.manuals.map((m) => (
+      <div key={m.name}>
+        <Go to={this.rel(`m/${m.name}`)}>{m.name}</Go>
+      </div>
+    ));
+  }
+
   public render() {
     return (
       <div className="ModuleMenu">
@@ -75,8 +100,11 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {
         {this.props.module.env.length > 0 &&
         <div><Go strict={true} to={"configuration"}>Configuration</Go></div>
         }
+        {this.renderManuals()}
+        {this.renderComponents()}
         {this.renderDecorators()}
         {this.renderServices()}
+        {this.renderServices(true)}
       </div>
     );
   }

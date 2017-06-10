@@ -24,7 +24,7 @@
     padding-left: 10px;
     font-size: 12px;
     a {
-      opacity: 0.9;
+      opacity: 0.8;
       border-top-left-radius: 0;
     }
   }
@@ -32,6 +32,11 @@
 
 .ModuleMenu_part {
   margin-top: 10px;
+  .ModuleMenu_part-header {
+    box-shadow: inset 0 -2px rgba($black, 0.1);
+    padding: 4px;
+    font-weight: 300;
+  }
 }
 
 .ModuleMenu_head {
