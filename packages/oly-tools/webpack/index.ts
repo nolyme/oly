@@ -430,8 +430,8 @@ function imageLoaderFactory(isProduction: boolean = false): Rule {
       loader: "file-loader",
       options: {
         name: isProduction
-          ? "images/[name].[hash].[ext]"
-          : "images/[name].[ext]",
+          ? "./images/[name].[hash].[ext]"
+          : "./images/[name].[ext]",
       },
     }],
   };
@@ -447,8 +447,8 @@ function fontLoaderFactory(isProduction: boolean = false) {
       loader: "file-loader",
       options: {
         name: isProduction
-          ? "fonts/[name].[hash].[ext]"
-          : "fonts/[name].[ext]",
+          ? "./fonts/[name].[hash].[ext]"
+          : "./fonts/[name].[ext]",
       },
     }],
   };

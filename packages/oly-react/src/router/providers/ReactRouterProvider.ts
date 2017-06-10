@@ -1,4 +1,4 @@
-import { Class, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import {
@@ -26,6 +26,9 @@ export class ReactRouterProvider implements IProvider {
   public layers: ILayer[] = [];
 
   public match?: IMatch;
+
+  @env("OLY_REACT_ROUTER_BASE_HREF")
+  public baseHref: string = "";
 
   @inject
   protected kernel: Kernel;
@@ -170,6 +173,9 @@ export class ReactRouterProvider implements IProvider {
     for (const pageDeclaration of pageDeclarations) {
       if (!this.hasParent(pageDeclarations, pageDeclaration.definition)) {
         nodes.push(...this.createNodes(pageDeclaration.definition));
+        for (const node of nodes) {
+          node.path = this.baseHref + node.path;
+        }
       }
     }
 
