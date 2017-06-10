@@ -67,7 +67,6 @@ export class DocProvider {
 
     // produce .js
     this.logger.info(`write as js`);
-    const argv = require("minimist")(process.argv.slice(2));
     const docsName = "docs." + Global.shortid() + ".js";
     const outputDocs = resolve(output, docsName);
     writeFileSync(outputDocs, "window.__DOCS__=" + JSON.stringify(doc) + ";");
