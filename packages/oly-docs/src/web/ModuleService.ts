@@ -66,7 +66,7 @@ export class ModuleService {
         const dId2 = "<" + dId;
         if (dId.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "c" + d.name,
+              href: "/m/" + m.name + "/c/" + d.name,
               module: m.name,
               name: "<" + d.name + "/>",
             })) {
@@ -74,7 +74,7 @@ export class ModuleService {
           }
         } else if (dId2.indexOf(queryCleaned) > -1) {
           if (push({
-              href: "/m/" + m.name + "c" + d.name,
+              href: "/m/" + m.name + "/c/" + d.name,
               module: m.name,
               name: "<" + d.name + "/>",
             })) {
