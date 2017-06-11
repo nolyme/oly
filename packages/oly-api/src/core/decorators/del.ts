@@ -3,7 +3,7 @@ import { route } from "../../router/decorators/route";
 /**
  * Create a DEL route.
  *
- * ```typescript
+ * ```ts
  * class A {
  *  @del("/") remove() {}
  * }

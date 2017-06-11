@@ -21,9 +21,11 @@ class Person {
 #### Services
 
 Class supposed to be used everywhere in your code. 
+
 Most of the time, services:
  - are stateless.
  - follow the [singleton](https://en.wikipedia.org/wiki/Singleton_pattern) pattern.
+
 Some services:
  - Logger
  - Router
@@ -43,10 +45,12 @@ const r = s.add(1, 1); // 2
 #### Providers
 
 Big and heavy service which provides stuffs. **Don't use providers directly.** 
+
 Most of the time, providers:
  - are stateful
  - use #onStart() to initialize states.
  - are linked to a service
+
 Some providers:
  - ApiProvider
  - ReactBrowserProvider

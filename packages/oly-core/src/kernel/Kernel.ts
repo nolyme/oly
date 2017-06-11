@@ -51,7 +51,7 @@ import { IStateMutateEvent, IStatesMetadata, IStore } from "./interfaces/states"
  * The child keep all the declarations but without any data (instances, store, ...).
  * No #start() nor #stop() are triggered. We assume that's already done by the parent.
  *
- * ```typescript
+ * ```ts
  * const kernel = new Kernel(store).with(...definitions);
  * await kernel.start();
  * ```
@@ -62,7 +62,7 @@ export class Kernel {
    * This is a simple kernel factory.
    * Useful if you don't want see any 'new' keyword in your app.
    *
-   * ```typescript
+   * ```ts
    * Kernel
    *   .create()
    *   .with()
@@ -311,7 +311,7 @@ export class Kernel {
   /**
    * Get a service based on a definition.
    *
-   * ```typescript
+   * ```ts
    * class A { b = "c" }
    * kernel.get(A).b; // "c"
    * ```
@@ -430,7 +430,7 @@ export class Kernel {
    *
    * String numeric value are parsed to Number.
    * String boolean are parsed to Boolean.
-   * ```typescript
+   * ```ts
    * kernel = Kernel.create({a: "true"});
    * kernel.env("a"); // true
    * kernel.state("a"); // "true"
@@ -463,7 +463,7 @@ export class Kernel {
    * Register an event with a key (identifier) and an action.
    * This is the under-the-hood of `@on()`.
    *
-   * ```typescript
+   * ```ts
    * kernel.on("wat", () => console.log("Hi!"));
    * ```
    *

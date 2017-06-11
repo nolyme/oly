@@ -132,7 +132,7 @@ export interface IMetaNumber extends IMetaBase {
 export interface IMetaObject extends IMetaBase {
   /**
    * Skip `type` for mapping and use only this function.
-   * ```typescript
+   * ```ts
    * class A {
    *    @field({
    *      map: (dateAsString) => new Date(dateAsString)

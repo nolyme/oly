@@ -4,12 +4,12 @@
  *
  * Exception has a real #toJSON(). It can be stringify.
  * It's useful when http, debug and message.
- * ```typescript
+ * ```ts
  * console.log(JSON.stringify(new Exception("A")));
  * ```
  *
  * Exception can have a cause (reason).
- * ```typescript
+ * ```ts
  * try {
  *   try {
  *     throw new Error("A");
@@ -22,21 +22,21 @@
  * ```
  *
  * You can set a default message.
- * ```typescript
+ * ```ts
  * class MyException extends Exception {
  *    message = "My default message";
  * }
  * ```
  *
  * This is designed to be overridden.
- * ```typescript
+ * ```ts
  * class MyException extends Exception {
  * }
  * ```
  *
  * You can use `instanceof` without fear server-side.
  * Browser side, you should use name comparison.
- * ```typescript
+ * ```ts
  * e.name === "Exception"
  * ```
  */
@@ -154,7 +154,7 @@ export class Exception extends Error {
    * Return error as object without shitty data.
    * Designed to be overridden.
    *
-   * ```typescript
+   * ```ts
    * class A extends Exception {
    *   toJSON() {
    *     return {

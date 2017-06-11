@@ -3,7 +3,7 @@ import { route } from "../../router/decorators/route";
 /**
  * Create a GET route.
  *
- * ```typescript
+ * ```ts
  * class A {
  *  @get("/") find() {}
  * }

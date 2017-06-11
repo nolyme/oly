@@ -5,7 +5,7 @@ import { ILogLevel, LogLevels } from "./LogLevels";
 /**
  * Display {json: message} instead of classic format.
  *
- * ```typescript
+ * ```ts
  * kernel.with(JsonLogger);
  * ```
  */

@@ -8,7 +8,7 @@ import { olyHttpErrors } from "../constants/errors";
  * - however, stacktrace is always available on logging
  * - status is added (default to 500)
  *
- * ```typescript
+ * ```ts
  * class A {
  *    index() {
  *      throw new HttpServerException();

@@ -3,7 +3,7 @@ import { route } from "../../router/decorators/route";
 /**
  * Create a POST route.
  *
- * ```typescript
+ * ```ts
  * class A {
  *  @post("/") create() {}
  * }

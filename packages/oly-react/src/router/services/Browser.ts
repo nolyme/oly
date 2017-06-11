@@ -6,13 +6,13 @@ import * as ReactDOM from "react-dom";
 /**
  * It's a safe browser to avoid the use of global variables in universal env.
  *
- * ```typescript
+ * ```ts
  * browser.exists()
  * ```
  *
  * There is also a ref to the last mount app.
  *
- * ```typescript
+ * ```ts
  * browser.root // React App
  * ```
  */

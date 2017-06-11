@@ -150,7 +150,7 @@ export interface IToolsOptions {
 /**
  * Create a default webpack configuration.
  *
- * ```typescript
+ * ```ts
  * import { createConfiguration } from "oly-tools";
  *
  * export default createConfiguration({
@@ -161,7 +161,7 @@ export interface IToolsOptions {
  * Even if it's cool to have a ready2go webpack configuration,
  * you should avoid this function and make your own configuration.
  *
- * ```typescript
+ * ```ts
  * export default (env: string) => {
  *
  *  const config = createConfiguration({

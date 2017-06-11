@@ -8,7 +8,7 @@ import { NotFoundException } from "../exceptions/NotFoundException";
  * There are not designed to be used outside oly-api,
  * however, you can replace one of them by your own stuff.
  *
- * ```typescript
+ * ```ts
  * class MyApiMiddlewares extends ApiMiddlewares {
  *   errorHandler() {
  *     return async(ctx, next) => {

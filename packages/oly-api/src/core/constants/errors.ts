@@ -1,7 +1,7 @@
 /**
  * oly-api error messages.
  *
- * ```typescript
+ * ```ts
  * import { olyApiErrors } from "oly-api";
  * olyApiErrors.missing = (w, n) => "override message like that";
  * ```

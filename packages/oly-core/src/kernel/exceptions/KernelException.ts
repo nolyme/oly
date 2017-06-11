@@ -3,7 +3,7 @@ import { Exception } from "../../error/Exception";
 /**
  * Example of Exception override.
  *
- * ```typescript
+ * ```ts
  * throw new KernelException();
  * ```
  */

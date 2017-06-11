@@ -3,7 +3,7 @@ import { route } from "../../router/decorators/route";
 /**
  * Create a PUT route.
  *
- * ```typescript
+ * ```ts
  * class A {
  *  @put("/") update() {}
  * }

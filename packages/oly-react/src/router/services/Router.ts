@@ -31,7 +31,7 @@ export class Router {
   /**
    * Go to a named node.
    *
-   * ```typescript
+   * ```ts
    * router.go("index");
    * ```
    */

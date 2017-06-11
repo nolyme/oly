@@ -32,7 +32,7 @@ export class EnvDecorator implements IDecorator {
  * An error will be thrown if no value was found.
  *
  * <br/>
- * ```typescript
+ * ```ts
  * class A {
  *
  *   @env("B")
