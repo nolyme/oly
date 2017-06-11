@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { env, inject, Logger } from "oly-core";
-import { JsonService } from "oly-json";
+import { Json } from "oly-json";
 import { resolve } from "path";
 import { Application } from "typedoc";
 import { DocParser } from "./DocParser";
@@ -24,7 +24,7 @@ export class DocProvider {
 
   @inject private logger: Logger;
   @inject private parser: DocParser;
-  @inject private jsonService: JsonService;
+  @inject private json: Json;
 
   public async onStart() {
     const webpackArgv = process.argv.slice(2).join(" ");
@@ -32,7 +32,7 @@ export class DocProvider {
     const webpackConfig = webpackContext + "/webpack.config.ts";
     const webpackPath = resolve(__dirname + "/../../node_modules/.bin/webpack");
     const configPath = resolve(this.cwd, "docs.json");
-    const config = this.jsonService.build(Configuration, readFileSync(configPath, "UTF-8"));
+    const config = this.json.build(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
     const command = `${webpackPath} --output-path=${output} `

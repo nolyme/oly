@@ -13,9 +13,12 @@
   background-color: $white;
 
   h1, h2, h3, h4 {
-    font-weight: 300;
     margin-top: 30px;
     margin-bottom: 20px;
+  }
+
+  .pt-table {
+    width: 100%;
   }
 
   h1 {
@@ -25,6 +28,7 @@
   }
 
   h3, h4 {
+    font-weight: 300;
     box-shadow: -2px 0 rgba($pt-intent-primary, 0.5);
     padding-left: 10px;
   }

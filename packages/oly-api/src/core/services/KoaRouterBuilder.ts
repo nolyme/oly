@@ -1,6 +1,6 @@
 import * as KoaRouter from "koa-router";
 import { Class, inject, Meta } from "oly-core";
-import { IType, JsonService, olyMapperKeys, TypeUtil } from "oly-json";
+import { IType, Json, olyMapperKeys, TypeUtil } from "oly-json";
 import { MetaRouter } from "../../router/MetaRouter";
 import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
@@ -12,7 +12,7 @@ import { ApiMiddlewares } from "./ApiMiddlewares";
 export class KoaRouterBuilder {
 
   @inject
-  protected json: JsonService;
+  protected json: Json;
 
   @inject
   protected apiMiddlewares: ApiMiddlewares;

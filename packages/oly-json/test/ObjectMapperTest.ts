@@ -2,7 +2,7 @@ import { Kernel } from "oly-core";
 import { array } from "../src";
 import { field } from "../src/decorators/field";
 import { ValidationException } from "../src/exceptions/ValidationException";
-import { JsonService } from "../src/services/JsonService";
+import { Json } from "../src/services/Json";
 import { JsonValidator } from "../src/services/JsonValidator";
 
 describe("ObjectMapper", () => {
@@ -40,7 +40,7 @@ describe("ObjectMapper", () => {
       },
     };
 
-    const json = Kernel.create().get(JsonService);
+    const json = Kernel.create().get(Json);
     const obj = json.build(Data, JSON.stringify(raw));
 
     expect(obj.msg).toBe("hello world a1true");

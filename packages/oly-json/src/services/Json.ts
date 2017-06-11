@@ -8,7 +8,7 @@ import { JsonValidator } from "./JsonValidator";
 /**
  * Allow to parse object and array of objects
  */
-export class JsonService {
+export class Json {
 
   @inject
   protected mapper: JsonMapper;

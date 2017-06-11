@@ -1,6 +1,6 @@
 import { Collection, ObjectID } from "mongodb";
 import { Class, inject, Kernel, Logger, Meta } from "oly-core";
-import { IFieldsMetadata, JsonService, olyMapperKeys } from "oly-json";
+import { IFieldsMetadata, Json, olyMapperKeys } from "oly-json";
 import { olyMongoKeys } from "./constants/keys";
 import { ID, IDocument, IIndexesMetadata } from "./interfaces";
 import { MongoProvider } from "./MongoProvider";
@@ -28,7 +28,7 @@ export abstract class Repository<T extends IDocument> {
   protected database: MongoProvider;
 
   @inject
-  protected jsonService: JsonService;
+  protected json: Json;
 
   /**
    * Define the collection name.
@@ -88,7 +88,7 @@ export abstract class Repository<T extends IDocument> {
     }
 
     if (this.type) {
-      return this.kernel.get(this.type, {instance: this.jsonService.build(this.type, object)}); // tslint:disable-line
+      return this.kernel.get(this.type, {instance: this.json.build(this.type, object)}); // tslint:disable-line
     }
 
     return object as T;

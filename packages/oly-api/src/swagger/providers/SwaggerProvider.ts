@@ -1,6 +1,6 @@
 import { IDeclarations, inject, Kernel, Logger } from "oly-core";
 import { HttpServerProvider, serve } from "oly-http";
-import { JsonService } from "oly-json";
+import { Json } from "oly-json";
 import { join } from "path";
 import { ApiProvider } from "../../core/providers/ApiProvider";
 import { KoaRouterBuilder } from "../../core/services/KoaRouterBuilder";
@@ -19,7 +19,7 @@ export class SwaggerProvider {
   public swagger: any;
 
   @inject
-  protected jsonService: JsonService;
+  protected json: Json;
 
   @inject
   protected httpServerProvider: HttpServerProvider;
@@ -127,7 +127,7 @@ export class SwaggerProvider {
                     $ref: "#/definitions/" + arg.body.name,
                   },
                 });
-                this.swagger.definitions[arg.body.name] = this.jsonService.schema(arg.body);
+                this.swagger.definitions[arg.body.name] = this.json.schema(arg.body);
               }
             }
           }

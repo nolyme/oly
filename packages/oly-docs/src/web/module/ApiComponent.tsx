@@ -12,7 +12,8 @@ export class ApiComponent extends Component<{ module: IModuleContent; component:
       <div>
         <small className="pt-text-muted">Component</small>
         <h3>{`<${this.props.component.name}/>`}</h3>
-        <br/>
+        <Prism html={this.props.component.description}/>
+        <h4>Props</h4>
         <table className="pt-table pt-striped pt-bordered">
           <thead>
           <tr>
@@ -33,7 +34,6 @@ export class ApiComponent extends Component<{ module: IModuleContent; component:
           ))}
           </tbody>
         </table>
-        <Prism html={this.props.component.description}/>
       </div>
     );
   }

@@ -1,10 +1,8 @@
 ### Naming Convention
 
-#### @decorator
+#### @decorators
 
-This is just a function called on the start on the application.
-
-The decorator **enhances** a property/class by adding
+This is just a function called on the start on the application. The decorator **enhances** a property/class by adding
 metadata or modifying the prototype.
 
 ```ts
@@ -20,12 +18,16 @@ class Person {
 
 ```
 
-#### Service
+#### Services
 
-Class supposed to be used everywhere in your code.
+Class supposed to be used everywhere in your code. 
 Most of the time, services:
  - are stateless.
  - follow the [singleton](https://en.wikipedia.org/wiki/Singleton_pattern) pattern.
+Some services:
+ - Logger
+ - Router
+ - Json
 
 ```ts
 class Service {
@@ -38,16 +40,19 @@ const s = k.get(Service);
 const r = s.add(1, 1); // 2
 ```
 
-#### Provider
+#### Providers
 
-Big and heavy service which provides stuffs.
-**Don't use providers directly.**
+Big and heavy service which provides stuffs. **Don't use providers directly.** 
 Most of the time, providers:
-  - are stateful
-  - use #onStart() to initialize states.
-  - are linked to a service
+ - are stateful
+ - use #onStart() to initialize states.
+ - are linked to a service
+Some providers:
+ - ApiProvider
+ - ReactBrowserProvider
+ - ReactServerProvider  
 
-```
+```ts
 class Provider {
   @state counter;
   
@@ -63,14 +68,9 @@ class Service {
     return this.provider.counter += 1;
   }
 }
-
-const k = Kernel.create();
-const s = k.get(Service);
-await k.start();
-s.inc(); // 2
 ```
 
-#### &#60;Component/&#62;
+#### &#60;Components/&#62;
 
 [https://facebook.github.io/react/docs/react-component.html](https://facebook.github.io/react/docs/react-component.html)
 

@@ -25,6 +25,17 @@ import "./prism/tsx";
 
 const renderer = new marked.Renderer();
 
+renderer.table = (header, body) => {
+  return "<table class='pt-table pt-striped'>\n"
+    + "<thead>\n"
+    + header
+    + "</thead>\n"
+    + "<tbody>\n"
+    + body
+    + "</tbody>\n"
+    + "</table>\n";
+};
+
 renderer.code = (code, language) => {
   if (!language) {
     return `<pre><code>${code}</code></pre>`;
