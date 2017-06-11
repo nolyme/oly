@@ -59,7 +59,7 @@ export class Router {
    */
   public href(query: string | IHrefQuery): string | undefined {
     const href = this.routerProvider.href(query);
-    if (this.browserProvider.useHash) {
+    if (href && this.browserProvider.useHash) {
       return "#" + href;
     }
     return href;

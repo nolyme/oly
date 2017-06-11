@@ -20,5 +20,22 @@ export class OnDecorator implements IDecorator {
 
 /**
  * Event listener decorator.
+ *
+ * ```ts
+ * class A {
+ *   public @on b = () => console.log("Hey");
+ * }
+ * ```
+ *
+ * ### Free
+ *
+ * You don't need to free() events on services. Like events, services are stored in the kernel.
+ * When the kernel dies, services die and events are erased.
+ *
+ * This is not the case for React components, which are mount / unmount on the way.
+ * To handle this case, ANY class which use @on will implement IListener.
+ * This interface gives you the __free__() method, useful to remove events.
+ *
+ * > @attach will __free__() components for you.
  */
 export const on = Meta.decorator<string>(OnDecorator);

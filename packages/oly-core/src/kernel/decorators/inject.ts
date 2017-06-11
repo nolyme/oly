@@ -51,6 +51,14 @@ export class InjectDecorator implements IDecorator {
  * Kernel.create().get(A).b.c // "d"
  * ```
  *
+ * You can force the Type.
+ * ```ts
+ * class A {
+ *   @inject(B) b;
+ *   @inject({type: C}): c;
+ * }
+ * ```
+ *
  * It works also on constructor with Kernel#invoke().
  *
  * ```ts

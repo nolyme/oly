@@ -48,7 +48,7 @@ Big and heavy service which provides stuffs. **Don't use providers directly.**
 
 Most of the time, providers:
  - are stateful
- - use #onStart() to initialize states.
+ - use Kernel#start() to initialize their states.
  - are linked to a service
 
 Some providers:
