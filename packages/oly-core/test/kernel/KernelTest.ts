@@ -1,4 +1,4 @@
-import { deepEqual, equal } from "assert";
+import { equal } from "assert";
 import { _ } from "../../src";
 import { olyCoreErrors } from "../../src/kernel/constants/errors";
 import { env } from "../../src/kernel/decorators/env";
@@ -77,6 +77,25 @@ describe("Kernel", () => {
 
       expect(createKernel().get(Parent).a).toBe("a");
       expect(() => createKernel().get(Child).a).toThrow(olyCoreErrors.envNotDefined("B"));
+    });
+
+    it("should auto inject", async () => {
+
+      class B {
+        c = "d";
+      }
+
+      @injectable
+      class A {
+        constructor(@state("X")
+                    public x: string,
+                    public b: B) {
+        }
+      }
+
+      const k = createKernel({X: "Y"});
+      expect(k.get(A).b.c).toBe("d");
+      expect(k.get(A).x).toBe("Y");
     });
 
     it("should swap 'provide' with 'use'", () => {

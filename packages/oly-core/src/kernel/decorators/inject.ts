@@ -37,6 +37,30 @@ export class InjectDecorator implements IDecorator {
 }
 
 /**
+ * Inject a service.
+ *
+ * ```ts
+ * class B {
+ *   c = "d";
+ * }
+ *
+ * class A {
+ *  @inject b: B;
+ * }
+ *
+ * Kernel.create().get(A).b.c // "d"
+ * ```
+ *
+ * It works also on constructor with Kernel#invoke().
+ *
+ * ```ts
+ * class B {}
+ * class A {
+ *   constructor(@inject b: B) {}
+ * }
+ * ```
+ *
+ * > You don't have to set @inject if your service has @injectable.
  *
  */
 export const inject = Meta.decorator<IInjectOptions>(InjectDecorator);

@@ -9,6 +9,7 @@
       ],
       "decorators": [
         "kernel/decorators/inject.ts",
+        "kernel/decorators/injectable.ts",
         "kernel/decorators/state.ts",
         "kernel/decorators/env.ts",
         "kernel/decorators/on.ts"
