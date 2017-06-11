@@ -1,9 +1,9 @@
 
 # TODO
 
-- (docs) ci docs. **[IN PROGRESS]**
 - (docs) add docs. **[IN PROGRESS]**
 - (*) use `/__tests__/`
+- oly-react test refactoring
 - coverage100
 
 - Cookie.get() Cookie.set(), cookie sec

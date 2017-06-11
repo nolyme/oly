@@ -5,7 +5,8 @@
       "name": "oly-core",
       "icon": "sim-card",
       "manuals": [
-        "docs/Intro.md"
+        "docs/Intro.md",
+        "docs/Test.md"
       ],
       "decorators": [
         "kernel/decorators/inject.ts",
