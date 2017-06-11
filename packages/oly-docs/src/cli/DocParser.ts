@@ -3,6 +3,7 @@ import * as marked from "marked";
 import { inject, Logger } from "oly-core";
 import { basename, resolve } from "path";
 import * as Prism from "prismjs";
+import "prismjs/components/prism-bash.js";
 import { Application, ProjectReflection } from "typedoc";
 import {
   DeclarationReflection,

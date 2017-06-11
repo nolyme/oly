@@ -73,22 +73,21 @@ export class Kernel {
    * @param store         Map of key-value.
    * @internal
    */
-  public static create(store?: IStore) {
-    return new Kernel(store);
-  }
+  public static create(store: IStore = {}) {
 
-  /**
-   * Create a kernel and bind Kernel#start() to beforeAll in test env.
-   *
-   * @internal
-   */
-  public static test(store: IStore = {}) {
-    store.OLY_LOGGER_LEVEL = store.OLY_LOGGER_LEVEL || "ERROR";
+    if (_.isTest()) {
+      store.OLY_LOGGER_LEVEL = store.OLY_LOGGER_LEVEL || "ERROR";
+    }
+
     const kernel = new Kernel(store);
-    if (_.isTest() && beforeAll && afterAll) {
+
+    if (_.isTest()
+      && typeof beforeAll === "function"
+      && typeof afterAll === "function") {
       beforeAll(() => kernel.start());
       afterAll(() => kernel.stop());
     }
+
     return kernel;
   }
 

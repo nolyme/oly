@@ -25,7 +25,7 @@ class Ctrl {
 
 describe("SwaggerProvider", () => {
 
-  const kernel = Kernel.test({
+  const kernel = Kernel.create({
     OLY_HTTP_SERVER_PORT: 6833,
   }).with(Ctrl, SwaggerProvider);
   const server = kernel.get(ApiProvider);

@@ -40,7 +40,7 @@ describe("ObjectMapper", () => {
       },
     };
 
-    const json = Kernel.test().get(JsonService);
+    const json = Kernel.create().get(JsonService);
     const obj = json.build(Data, JSON.stringify(raw));
 
     expect(obj.msg).toBe("hello world a1true");

@@ -17,7 +17,7 @@ class App {
 
 describe("CronProvider", () => {
 
-  Kernel.test().with(App, CronProvider);
+  Kernel.create().with(App, CronProvider);
 
   it("should tick once", async () => {
     await _.timeout(2200);

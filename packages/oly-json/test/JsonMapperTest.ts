@@ -4,7 +4,7 @@ import { Address, Person, Status } from "./fixtures";
 
 describe("JsonMapper", () => {
 
-  const kernel = Kernel.test();
+  const kernel = Kernel.create();
   const mapper = kernel.get(JsonMapper);
   const now = new Date();
   const data = JSON.stringify({

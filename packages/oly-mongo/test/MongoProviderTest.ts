@@ -11,7 +11,7 @@ describe("MongoProvider", () => {
   class MyRepository extends Repository.of(MyModel) {
   }
 
-  const kernel = Kernel.test();
+  const kernel = Kernel.create();
   const myRepository = kernel.get(MyRepository);
 
   it("should save data", async () => {

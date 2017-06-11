@@ -19,7 +19,7 @@ class App {
 
 describe("SecurityMiddlewares", () => {
 
-  const kernel = Kernel.test({
+  const kernel = Kernel.create({
     OLY_HTTP_SERVER_PORT: 6049,
   }).with(App);
   const server = kernel.get(ApiProvider);

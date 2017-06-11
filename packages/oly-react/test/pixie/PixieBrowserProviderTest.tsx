@@ -14,7 +14,7 @@ describe("PixieBrowserProvider", () => {
   class FakeApp {
   }
 
-  const kernel = Kernel.test()
+  const kernel = Kernel.create()
     .with(FakeApp, PixieBrowserProvider);
 
   const pixie = kernel.get(Pixie);

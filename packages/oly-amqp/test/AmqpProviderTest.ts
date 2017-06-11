@@ -18,7 +18,7 @@ describe("AmqpProvider", () => {
     }
   }
 
-  const kernel = Kernel.test().with(WorkerProvider, Tasks);
+  const kernel = Kernel.create().with(WorkerProvider, Tasks);
 
   const amqp = kernel.get(AmqpProvider);
 

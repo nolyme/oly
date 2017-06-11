@@ -3,6 +3,7 @@
 #### @decorator
 
 This is just a function called on the start on the application.
+
 The decorator **enhances** a property/class by adding
 metadata or modifying the prototype.
 
@@ -39,11 +40,35 @@ const r = s.add(1, 1); // 2
 
 #### Provider
 
-Big and heavy service which provide stuff.
-**Never use providers directly.**
+Big and heavy service which provides stuffs.
+**Don't use providers directly.**
 Most of the time, providers:
   - are stateful
   - use #onStart() to initialize states.
+  - are linked to a service
+
+```
+class Provider {
+  @state counter;
+  
+  onStart() {
+    this.counter = 0;
+  }
+}
+
+class Service {
+  @inject provider: Provider;
+  
+  inc() {
+    return this.provider.counter += 1;
+  }
+}
+
+const k = Kernel.create();
+const s = k.get(Service);
+await k.start();
+s.inc(); // 2
+```
 
 #### &#60;Component/&#62;
 

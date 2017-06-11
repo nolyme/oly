@@ -22,7 +22,7 @@ class App {
 
 describe("PixieServerProvider", () => {
 
-  const kernel = Kernel.test()
+  const kernel = Kernel.create()
     .with(App, PixieServerProvider);
   const server = kernel.get(ReactServerProvider);
   const client = kernel.get(HttpClient).with({

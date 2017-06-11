@@ -13,7 +13,7 @@ class DataRepository extends Repository.of(Data) {
 
 describe("DatabaseProvider", () => {
 
-  const kernel = Kernel.test({
+  const kernel = Kernel.create({
     OLY_DATABASE_URL: ":memory:",
   });
   const dataRepository = kernel.get(DataRepository);

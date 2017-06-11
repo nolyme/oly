@@ -90,7 +90,7 @@ describe("AppContext", () => {
     }
   }
 
-  const kernel = Kernel.test({DEFAULT_NAME: "Francis"});
+  const kernel = Kernel.create({DEFAULT_NAME: "Francis"});
   const container = document.createElement("div");
   container.setAttribute("id", "app");
   document.body.appendChild(container);

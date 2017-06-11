@@ -11,7 +11,7 @@ import { App } from "./fixtures";
 
 describe("BrowserReactProvider", () => {
 
-  const kernel = Kernel.test()
+  const kernel = Kernel.create()
     .with(App, ReactBrowserProvider);
 
   const browser = kernel.get(Browser);

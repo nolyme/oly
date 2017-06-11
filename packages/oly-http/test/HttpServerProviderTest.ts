@@ -14,7 +14,7 @@ describe("HttpServerProvider", () => {
   }
 
   const message = "OK";
-  const kernel = Kernel.test({
+  const kernel = Kernel.create({
     OLY_HTTP_SERVER_PORT: 6093,
   });
 
