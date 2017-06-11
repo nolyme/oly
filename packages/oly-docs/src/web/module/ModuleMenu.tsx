@@ -29,7 +29,7 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
     return (
       <div className="ModuleMenu_part">
         <div className="ModuleMenu_part-header">
-          {!provider ? "Services" : "Provider"}
+          {!provider ? "Services" : "Providers"}
         </div>
         {services.map((s) => (
             <div key={s.name}>

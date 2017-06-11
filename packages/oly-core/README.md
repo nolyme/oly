@@ -2,8 +2,11 @@
 
 o*l*y core is a module of the [o*l*y project](https://noly.me/oly).
 
-### Installation
+## Installation
 
 ```
 $ npm install oly-core
 ```
+
+All modules depends on oly-core. This is the only module written without external library.
+

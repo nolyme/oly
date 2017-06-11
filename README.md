@@ -21,12 +21,7 @@ export class App {
 }
 ```
 
-<br/>
-<hr/>
-<br/>
-
 ### Getting started
-<br/>
 
  - [oly-core](https://noly.me/oly/#/m/oly-core)   Take a look on the fundamental of o*l*y.
  - [oly-api](https://noly.me/oly/#/m/oly-api)     Make REST api with Koa and o*l*y.  
