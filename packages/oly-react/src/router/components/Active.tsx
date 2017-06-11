@@ -12,14 +12,19 @@ import { Router } from "../services/Router";
 export interface IActiveProps {
 
   /**
-   *
+   * Href / QueryHref.
    */
   href: string | IHrefQuery;
 
   /**
-   *
+   * Compare exact path.
    */
   strict?: boolean;
+
+  /**
+   * Always re-render on route change.
+   */
+  always?: boolean;
 }
 
 export interface IActiveState {
@@ -45,7 +50,7 @@ export class Active extends Component<IActiveProps, IActiveState> {
   @on(olyReactRouterEvents.TRANSITION_END)
   public onTransitionEnd(): void {
     const active = this.router.isActive(this.props.href, this.props.strict);
-    if (this.state.active !== active) {
+    if (this.state.active !== active || this.props.always) {
       this.setState({active});
     }
   }

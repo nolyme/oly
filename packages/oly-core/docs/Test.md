@@ -1,12 +1,16 @@
-### Test
+### Jest
 
 There is a wonderful tool called [jest](https://facebook.github.io/jest/).
 
 - very fast
 - coverage
-- browser/server
+- env browser/server
 - async/await
 - typescript (with ts-jest)
+
+```bash
+$ npm i -D jest ts-jest @types/jest
+```
 
 #### Example
 
@@ -25,16 +29,6 @@ describe("A", () => {
   
   // inject regular service
   const s = k.get(Service);
- 
-  // mock
-  k.with({
-    provide: HttpClient,
-    use: class extends HttpClient {
-      request() {
-        return {};
-      }
-    }
-  })
   
   it("should be ok", () => {
   

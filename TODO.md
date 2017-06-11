@@ -3,10 +3,10 @@
 
 - (docs) add docs. **[IN PROGRESS]**
 - (*) use `/__tests__/`
-- oly-react test refactoring
 - coverage100
 
 - Cookie.get() Cookie.set(), cookie sec
+- scroll top on route change
 - pixie auto route !!!
 - pagination Page
 - amqp @retry

@@ -23,7 +23,7 @@ export class OnDecorator implements IDecorator {
  *
  * ```ts
  * class A {
- *   public @on b = () => console.log("Hey");
+ *   @on b = () => console.log("Hey");
  * }
  * ```
  *

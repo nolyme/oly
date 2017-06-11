@@ -8,8 +8,8 @@ o*l*y core is a module of the [o*l*y project](https://noly.me/oly).
 $ npm install oly-core
 ```
 
-> All o*l*y modules depends on oly-core. 
-This is the only module written without (big) external library.
+> All o*l*y modules depend on oly-core. 
+This is the only module written without external library.
 
 ## Why
 

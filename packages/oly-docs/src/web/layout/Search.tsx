@@ -1,23 +1,29 @@
 import { Popover, Position } from "@blueprintjs/core";
 import { inject } from "oly-core";
-import { action, attach, Go, styles } from "oly-react";
+import { action, attach, Go, Router, styles } from "oly-react";
 import * as React from "react";
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
 import { IDocs } from "../../cli/interfaces";
 import { ISearchItem, ModuleService } from "../ModuleService";
 
 export interface IState {
   query: string;
   results: ISearchItem[] | null;
+  focus: number;
 }
 
 @attach
 @styles(() => require("./Search.scss"))
 export class Search extends React.Component<{ docs: IDocs }, IState> {
 
-  public state: IState = {query: "", results: null};
+  public state: IState = {
+    query: "",
+    results: null,
+    focus: -1,
+  };
 
   @inject private ms: ModuleService;
+  @inject private router: Router;
 
   @action
   public handlePopoverInteraction(nextOpenState: boolean) {
@@ -28,7 +34,7 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
 
   @action
   public resetState() {
-    this.setState({query: "", results: null});
+    this.setState({query: "", results: null, focus: -1});
   }
 
   @action
@@ -39,19 +45,77 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
       return;
     }
     const results = this.ms.search(query);
-    this.setState({query, results});
+    if (results.length > 0) {
+      this.setState({query, results, focus: 0});
+    } else {
+      this.setState({query, results});
+    }
+  }
+
+  @action
+  public onSubmit(ev: SyntheticEvent<any>) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    if (this.state.results) {
+      this.setState({query: "", results: null, focus: -1});
+      this.router.go(this.state.results[this.state.focus].href);
+    }
+  }
+
+  @action
+  public onKeyDown(ev: KeyboardEvent<any>) {
+    if (!this.state.results) {
+      return;
+    }
+    if (ev.keyCode === 40) {
+      if (this.state.focus < this.state.results.length) {
+        this.setState({
+          focus: this.state.focus += 1,
+        });
+      }
+    } else if (ev.keyCode === 38) {
+      if (this.state.focus > 0) {
+        this.setState({
+          focus: this.state.focus -= 1,
+        });
+      } else if (this.state.focus === 0) {
+        this.setState({
+          focus: -1,
+        });
+      }
+    }
+  }
+
+  public onMouseOver(index: number) {
+    return (ev: MouseEvent<HTMLAnchorElement>) => {
+      this.setState({
+        focus: index,
+      });
+    };
   }
 
   public render() {
     return (
-      <div className="search">
+      <div
+        className="search"
+        onKeyDown={this.onKeyDown}
+      >
         <Popover
           content={(
             <div>
               {Array.isArray(this.state.results) && this.state.results.length > 0
-                ? this.state.results.map((result: any) => (
-                  <div key={result.href} className="search-item">
-                    <Go onClick={this.resetState} to={result.href}>
+                ? this.state.results.map((result: any, index) => (
+                  <div
+                    key={result.href}
+                    className="search-item"
+                    onKeyDown={this.onKeyDown}
+                  >
+                    <Go
+                      onClick={this.resetState}
+                      to={result.href}
+                      onMouseOver={this.onMouseOver(index)}
+                      className={this.state.focus === index ? "focus" : ""}
+                    >
                       <small className="pt-tag pt-round">{result.module.replace("oly-", "")}</small>
                       <span>{result.name}</span>
                     </Go>
@@ -67,9 +131,14 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
           popoverClassName="pt-popover-content-sizing pt-minimal search"
           position={Position.BOTTOM}
         >
-          <div className="pt-input-group" style={{marginRight: "20px"}}>
+          <form
+            className="pt-input-group"
+            style={{marginRight: "20px"}}
+            onSubmit={this.onSubmit}
+          >
             <span className="pt-icon pt-icon-search"/>
             <input
+              autoFocus={true}
               maxLength={30}
               style={{width: "235px"}}
               type="search"
@@ -78,7 +147,7 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
               value={this.state.query}
               className="pt-input"
             />
-          </div>
+          </form>
         </Popover>
       </div>
     );

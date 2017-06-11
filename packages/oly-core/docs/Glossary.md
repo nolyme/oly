@@ -1,5 +1,9 @@
 ### Naming Convention
 
+#### &#60;Components/&#62;
+
+[https://facebook.github.io/react/docs/react-component.html](https://facebook.github.io/react/docs/react-component.html)
+
 #### @decorators
 
 This is just a function called on the start on the application. The decorator **enhances** a property/class by adding
@@ -15,8 +19,9 @@ class Person {
   @init("Jean")
   name: string;
 }
-
 ```
+
+[https://www.typescriptlang.org/docs/handbook/decorators.html](https://www.typescriptlang.org/docs/handbook/decorators.html)
 
 #### Services
 
@@ -73,8 +78,3 @@ class Service {
   }
 }
 ```
-
-#### &#60;Components/&#62;
-
-[https://facebook.github.io/react/docs/react-component.html](https://facebook.github.io/react/docs/react-component.html)
-

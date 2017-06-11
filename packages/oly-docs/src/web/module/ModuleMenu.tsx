@@ -1,6 +1,8 @@
+import { Collapse } from "@blueprintjs/core";
 import { inject } from "oly-core";
-import { Active, attach, Go, Router, styles } from "oly-react";
+import { attach, Go, olyReactRouterEvents, Router, styles } from "oly-react";
 import * as React from "react";
+import { on } from "oly-core";
 import { IModuleContent } from "../../cli/interfaces";
 
 @attach
@@ -13,6 +15,12 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
 
   @inject
   private router: Router;
+
+  @on(olyReactRouterEvents.TRANSITION_END)
+  public onTransitionEnd(): void {
+    // je m'en bats les couilles
+    this.forceUpdate();
+  }
 
   public rel(path: string = ""): string {
     return `/m/${this.props.module.name}/${path}`;
@@ -32,19 +40,19 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
           {!provider ? "Services" : "Providers"}
         </div>
         {services.map((s) => (
-            <div key={s.name}>
-              <Go to="service" params={{service: s.name}}>
-                {s.name}
-              </Go>
-              <Active href={{to: "service", params: {service: s.name}}}>
-                {s.methods.map((m) => (
-                  <div key={m.name} className="sub">
-                    <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
-                  </div>
-                ))}
-              </Active>
-            </div>
-          ))}
+          <div key={s.name}>
+            <Go to="service" params={{service: s.name}}>
+              {s.name}
+            </Go>
+            <Collapse isOpen={this.router.isActive({to: "service", params: {service: s.name}})}>
+              {s.methods.map((m) => (
+                <div key={m.name} className="sub">
+                  <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
+                </div>
+              ))}
+            </Collapse>
+          </div>
+        ))}
       </div>
     );
   }

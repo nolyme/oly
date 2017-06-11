@@ -40,7 +40,7 @@ renderer.code = (code, language) => {
   if (!language) {
     return `<pre><code>${code}</code></pre>`;
   }
-  const highlighted = Prism.highlight(code, Prism.languages[language]);
+  const highlighted = Prism.highlight(code.replace(/&shy;/gim, ""), Prism.languages[language]);
   return `<pre class="language-${language}"><code class="language-${language}">${highlighted}</code></pre>`;
 };
 

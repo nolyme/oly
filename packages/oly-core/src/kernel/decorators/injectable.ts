@@ -39,9 +39,10 @@ export class InjectableDecorator implements IDecorator {
 /**
  * Configure service.
  *
- * ```
- * @inject
- * class A {}
+ * ```ts
+ * &shy;@injectable
+ * class A {
+ * }
  * ```
  */
 export const injectable = Meta.decorator<IInjectableOptions>(InjectableDecorator);

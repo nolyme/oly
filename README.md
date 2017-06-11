@@ -4,15 +4,12 @@ Set of libraries to create well-written [TypeScript](https://github.com/Microsof
 
 The set is based on known projects, such as [Koa](https://github.com/koajs/koa) and [React](https://github.com/facebook/react).
 
-It's experimental.
-
 ### Why
 
 - hide complexity of server-side rendering
 - make code between client/server consistency
 - easily and quickly test everything
 - unify contexts into one single class
-- be invisible
 
 ### Overview
 
@@ -37,7 +34,7 @@ export class Home extends React.Component<IHomeProps, {}> {
 }
 ```
 
-With SSR, we need to resolve data before the rendering.
+With SSR, we need to fetch data before the rendering.
 ```ts
 import { inject } from "oly-core";
 import { page, PixieHttp } from "oly-react";

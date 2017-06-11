@@ -49,7 +49,7 @@ export class Prism extends Component<{ html: string }, {}> {
           const results = this.ms.search(query);
           const d = results.find((r) => r.name === query);
           if (d && !this.router.isActive(d.href, true)) {
-            return element.replace(query, `<a href="${d.href}" class="link" style="color: black">${query}</a>`);
+            return element.replace(query, `<a href="${d.href}" class="link" style="color: inherit">${query}</a>`);
           }
           return element;
         },
@@ -67,7 +67,7 @@ export class Prism extends Component<{ html: string }, {}> {
             },
           });
           if (href && !this.router.isActive(href)) {
-            return element.replace(query, `<a href="${href}" class="link">${query}</a>`);
+            return element.replace(query, `<a href="${href}" class="link" style="color: inherit">${query}</a>`);
           }
           return element;
         },
