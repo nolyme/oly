@@ -80,10 +80,22 @@ export class Router {
 
     const current = this.current.path.replace(/\/$/, "");
     const target = href.replace(/\/$/, "");
+
     if (strict) {
       return current === target;
     }
 
-    return current.indexOf(target) === 0;
+    if (current.indexOf(target) !== 0) {
+      return false;
+    }
+
+    // note: we need to check the offset
+    // for /abc/def
+    // - /abc             is Active
+    // - /abc/def         is Active
+    // - /abc/d           is NOT Active :)
+    const offset = current.replace(target, "")[0];
+
+    return (!offset || offset === "/");
   }
 }
