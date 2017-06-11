@@ -71,13 +71,16 @@ export class Kernel {
    * ```
    *
    * @param store         Map of key-value.
+   * @internal
    */
   public static create(store?: IStore) {
     return new Kernel(store);
   }
 
   /**
+   * Create a kernel and bind Kernel#start() to beforeAll in test env.
    *
+   * @internal
    */
   public static test(store: IStore = {}) {
     store.OLY_LOGGER_LEVEL = store.OLY_LOGGER_LEVEL || "ERROR";
