@@ -6,7 +6,7 @@ import { IDocs } from "../../cli/interfaces";
 import { ModuleService } from "../ModuleService";
 
 @attach
-export class Prism extends Component<{ html: string }, {}> {
+export class Prism extends Component<{ html: string; className?: string }, {}> {
 
   @state("DOCS") docs: IDocs;
   @inject ms: ModuleService;
@@ -24,7 +24,7 @@ export class Prism extends Component<{ html: string }, {}> {
       (element, query) => {
         const [d] = this.ms.search(query);
         if (d && !this.router.isActive(d.href, true)) {
-          return `<a href="${d.href}" class="link" >${element}</a>`;
+          return `<a href="${d.href}" class="link" style="color: inherit">${element}</a>`;
         }
         return element;
       },
@@ -44,7 +44,7 @@ export class Prism extends Component<{ html: string }, {}> {
     const services = this.ms.getServices();
     for (const s of services) {
       html = html.replace(
-        new RegExp(`(${s.name})[^\\w/#]`, "g"),
+        new RegExp(`[^\\w](${s.name})[^\\w/#]`, "g"),
         (element, query) => {
           const results = this.ms.search(query);
           const d = results.find((r) => r.name === query);
@@ -79,7 +79,10 @@ export class Prism extends Component<{ html: string }, {}> {
 
   public render() {
     return (
-      <div dangerouslySetInnerHTML={{__html: this.html}}/>
+      <div
+        className={this.props.className}
+        dangerouslySetInnerHTML={{__html: this.html}}
+      />
     );
   }
 }

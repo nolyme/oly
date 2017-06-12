@@ -12,6 +12,7 @@ export class ApiManual extends Component<{ module: IModuleContent; manual: IDocM
     return (
       <div>
         <h2>{this.props.manual.name}</h2>
+        <div className="separator"/>
         <Prism html={this.props.manual.content}/>
       </div>
     );

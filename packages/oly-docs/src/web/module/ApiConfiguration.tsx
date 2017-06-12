@@ -9,6 +9,7 @@ export class ApiConfiguration extends React.Component<{ module: IModuleContent }
     return (
       <div>
         <h2>Configuration</h2>
+        <div className="separator"/>
         <table className="pt-table pt-striped pt-bordered">
           <thead>
           <tr>

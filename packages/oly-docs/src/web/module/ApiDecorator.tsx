@@ -12,7 +12,8 @@ export class ApiDecorator extends Component<{ module: IModuleContent; decorator:
       <div>
         <small className="pt-text-muted">Decorator</small>
         <h2>@{this.props.decorator.name}</h2>
-        <Prism html={this.props.decorator.install}/>
+        <div className="separator"/>
+        <Prism html={this.props.decorator.install} className="naked"/>
         <h3>Description</h3>
         <Prism html={this.props.decorator.description}/>
       </div>

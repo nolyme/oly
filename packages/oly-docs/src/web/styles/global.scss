@@ -18,6 +18,18 @@
     margin-bottom: 20px;
   }
 
+  h2 {
+    margin-top: 10px;
+  }
+
+  .separator {
+    border-bottom: 2px solid rgba($pt-intent-primary, 0.6);
+    margin-left: -50px;
+    margin-right: -150px;
+    padding-left: 50px;
+    padding-bottom: 10px;
+  }
+
   .pt-table {
     width: 100%;
   }

@@ -12,7 +12,8 @@ export class ApiComponent extends Component<{ module: IModuleContent; component:
       <div>
         <small className="pt-text-muted">Component</small>
         <h2>{`<${this.props.component.name}/>`}</h2>
-        <Prism html={this.props.component.install}/>
+        <div className="separator"/>
+        <Prism html={this.props.component.install} className="naked"/>
         <h3>Description</h3>
         <Prism html={this.props.component.description}/>
         <h3>Props</h3>

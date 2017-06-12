@@ -15,6 +15,16 @@ pre.language-ts, pre.language-bash {
   margin-bottom: 30px;
 }
 
+.naked {
+  pre.language-ts, pre.language-bash {
+    box-shadow: none;
+    border: none;
+    background: none;
+    padding-left: 0;
+    padding-top: 30px;
+  }
+}
+
 .token.script.language-typescript {
   color: black;
 }

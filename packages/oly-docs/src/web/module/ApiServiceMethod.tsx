@@ -13,11 +13,11 @@ export class ApiServiceMethod extends React.Component<{ service: IDocService; me
         <h2>
           {this.props.service.name}#{this.props.method.name}()
         </h2>
-        <p>
+        <p className="pt-text-muted">
           {this.props.service.name}#{this.props.method.name}(
           {this.props.method.parameters.map((prop, i) => (
             <span key={i}>
-              <span>{(i ? ", " : "")} </span>
+              <span>{(i ? ", " : "")}</span>
               <span>{prop.name + ": "}</span>
               <strong>{prop.type}</strong>
             </span>
@@ -25,31 +25,34 @@ export class ApiServiceMethod extends React.Component<{ service: IDocService; me
           )
           {": " + this.props.method.returnType}
         </p>
+        <div className="separator"/>
         <h3>Description</h3>
         <Prism html={this.props.method.description}/>
-        <h3>Arguments</h3>
-        <table className="pt-table pt-striped pt-bordered">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Required</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          {this.props.method.parameters.map((prop) => (
-            <tr key={prop.name}>
-              <td><strong>{prop.name}</strong></td>
-              <td><code>{prop.type.replace("undefined | ", "")}</code></td>
-              <td><Prism html={prop.default || ""}/></td>
-              <td>{(prop.optional || !!prop.default) ? "" : "true"}</td>
-              <td><Prism html={prop.description}/></td>
+        {this.props.method.parameters.length > 0 && (<div>
+          <h3>Arguments</h3>
+          <table className="pt-table pt-striped pt-bordered">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Required</th>
+              <th>Description</th>
             </tr>
-          ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            {this.props.method.parameters.map((prop) => (
+              <tr key={prop.name}>
+                <td><strong>{prop.name}</strong></td>
+                <td><code>{prop.type.replace("undefined | ", "")}</code></td>
+                <td><Prism html={prop.default || ""}/></td>
+                <td>{(prop.optional || !!prop.default) ? "" : "true"}</td>
+                <td><Prism html={prop.description}/></td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>)}
       </div>
     );
   }

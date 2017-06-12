@@ -11,7 +11,8 @@ export class ApiService extends React.Component<{ module: IModuleContent; servic
       <div>
         <small className="pt-text-muted">Service</small>
         <h2>{this.props.service.name}</h2>
-        <Prism html={this.props.service.install}/>
+        <div className="separator"/>
+        <Prism html={this.props.service.install} className="naked"/>
         <h3>Description</h3>
         <Prism html={this.props.service.description}/>
       </div>
