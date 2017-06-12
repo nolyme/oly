@@ -27,7 +27,7 @@ export class OnDecorator implements IDecorator {
  * }
  * ```
  *
- * ### Free
+ * #### Free
  *
  * You don't need to free() events on services. Like events, services are stored in the kernel.
  * When the kernel dies, services die and events are erased.

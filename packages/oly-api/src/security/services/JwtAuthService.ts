@@ -18,10 +18,10 @@ export class JwtAuthService {
 
   public token: IToken;
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  @inject(CryptoService)
+  @inject
   protected cryptoService: CryptoService;
 
   /**

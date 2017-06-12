@@ -11,6 +11,7 @@ export interface IDocService {
   name: string;
   description: string;
   methods: IDocMethod[];
+  install: string;
 }
 
 export interface IDocParameter {
@@ -30,12 +31,14 @@ export interface IDocComponent {
   name: string;
   description: string;
   props: IDocParameter[];
+  install: string;
 }
 
 export interface IDocDecorator {
   name: string;
   description: string;
   parameters: IDocParameter[];
+  install: string;
 }
 
 export interface IDocEnv {

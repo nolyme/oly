@@ -21,6 +21,11 @@ export interface IViewProps {
    *
    */
   name?: string;
+
+  /**
+   *
+   */
+  onChange?: () => any;
 }
 
 /**
@@ -67,9 +72,12 @@ export class View extends Component<IViewProps, { content: any }> {
       && level === this.index
       && this.content !== this.state.content) {
       this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
-      return new Promise<void>((resolve) =>
-        this.setState({content: this.content}, () => resolve()),
-      );
+      return new Promise<void>((resolve) => this.setState({content: this.content}, () => {
+        resolve();
+        if (typeof this.props.onChange === "function") {
+          this.props.onChange();
+        }
+      }));
     }
     return Promise.resolve();
   }

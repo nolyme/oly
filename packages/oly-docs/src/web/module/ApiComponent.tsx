@@ -11,9 +11,11 @@ export class ApiComponent extends Component<{ module: IModuleContent; component:
     return (
       <div>
         <small className="pt-text-muted">Component</small>
-        <h3>{`<${this.props.component.name}/>`}</h3>
+        <h2>{`<${this.props.component.name}/>`}</h2>
+        <Prism html={this.props.component.install}/>
+        <h3>Description</h3>
         <Prism html={this.props.component.description}/>
-        <h4>Props</h4>
+        <h3>Props</h3>
         <table className="pt-table pt-striped pt-bordered">
           <thead>
           <tr>

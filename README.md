@@ -1,4 +1,4 @@
-# o *l* y
+# o*l*y
 
 Set of libraries to create well-written [TypeScript](https://github.com/Microsoft/TypeScript) applications with [Node.js®](https://nodejs.org/en/) and Browsers.
 

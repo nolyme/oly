@@ -72,7 +72,8 @@
         "core/decorators/query.ts"
       ],
       "services": [
-        "core/providers/ApiProvider.ts"
+        "core/providers/ApiProvider.ts",
+        "security/services/JwtAuthService.ts"
       ]
     },
     {

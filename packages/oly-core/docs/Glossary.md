@@ -52,9 +52,9 @@ const r = s.add(1, 1); // 2
 Big and heavy service which provides stuffs. **Don't use providers directly.** 
 
 Most of the time, providers:
- - are stateful
+ - are stateful.
  - use Kernel#start() to initialize their states.
- - are linked to a service
+ - are linked to a service.
 
 Some providers:
  - ApiProvider

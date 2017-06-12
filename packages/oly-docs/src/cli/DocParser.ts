@@ -21,6 +21,7 @@ import {
   IDocParameter,
   IDocService,
 } from "./interfaces";
+import { ModuleConfiguration } from "./models/ModuleConfiguration";
 import "./prism/tsx";
 
 const renderer = new marked.Renderer();
@@ -66,8 +67,9 @@ export class DocParser {
     });
   }
 
-  public generateComponents(app: Application, path: string, results: string[] = []): IDocComponent[] {
+  public generateComponents(app: Application, path: string, m: ModuleConfiguration): IDocComponent[] {
     this.logger.debug("check components");
+    const results = m.components || [];
     results.map((r) => this.check(resolve(path, r)));
 
     const components = this.generateDeclarations(app, path, results);
@@ -83,6 +85,7 @@ export class DocParser {
       return {
         name: clazz.name,
         description: this.getDescription(clazz),
+        install: this.markInstall(clazz.name, m.name),
         props: props
           ? props.children.filter((p) => !p.inheritedFrom).map((p) => {
             return {
@@ -99,28 +102,30 @@ export class DocParser {
     });
   }
 
-  public generateDecorator(app: Application, path: string, results: string[] = []): IDocDecorator[] {
+  public generateDecorator(app: Application, path: string, m: ModuleConfiguration): IDocDecorator[] {
     this.logger.debug("check decorators");
+    const results = m.decorators || [];
     results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
 
     return declarations
       .map((i) => i.children[i.children.length - 1])
-      .map((i) => this.mapDecorators(i))
+      .map((i) => this.mapDecorators(i, m.name))
       .map((i) => {
         this.logger.info(`push @${i.name}`);
         return i;
       });
   }
 
-  public generateService(app: Application, path: string, results: string[] = []): IDocService[] {
+  public generateService(app: Application, path: string, m: ModuleConfiguration): IDocService[] {
     this.logger.debug("check services");
+    const results = m.services || [];
     results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
 
     return declarations
       .map((i) => i.children[i.children.length - 1])
-      .map((i) => this.mapService(i))
+      .map((i) => this.mapService(i, m.name))
       .map((i) => {
         this.logger.info(`push ${i.name}`);
         return i;
@@ -179,10 +184,11 @@ export class DocParser {
       files.indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
   }
 
-  public mapDecorators(decorator: DeclarationReflection): IDocDecorator {
+  public mapDecorators(decorator: DeclarationReflection, module: string): IDocDecorator {
     return {
       description: this.getDescription(decorator),
       name: decorator.name,
+      install: this.markInstall(decorator.name, module),
       parameters: [],
     };
   }
@@ -197,10 +203,11 @@ export class DocParser {
     };
   }
 
-  public mapService(service: DeclarationReflection): IDocService {
+  public mapService(service: DeclarationReflection, module: string): IDocService {
     return {
       description: this.getDescription(service),
       methods: this.getPublicMethods(service),
+      install: this.markInstall(service.name, module),
       name: service.name,
     };
   }
@@ -328,6 +335,14 @@ export class DocParser {
 
   public sanitize(text: string): string {
     return text.trim();
+  }
+
+  public markInstall(service: string, module: string): string {
+    return this.mark(`
+\`\`\`ts
+import { ${service} } from "${module}";
+\`\`\`
+    `.trim());
   }
 
   public mark(text: string): string {

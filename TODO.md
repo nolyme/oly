@@ -1,7 +1,11 @@
 
 # TODO
 
+
+docs: double sidebar edge, safari bide
+
 - (docs) add docs. **[IN PROGRESS]**
+  - type! interfaces! returns Type.
 - (*) use `/__tests__/`
 - coverage100
 

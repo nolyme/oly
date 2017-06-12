@@ -28,7 +28,7 @@ export const initProject = () => {
   copyFiles("project");
 };
 
-export const initBrowser = (): void => {
+export const initClient = (): void => {
   ensureDependencies([
     "typescript",
     {name: "oly-core", dev: false},
@@ -41,7 +41,7 @@ export const initBrowser = (): void => {
     "webpack-dev-server",
   ]);
   copyFiles("project");
-  copyFiles("browser");
+  copyFiles("client");
   mergePackageJson({
     scripts: {
       build: "webpack",
@@ -96,7 +96,7 @@ export const initCommands: ICommands = {
   },
   "--client": {
     help: "simple browser file with react/webpack",
-    exec: () => initBrowser(),
+    exec: () => initClient(),
   },
   "--server": {
     help: "simple server file with koa",

@@ -81,15 +81,15 @@ export class DocProvider {
     this.logger.info(`add module ${m.name}`);
 
     return {
-      decorators: this.parser.generateDecorator(app, sources, m.decorators),
+      decorators: this.parser.generateDecorator(app, sources, m),
       interfaces: [],
-      components: this.parser.generateComponents(app, sources, m.components),
+      components: this.parser.generateComponents(app, sources, m),
       manuals: this.parser.generateManuals(app, project, m.manuals),
       env: this.parser.generateEnv(app, sources, m.services),
       home: this.parser.mark(readFileSync(resolve(project, "README.md"), "UTF-8")),
       icon: m.icon,
       name: m.name,
-      services: this.parser.generateService(app, sources, m.services),
+      services: this.parser.generateService(app, sources, m),
     };
   }
 }
