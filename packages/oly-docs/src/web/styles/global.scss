@@ -11,6 +11,7 @@
   height: 100%;
   width: 100%;
   background-color: $white;
+  overflow: hidden;
 
   h1, h2, h3, h4 {
     margin-top: 30px;
@@ -39,7 +40,6 @@
     margin-bottom: 40px;
     padding-bottom: 10px;
     color: $dark-gray1;
-    box-shadow: 0 2px rgba($pt-intent-primary, 0.3);
   }
 
   h3, h4 {
@@ -80,7 +80,6 @@
 
 .flex-full {
   flex: 1;
-  height: 100%;
 
   &.with-scroll {
     overflow-y: auto;

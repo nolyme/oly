@@ -1,7 +1,7 @@
 @import "../styles/variables";
 
 .ModuleMenu {
-  background: linear-gradient(to right, white, rgba($pt-intent-primary, 0.04));
+  background: linear-gradient(to right, rgba($white, 0.05), rgba($pt-intent-primary, 0.05));
   padding: 50px 0 50px 50px;
   border-right: 2px solid rgba($pt-intent-primary, 0.6);
   width: 250px;
