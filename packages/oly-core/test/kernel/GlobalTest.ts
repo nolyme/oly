@@ -19,12 +19,12 @@ describe("Global", () => {
     });
   });
   describe(".isEqualClass()", () => {
-    const f1 = () => class A {
+    const f1 = () => class Abc {
       toto() {
         return 0;
       }
     };
-    const f2 = () => class A {
+    const f2 = () => class Abc {
       toto() {
         return 0;
       }

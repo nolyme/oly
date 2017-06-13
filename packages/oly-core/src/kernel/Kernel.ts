@@ -28,8 +28,12 @@ import {
 import { IStateMutateEvent, IStatesMetadata, IStore } from "./interfaces/states";
 
 /**
- * Kernel is a registry as context.
- * All the oly world depends on Kernel.
+ * Kernel is a master class.
+ *
+ * There are 3 registries:
+ * - Dependencies
+ * - Events
+ * - Store
  *
  * There are three things: Dependencies, States and Events.
  * - Dependencies are classes declarations with relations.
@@ -182,10 +186,20 @@ export class Kernel {
   /**
    * Create a new kernel with the same definitions.
    * - declarations are cloned
-   * - but instances are cleared
+   * - instances are cleared
    * - store is cleared
-   * - but daddy store is accessible
-   * - events are isolated
+   * - new events are isolated
+   *
+   * Parent's store is stiff accessible.
+   *
+   * ```ts
+   * const k = new Kernel({ A: "B", C: "D" });
+   * const c = k.fork({ A: "F");
+   * c.state("A"); // F
+   * c.state("C"); // D
+   * ```
+   *
+   * @param store     Map of key value
    */
   public fork(store?: any): Kernel {
     return new Kernel(store, this);
@@ -317,12 +331,9 @@ export class Kernel {
    * ```
    *
    * @param definition          IDefinition or IDefinition
-   * @param [options]           Injection options
-   * @param [options.parent]    Who want this dependency, default `undefined`
-   * @param [options.register]  Register definition ? default `true`
-   * @param [options.instance]  Do we have already an instance ? default `undefined`
+   * @param options             Injection options
    */
-  public get<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions = {}): T {
+  public get<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
 
     // skip declaration, just inject
     if (typeof definition === "function" && (options.register === false || !!options.instance)) {

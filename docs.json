@@ -25,7 +25,8 @@
       "icon": "ninja",
       "decorators": [
         "decorators/field.ts",
-        "decorators/array.ts"
+        "decorators/array.ts",
+        "decorators/date.ts"
       ],
       "services": [
         "services/Json.ts"
@@ -44,11 +45,13 @@
       "icon": "delta",
       "decorators": [
         "core/decorators/attach.ts",
-        "router/decorators/page.ts"
+        "router/decorators/page.ts",
+        "router/decorators/layout.ts"
       ],
       "components": [
         "router/components/Go.tsx",
-        "router/components/View.tsx"
+        "router/components/View.tsx",
+        "core/components/AppContext.tsx"
       ],
       "services": [
         "router/services/Router.ts",
@@ -56,7 +59,9 @@
         "router/providers/ReactRouterProvider.ts",
         "router/providers/ReactBrowserProvider.ts",
         "server/providers/ReactServerProvider.ts",
-        "pixie/services/PixieHttp.ts"
+        "pixie/services/PixieHttp.ts",
+        "pixie/services/Pixie.ts",
+        "pixie/services/PixieSession.ts"
       ]
     },
     {
@@ -69,11 +74,15 @@
         "core/decorators/del.ts",
         "core/decorators/body.ts",
         "core/decorators/param.ts",
-        "core/decorators/query.ts"
+        "core/decorators/header.ts",
+        "core/decorators/query.ts",
+        "router/decorators/use.ts",
+        "router/decorators/router.ts"
       ],
       "services": [
         "core/providers/ApiProvider.ts",
-        "security/services/JwtAuthService.ts"
+        "security/services/JwtAuthService.ts",
+        "security/services/CryptoService.ts"
       ]
     },
     {

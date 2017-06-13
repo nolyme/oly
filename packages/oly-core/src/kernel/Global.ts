@@ -102,15 +102,13 @@ export class Global {
       return false;
     }
 
-    if (Global.isProduction()) {
-      return type1 === type2;
-    }
-
     if (type1 === type2) {
       return true;
     }
 
-    if (typeof type1.name === "string" && (type1.name === type2.name)) {
+    if (typeof type1.name === "string"
+      && type1.name.length > 2
+      && type1.name === type2.name) {
       const keys1 = Object.getOwnPropertyNames(type1.prototype);
       const keys2 = Object.getOwnPropertyNames(type2.prototype);
       for (let i = 0; i < keys1.length; i++) {
@@ -118,6 +116,7 @@ export class Global {
           return false;
         }
       }
+
       return ("" + type1) === ("" + type2);
     }
 

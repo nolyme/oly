@@ -65,10 +65,22 @@ export interface IInjectionsMetadata extends IMetadata {
 /**
  * Kernel#get() options.
  */
-export interface IKernelGetOptions {
+export interface IKernelGetOptions<T = any> {
+
+  /**
+   * Class who wants the injection.
+   */
   parent?: Class;
+
+  /**
+   * Store the dependencies ?
+   */
   register?: boolean;
-  instance?: any;
+
+  /**
+   * Use this instance instead of created a new one.
+   */
+  instance?: T;
 }
 
 /**
