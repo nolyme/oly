@@ -53,6 +53,16 @@ export class BodyDecorator implements IDecorator {
 }
 
 /**
+ * Extract `request.body` from IKoaContext.
  *
+ * ```ts
+ * class A
+ *
+ *   @post("/")
+ *   create(@body body: object) {
+ *     console.log(body);
+ *   }
+ * }
+ * ```
  */
 export const body = Meta.decorator<IBodyOptions>(BodyDecorator);

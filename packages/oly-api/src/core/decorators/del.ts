@@ -1,11 +1,11 @@
 import { route } from "../../router/decorators/route";
 
 /**
- * Create a DEL route.
+ * Define a route with the http method DELETE.
  *
  * ```ts
  * class A {
- *  @del("/") remove() {}
+ *   @del("/") remove() {}
  * }
  * ```
  *

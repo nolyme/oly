@@ -75,7 +75,7 @@ export class Logger {
    * kernel.get(Logger).as('MyComponent');
    * ```
    *
-   * @param componentName - Component name
+   * @param componentName     Component name
    * @returns {Logger}
    */
   public as(componentName: string) {
