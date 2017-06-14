@@ -1,5 +1,4 @@
-import { env, inject, Logger } from "oly-core";
-import { Global } from "../../../../oly-core/src/kernel/Global";
+import { env, Global, inject, Logger } from "oly-core";
 import { Browser } from "../../router/services/Browser";
 import { Pixie } from "./Pixie";
 
