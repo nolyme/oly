@@ -28,7 +28,7 @@ export class InjectableDecorator implements IDecorator {
         if (!data || !data.args || !data.args.$constructor || !data.args.$constructor[i]) {
           meta.set({
             type: paramTypes[i],
-            handler: (k: Kernel) => k.get(paramTypes[i] as Class),
+            handler: (k: Kernel) => k.inject(paramTypes[i] as Class),
           });
         }
       }

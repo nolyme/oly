@@ -18,7 +18,7 @@ describe("HttpServerProvider", () => {
     OLY_HTTP_SERVER_PORT: 6093,
   });
 
-  const server = kernel.get(HttpServerProvider)
+  const server = kernel.inject(HttpServerProvider)
     .use((ctx, next) => {
       return next().catch((e) => {
         if (e instanceof HttpServerException) {
@@ -34,7 +34,7 @@ describe("HttpServerProvider", () => {
       ctx.body = message;
     });
 
-  const client = kernel.get(HttpClient)
+  const client = kernel.inject(HttpClient)
     .with({baseURL: server.hostname});
 
   it("should be fetched", async () => {

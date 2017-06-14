@@ -55,7 +55,7 @@ export class ApiMiddlewares {
   public log(): IKoaMiddleware {
     return (ctx: IKoaContext, next: Function) => {
 
-      const logger = ctx.kernel.get(Logger).as("KoaRouter");
+      const logger = ctx.kernel.inject(Logger).as("KoaRouter");
 
       logger.info(`incoming request ${ctx.method} ${ctx.path}`);
       logger.debug("request data", ctx.request.toJSON());

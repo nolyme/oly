@@ -73,7 +73,7 @@ export class Logger {
   /**
    * Change the componentName after instantiation.
    * ```
-   * kernel.get(Logger).as('MyComponent');
+   * kernel.inject(Logger).as('MyComponent');
    * ```
    *
    * @param componentName     Component name

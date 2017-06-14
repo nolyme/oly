@@ -28,7 +28,7 @@ export class BodyDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const json = k.get(Json);
+          const json = k.inject(Json);
           const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
           const value: object | object[] = this.options.name ? ctx.request.body[this.options.name] : ctx.request.body;
 

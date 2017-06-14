@@ -24,8 +24,8 @@ describe("PixieServerProvider", () => {
 
   const kernel = Kernel.create()
     .with(App, PixieServerProvider);
-  const server = kernel.get(ReactServerProvider);
-  const client = kernel.get(HttpClient).with({
+  const server = kernel.inject(ReactServerProvider);
+  const client = kernel.inject(HttpClient).with({
     baseURL: server.hostname,
   });
 

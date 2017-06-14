@@ -22,14 +22,14 @@ export class AttachDecorator implements IDecorator {
       // force Kernel#inject() before #componentWillMount()
       target.prototype.componentWillMount$$ = target.prototype.componentWillMount || _.noop;
       target.prototype.componentWillMount = function componentWillMount(this: React.Component<{}, {}>) {
-        this.context.kernel.get(ComponentInjector).inject(target, this);
+        this.context.kernel.inject(ComponentInjector).inject(target, this);
         return target.prototype.componentWillMount$$.apply(this, arguments);
       };
 
       // try to clean event-listeners before componentWillUnmount
       target.prototype.componentWillUnmount$$ = target.prototype.componentWillUnmount || _.noop;
       target.prototype.componentWillUnmount = function componentWillUnmount(this: React.Component<{}, {}>) {
-        this.context.kernel.get(ComponentInjector).free(this);
+        this.context.kernel.inject(ComponentInjector).free(this);
         return target.prototype.componentWillUnmount$$.apply(this, arguments);
       };
     }

@@ -10,7 +10,7 @@ export const parseToken = (): IKoaMiddleware => {
 
     const authorization = ctx.request.header.authorization;
     const tokenName = ctx.kernel.env("OLY_PIXIE_COOKIE");
-    const logger = ctx.kernel.get(Logger).as("parseToken");
+    const logger = ctx.kernel.inject(Logger).as("parseToken");
 
     if (typeof authorization === "string") {
 
@@ -18,12 +18,12 @@ export const parseToken = (): IKoaMiddleware => {
 
       const token = authorization.replace("Bearer ", "");
 
-      ctx.kernel.get(JwtAuthService).checkToken(token);
+      ctx.kernel.inject(JwtAuthService).checkToken(token);
     } else if (!!tokenName && !!ctx.cookies.get(tokenName)) {
 
       logger.trace("cookie token detected");
 
-      ctx.kernel.get(JwtAuthService).checkToken(ctx.cookies.get(tokenName));
+      ctx.kernel.inject(JwtAuthService).checkToken(ctx.cookies.get(tokenName));
     }
 
     await next();

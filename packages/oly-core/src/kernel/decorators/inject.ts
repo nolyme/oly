@@ -31,7 +31,7 @@ export class InjectDecorator implements IDecorator {
   public asParameter(t: object, p: string, i: number): void {
     Meta.of({key: olyCoreKeys.arguments, target: t, propertyKey: p, index: i}).set({
       type: this.options.type || Meta.designParamTypes(t, p)[i] as any,
-      handler: (k: Kernel) => k.get(this.options.type || Meta.designParamTypes(t, p)[i] as any),
+      handler: (k: Kernel) => k.inject(this.options.type || Meta.designParamTypes(t, p)[i] as any),
     });
   }
 }

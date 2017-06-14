@@ -16,7 +16,7 @@ import { ILogLevel, LogLevels } from "./LogLevels";
 export class JsonLogger extends Logger {
 
   protected log(type: ILogLevel, message: string, data?: object) {
-    if (LogLevels[this.logLevel] <= type) {
+    if (LogLevels[this.logLevel] <= LogLevels[type]) {
       this.appender(type, this.format(type, message, data));
     }
   }

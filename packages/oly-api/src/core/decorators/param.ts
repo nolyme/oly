@@ -28,7 +28,7 @@ export class ParamDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const builder = k.get(KoaRouterBuilder);
+          const builder = k.inject(KoaRouterBuilder);
           const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
           const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
           const value: string = ctx.params[name.toLowerCase()];

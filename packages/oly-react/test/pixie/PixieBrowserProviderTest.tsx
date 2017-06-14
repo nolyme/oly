@@ -17,7 +17,7 @@ describe("PixieBrowserProvider", () => {
   const kernel = Kernel.create()
     .with(FakeApp, PixieBrowserProvider);
 
-  const pixie = kernel.get(Pixie);
+  const pixie = kernel.inject(Pixie);
 
   it("should", () => {
     expect(pixie.get("a")).toBe("b");

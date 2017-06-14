@@ -6,7 +6,7 @@ import { Meta } from "./Meta";
 export class TimeDecorator extends AspectDecorator {
   public asProxy(ctx: IAspectParameter) {
     if (ctx.kernel) {
-      const l = ctx.kernel.get(Logger).as(ctx.target.name);
+      const l = ctx.kernel.inject(Logger).as(ctx.target.name);
       l.info(`Begin #${ctx.propertyKey}()`);
       const before = Date.now();
       ctx.call();

@@ -6,7 +6,7 @@ import { TypeUtil } from "../src/utils/TypeUtil";
 describe("JsonValidator", () => {
 
   const kernel = Kernel.create();
-  const validator = kernel.get(JsonValidator);
+  const validator = kernel.inject(JsonValidator);
 
   it("should valid string", () => {
 

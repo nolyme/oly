@@ -36,7 +36,7 @@ export class ComponentInjector {
 
     // just make a processing, skip registration and instantiation
     // NEVER REGISTER A REACT COMPONENT INSIDE THE KERNEL, NEVER; gygnygguuygnkuguyn
-    this.kernel.get(definition, {instance});
+    this.kernel.inject(definition, {instance});
 
     // process actions
     this.processActions(definition, instance);
@@ -84,7 +84,7 @@ export class ComponentInjector {
    */
   public processActions(target: Class, instance: object) {
 
-    const logger = this.kernel.get(Logger).as("Actions");
+    const logger = this.kernel.inject(Logger).as("Actions");
     const actionsMetadata = Meta.of({key: olyReactKeys.actions, target}).get<IActionsMetadata>();
     if (actionsMetadata) {
       const keys = Object.keys(actionsMetadata.properties);

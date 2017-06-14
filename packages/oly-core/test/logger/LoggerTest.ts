@@ -38,7 +38,7 @@ describe("Logger", () => {
       OLY_APP_NAME: "TEST",
       OLY_LOGGER_LEVEL: "ERROR",
     });
-    const a = k.get(A);
+    const a = k.inject(A);
     expect(a.logger["contextId"]).toBe(k.env("OLY_KERNEL_ID"));
     expect(a.logger["componentName"]).toBe("A");
     expect(a.logger["appName"]).toBe("TEST");
@@ -87,7 +87,7 @@ describe("Logger", () => {
     k.with({provide: Logger, use: FakeLogger});
     expect(FakeLogger.i).toBe(1);
 
-    const a = k.get(A);
+    const a = k.inject(A);
     expect(FakeLogger.i).toBe(2);
 
     a.test();

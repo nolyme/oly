@@ -14,8 +14,8 @@ describe("BrowserReactProvider", () => {
   const kernel = Kernel.create()
     .with(App, ReactBrowserProvider);
 
-  const browser = kernel.get(Browser);
-  const router = kernel.get(Router);
+  const browser = kernel.inject(Browser);
+  const router = kernel.inject(Router);
 
   it("should returns home", () => {
     expect(browser.root.textContent).toBe("Layout:Home");
@@ -47,7 +47,7 @@ describe("BrowserReactProvider", () => {
   });
 
   it("should returns 404", async () => {
-    const routerProvider = kernel.get(ReactRouterProvider);
+    const routerProvider = kernel.inject(ReactRouterProvider);
     await routerProvider.transition("/wat");
     expect(browser.root.textContent).toBe("Layout:NotFound");
   });

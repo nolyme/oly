@@ -20,7 +20,7 @@ describe("AmqpProvider", () => {
 
   const kernel = Kernel.create().with(WorkerProvider, Tasks);
 
-  const amqp = kernel.get(AmqpProvider);
+  const amqp = kernel.inject(AmqpProvider);
 
   it("should publish a message", async () => {
     await amqp.purge("abc.queue");

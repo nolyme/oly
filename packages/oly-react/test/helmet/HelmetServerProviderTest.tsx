@@ -35,8 +35,8 @@ describe("HelmetServiceProvider", () => {
 
   it("should insert html, body, meta, title", async () => {
 
-    const client = kernel.get(HttpClient).with({
-      baseURL: kernel.get(ReactServerProvider).hostname,
+    const client = kernel.inject(HttpClient).with({
+      baseURL: kernel.inject(ReactServerProvider).hostname,
     });
     const {data} = await client.get<string>("/");
     const $ = cheerio.load(data);

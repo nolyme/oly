@@ -32,7 +32,7 @@ describe("ReactServerProvider", () => {
       OLY_LOGGER_LEVEL: "ERROR",
       OLY_REACT_SERVER_POINTS: ["default"],
     }).with(app, ReactServerProvider);
-    const client = kernel.get(HttpClient).with({
+    const client = kernel.inject(HttpClient).with({
       baseURL: "http://localhost:" + kernel.env("OLY_HTTP_SERVER_PORT"),
     });
     await kernel.start();

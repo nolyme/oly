@@ -7,7 +7,7 @@ import { HttpServerProvider } from "./providers/HttpServerProvider";
  * @param kernel
  */
 export const USE_HTTP_COMPRESS = (kernel: Kernel) => {
-  kernel.get(HttpServerProvider).use(compress());
+  kernel.inject(HttpServerProvider).use(compress());
 };
 
 /**
@@ -15,5 +15,5 @@ export const USE_HTTP_COMPRESS = (kernel: Kernel) => {
  * @param kernel
  */
 export const USE_HTTP_HELMET = (kernel: Kernel) => {
-  kernel.get(HttpServerProvider).use(helmet());
+  kernel.inject(HttpServerProvider).use(helmet());
 };

@@ -103,9 +103,9 @@ export class ReactServerProvider implements IProvider {
       if (ctx.status === 404 && !ctx.body && ctx.url.indexOf(".") === -1) {
 
         const kernel: Kernel = ctx.kernel;
-        const logger: Logger = kernel.get(Logger).as("ReactRouter");
-        const router = kernel.get(ReactRouterProvider);
-        const renderer = kernel.get(ReactServerRenderer);
+        const logger: Logger = kernel.inject(Logger).as("ReactRouter");
+        const router = kernel.inject(ReactRouterProvider);
+        const renderer = kernel.inject(ReactServerRenderer);
 
         logger.info(`incoming request ${ctx.method} ${ctx.path}`);
         logger.trace("page data", ctx.request.toJSON());

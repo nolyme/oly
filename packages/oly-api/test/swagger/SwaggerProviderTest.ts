@@ -28,8 +28,8 @@ describe("SwaggerProvider", () => {
   const kernel = Kernel.create({
     OLY_HTTP_SERVER_PORT: 6833,
   }).with(Ctrl, SwaggerProvider);
-  const server = kernel.get(ApiProvider);
-  const client = kernel.get(HttpClient).with({baseURL: server.hostname});
+  const server = kernel.inject(ApiProvider);
+  const client = kernel.inject(HttpClient).with({baseURL: server.hostname});
 
   describe("#onStart()", () => {
     it("should provide spec", async () => {

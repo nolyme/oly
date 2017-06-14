@@ -16,7 +16,7 @@ describe("DatabaseProvider", () => {
   const kernel = Kernel.create({
     OLY_DATABASE_URL: ":memory:",
   });
-  const dataRepository = kernel.get(DataRepository);
+  const dataRepository = kernel.inject(DataRepository);
 
   it("should synchronise schema", async () => {
     expect(await dataRepository.count()).toBe(0);

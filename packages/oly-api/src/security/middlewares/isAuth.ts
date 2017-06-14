@@ -11,7 +11,7 @@ export const isAuth = (): IKoaMiddleware => {
 
     await parseToken()(ctx, () => Promise.resolve());
 
-    const authenticationService = ctx.kernel.get(JwtAuthService);
+    const authenticationService = ctx.kernel.inject(JwtAuthService);
 
     if (!authenticationService.token) {
       throw new UnauthorizedException();

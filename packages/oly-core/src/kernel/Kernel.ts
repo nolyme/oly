@@ -215,7 +215,7 @@ export class Kernel {
    *
    * ```ts
    * new Kernel()
-   *  .configure(k => k.get(Service).andDoSomething(''))
+   *  .configure(k => k.inject(Service).andDoSomething(''))
    *  .start()
    * ```
    *
@@ -334,7 +334,7 @@ export class Kernel {
    *
    * ```ts
    * class A { b = "c" }
-   * kernel.get(A).b; // "c"
+   * kernel.inject(A).b; // "c"
    * ```
    *
    * @param definition          IDefinition or IDefinition
@@ -733,7 +733,7 @@ export class Kernel {
    *
    * will be transformed into:
    * ```
-   * class A { get b() { return kernel.get(B) } }
+   * class A { get b() { return kernel.inject(B) } }
    * ```
    *
    * Exception for the factories, there are instantiated here only once by definition.

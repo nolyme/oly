@@ -22,9 +22,9 @@ describe("SecurityMiddlewares", () => {
   const kernel = Kernel.create({
     OLY_HTTP_SERVER_PORT: 6049,
   }).with(App);
-  const server = kernel.get(ApiProvider);
-  const jwt = kernel.get(JwtAuthService);
-  const client = kernel.get(HttpClient).with({
+  const server = kernel.inject(ApiProvider);
+  const jwt = kernel.inject(JwtAuthService);
+  const client = kernel.inject(HttpClient).with({
     baseURL: server.hostname,
   });
 

@@ -5,7 +5,7 @@ import { Person } from "./fixtures";
 describe("JsonSanitizer", () => {
 
   const kernel = Kernel.create();
-  const sanitizer = kernel.get(JsonSanitizer);
+  const sanitizer = kernel.inject(JsonSanitizer);
   const data = JSON.stringify({
     name: "     JeAn      ",
   });

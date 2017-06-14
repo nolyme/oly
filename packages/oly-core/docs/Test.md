@@ -28,7 +28,7 @@ describe("A", () => {
   });
   
   // inject regular service
-  const s = k.get(Service);
+  const s = k.inject(Service);
   
   it("should be ok", () => {
   

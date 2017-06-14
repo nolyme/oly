@@ -43,7 +43,7 @@ class Service {
   }
 }
 const k = Kernel.create();
-const s = k.get(Service);
+const s = k.inject(Service);
 const r = s.add(1, 1); // 2
 ```
 
