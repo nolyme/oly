@@ -17,10 +17,10 @@
     "@types/koa": "2.0.39",
     "axios": "0.16.1",
     "http-shutdown": "1.2.0",
-    "kcors": "2.2.0",
+    "kcors": "2.2.1",
     "koa": "2.2.0",
     "koa-compress": "2.0.0",
-    "koa-helmet": "3.1.0",
+    "koa-helmet": "3.2.0",
     "koa-mount": "2.0.0",
     "koa-static": "3.0.0"
   },

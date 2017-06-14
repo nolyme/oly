@@ -1,14 +1,14 @@
 {
   "private": true,
   "devDependencies": {
-    "@types/jest": "19.2.3",
-    "@types/node": "7.0.22",
+    "@types/jest": "19.2.4",
+    "@types/node": "7.0.31",
     "jest": "20.0.4",
     "lerna": "2.0.0-rc.5",
     "rimraf": "2.6.1",
-    "ts-jest": "20.0.5",
-    "ts-node": "3.0.4",
-    "tslint": "5.3.2",
+    "ts-jest": "20.0.6",
+    "ts-node": "3.0.6",
+    "tslint": "5.4.3",
     "tslint-react": "3.0.0",
     "typescript": "2.3.4"
   },

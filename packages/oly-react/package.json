@@ -14,12 +14,12 @@
     "ssr"
   ],
   "dependencies": {
-    "@types/history": "4.5.1",
+    "@types/history": "4.5.2",
     "@types/prop-types": "15.5.1",
     "@types/react-dom": "15.5.0",
     "@types/react-helmet": "5.0.2",
     "cheerio": "0.22.0",
-    "history": "4.6.1",
+    "history": "4.6.2",
     "oly-http": "^0.11.2",
     "path-to-regexp": "1.7.0",
     "prop-types": "15.5.10",

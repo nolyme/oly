@@ -24,8 +24,8 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@types/shelljs": "0.7.1",
+    "@types/shelljs": "0.7.2",
     "oly-core": "^0.11.2",
-    "shelljs": "0.7.7"
+    "shelljs": "0.7.8"
   }
 }
