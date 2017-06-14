@@ -316,10 +316,17 @@ export class Kernel {
       if (!definition) {
         throw new KernelException(olyCoreErrors.injectableIsNull());
       }
-      this.get(definition);
+      this.inject(definition);
     }
 
     return this;
+  }
+
+  /**
+   * @deprecated Use Kernel#inject()
+   */
+  public get<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
+    return this.inject(definition, options);
   }
 
   /**
@@ -333,11 +340,11 @@ export class Kernel {
    * @param definition          IDefinition or IDefinition
    * @param options             Injection options
    */
-  public get<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
+  public inject<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
 
     // skip declaration, just inject
     if (typeof definition === "function" && (options.register === false || !!options.instance)) {
-      return this.inject<T>(definition, options.instance);
+      return this.processMetadata<T>(definition, options.instance);
     }
 
     // easy parameters
@@ -685,10 +692,10 @@ export class Kernel {
 
       const instance: T = (func as IFactory<T>)(this, parent);
 
-      return this.inject<T>(instance.constructor as Class<T>, instance);
+      return this.processMetadata<T>(instance.constructor as Class<T>, instance);
     }
 
-    return this.inject<T>(dependency.use as Class<T>, undefined, parent);
+    return this.processMetadata<T>(dependency.use as Class<T>, undefined, parent);
   }
 
   /**
@@ -703,7 +710,7 @@ export class Kernel {
    * @param parent
    * @returns {T}         The new instance
    */
-  private inject<T>(definition: Class<T>, instance?: T, parent?: Class): T {
+  private processMetadata<T>(definition: Class<T>, instance?: T, parent?: Class): T {
 
     const meta = Meta.of({key: olyCoreKeys.arguments, target: definition}).deep<IArgumentsMetadata>();
     const args: any[] = meta && meta.args.$constructor

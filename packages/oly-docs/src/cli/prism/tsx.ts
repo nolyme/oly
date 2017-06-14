@@ -2,7 +2,7 @@
 declare const Prism: any;
 
 Prism.languages.typescript = Prism.languages.extend("javascript", {
-  keyword: /(?:^|[^.])\b(break|async|await|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|false|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|package|private|protected|public|return|set|static|super|switch|this|throw|true|try|typeof|var|void|while|with|yield|module|declare|constructor|string|Function|any|number|boolean|Array)\b/, // tslint:disable-line
+  keyword: /(?:^|[^.])\b(break|async|await|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|false|finally|for|from|function|if|implements|import|in|instanceof|interface|let|new|null|package|private|protected|public|return|set|static|super|switch|this|throw|true|try|typeof|var|void|while|with|yield|module|declare|constructor|string|Function|any|number|boolean|Array)\b/, // tslint:disable-line
   class: /class\s([A-Z][a-z]+)/,
 });
 Prism.languages.ts = Prism.languages.typescript;

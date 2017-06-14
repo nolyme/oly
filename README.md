@@ -6,7 +6,7 @@ The set is based on known projects, such as [Koa](https://github.com/koajs/koa) 
 
 ### Why
 
-- hide complexity of server-side rendering
+- hide the complexity of server-side rendering
 - make code between client/server consistency
 - easily and quickly test everything
 - unify contexts into one single class
@@ -34,7 +34,7 @@ export class Home extends React.Component<IHomeProps, {}> {
 }
 ```
 
-With SSR, we need to fetch data before the rendering.
+Maybe, we need to fetch some data before the rendering.
 ```ts
 import { inject } from "oly-core";
 import { page, PixieHttp } from "oly-react";

@@ -1,4 +1,6 @@
 import { env, inject, Logger } from "oly-core";
+import { Global } from "../../../../oly-core/src/kernel/Global";
+import { Browser } from "../../router/services/Browser";
 import { Pixie } from "./Pixie";
 
 /**
@@ -9,10 +11,13 @@ export class PixieSession {
   @env("OLY_PIXIE_COOKIE")
   public cookieName: string = "SSID";
 
-  @inject(Pixie)
+  @inject
   protected pixie: Pixie;
 
-  @inject(Logger)
+  @inject
+  protected browser: Browser;
+
+  @inject
   protected logger: Logger;
 
   protected token: string | null;
@@ -42,15 +47,16 @@ export class PixieSession {
 
     this.token = token;
 
-    if (this.pixie.isBrowser()) {
+    if (Global.isBrowser()) {
 
       const path = "Path=/;";
       const expires = ttl
         ? `expires=${new Date(new Date().getTime() + ttl * 1000).toUTCString()};`
         : "";
+      const cookie = `${this.cookieName}=${this.token};` + path + expires;
 
-      this.logger.info(`set cookie: ${this.cookieName}=${this.token};` + path + expires);
-      window.document.cookie = `${this.cookieName}=${this.token};` + path + expires;
+      this.logger.info(cookie);
+      this.browser.window.document.cookie = cookie;
     }
   }
 
@@ -59,9 +65,9 @@ export class PixieSession {
    */
   public removeToken(): void {
     this.token = null;
-    if (this.pixie.isBrowser()) {
+    if (Global.isBrowser()) {
       this.logger.info("remove cookie");
-      window.document.cookie = `${this.cookieName}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+      this.browser.window.document.cookie = `${this.cookieName}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
     }
   }
 }

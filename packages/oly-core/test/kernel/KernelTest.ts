@@ -32,7 +32,7 @@ describe("Kernel", () => {
       }
 
       const kernel = createKernel();
-      const a = kernel.get(A, {register: false});
+      const a = kernel.inject(A, {register: false});
 
       expect(a.b).toBe("c");
     });
@@ -44,7 +44,7 @@ describe("Kernel", () => {
       }
 
       const kernel = createKernel({A: "B"});
-      const a = kernel.get(A, {register: false});
+      const a = kernel.inject(A, {register: false});
 
       expect(a.kernel.env("OLY_KERNEL_ID")).toBe(kernel.env("OLY_KERNEL_ID"));
       expect(a.kernel.state("A")).toBe("B");
@@ -58,7 +58,7 @@ describe("Kernel", () => {
 
     it("should reject when null 2", async () => {
       const A: any = null;
-      expect(() => createKernel().get({provide: A, use: A}))
+      expect(() => createKernel().inject({provide: A, use: A}))
         .toThrow(olyCoreErrors.isNotFunction("provide", typeof A));
     });
 
@@ -75,8 +75,8 @@ describe("Kernel", () => {
         @env("B") b: string;
       }
 
-      expect(createKernel().get(Parent).a).toBe("a");
-      expect(() => createKernel().get(Child).a).toThrow(olyCoreErrors.envNotDefined("B"));
+      expect(createKernel().inject(Parent).a).toBe("a");
+      expect(() => createKernel().inject(Child).a).toThrow(olyCoreErrors.envNotDefined("B"));
     });
 
     it("should auto inject", async () => {
@@ -94,8 +94,8 @@ describe("Kernel", () => {
       }
 
       const k = createKernel({X: "Y"});
-      expect(k.get(A).b.c).toBe("d");
-      expect(k.get(A).x).toBe("Y");
+      expect(k.inject(A).b.c).toBe("d");
+      expect(k.inject(A).x).toBe("Y");
     });
 
     it("should swap 'provide' with 'use'", () => {
@@ -112,7 +112,7 @@ describe("Kernel", () => {
       }
 
       const kernel = createKernel().with({provide: B, use: BMock}, A);
-      expect(kernel.get(A).b.c).toBe("MOCK");
+      expect(kernel.inject(A).b.c).toBe("MOCK");
     });
 
     it("should reject swap of B if B is already defined after start", async () => {
@@ -128,8 +128,8 @@ describe("Kernel", () => {
         @inject b: B;
       }
 
-      expect(createKernel().get(A).b.c).toBe("C");
-      expect(createKernel().with(A).with({provide: B, use: BMock}).get(A).b.c).toBe("MOCK");
+      expect(createKernel().inject(A).b.c).toBe("C");
+      expect(createKernel().with(A).with({provide: B, use: BMock}).inject(A).b.c).toBe("MOCK");
       await expect(createKernel().with(A).start().then((k) => k.with({provide: B, use: BMock})))
         .rejects.toEqual(new KernelException(olyCoreErrors.noDepUpdate("B")));
     });
@@ -147,21 +147,21 @@ describe("Kernel", () => {
       const kernel = createKernel();
 
       // define A2 as A then return A2
-      const a = kernel.get({provide: A, use: A2});
+      const a = kernel.inject({provide: A, use: A2});
       equal(a.b, "d");
       a.b = "e";
 
       // A2 is shared with A as A2 !
-      equal(kernel.get(A2).b, "e");
+      equal(kernel.inject(A2).b, "e");
 
       // you can break the rule with lambda
       const k2 = createKernel();
-      const a2 = k2.get({provide: A, use: (k) => k.get(A2, {register: false})}); // this is allowed
+      const a2 = k2.inject({provide: A, use: (k) => k.inject(A2, {register: false})}); // this is allowed
 
       // but now, 'use' cannot be a research criteria
       equal(a2.b, "d");
       a2.b = "e";
-      equal(k2.get(A2).b, "d");
+      equal(k2.inject(A2).b, "d");
     });
 
     it("should respect explicit swapping", async () => {
@@ -252,7 +252,7 @@ describe("Kernel", () => {
         .with({provide: B, use: B2})
         .start();
 
-      expect(k.get(A).b.d).toBe("f");
+      expect(k.inject(A).b.d).toBe("f");
     });
     it("should use parent", () => {
       class A {
@@ -266,7 +266,7 @@ describe("Kernel", () => {
       class E2 extends E {
       }
 
-      expect(createKernel().get(E2).a.b).toBe("c");
+      expect(createKernel().inject(E2).a.b).toBe("c");
     });
   });
 
@@ -300,7 +300,7 @@ describe("Kernel", () => {
       const k = createKernel();
       await k.start();
 
-      expect(k.get(A).b).toBe("c");
+      expect(k.inject(A).b).toBe("c");
     });
 
     it("should reject A as IProvider after #start()", async () => {
@@ -316,7 +316,7 @@ describe("Kernel", () => {
       const k = createKernel();
       await k.start();
 
-      expect(() => k.get(A))
+      expect(() => k.inject(A))
         .toThrow(olyCoreErrors.noDepAfterStart("A"));
     });
 
@@ -421,7 +421,7 @@ describe("Kernel", () => {
         data3: "1",
       });
       expect(kernel.with(A).state(_.identity(A, "data"))).toBe("SECRET");
-      expect(kernel.get(A).getEnv()).toBe("1");
+      expect(kernel.inject(A).getEnv()).toBe("1");
     });
 
     it("should parse boolean", () => {
@@ -499,31 +499,31 @@ describe("Kernel", () => {
 
     it("should create new context", () => {
       const kernel = new Kernel().with(A, B);
-      equal(kernel.get(A).data, "a");
-      kernel.get(A).data = "b";
-      equal(kernel.get(A).data, "b");
+      equal(kernel.inject(A).data, "a");
+      kernel.inject(A).data = "b";
+      equal(kernel.inject(A).data, "b");
       const child = kernel.fork();
-      equal(child.get(A).data, "a");
-      equal(kernel.get(A).data, "b");
+      equal(child.inject(A).data, "a");
+      equal(kernel.inject(A).data, "b");
     });
 
     it("should keep parent state", () => {
       const kernel = new Kernel().with(A, B);
-      equal(kernel.get(B).data, "a");
-      kernel.get(B).data = "b";
-      equal(kernel.get(B).data, "b");
+      equal(kernel.inject(B).data, "a");
+      kernel.inject(B).data = "b";
+      equal(kernel.inject(B).data, "b");
       const child = kernel.fork();
-      equal(child.get(B).data, "b");
-      equal(kernel.get(B).data, "b");
+      equal(child.inject(B).data, "b");
+      equal(kernel.inject(B).data, "b");
     });
 
     it("should mutate parent state", () => {
       const kernel = new Kernel().with(A, B);
-      kernel.get(B).data = "b";
+      kernel.inject(B).data = "b";
       const child = kernel.fork();
-      child.get(B).data = "c";
-      equal(child.get(B).data, "c");
-      equal(kernel.get(B).data, "c");
+      child.inject(B).data = "c";
+      equal(child.inject(B).data, "c");
+      equal(kernel.inject(B).data, "c");
     });
 
     it("should mutate his own state", () => {
@@ -533,9 +533,9 @@ describe("Kernel", () => {
 
       const parent = new Kernel().with(C);
       const child = parent.fork();
-      child.get(C).data = "c";
-      equal(child.get(C).data, "c");
-      equal(parent.get(C).data, undefined);
+      child.inject(C).data = "c";
+      equal(child.inject(C).data, "c");
+      equal(parent.inject(C).data, undefined);
     });
 
     it("should keep parent env", () => {
@@ -559,13 +559,13 @@ describe("Kernel", () => {
       }
 
       const kernel = createKernel();
-      const a = kernel.get(A);
+      const a = kernel.inject(A);
       expect(a.b).toBe("c");
       a.b = "d";
       expect(a.b).toBe("d");
       expect(kernel.state(_.identity(A, "b"))).toBe(a.b);
       const child = kernel.fork();
-      const a2 = child.get(A);
+      const a2 = child.inject(A);
       expect(a2.b).toBe("d");
       expect(a.b).toBe(a2.b);
       expect(kernel.state(_.identity(A, "b"))).toBe(a.b);
@@ -603,7 +603,7 @@ describe("Kernel", () => {
       await kernel.fork().emit("inc");
       expect(kernel.state("counter")).toBe(6);
 
-      (kernel.get(App) as any).__free__();
+      (kernel.inject(App) as any).__free__();
       await kernel.emit("inc");
       expect(kernel.state("counter")).toBe(6);
     });
@@ -668,7 +668,7 @@ describe("Kernel", () => {
       }
 
       const k = createKernel({F: "G"});
-      const b = k.get(B);
+      const b = k.inject(B);
       expect(b.a).toBe("G");
       expect(b.e).toBeUndefined();
       k.invoke(B, "c");
@@ -685,7 +685,7 @@ describe("Kernel", () => {
       }
 
       const k = createKernel();
-      const a = k.get(A);
+      const a = k.inject(A);
       expect(a.b).toBeUndefined();
       k.invoke(A, "c", ["e"]);
       expect(a.b).toBe("e");

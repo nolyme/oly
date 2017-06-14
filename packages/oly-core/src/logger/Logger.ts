@@ -17,6 +17,7 @@ export class Logger {
   public static DEFAULT_NAME = "Component";
 
   public static ansi = require("ansicolor");
+
   public static supportsColor = require("supports-color");
 
   /**
@@ -40,7 +41,7 @@ export class Logger {
    * Set the level of your logger.
    */
   @env("OLY_LOGGER_LEVEL")
-  protected logLevel: string = "INFO";
+  protected logLevel: ILogLevel = "INFO";
 
   /**
    * Enable or disable color.

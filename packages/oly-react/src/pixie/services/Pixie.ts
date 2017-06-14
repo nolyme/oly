@@ -1,4 +1,4 @@
-import { inject, Kernel, Logger } from "oly-core";
+import { Global, inject, Kernel, Logger } from "oly-core";
 import { IPixieSetOptions } from "../interfaces";
 
 /**
@@ -11,33 +11,16 @@ export class Pixie {
 
   public static stateName = "__pixie__";
 
-  @inject(Logger)
+  @inject
   protected logger: Logger;
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
   /**
    * Volatile data
    */
   protected data = {};
-
-  /**
-   * Check if window exists
-   * @returns {boolean}
-   */
-  public isBrowser(): boolean {
-    return typeof window !== "undefined"
-      && typeof window.document !== "undefined";
-  }
-
-  /**
-   * Negative isBrowser()
-   * @returns {boolean}
-   */
-  public isServer(): boolean {
-    return !this.isBrowser();
-  }
 
   /**
    * Getter
@@ -65,8 +48,8 @@ export class Pixie {
     if (typeof this.data[key] === "undefined" || !options.once) {
       if (
         options.only === "both"
-        || (options.only === "browser" && this.isBrowser())
-        || (options.only === "server" && !this.isBrowser())
+        || (options.only === "browser" && Global.isBrowser())
+        || (options.only === "server" && !Global.isBrowser())
       ) {
         this.data[key] = value;
       }
@@ -91,7 +74,7 @@ export class Pixie {
     if (value != null) {
 
       this.logger.trace(`fly cached #${key}`);
-      if (this.isBrowser()) {
+      if (Global.isBrowser()) {
         this.data[key] = null;
       }
 
@@ -101,7 +84,7 @@ export class Pixie {
     this.logger.trace(`fly unresolved #${key}`);
 
     return new Promise((eat) => eat(func())).then((result: any) => {
-      if (!this.isBrowser()) {
+      if (!Global.isBrowser()) {
         this.logger.trace(`set '${key}' with`, result);
         this.data[key] = result;
       }

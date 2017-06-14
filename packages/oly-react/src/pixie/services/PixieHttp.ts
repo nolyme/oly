@@ -1,4 +1,4 @@
-import { env, inject, Kernel } from "oly-core";
+import { env, Global, inject, Kernel } from "oly-core";
 import { HttpClient, IHttpRequest } from "oly-http";
 import { Pixie } from "./Pixie";
 import { PixieSession } from "./PixieSession";
@@ -28,8 +28,10 @@ export class PixieHttp {
    *
    */
   public get root(): string {
-    if (this.pixie.isBrowser()) {
+    if (Global.isBrowser()) {
+
       return this.apiRoot || this.pixie.get<string>("API_ROOT") || "/api";
+
     } else {
 
       if (this.apiRoot) {
@@ -98,7 +100,7 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public get<T>(url: string, options: IHttpRequest = {}): Promise<T> {
-    return this.request(Object.assign({}, options, {url, method: "GET"}));
+    return this.request(Global.merge(options, {url, method: "GET"}));
   }
 
   /**
@@ -110,7 +112,7 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public post<T>(url: string, data: any, options: IHttpRequest = {}): Promise<T> {
-    return this.request(Object.assign({}, options, {url, method: "POST", data}));
+    return this.request(Global.merge(options, {url, method: "POST", data}));
   }
 
   /**
@@ -122,7 +124,7 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public put<T>(url: string, data: any, options: IHttpRequest = {}): Promise<T> {
-    return this.request(Object.assign({}, options, {url, method: "PUT", data}));
+    return this.request(Global.merge(options, {url, method: "PUT", data}));
   }
 
   /**
@@ -133,6 +135,6 @@ export class PixieHttp {
    * @param options   Request options (headers?)
    */
   public del<T>(url: string, options: IHttpRequest = {}): Promise<T> {
-    return this.request(Object.assign({}, options, {url, method: "DELETE"}));
+    return this.request(Global.merge(options, {url, method: "DELETE"}));
   }
 }
