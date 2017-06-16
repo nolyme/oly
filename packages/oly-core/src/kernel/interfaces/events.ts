@@ -61,7 +61,7 @@ export interface IKernelOnOptions {
  */
 export interface IKernelEmitOptions {
   fork?: boolean;
-  parallel?: boolean;
+  sequential?: boolean;
 }
 
 export interface IListener {

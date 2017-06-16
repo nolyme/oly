@@ -2,13 +2,21 @@
 
 ### SOON
 
+- (oly-core): remove link between logger and kernel
+- (oly-core): log date+data isn't really visible on black screen
 - (oly-docs): split module (api & react)
+- (oly-docs): middlewares
+- (oly-docs): exceptions
+- [HARD] (oly-docs): interfaces (popup)
+- [HARD] (oly-docs): version
+- (oly-docs): show env & exception in services/components
 - (oly-docs): add more and more and more docs.
+- (oly-docs): preprocess links on generated md before runtime.
 - [HARD] (oly-*) better coverage, especially react-router... :)
 - (oly-react/router) scroll top:0 on route change
 - [HARD] (oly-amqp) amqp @retry
 - [HARD] (oly-amqp) memory (for test!)
-- [HARD] (oly-orm): use objection.js + knex + oly-json
+- [HARD] (oly-orm): use knex + oly-json
   
 ### THOUGHTS
 

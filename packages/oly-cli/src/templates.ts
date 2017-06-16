@@ -102,8 +102,4 @@ export const initCommands: ICommands = {
     help: "simple server file with koa",
     exec: () => initServer(),
   },
-  "--test": {
-    help: "simple test file with jest",
-    exec: () => initTest(),
-  },
 };

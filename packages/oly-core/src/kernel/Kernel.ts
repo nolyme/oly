@@ -512,8 +512,6 @@ export class Kernel {
    * @param key               Event name
    * @param data              Event data (parameters)
    * @param options           Emitter options
-   * @param options.parent    If yes, event is sent to parent too
-   * @param options.fork      If yes, kernel is forked for each call
    */
   public emit(key: string, data?: any, options: IKernelEmitOptions = {}): Promise<any> {
 
@@ -547,7 +545,7 @@ export class Kernel {
       };
     });
 
-    if (options.parallel === false) {
+    if (options.sequential === true) {
       return _.cascade(actions);
     }
 
@@ -808,7 +806,7 @@ export class Kernel {
         if (state.readonly !== true) {
           Object.defineProperty(instance, propertyKey, {
             get: () => this.state(stateName),
-            set: (newValue) => this.state(stateName, newValue),
+            set: (newValue: any) => this.state(stateName, newValue),
           });
         } else {
           if (typeof this.state(stateName) === "undefined") {

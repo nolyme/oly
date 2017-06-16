@@ -188,13 +188,13 @@ export class Logger {
   protected format(type: string, message: string, data?: object): string {
     const now = _.isBrowser() ? new Date().toLocaleTimeString() : new Date().toLocaleString();
     return ""
-      + "[" + Logger.ansi.dim(now) + "] "
+      + "[" + now + "] "
       + Logger.ansi[Logger.colors[type]](type) + " "
       + (!_.isBrowser()
         ? Logger.ansi.bright(this.appName + "(") + this.contextId + Logger.ansi.bright(")") + " "
         : "")
       + Logger.ansi.bright(this.componentName + ":") + " "
       + Logger.ansi.italic("\"" + message + "\" ")
-      + Logger.ansi.dim(!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
+      + (!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
 }
