@@ -1,4 +1,4 @@
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { createCipher, createDecipher } from "crypto";
 import { env } from "oly-core";
 
