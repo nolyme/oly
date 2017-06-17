@@ -1,22 +1,25 @@
-import { createServer, Server } from 'http';
-import * as Koa from 'koa';
-import { env, inject, IProvider, Kernel, Logger, state } from 'oly-core';
-import { IKoaMiddleware } from '../interfaces';
-import { context } from '../middlewares';
+import { createServer, Server } from "http";
+import * as Koa from "koa";
+import { env, inject, IProvider, Kernel, Logger, state } from "oly-core";
+import { IKoaMiddleware } from "../interfaces";
+import { context } from "../middlewares";
 
 /**
  * Default http server provider
  */
 export class HttpServerProvider implements IProvider {
+
   /**
    * Set hostname of the http server.
    */
-  @env('HTTP_SERVER_HOST') protected readonly host: string = '127.0.0.1';
+  @env("HTTP_SERVER_HOST")
+  protected readonly host: string = "127.0.0.1";
 
   /**
    * Set port of the http server.
    */
-  @env('HTTP_SERVER_PORT') protected readonly port: number = 3000;
+  @env("HTTP_SERVER_PORT")
+  protected readonly port: number = 3000;
 
   /**
    * Kernel.
@@ -94,7 +97,7 @@ export class HttpServerProvider implements IProvider {
    */
   public onStop(): Promise<void> {
     // stop server
-    this.logger.info('kill server');
+    this.logger.info("kill server");
     return new Promise<void>((resolve, reject) =>
       this.http.shutdown((err: Error) => {
         err ? reject(err) : resolve();
@@ -106,12 +109,12 @@ export class HttpServerProvider implements IProvider {
    *
    */
   protected createServer(): Server {
-    return require('http-shutdown')(createServer(this.app.callback()));
+    return require("http-shutdown")(createServer(this.app.callback()));
   }
 }
 
 // override default interface
-declare module 'http' {
+declare module "http" {
   // tslint:disable-next-line
   interface Server {
     shutdown: Function;
