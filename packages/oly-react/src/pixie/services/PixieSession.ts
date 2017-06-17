@@ -7,7 +7,7 @@ import { Pixie } from "./Pixie";
  */
 export class PixieSession {
 
-  @env("OLY_PIXIE_COOKIE")
+  @env("PIXIE_COOKIE")
   public cookieName: string = "SSID";
 
   @inject

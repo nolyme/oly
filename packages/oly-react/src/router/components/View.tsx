@@ -38,7 +38,7 @@ export class View extends Component<IViewProps, { content: any }> {
     layer: PropTypes.number,
   };
 
-  @env("OLY_REACT_SHOW_VIEWS")
+  @env("REACT_SHOW_VIEWS")
   public readonly show: boolean = false;
 
   @inject

@@ -34,25 +34,25 @@ export class Logger {
   /**
    * Set a name to your app.
    */
-  @env("OLY_APP_NAME")
+  @env("APP_NAME")
   protected appName: string = "App";
 
   /**
    * Set the level of your logger.
    */
-  @env("OLY_LOGGER_LEVEL")
+  @env("LOGGER_LEVEL")
   protected logLevel: ILogLevel = "INFO";
 
   /**
    * Enable or disable color.
    */
-  @env("OLY_LOGGER_COLOR")
+  @env("LOGGER_COLOR")
   protected hasColor: boolean = true;
 
   /**
    *
    */
-  @state("OLY_KERNEL_ID")
+  @state("KERNEL_ID")
   protected contextId: string = "";
 
   /**

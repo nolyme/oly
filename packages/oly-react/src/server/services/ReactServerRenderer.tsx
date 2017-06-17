@@ -32,7 +32,7 @@ export class ReactServerRenderer {
       <html>
         <head>
           <meta charset="UTF-8"/>
-          <title>${this.kernel.env("OLY_APP_NAME")}</title>
+          <title>${this.kernel.env("APP_NAME")}</title>
           <base href="${prefix}"/>
         </head>
         <body>

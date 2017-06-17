@@ -16,13 +16,13 @@ export class ReactBrowserProvider implements IProvider {
   /**
    *
    */
-  @env("OLY_REACT_ID")
+  @env("REACT_ID")
   public mountId: string = "app";
 
   /**
    *
    */
-  @env("OLY_REACT_ROUTER_HASH")
+  @env("REACT_ROUTER_HASH")
   public readonly useHash: boolean = false;
 
   @inject

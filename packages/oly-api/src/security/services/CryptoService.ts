@@ -7,13 +7,13 @@ import { env } from "oly-core";
  */
 export class CryptoService {
 
-  @env("OLY_SECURITY_SECRET")
+  @env("SECURITY_SECRET")
   public readonly secret: string = "tz7b]K]o2h)796ag=ihB.POz3Q0G0>";
 
-  @env("OLY_SECURITY_SALT_ROUND")
+  @env("SECURITY_SALT_ROUND")
   public readonly saltRound: number | string = 8;
 
-  @env("OLY_SECURITY_ALGO")
+  @env("SECURITY_ALGO")
   public readonly algorithm: string = "aes-256-ctr";
 
   /**

@@ -9,7 +9,7 @@ import { PixieSession } from "./PixieSession";
  */
 export class PixieHttp {
 
-  @env("OLY_PIXIE_HTTP_ROOT")
+  @env("PIXIE_HTTP_ROOT")
   public apiRoot: string = "";
 
   @inject
@@ -39,9 +39,9 @@ export class PixieHttp {
       }
 
       // try to create API_ROOT based on oly-http an oly-api if available
-      const port = this.kernel.state("OLY_HTTP_SERVER_PORT") || 3000;
-      const host = this.kernel.state("OLY_HTTP_SERVER_HOST") || "localhost";
-      const prefix = this.kernel.state("OLY_API_PREFIX") || "";
+      const port = this.kernel.state("HTTP_SERVER_PORT") || 3000;
+      const host = this.kernel.state("HTTP_SERVER_HOST") || "localhost";
+      const prefix = this.kernel.state("API_PREFIX") || "";
 
       if (!!prefix) {
         this.pixie.set("API_ROOT", prefix);

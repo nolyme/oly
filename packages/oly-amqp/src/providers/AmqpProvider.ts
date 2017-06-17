@@ -6,7 +6,7 @@ export class AmqpProvider implements IProvider {
   /**
    *
    */
-  @env("OLY_AMQP_URL")
+  @env("AMQP_URL")
   public readonly url: string = "amqp://localhost";
 
   @state

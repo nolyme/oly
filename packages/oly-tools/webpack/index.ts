@@ -241,6 +241,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       options.typescriptLoader,
       options.styleLoader,
       options.fontLoader,
+
       options.imageLoader,
     ],
   };
@@ -311,7 +312,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
     //
     // WARNING:
-    // for now, we can't uglify code in es6 :((
+    // for now, we can't uglify code in es6
     //
     // config.plugins.push(
     //   new UglifyJsPlugin({

@@ -13,7 +13,7 @@ import { CryptoService } from "./CryptoService";
  */
 export class JwtAuthService {
 
-  @env("OLY_SECURITY_TOKEN_EXPIRATION")
+  @env("SECURITY_TOKEN_EXPIRATION")
   public readonly tokenExpiration: number = 60 * 60 * 3;
 
   public token: IToken;

@@ -8,7 +8,7 @@ import { IScheduler, ISchedulersMetadata } from "./interfaces";
  */
 export class CronProvider implements IProvider {
 
-  @env("OLY_CRON_TIMEZONE")
+  @env("CRON_TIMEZONE")
   public timezone: string = "";
 
   @state

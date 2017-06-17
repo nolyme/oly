@@ -25,9 +25,9 @@ describe("HelmetServiceProvider", () => {
   }
 
   const kernel = new Kernel({
-    OLY_HTTP_SERVER_PORT: 4059,
-    OLY_LOGGER_LEVEL: "ERROR",
-    OLY_REACT_SERVER_POINTS: ["default"],
+    HTTP_SERVER_PORT: 4059,
+    LOGGER_LEVEL: "ERROR",
+    REACT_SERVER_POINTS: ["default"],
   }).with(Router, HelmetServerProvider);
 
   beforeAll(() => kernel.start());

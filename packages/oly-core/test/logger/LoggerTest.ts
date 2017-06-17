@@ -35,11 +35,11 @@ describe("Logger", () => {
     }
 
     const k = Kernel.create({
-      OLY_APP_NAME: "TEST",
-      OLY_LOGGER_LEVEL: "ERROR",
+      APP_NAME: "TEST",
+      LOGGER_LEVEL: "ERROR",
     });
     const a = k.inject(A);
-    expect(a.logger["contextId"]).toBe(k.env("OLY_KERNEL_ID"));
+    expect(a.logger["contextId"]).toBe(k.env("KERNEL_ID"));
     expect(a.logger["componentName"]).toBe("A");
     expect(a.logger["appName"]).toBe("TEST");
     expect(a.logger["logLevel"]).toBe("ERROR");
@@ -78,8 +78,8 @@ describe("Logger", () => {
     }
 
     const k = Kernel.create({
-      OLY_APP_NAME: "TEST",
-      OLY_LOGGER_LEVEL: "TRACE",
+      APP_NAME: "TEST",
+      LOGGER_LEVEL: "TRACE",
     });
 
     expect(FakeLogger.i).toBe(0);
@@ -93,7 +93,7 @@ describe("Logger", () => {
     a.test();
     expect(FakeLogger.i).toBe(2);
 
-    expect(a.logger["contextId"]).toBe(k.env("OLY_KERNEL_ID"));
+    expect(a.logger["contextId"]).toBe(k.env("KERNEL_ID"));
     expect(a.logger["componentName"]).toBe("A");
     expect(a.logger["appName"]).toBe("TEST");
     expect(a.logger["logLevel"]).toBe("TRACE");

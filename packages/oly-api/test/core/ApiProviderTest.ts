@@ -6,7 +6,7 @@ import { A1, A2, A3, A4 } from "./fixtures";
 
 describe("ApiProvider", () => {
 
-  const kernel = Kernel.create({OLY_HTTP_SERVER_PORT: 19219, OLY_LOGGER_LEVEL: "NONE"})
+  const kernel = Kernel.create({HTTP_SERVER_PORT: 19219, LOGGER_LEVEL: "NONE"})
     .with(A1, A2, A3, A4);
   const server = kernel.inject(ApiProvider);
   const client = kernel.inject(HttpClient).with({

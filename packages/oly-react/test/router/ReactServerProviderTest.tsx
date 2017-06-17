@@ -28,12 +28,12 @@ describe("ReactServerProvider", () => {
 
   const appTestFactory = async (app: Class): Promise<IAppTest> => {
     const kernel = new Kernel({
-      OLY_HTTP_SERVER_PORT: 6001 + Math.floor(Math.random() * 100),
-      OLY_LOGGER_LEVEL: "ERROR",
-      OLY_REACT_SERVER_POINTS: ["default"],
+      HTTP_SERVER_PORT: 6001 + Math.floor(Math.random() * 100),
+      LOGGER_LEVEL: "ERROR",
+      REACT_SERVER_POINTS: ["default"],
     }).with(app, ReactServerProvider);
     const client = kernel.inject(HttpClient).with({
-      baseURL: "http://localhost:" + kernel.env("OLY_HTTP_SERVER_PORT"),
+      baseURL: "http://localhost:" + kernel.env("HTTP_SERVER_PORT"),
     });
     await kernel.start();
     return {

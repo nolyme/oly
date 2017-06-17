@@ -3,8 +3,8 @@ import { DocProvider } from "./cli/DocProvider";
 
 new Kernel({
   ...process.env,
-  OLY_LOGGER_LEVEL: process.argv.indexOf("--verbose") > -1 ? "TRACE" : "INFO",
-  OLY_APP_NAME: "Docs",
+  LOGGER_LEVEL: process.argv.indexOf("--verbose") > -1 ? "TRACE" : "INFO",
+  APP_NAME: "Docs",
 })
   .with(DocProvider)
   .start()

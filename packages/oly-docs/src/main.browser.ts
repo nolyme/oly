@@ -10,8 +10,8 @@ declare const __DOCS__: any;
 
 new Kernel({
   DOCS: __DOCS__,
-  OLY_REACT_ROUTER_HASH: true,
-  OLY_LOGGER_LEVEL: "TRACE",
+  REACT_ROUTER_HASH: true,
+  LOGGER_LEVEL: "TRACE",
   ...process.env,
 })
   .with(Application, ReactBrowserProvider)

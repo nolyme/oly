@@ -16,7 +16,7 @@ export class ApiProvider implements IProvider {
   /**
    * Define a global namespace to your path api.
    */
-  @env("OLY_API_PREFIX")
+  @env("API_PREFIX")
   public prefix: string = "/api";
 
   @inject

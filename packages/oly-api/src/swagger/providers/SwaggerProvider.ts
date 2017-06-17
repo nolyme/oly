@@ -48,7 +48,7 @@ export class SwaggerProvider {
       host: `${this.httpServerProvider["host"]}:${this.httpServerProvider["port"]}`, // tslint:disable-line
       info: {
         description: "Swagger API",
-        title: this.kernel.env("OLY_APP_NAME") || "MyApp",
+        title: this.kernel.env("APP_NAME") || "MyApp",
         version: "1.0.0",
       },
       paths: {},

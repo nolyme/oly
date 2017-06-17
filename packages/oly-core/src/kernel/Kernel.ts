@@ -80,7 +80,7 @@ export class Kernel {
   public static create(store: IStore = {}) {
 
     if (_.isTest()) {
-      store.OLY_LOGGER_LEVEL = store.OLY_LOGGER_LEVEL || "ERROR";
+      store.LOGGER_LEVEL = store.LOGGER_LEVEL || "ERROR";
     }
 
     const kernel = new Kernel(store);
@@ -180,7 +180,7 @@ export class Kernel {
       this.started = false;
     }
 
-    this.store.OLY_KERNEL_ID = this.id;
+    this.store.KERNEL_ID = this.id;
   }
 
   /**

@@ -15,14 +15,14 @@ describe("ReactProxyTest", () => {
   }
 
   const client = Kernel.create({
-    OLY_HTTP_SERVER_PORT: 22048,
-    OLY_LOGGER_LEVEL: "ERROR",
-    OLY_REACT_SERVER_POINTS: ["default"],
+    HTTP_SERVER_PORT: 22048,
+    LOGGER_LEVEL: "ERROR",
+    REACT_SERVER_POINTS: ["default"],
   }).with(ReactServerProvider, App);
   const server = Kernel.create({
-    OLY_HTTP_SERVER_PORT: 22049,
-    OLY_LOGGER_LEVEL: "ERROR",
-    OLY_REACT_SERVER_POINTS: [client.get(ReactServerProvider).hostname],
+    HTTP_SERVER_PORT: 22049,
+    LOGGER_LEVEL: "ERROR",
+    REACT_SERVER_POINTS: [client.get(ReactServerProvider).hostname],
   }).with(ReactServerProvider, App);
 
   const http = client.get(HttpClient).with({baseURL: server.get(ReactServerProvider).hostname});

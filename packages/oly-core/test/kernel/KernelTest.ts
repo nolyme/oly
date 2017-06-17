@@ -18,7 +18,7 @@ declare global {
 }
 
 const createKernel = (o: any = {}): Kernel => {
-  return Kernel.create({OLY_LOGGER_LEVEL: "ERROR", ...o});
+  return Kernel.create({LOGGER_LEVEL: "ERROR", ...o});
 };
 
 describe("Kernel", () => {
@@ -46,7 +46,7 @@ describe("Kernel", () => {
       const kernel = createKernel({A: "B"});
       const a = kernel.inject(A, {register: false});
 
-      expect(a.kernel.env("OLY_KERNEL_ID")).toBe(kernel.env("OLY_KERNEL_ID"));
+      expect(a.kernel.env("KERNEL_ID")).toBe(kernel.env("KERNEL_ID"));
       expect(a.kernel.state("A")).toBe("B");
     });
 

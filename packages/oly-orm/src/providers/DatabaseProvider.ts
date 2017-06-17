@@ -7,13 +7,13 @@ import { parse } from "url";
  */
 export class DatabaseProvider implements IProvider {
 
-  @env("OLY_DATABASE_URL")
+  @env("DATABASE_URL")
   public url: string;
 
-  @env("OLY_DATABASE_AUTO_SYNC")
+  @env("DATABASE_AUTO_SYNC")
   public autoSync: boolean = true;
 
-  @env("OLY_DATABASE_SHOW_LOGS")
+  @env("DATABASE_SHOW_LOGS")
   public showLogs: boolean = false;
 
   @state

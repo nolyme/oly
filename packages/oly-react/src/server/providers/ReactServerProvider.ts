@@ -12,13 +12,13 @@ import { ReactStaticService } from "../services/ReactStaticService";
  */
 export class ReactServerProvider implements IProvider {
 
-  @env("OLY_REACT_SERVER_PREFIX")
+  @env("REACT_SERVER_PREFIX")
   public prefix: string = "/";
 
-  @env("OLY_REACT_ID")
+  @env("REACT_ID")
   public mountId: string = "app";
 
-  @env("OLY_REACT_SERVER_POINTS")
+  @env("REACT_SERVER_POINTS")
   public points: string[] | string = [
     join(process.cwd(), "www"),
     "http://localhost:8080",
@@ -158,7 +158,7 @@ export class ReactServerProvider implements IProvider {
 
     if (!this.template) {
       throw new Error("There is no template available. " +
-        "Please set OLY_REACT_SERVER_POINTS with one or more valid points");
+        "Please set REACT_SERVER_POINTS with one or more valid points");
     }
 
     const $ = cheerio.load(this.template);

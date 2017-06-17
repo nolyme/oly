@@ -15,7 +15,7 @@ describe("HttpServerProvider", () => {
 
   const message = "OK";
   const kernel = Kernel.create({
-    OLY_HTTP_SERVER_PORT: 6093,
+    HTTP_SERVER_PORT: 6093,
   });
 
   const server = kernel.inject(HttpServerProvider)

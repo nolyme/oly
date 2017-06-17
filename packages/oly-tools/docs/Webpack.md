@@ -39,5 +39,5 @@ npm allows us some alias without installing stuff globally.
 After that, we can build an app like that:
 
 ```bash
-$ npm run build -- --env.NODE_ENV=production --env.OLY_LOGGER_LEVEL=ERROR
+$ npm run build -- --env.NODE_ENV=production --env.LOGGER_LEVEL=ERROR
 ```

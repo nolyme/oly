@@ -24,7 +24,7 @@ describe("A", () => {
   
   const k = Kernel.create({
     // set ENV here,
-    // like OLY_DATABASE_URL: ":memory:"
+    // like DATABASE_URL: ":memory:"
   });
   
   // inject regular service

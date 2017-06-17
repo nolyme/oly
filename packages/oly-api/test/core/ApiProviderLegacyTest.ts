@@ -27,7 +27,7 @@ describe("ApiProviderLegacy", () => {
       }
     }
 
-    const kernel = Kernel.create({OLY_HTTP_SERVER_PORT: 2910}).with(MyController);
+    const kernel = Kernel.create({HTTP_SERVER_PORT: 2910}).with(MyController);
     const server = kernel.inject(ApiProvider);
     const client = kernel.inject(HttpClient).with({
       baseURL: server.hostname,
@@ -81,7 +81,7 @@ describe("ApiProviderLegacy", () => {
       }
     }
 
-    const kernel = Kernel.create({OLY_HTTP_SERVER_PORT: 2911}).with(MyController);
+    const kernel = Kernel.create({HTTP_SERVER_PORT: 2911}).with(MyController);
     const server = kernel.inject(ApiProvider);
     const client = kernel.inject(HttpClient).with({
       baseURL: server.hostname,
@@ -162,7 +162,7 @@ describe("ApiProviderLegacy", () => {
       }
     }
 
-    const kernel = Kernel.create({OLY_HTTP_SERVER_PORT: 2912}).with(A);
+    const kernel = Kernel.create({HTTP_SERVER_PORT: 2912}).with(A);
     const server = kernel.inject(ApiProvider);
     const client = kernel.inject(HttpClient).with({
       baseURL: server.hostname,

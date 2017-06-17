@@ -20,7 +20,7 @@ class App {
 describe("SecurityMiddlewares", () => {
 
   const kernel = Kernel.create({
-    OLY_HTTP_SERVER_PORT: 6049,
+    HTTP_SERVER_PORT: 6049,
   }).with(App);
   const server = kernel.inject(ApiProvider);
   const jwt = kernel.inject(JwtAuthService);
@@ -29,7 +29,7 @@ describe("SecurityMiddlewares", () => {
   });
 
   beforeEach(() => {
-    kernel.state("OLY_SECURITY_TOKEN_EXPIRATION", 60 * 60 * 3);
+    kernel.state("SECURITY_TOKEN_EXPIRATION", 60 * 60 * 3);
   });
 
   it("should reject unauthorized requests", async () => {
@@ -84,7 +84,7 @@ describe("SecurityMiddlewares", () => {
   });
 
   it("should reject expired token", async () => {
-    kernel.state("OLY_SECURITY_TOKEN_EXPIRATION", 0);
+    kernel.state("SECURITY_TOKEN_EXPIRATION", 0);
     const token = jwt.createToken("<id>");
     expect(Jwt.isValid(token)).toBeFalsy();
     try {

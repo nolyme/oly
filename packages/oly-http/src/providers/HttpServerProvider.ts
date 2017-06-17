@@ -1,51 +1,44 @@
-import { createServer, Server } from "http";
-import * as Koa from "koa";
-import { env, inject, IProvider, Kernel, Logger, state } from "oly-core";
-import { IKoaMiddleware } from "../interfaces";
-import { context } from "../middlewares";
+import { createServer, Server } from 'http';
+import * as Koa from 'koa';
+import { env, inject, IProvider, Kernel, Logger, state } from 'oly-core';
+import { IKoaMiddleware } from '../interfaces';
+import { context } from '../middlewares';
 
 /**
  * Default http server provider
  */
 export class HttpServerProvider implements IProvider {
+  /**
+   * Set hostname of the http server.
+   */
+  @env('HTTP_SERVER_HOST') protected readonly host: string = '127.0.0.1';
 
   /**
-   *
+   * Set port of the http server.
    */
-  @env("OLY_HTTP_SERVER_HOST")
-  protected readonly host: string = "127.0.0.1";
-
-  /**
-   *
-   */
-  @env("OLY_HTTP_SERVER_PORT")
-  protected readonly port: number = 3000;
+  @env('HTTP_SERVER_PORT') protected readonly port: number = 3000;
 
   /**
    * Kernel.
    * We use kernel here to fork context on each request.
    */
-  @inject
-  protected readonly kernel: Kernel;
+  @inject protected readonly kernel: Kernel;
 
   /**
    * Logger.
    */
-  @inject
-  protected readonly logger: Logger;
+  @inject protected readonly logger: Logger;
 
   /**
    * Koa application.
    * Http Server is provided with Koa.
    */
-  @state
-  protected readonly app: Koa;
+  @state protected readonly app: Koa;
 
   /**
    * NodeJS Http Server instance.
    */
-  @state
-  protected http: Server;
+  @state protected http: Server;
 
   /**
    * Initialize once koa.
@@ -78,7 +71,6 @@ export class HttpServerProvider implements IProvider {
    * Listen new connections.
    */
   public onStart(): Promise<void> {
-
     // override koa context with our forked kernel
     // we fork kernel to protect the main layer
     this.app.use(context(this.kernel));
@@ -101,25 +93,27 @@ export class HttpServerProvider implements IProvider {
    * We don't wait the callback.
    */
   public onStop(): Promise<void> {
-
     // stop server
-    this.logger.info("kill server");
-    return new Promise<void>((resolve, reject) => this.http.shutdown((err: Error) => {
-      err ? reject(err) : resolve();
-    }));
+    this.logger.info('kill server');
+    return new Promise<void>((resolve, reject) =>
+      this.http.shutdown((err: Error) => {
+        err ? reject(err) : resolve();
+      }),
+    );
   }
 
   /**
    *
    */
   protected createServer(): Server {
-    return require("http-shutdown")(createServer(this.app.callback()));
+    return require('http-shutdown')(createServer(this.app.callback()));
   }
 }
 
 // override default interface
-declare module "http" {
-  interface Server { // tslint:disable-line
+declare module 'http' {
+  // tslint:disable-next-line
+  interface Server {
     shutdown: Function;
   }
 }
