@@ -29,7 +29,7 @@ export class DocProvider {
   public async onStart() {
     const webpackArgv = process.argv.slice(2).join(" ");
     const webpackContext = resolve(__dirname + "/../../");
-    const webpackConfig = webpackContext + "/webpack.config.ts";
+    const webpackConfig = webpackContext + "/webpack.config.js";
     const webpackPath = resolve(__dirname + "/../../node_modules/.bin/webpack");
     const configPath = resolve(this.cwd, "docs.json");
     const config = this.json.build(Configuration, readFileSync(configPath, "UTF-8"));

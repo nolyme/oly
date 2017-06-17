@@ -5,7 +5,7 @@ However, it's not easy to make a webpack configuration.
 
 oly-tools has a custom "preset" for TypeScript webapps.
 
-*&#60;project&#62;/webpack.config.ts*
+*&#60;project&#62;/webpack.config.js*
 ```ts
 import { createConfiguration, loaders } from "oly-tools";
 
