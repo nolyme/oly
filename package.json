@@ -21,7 +21,7 @@
     "lint": "tslint --fix packages/**/src/**/*.ts",
     "test": "lerna run test",
     "lint:ci": "tslint --force -o checkstyle-result.xml -t checkstyle packages/**/src/**/*.ts",
-    "test:ci": "mocha -r ts-node/register packages/**/test/**/*Test.{ts,tsx}",
+    "test:ci": "jest --coverage --no-cache",
     "publish": "lerna publish --force-publish=*"
   },
   "jest": {
