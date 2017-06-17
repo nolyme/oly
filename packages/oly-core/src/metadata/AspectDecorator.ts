@@ -37,7 +37,7 @@ export abstract class AspectDecorator implements IDecorator {
         call: trigger,
         target: t.constructor,
         propertyKey: p,
-        arguments: Array.from(args),
+        arguments: [].slice.call(args),
       });
       if (!done) {
         trigger();

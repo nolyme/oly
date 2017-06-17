@@ -42,8 +42,8 @@ export class BrowserLogger extends Logger {
     return ""
       + "[" + now + "] "
       + AnsiColor[this.colors[type]](type) + " "
-      + AnsiColor.bright(this.componentName + ":") + " "
-      + AnsiColor.italic("\"" + message + "\" ")
+      + AnsiColor.chalk.bold(this.componentName + ":") + " "
+      + AnsiColor.chalk.italic("\"" + message + "\" ")
       + (!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
 }

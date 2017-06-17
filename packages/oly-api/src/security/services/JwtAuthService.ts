@@ -7,6 +7,7 @@ import { JsonWebTokenException } from "../exceptions/JsonWebTokenException";
 import { TokenExpiredException } from "../exceptions/TokenExpiredException";
 import { IPayload, IToken } from "../interfaces";
 import { CryptoService } from "./CryptoService";
+import { Global } from "../../../../oly-core/src/kernel/Global";
 
 /**
  * Use JWT.
@@ -47,7 +48,7 @@ export class JwtAuthService {
         },
       },
       this.cryptoService.secret,
-      Object.assign({}, config, options));
+      Global.merge(config, options));
   }
 
   /**

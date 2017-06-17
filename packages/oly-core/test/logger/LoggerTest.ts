@@ -4,7 +4,7 @@ import { inject } from "../../src/kernel/decorators/inject";
 import { IInjectableMetadata } from "../../src/kernel/interfaces/injections";
 import { Kernel } from "../../src/kernel/Kernel";
 import { Logger } from "../../src/logger/Logger";
-import { Meta } from "../../src/meta/Meta";
+import { Meta } from "../../src/metadata/Meta";
 
 describe("Logger", () => {
 

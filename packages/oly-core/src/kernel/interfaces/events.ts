@@ -1,4 +1,4 @@
-import { IMetadata } from "../../meta/interfaces";
+import { IMetadata } from "../../metadata/interfaces";
 import { Class } from "./injections";
 
 /**

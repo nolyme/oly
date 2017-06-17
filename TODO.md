@@ -2,8 +2,6 @@
 
 ### SOON
 
-- (oly-core): remove link between logger and kernel
-- (oly-core): log date+data isn't really visible on black screen
 - (oly-docs): split module (api & react)
 - (oly-docs): middlewares
 - (oly-docs): exceptions
@@ -35,10 +33,6 @@
 
 ### MAYBE ONE DAY
 
-- (oly-*) use `/__tests__/`
-- (oly-http): remove, move axios in react/http and use @state for http server
-- (oly-*): es5 ... = (no ansicolor, fix Exception)
-- (oly-json): with loki -> little embedded db
 - (oly-orm): rest
 - (oly-tools): hot reload
 - (oly-api): hal resource

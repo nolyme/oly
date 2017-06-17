@@ -1,5 +1,12 @@
-import { IMetadata } from "../../meta/interfaces";
+import { IMetadata } from "../../metadata/interfaces";
 import { Kernel } from "../Kernel";
+
+declare global {
+  // tslint:disable-next-line
+  interface Function {
+    name: string;
+  }
+}
 
 /**
  * How to define a declaration.

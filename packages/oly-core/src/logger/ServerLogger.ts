@@ -38,10 +38,10 @@ export class ServerLogger extends Logger {
   protected format(type: string, message: string, data?: object): string {
     return ""
       + "[" + new Date().toLocaleString() + "] "
-      + AnsiColor[this.colors[type]](type) + " "
-      + AnsiColor.bright(this.appName + "(") + this.contextId + AnsiColor.bright(")") + " "
-      + AnsiColor.bright(this.componentName + ":") + " "
-      + AnsiColor.italic("\"" + message + "\" ")
+      + AnsiColor.chalk[this.colors[type]](type) + " "
+      + AnsiColor.chalk.bold(this.appName + "(") + this.contextId + AnsiColor.chalk.bold(")") + " "
+      + AnsiColor.chalk.bold(this.componentName + ":") + " "
+      + AnsiColor.chalk.italic("\"" + message + "\" ")
       + (!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
 }

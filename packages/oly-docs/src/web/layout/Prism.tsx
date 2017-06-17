@@ -47,7 +47,7 @@ export class Prism extends Component<{ html: string; className?: string }, {}> {
         new RegExp(`[^\\w](${s.name})[^\\w/#]`, "g"),
         (element, query) => {
           const results = this.ms.search(query);
-          const d = results.find((r) => r.name === query);
+          const d = results.filter((r) => r.name === query)[0];
           if (d && !this.router.isActive(d.href, true)) {
             return element.replace(query, `<a href="${d.href}" class="link" style="color: inherit">${query}</a>`);
           }

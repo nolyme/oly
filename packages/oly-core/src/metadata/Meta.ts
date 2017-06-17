@@ -9,6 +9,11 @@ import {
   IMetaIdentifier,
 } from "./interfaces";
 
+// tslint:disable-next-line
+declare global {
+  const Reflect: any;
+}
+
 /**
  *
  */

@@ -1,10 +1,11 @@
-import { Exception } from "../../src/error/Exception";
-import { olyCoreErrors } from "../../src/kernel/constants/errors";
-import { KernelException } from "../../src/kernel/exceptions/KernelException";
+import { Exception } from "../../src/exception/Exception";
 
 describe("Exception", () => {
 
-  it("should have custom message", () => {
+  class ExtendedException extends Exception {
+  }
+
+  it("could have custom message", () => {
     expect(new Exception("A").message).toBe("A");
     expect(() => {
       throw new Exception("A");
@@ -12,10 +13,10 @@ describe("Exception", () => {
   });
 
   it("should have default message", () => {
-    expect(new Exception().message).toBe(olyCoreErrors.defaultException());
+    expect(new Exception().message).toBe(Exception.DEFAULT_MESSAGE);
     expect(() => {
       throw new Exception();
-    }).toThrow(olyCoreErrors.defaultException());
+    }).toThrow(Exception.DEFAULT_MESSAGE);
   });
 
   it("should have custom message when extends", () => {
@@ -48,9 +49,9 @@ describe("Exception", () => {
 
   it("should have name", () => {
     expect(new Exception().name).toBe("Exception");
-    expect(new KernelException().name).toBe("KernelException");
+    expect(new ExtendedException().name).toBe("ExtendedException");
 
-    class Toto extends KernelException {
+    class Toto extends ExtendedException {
     }
 
     expect(new Toto().name).toBe("Toto");
@@ -77,6 +78,26 @@ describe("Exception", () => {
   });
 
   it("should accept legacy error as source", () => {
-    expect(new KernelException(new RangeError("That's bad.")).cause!.name).toBe("RangeError");
+    expect(new ExtendedException(new RangeError("That's bad.")).cause!.name).toBe("RangeError");
+  });
+
+  it("should be ok with instanceof", () => {
+
+    class AnotherException extends ExtendedException {
+    }
+
+    class TheLastException extends Exception {
+    }
+
+    try {
+      throw new AnotherException();
+    } catch (e) {
+      expect(e).toBeInstanceOf(Object);
+      expect(e).toBeInstanceOf(Error);
+      expect(e).toBeInstanceOf(Exception);
+      expect(e).toBeInstanceOf(ExtendedException);
+      expect(e).toBeInstanceOf(AnotherException);
+      expect(e).not.toBeInstanceOf(TheLastException);
+    }
   });
 });

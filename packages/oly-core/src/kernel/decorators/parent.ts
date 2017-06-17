@@ -1,5 +1,5 @@
-import { IDecorator } from "../../meta/interfaces";
-import { Meta } from "../../meta/Meta";
+import { IDecorator } from "../../metadata/interfaces";
+import { Meta } from "../../metadata/Meta";
 import { olyCoreKeys } from "../constants/keys";
 import { Class } from "../interfaces/injections";
 import { Kernel } from "../Kernel";

@@ -3,6 +3,7 @@ import { Class, IDeclarations, inject, IProvider, Kernel, Logger, Meta } from "o
 import { olyAmqpKeys } from "../constants/keys";
 import { ITasksMetadata } from "../interfaces";
 import { AmqpProvider } from "./AmqpProvider";
+import { Global } from "../../../oly-core/src/kernel/Global";
 
 export class WorkerProvider implements IProvider {
 
@@ -31,8 +32,7 @@ export class WorkerProvider implements IProvider {
 
           this.logger.debug(`consume ${task.name} -> ${target.name}#${propertyKey}()`);
           await this.amqp.channel.assertQueue(task.name, task.assert);
-          await this.amqp.channel.consume(task.name, this.createHandler(target, propertyKey, task.name),
-            Object.assign({}, task.consume));
+          await this.amqp.channel.consume(task.name, this.createHandler(target, propertyKey, task.name), task.consume);
         }
       }
     }

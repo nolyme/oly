@@ -28,7 +28,7 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
 
   public renderServices(provider: boolean = false) {
     const services = this.props.module.services
-      .filter((s) => s.name.includes("Provider")
+      .filter((s) => s.name.indexOf("Provider") > -1
         ? provider
         : !provider);
     if (services.length === 0) {

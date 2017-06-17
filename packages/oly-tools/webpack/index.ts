@@ -1,5 +1,4 @@
 import * as _autoprefixer from "autoprefixer";
-import * as BabiliPlugin from "babili-webpack-plugin";
 import * as CleanWebpackPlugin from "clean-webpack-plugin";
 import * as CopyPlugin from "copy-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
@@ -300,30 +299,19 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     );
 
     config.plugins.push(
-      new BabiliPlugin({}, {
+      new UglifyJsPlugin({
+        beautify: false,
         comments: false,
-        babili: require("babel-preset-babili"),
+        compress: {
+          screw_ie8: true,
+          warnings: false,
+        },
+        mangle: {
+          keep_fnames: true,
+          screw_ie8: true,
+        },
       }),
     );
-
-    //
-    // WARNING:
-    // for now, we can't uglify code in es6
-    //
-    // config.plugins.push(
-    //   new UglifyJsPlugin({
-    //     beautify: false,
-    //     comments: false,
-    //     compress: {
-    //       screw_ie8: true,
-    //       warnings: false,
-    //     },
-    //     mangle: {
-    //       keep_fnames: true,
-    //       screw_ie8: true,
-    //     },
-    //   }),
-    // );
   }
 
   // Axios & some universal libs use Buffer in their code

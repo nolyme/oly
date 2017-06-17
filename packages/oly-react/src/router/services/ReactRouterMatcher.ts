@@ -70,7 +70,7 @@ export class ReactRouterMatcher {
   public parents(nodes: INode[], target: INode): INode[] {
     const parents: INode[] = [target];
     while (parents[0].parent) {
-      const parent = nodes.find((s) => s.name === parents[0].parent);
+      const parent = nodes.filter((s) => s.name === parents[0].parent)[0];
       if (parent) {
         parents.unshift(parent);
       } else {
@@ -192,7 +192,7 @@ export class ReactRouterMatcher {
     }
 
     const n1 = match1.route.stack[level];
-    if (n1.path.includes(":")) {
+    if (n1.path.indexOf(":") > -1) {
       return compile(n1.path)(match1.params) === compile(n1.path)(match2.params);
     }
 

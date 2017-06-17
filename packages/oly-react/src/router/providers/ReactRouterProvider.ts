@@ -133,7 +133,7 @@ export class ReactRouterProvider implements IProvider {
 
       this.logger.warn(`transition to '${options.to}' has failed`);
 
-      const errorHandler = this.routes.find((r) => r.name === "error") as IRoute;
+      const errorHandler = this.routes.filter((r) => r.name === "error")[0] as IRoute;
       const errorTransition: ITransitionError = {
         ...transition,
         to: {

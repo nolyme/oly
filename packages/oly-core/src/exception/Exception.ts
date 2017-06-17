@@ -1,9 +1,10 @@
 /**
  * It's an enhancement of Error with toJSON and cause.
- * It's totally BROKEN in es5. sorry... :(
+ * There is also a hack that allow instanceof with es5.
  *
  * Exception has a real #toJSON(). It can be stringify.
  * It's useful when http, debug and message.
+ *
  * ```ts
  * console.log(JSON.stringify(new Exception("A")));
  * ```
@@ -21,7 +22,7 @@
  * }
  * ```
  *
- * You can set a default message.
+ * You can define a default message without pain.
  * ```ts
  * class MyException extends Exception {
  *    message = "My default message";
@@ -32,17 +33,27 @@
  * ```ts
  * class MyException extends Exception {
  * }
+ * new MyException().name // "MyException"
  * ```
  *
- * You can use `instanceof` without fear server-side.
- * Browser side, you should use name comparison.
+ * You can use `instanceof` without fear.
  * ```ts
- * e.name === "Exception"
+ * try {
+ *  throw new Exception();
+ * } catch (e) {
+ *  console.log(e instanceof Object); // true
+ *  console.log(e instanceof Error); // true
+ *  console.log(e instanceof Exception); // true
+ *  console.log(e instanceof Number); // false
+ * }
  * ```
  */
 export class Exception extends Error {
 
   public static DEFAULT_MESSAGE = `An exception has been thrown without any message`;
+
+  // tslint:disable-next-line
+  __proto__: Error;
 
   /**
    * Error name.
@@ -71,7 +82,9 @@ export class Exception extends Error {
    * @param message       Optional message if not set as source
    */
   public constructor(cause?: string | Throwable, message?: string) {
+    const trueProto = new.target.prototype;
     super();
+    this.__proto__ = trueProto;
 
     const sourceMessage = (typeof cause === "string"
       ? cause

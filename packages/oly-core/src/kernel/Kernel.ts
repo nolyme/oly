@@ -2,7 +2,7 @@ import { IArgumentsMetadata, IInjectionsMetadata, olyCoreKeys } from "../index";
 import { BrowserLogger } from "../logger/BrowserLogger";
 import { Logger } from "../logger/Logger";
 import { ServerLogger } from "../logger/ServerLogger";
-import { Meta } from "../meta/Meta";
+import { Meta } from "../metadata/Meta";
 import { olyCoreErrors } from "./constants/errors";
 import { olyCoreEvents } from "./constants/events";
 import { Parent } from "./decorators/parent";
@@ -372,9 +372,9 @@ export class Kernel {
     // check if dependency already exists
     // -> `definition` is the first criteria of research
     // -> but if you are doing a swap, the real criteria is `use`, not `definition`
-    const match: IDeclaration | undefined = this.declarations.find((i) =>
+    const match: IDeclaration | undefined = this.declarations.filter((i) =>
       _.isEqualClass(i.definition, target.provide) ||
-      _.isEqualClass(i.use, target.provide));
+      _.isEqualClass(i.use, target.provide))[0];
 
     // check if dependency will be updated
     if (target.use && match && match.use !== target.use) {
@@ -671,7 +671,7 @@ export class Kernel {
       declaration.instance.__free__();
     }
     declaration.children
-      .map((c) => this.declarations.find((d) => d.definition === c.type))
+      .map((c) => this.declarations.filter((d) => d.definition === c.type)[0])
       .forEach((c) => {
         if (c) {
           this.removeDependency(c);
@@ -901,8 +901,8 @@ export class Kernel {
         }
 
         for (const child of declaration.children) {
-          const childDependency = declarations.find((d: IDeclaration<any>) =>
-            _.isEqualClass(d.definition, child.type));
+          const childDependency = declarations.filter((d: IDeclaration<any>) =>
+            _.isEqualClass(d.definition, child.type))[0];
           if (!!childDependency && findDefinitionInTree(childDependency, definition)) {
             return true;
           }

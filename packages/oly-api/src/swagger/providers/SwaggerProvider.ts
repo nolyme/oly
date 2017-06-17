@@ -2,6 +2,7 @@ import { IDeclarations, inject, Kernel, Logger } from "oly-core";
 import { HttpServerProvider, serve } from "oly-http";
 import { Json } from "oly-json";
 import { join } from "path";
+import { Global } from "../../../../oly-core/src/kernel/Global";
 import { ApiProvider } from "../../core/providers/ApiProvider";
 import { KoaRouterBuilder } from "../../core/services/KoaRouterBuilder";
 import { MetaRouter } from "../../router/MetaRouter";
@@ -70,7 +71,7 @@ export class SwaggerProvider {
         for (const layer of router.stack) {
 
           const route: any = this.getRouteByLayer(dep.definition, layer);
-          const api: any = Object.assign({
+          const api: any = Global.merge({
             parameters: [],
             produces: [
               "application/json",
@@ -173,12 +174,12 @@ export class SwaggerProvider {
         const r = router.properties[propertyKey];
 
         if (r.method === "DEL" && (router.target.prefix || "") + r.path === layer.path) {
-          return Object.assign({}, r, {propertyKey});
+          return Global.merge(r, {propertyKey});
         }
 
         if (r.method === layer.methods[layer.methods.length - 1]
           && (router.target.prefix || "") + r.path === layer.path) {
-          return Object.assign({}, r, {propertyKey});
+          return Global.merge(r, {propertyKey});
         }
       }
     }

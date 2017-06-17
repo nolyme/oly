@@ -1,4 +1,4 @@
-import { IMetadata } from "../../meta/interfaces";
+import { IMetadata } from "../../metadata/interfaces";
 import { Kernel } from "../Kernel";
 
 export interface IArgumentArg {

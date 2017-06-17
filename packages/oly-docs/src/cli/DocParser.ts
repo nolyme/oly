@@ -74,10 +74,10 @@ export class DocParser {
 
     const components = this.generateDeclarations(app, path, results);
     return components.map((c) => {
-      const clazz = c.children.find(
-        (p) => p.kindString === "Class");
-      const props = c.children.find(
-        (p) => p.kindString === "Interface" && p.name.includes("Props"));
+      const clazz = c.children.filter(
+        (p) => p.kindString === "Class")[0];
+      const props = c.children.filter(
+        (p) => p.kindString === "Interface" && p.name.indexOf("Props") > -1)[0];
       if (!clazz) {
         throw new Error("Invalid " + props);
       }
@@ -156,7 +156,7 @@ export class DocParser {
 
     const final: IDocEnv[] = [];
     for (const r of envResults) {
-      if (!final.find((f) => f.name === r.name)) {
+      if (!final.filter((f) => f.name === r.name)[0]) {
         final.push(r);
       } else {
         this.logger.info(`remove duplicate ${r.name}`);
