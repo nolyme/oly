@@ -307,6 +307,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     config.plugins.push(
       new BabiliPlugin({}, {
         comments: false,
+        babili: require("babel-preset-babili"),
       }),
     );
 
