@@ -1,6 +1,6 @@
 const {createConfiguration, loaders} = require("oly-tools");
 
-export default (env) => {
+module.exports = (env) => {
 
   const config = createConfiguration({
     entry: [
