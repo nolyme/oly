@@ -17,6 +17,7 @@ const {
 } = _webpack;
 
 export { Configuration, NewModule } from "webpack";
+export * from "./synchronize";
 
 /**
  * Loaders ref.

@@ -2,14 +2,27 @@ import * as chalk from "chalk";
 
 (chalk as any).enabled = true;
 
+require("ansi-html").setColors({
+  reset: ["555", "666"],
+  black: "aaa",
+  red: "bbb",
+  green: "ccc",
+  yellow: "ddd",
+  blue: "eee",
+  magenta: "fff",
+  cyan: "999",
+  lightgrey: "888",
+  darkgrey: "777",
+});
+
 export class AnsiColor {
 
   public static html: any = require("ansi-html");
 
   public static chalk = chalk;
 
-  public static toBrowser(text: string): [string, string] {
-    return [text, this.html(text)];
+  public static toBrowser(text: string): string[] {
+    return this.htmlToStyles(this.html(text));
   }
 
   public static clear(text: string): string {
@@ -18,5 +31,29 @@ export class AnsiColor {
 
   public static isSupported(): boolean {
     return this.chalk.supportsColor;
+  }
+
+  public static htmlToStyles(...text: string[]): string[] {
+    const argArray: string[] = [];
+
+    if (arguments.length) {
+      const startTagRe = /<span\s+style=(['"])([^'"]*)\1\s*>/gi;
+      const endTagRe = /<\/span>/gi;
+
+      let reResultArray;
+      argArray.push(arguments[0].replace(startTagRe, "%c").replace(endTagRe, "%c"));
+
+      // tslint:disable-next-line
+      while (reResultArray = startTagRe.exec(arguments[0])) {
+        argArray.push(reResultArray[2]);
+        argArray.push("");
+      }
+
+      for (let j = 1; j < arguments.length; j++) {
+        argArray.push(arguments[j]);
+      }
+    }
+
+    return argArray;
   }
 }

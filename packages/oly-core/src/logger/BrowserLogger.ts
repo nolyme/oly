@@ -41,9 +41,9 @@ export class BrowserLogger extends Logger {
     const now = new Date().toLocaleTimeString();
     return ""
       + "[" + now + "] "
-      + AnsiColor[this.colors[type]](type) + " "
+      + AnsiColor.chalk[this.colors[type]](type) + " "
       + AnsiColor.chalk.bold(this.componentName + ":") + " "
-      + AnsiColor.chalk.italic("\"" + message + "\" ")
+      + ("\"" + message + "\" ")
       + (!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
   }
 }

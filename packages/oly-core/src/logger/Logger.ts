@@ -4,6 +4,7 @@ import { parent } from "../kernel/decorators/parent";
 import { state } from "../kernel/decorators/state";
 import { Class } from "../kernel/interfaces/injections";
 import { ILogLevel, LogLevels } from "./LogLevels";
+import { AnsiColor } from "./AnsiColor";
 
 /**
  * Simple logger.
