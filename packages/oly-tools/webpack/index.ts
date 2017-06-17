@@ -5,7 +5,6 @@ import * as CopyPlugin from "copy-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as NyanProgressPlugin from "nyan-progress-webpack-plugin";
-import * as OpenBrowserPlugin from "open-browser-webpack-plugin";
 import { join, resolve } from "path";
 import * as _webpack from "webpack";
 import { Configuration, Entry, Rule } from "webpack";
@@ -276,10 +275,6 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         from: options.assets, to: "./",
       }]),
     );
-  }
-
-  if (options.open === true) {
-    config.plugins.push(new OpenBrowserPlugin());
   }
 
   if (options.nyan === true) {
