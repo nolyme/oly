@@ -1,4 +1,3 @@
-import { injectable } from "../kernel/decorators/injectable";
 import { Logger } from "./Logger";
 import { ILogLevel, LogLevels } from "./LogLevels";
 
@@ -6,13 +5,9 @@ import { ILogLevel, LogLevels } from "./LogLevels";
  * Display {json: message} instead of classic format.
  *
  * ```ts
- * kernel.with(JsonLogger);
+ * kernel.with({provide: Logger, use: JsonLogger});
  * ```
  */
-@injectable({
-  provide: Logger,
-  singleton: false,
-})
 export class JsonLogger extends Logger {
 
   protected log(type: ILogLevel, message: string, data?: object) {
@@ -21,13 +16,13 @@ export class JsonLogger extends Logger {
     }
   }
 
-  protected appender(type: string, message: any) {
-    console.log.apply(console, [Logger.ansi.strip(message)]);
+  protected appender(type: string, text: any) {
+    console.log.apply(console, [text]);
   }
 
   protected format(type: string, message: string, data?: object) {
     const log: any = {
-      dat: new Date().toISOString(),
+      now: new Date().toISOString(),
       lvl: type,
       app: this.appName,
       ctx: this.contextId,

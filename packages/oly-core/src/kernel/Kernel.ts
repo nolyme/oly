@@ -1,10 +1,13 @@
 import { IArgumentsMetadata, IInjectionsMetadata, olyCoreKeys } from "../index";
+import { BrowserLogger } from "../logger/BrowserLogger";
 import { Logger } from "../logger/Logger";
+import { ServerLogger } from "../logger/ServerLogger";
 import { Meta } from "../meta/Meta";
 import { olyCoreErrors } from "./constants/errors";
 import { olyCoreEvents } from "./constants/events";
+import { Parent } from "./decorators/parent";
 import { KernelException } from "./exceptions/KernelException";
-import { Global as _ } from "./Global";
+import { Global, Global as _ } from "./Global";
 import {
   IEventCallback,
   IEventListener,
@@ -178,6 +181,12 @@ export class Kernel {
       // root kernel
       this.declarations = [];
       this.started = false;
+
+      if (Global.isBrowser()) {
+        this.inject({provide: Logger, use: BrowserLogger});
+      } else {
+        this.inject({provide: Logger, use: ServerLogger});
+      }
     }
 
     this.store.KERNEL_ID = this.id;
@@ -377,7 +386,7 @@ export class Kernel {
       this.removeDependency(match);
 
       // and recreate it with our new config
-      return this.get(definition, options);
+      return this.inject(definition, options);
     }
 
     const dependency: IDeclaration<T> = !!match
@@ -569,7 +578,7 @@ export class Kernel {
     const target = typeof definition === "object" ? definition.constructor as Class<T> : definition;
 
     // instance can be created (e.g Controller) or directly used (e.g ReactComponent)
-    const instance: T = typeof definition === "object" ? definition : this.get(target);
+    const instance: T = typeof definition === "object" ? definition : this.inject(target);
 
     // instance.propertyKey MUST BE a function
     const action: any = instance[propertyKey];
@@ -708,17 +717,17 @@ export class Kernel {
    * @param parent
    * @returns {T}         The new instance
    */
-  private processMetadata<T>(definition: Class<T>, instance?: T, parent?: Class): T {
+  private processMetadata<T extends IProvider>(definition: Class<T>, instance?: T, parent?: Class): T {
 
     const meta = Meta.of({key: olyCoreKeys.arguments, target: definition}).deep<IArgumentsMetadata>();
     const args: any[] = meta && meta.args.$constructor
       ? meta.args.$constructor.map((data) => data && data.handler(this, [parent]))
       : [];
 
-    return (
-      this.processStates(definition,
-        this.processEvents(definition,
-          this.processInjections(definition, instance || new definition(...args)))));
+    const newInstance = instance || new definition(...args);
+    return this.processStates(definition,
+      this.processEvents(definition,
+        this.processInjections(definition, newInstance)));
   }
 
   /**
@@ -751,9 +760,11 @@ export class Kernel {
           const injection = injections.properties[propertyKey];
           if (_.isEqualClass(injection.type, Kernel)) {
             Object.defineProperty(instance, propertyKey, {get: () => this});
+          } else if (_.isEqualClass(injection.type, Parent)) {
+            Object.defineProperty(instance, propertyKey, {get: () => definition});
           } else {
 
-            const value = this.get(injection.type, {parent: definition});
+            const value = this.inject(injection.type, {parent: definition});
             const injectable = Meta.of({
               key: olyCoreKeys.injectable,
               target: injection.type,
@@ -765,7 +776,7 @@ export class Kernel {
               });
             } else {
               Object.defineProperty(instance, propertyKey, {
-                get: () => this.get(injection.type, {parent: definition}),
+                get: () => this.inject(injection.type, {parent: definition}),
               });
             }
           }
@@ -908,7 +919,7 @@ export class Kernel {
    */
   private getLogger() {
     if (!this.logger) {
-      this.logger = this.get(Logger, {parent: Kernel});
+      this.logger = this.inject(Logger, {parent: Kernel});
     }
     return this.logger;
   }

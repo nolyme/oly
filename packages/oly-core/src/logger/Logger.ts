@@ -1,29 +1,22 @@
 import { env } from "../kernel/decorators/env";
 import { injectable } from "../kernel/decorators/injectable";
 import { parent } from "../kernel/decorators/parent";
-import { state } from "../kernel/decorators/state";
-import { _ } from "../kernel/Global";
 import { Class } from "../kernel/interfaces/injections";
 import { ILogLevel, LogLevels } from "./LogLevels";
+import { state } from "../kernel/decorators/state";
 
 /**
- * Main oly logger
+ * Simple logger.
  */
 @injectable({
   singleton: false,
 })
 export class Logger {
 
-  public static DEFAULT_NAME = "Component";
-
-  public static ansi = require("ansicolor");
-
-  public static supportsColor = require("supports-color");
-
   /**
    * Used by Logger.ansi.
    */
-  public static colors = {
+  protected colors = {
     DEBUG: "cyan",
     ERROR: "red",
     INFO: "green",
@@ -58,15 +51,15 @@ export class Logger {
   /**
    *
    */
-  protected componentName: string = Logger.DEFAULT_NAME;
+  protected componentName: string = "Component";
 
   /**
    *
-   * @param parent
    */
-  public constructor(@parent parent?: Class) {
-    if (parent) {
-      this.componentName = parent.name;
+  public constructor(@parent
+                     protected parent?: Class) {
+    if (this.parent && this.parent.name) {
+      this.as(this.parent.name);
     }
   }
 
@@ -152,30 +145,13 @@ export class Logger {
   }
 
   /**
-   * Output.
+   * Default appender.
    *
-   * @param type
-   * @param text
+   * @param type  Log level
+   * @param text  Message
    */
   protected appender(type: ILogLevel, text: string | Error): void {
-
-    if (type === "TRACE") {
-      type = "DEBUG";
-    }
-
-    const output = console[type.toLowerCase()] || console.log;
-
-    if (text instanceof Error) {
-      output.apply(console, [text]);
-    } else {
-      if (Logger.supportsColor && this.hasColor) {
-        output.apply(console, [text]);
-      } else if (_.isBrowser() && this.hasColor) {
-        output.apply(console, Logger.ansi.parse(text).asChromeConsoleLogArguments);
-      } else {
-        output.apply(console, [Logger.ansi.strip(text)]);
-      }
-    }
+    console.log.apply(console, [text]);
   }
 
   /**
@@ -186,15 +162,6 @@ export class Logger {
    * @param data      Extended data
    */
   protected format(type: string, message: string, data?: object): string {
-    const now = _.isBrowser() ? new Date().toLocaleTimeString() : new Date().toLocaleString();
-    return ""
-      + "[" + now + "] "
-      + Logger.ansi[Logger.colors[type]](type) + " "
-      + (!_.isBrowser()
-        ? Logger.ansi.bright(this.appName + "(") + this.contextId + Logger.ansi.bright(")") + " "
-        : "")
-      + Logger.ansi.bright(this.componentName + ":") + " "
-      + Logger.ansi.italic("\"" + message + "\" ")
-      + (!!data ? "\n" + JSON.stringify(data, null, "  ") : "");
+    return type.toLowerCase() + ": " + message;
   }
 }

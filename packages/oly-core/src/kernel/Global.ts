@@ -106,8 +106,8 @@ export class Global {
       return true;
     }
 
-    if (typeof type1.name === "string"
-      && type1.name.length > 2
+    if (!Global.isProduction()
+      && typeof type1.name === "string"
       && type1.name === type2.name) {
       const keys1 = Object.getOwnPropertyNames(type1.prototype);
       const keys2 = Object.getOwnPropertyNames(type2.prototype);

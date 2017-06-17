@@ -9,6 +9,7 @@
     "ban-types": false,
     "max-classes-per-file": false,
     "member-access": false,
-    "no-string-literal": false
+    "no-string-literal": false,
+    "no-var-requires": false
   }
 }
