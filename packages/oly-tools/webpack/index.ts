@@ -317,9 +317,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   // Axios & some universal libs use Buffer in their code
   // Webpack see this and try to emulate Buffer with a big code
   config.node = {
-    process: false,
     Buffer: false,
-    setImmediate: false,
   };
 
   // Dev Server
