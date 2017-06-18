@@ -3,16 +3,16 @@ import * as chalk from "chalk";
 (chalk as any).enabled = true;
 
 require("ansi-html").setColors({
-  reset: ["555", "666"],
-  black: "aaa",
-  red: "bbb",
-  green: "ccc",
-  yellow: "ddd",
-  blue: "eee",
-  magenta: "fff",
-  cyan: "999",
-  lightgrey: "888",
-  darkgrey: "777",
+  reset: ["fff", "000"],
+  black: "000",
+  red: "ff0000",
+  green: "209805",
+  yellow: "e8bf03",
+  blue: "0000ff",
+  magenta: "ff00ff",
+  cyan: "3dbbcc",
+  lightgrey: "f0f0f0",
+  darkgrey: "888",
 });
 
 export class AnsiColor {

@@ -1,8 +1,7 @@
 import { Collapse } from "@blueprintjs/core";
-import { inject } from "oly-core";
+import { inject, on } from "oly-core";
 import { attach, Go, olyReactRouterEvents, Router, styles } from "oly-react";
 import * as React from "react";
-import { on } from "oly-core";
 import { IModuleContent } from "../../cli/interfaces";
 
 @attach
@@ -93,6 +92,24 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
     );
   }
 
+  public renderExceptions() {
+    if (this.props.module.exceptions.length === 0) {
+      return;
+    }
+    return (
+      <div className="ModuleMenu_part">
+        <div className="ModuleMenu_part-header">
+          Exceptions
+        </div>
+        {this.props.module.exceptions.map((s) => (
+          <div key={s.name}>
+            <Go to={this.rel(`x/${s.name}`)}>{ s.name }</Go>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   public renderManuals() {
     return this.props.module.manuals.map((m) => (
       <div key={m.name}>
@@ -110,6 +127,7 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
         }
         {this.renderManuals()}
         {this.renderComponents()}
+        {this.renderExceptions()}
         {this.renderDecorators()}
         {this.renderServices()}
         {this.renderServices(true)}

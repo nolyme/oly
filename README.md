@@ -4,6 +4,8 @@ Set of libraries to create well-written [TypeScript](https://github.com/Microsof
 
 The set is based on known projects, such as [Koa](https://github.com/koajs/koa) and [React](https://github.com/facebook/react).
 
+This is very experimental. Do not use it.
+
 ### Why
 
 - hide the complexity of server-side rendering

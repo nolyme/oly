@@ -3,6 +3,7 @@ import { olyHttpErrors } from "../constants/errors";
 
 /**
  * Http server exception.
+ *
  * It's like a public exception:
  * - there is no source in #toJSON()
  * - however, stacktrace is always available on logging
@@ -16,8 +17,8 @@ import { olyHttpErrors } from "../constants/errors";
  * }
  * ```
  *
- * Like others exception, it's cool to extend this thing:
- * ```
+ * Like others exceptions, this is designed to be extended.
+ * ```ts
  * class BadRequestException extends HttpServerException {
  *    status = 400;
  * }

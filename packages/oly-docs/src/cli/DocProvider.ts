@@ -84,6 +84,7 @@ export class DocProvider {
       decorators: this.parser.generateDecorator(app, sources, m),
       interfaces: [],
       components: this.parser.generateComponents(app, sources, m),
+      exceptions: this.parser.generateException(app, sources, m),
       manuals: this.parser.generateManuals(app, project, m.manuals),
       env: this.parser.generateEnv(app, sources, m.services),
       home: this.parser.mark(readFileSync(resolve(project, "README.md"), "UTF-8")),

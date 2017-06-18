@@ -15,7 +15,7 @@ export class ServerLogger extends Logger {
    */
   protected appender(type: ILogLevel, text: string | Error): void {
 
-    const output = console[type.toLowerCase()] || console.log;
+    const output = console.log;
 
     if (text instanceof Error) {
       output.apply(console, [text]);

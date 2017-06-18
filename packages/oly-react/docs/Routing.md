@@ -16,7 +16,6 @@ class MyController {
 
   @page("/")
   index() {
-  
     return <MyComponent/>;
   }
 }

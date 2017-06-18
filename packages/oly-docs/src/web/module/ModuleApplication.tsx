@@ -6,6 +6,7 @@ import { NotFound } from "../layout/NotFound";
 import { ApiComponent } from "./ApiComponent";
 import { ApiConfiguration } from "./ApiConfiguration";
 import { ApiDecorator } from "./ApiDecorator";
+import { ApiException } from "./ApiException";
 import { ApiManual } from "./ApiManual";
 import { ApiService } from "./ApiService";
 import { ApiServiceMethod } from "./ApiServiceMethod";
@@ -62,6 +63,15 @@ export class ModuleApplication {
       return NotFound;
     }
     return <ApiDecorator module={this.module} decorator={decorator}/>;
+  }
+
+  @page("/x/:exception")
+  public exception(@param("exception") exceptionName: string) {
+    const exception = this.module.exceptions.filter((s) => s.name === exceptionName)[0];
+    if (!exception) {
+      return NotFound;
+    }
+    return <ApiException module={this.module} exception={exception}/>;
   }
 
   @page("/s/:service")

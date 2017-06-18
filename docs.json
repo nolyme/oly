@@ -18,6 +18,9 @@
       "services": [
         "kernel/Kernel.ts",
         "logger/Logger.ts"
+      ],
+      "exceptions": [
+        "exception/Exception.ts"
       ]
     },
     {
@@ -38,13 +41,17 @@
       "services": [
         "providers/HttpServerProvider.ts",
         "services/HttpClient.ts"
+      ],
+      "exceptions": [
+        "exceptions/HttpClientException.ts",
+        "exceptions/HttpServerException.ts"
       ]
     },
     {
       "name": "oly-react",
       "icon": "delta",
       "manuals": [
-        "docs/Router.md"
+        "docs/Routing.md"
       ],
       "decorators": [
         "core/decorators/attach.ts",

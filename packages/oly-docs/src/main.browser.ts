@@ -1,8 +1,7 @@
 import { FocusStyleManager } from "@blueprintjs/core";
-import { Global, Kernel } from "oly-core";
+import { Kernel } from "oly-core";
 import { ReactBrowserProvider } from "oly-react";
 import { Application } from "./web/Application";
-import "./web/main.scss";
 
 FocusStyleManager.onlyShowFocusOnTabs();
 

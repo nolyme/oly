@@ -3,7 +3,7 @@ import { attach, Router } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
 import { IDocs } from "../../cli/interfaces";
-import { ModuleService } from "../ModuleService";
+import { ModuleService } from "../services/ModuleService";
 
 @attach
 export class Prism extends Component<{ html: string; className?: string }, {}> {

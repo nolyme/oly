@@ -41,6 +41,12 @@ export interface IDocDecorator {
   install: string;
 }
 
+export interface IDocException {
+  name: string;
+  description: string;
+  install: string;
+}
+
 export interface IDocEnv {
   name: string;
   description: string;
@@ -66,6 +72,7 @@ export interface IModuleContent {
   services: IDocService[];
   manuals: IDocManual[];
   components: IDocComponent[];
+  exceptions: IDocException[];
   env: IDocEnv[];
   decorators: IDocDecorator[];
 }

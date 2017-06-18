@@ -9,6 +9,7 @@ import {
   DeclarationReflection,
   ParameterReflection,
   Reflection,
+  ReflectionKind,
   SignatureReflection,
   Type,
 } from "typedoc/dist/lib/models";
@@ -16,6 +17,7 @@ import {
   IDocComponent,
   IDocDecorator,
   IDocEnv,
+  IDocException,
   IDocManual,
   IDocMethod,
   IDocParameter,
@@ -132,6 +134,20 @@ export class DocParser {
       });
   }
 
+  public generateException(app: Application, path: string, m: ModuleConfiguration): IDocException[] {
+    this.logger.debug("check exceptions");
+    const results = m.exceptions || [];
+    results.map((r) => this.check(resolve(path, r)));
+    const declarations = this.generateDeclarations(app, path, results);
+    return declarations
+      .map((i) => i.children.filter((c) => c.kind = ReflectionKind.Class)[0])
+      .map((i) => this.mapException(i, m.name))
+      .map((i) => {
+        this.logger.info(`push ${i.name}`);
+        return i;
+      });
+  }
+
   public generateEnv(app: Application, path: string, results: string[] = []): IDocEnv[] {
     this.logger.debug("check env");
     results.map((r) => this.check(resolve(path, r)));
@@ -180,8 +196,8 @@ export class DocParser {
       return children;
     }
 
-    return children.filter((i: any) =>
-      files.indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
+    return children.filter((i: any) => files
+      .indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
   }
 
   public mapDecorators(decorator: DeclarationReflection, module: string): IDocDecorator {
@@ -209,6 +225,14 @@ export class DocParser {
       methods: this.getPublicMethods(service),
       install: this.markInstall(service.name, module),
       name: service.name,
+    };
+  }
+
+  public mapException(exception: DeclarationReflection, module: string): IDocException {
+    return {
+      description: this.getDescription(exception),
+      install: this.markInstall(exception.name, module),
+      name: exception.name,
     };
   }
 
@@ -347,11 +371,7 @@ import { ${service} } from "${module}";
 
   public mark(text: string): string {
     return this.sanitize(marked(text, {
-      gfm: true,
       tables: true,
-      breaks: true,
-      smartLists: true,
-      smartypants: true,
       renderer,
     }));
   }

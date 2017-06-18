@@ -18,6 +18,9 @@ export class ModuleConfiguration {
   public components: string[];
 
   @array({of: String, default: []})
+  public exceptions: string[];
+
+  @array({of: String, default: []})
   public services: string[];
 
   @array({of: String, default: []})

@@ -4,7 +4,7 @@ import { action, attach, Go, Router, styles } from "oly-react";
 import * as React from "react";
 import { ChangeEvent, KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
 import { IDocs } from "../../cli/interfaces";
-import { ISearchItem, ModuleService } from "../ModuleService";
+import { ISearchItem, ModuleService } from "../services/ModuleService";
 
 export interface IState {
   query: string;

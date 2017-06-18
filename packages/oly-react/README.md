@@ -15,7 +15,8 @@ $ npm install oly-core oly-react react @types/react
 - make SSR easier.
 
 ```ts
-import { page, layout, View } from "oly-react";
+import { Kernel } from "oly-core";
+import { page, layout, View, ReactBrowserProvider } from "oly-react";
 
 export class Application {
 
@@ -23,7 +24,7 @@ export class Application {
   root() {
     return (
       <div>
-        <Menu/>
+        <div>menu</div>
         <View/>
       </div>
     );
@@ -31,8 +32,13 @@ export class Application {
   
   @page("/")
   home() {
-    return <Home/>;
+    return <div>home</div>;
   }
 }
 
+Kernel
+  .create()
+  .with(Application, ReactBrowserProvider)
+  .start()
+  .catch(console.error)
 ```
