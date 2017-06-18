@@ -4,8 +4,11 @@ import { Pixie } from "./Pixie";
 import { PixieSession } from "./PixieSession";
 
 /**
- * Axios wrapped with pixie#fly to cache response.
- * Also support auto API_ROOT if oly-api is used.
+ * It use HttpClient.
+ *
+ * All requests are wrapped with Pixie#fly().
+ *
+ * A token is sent on each request if PixieSession exists.
  */
 export class PixieHttp {
 

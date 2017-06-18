@@ -32,22 +32,44 @@ export class Router {
    * Go to a named node.
    *
    * ```ts
+   * // path is allowed
+   * router.go("/");
+   * // or node name
    * router.go("index");
+   * // or route name
+   * router.go("root.home");
+   * // use object to pass params/query
+   * router.go({to: "root.users.byId", params: {userId: "1"}});
+   * // path is also allowed here
+   * router.go({to: "/", query: {a: "b"}});
    * ```
    */
   public go(query: string | IHrefQuery): Promise<ITransition> {
     return this.routerProvider.transition(query);
   }
 
+  /**
+   * Remove layers and go to the current path as REPLACE.
+   *
+   * ```ts
+   * router.reload();
+   * ```
+   */
   public reload(): Promise<ITransition> {
     this.routerProvider.layers = [];
     return this.go({to: this.current.path, type: "REPLACE"});
   }
 
+  /**
+   * Use history forward.
+   */
   public forward(): void {
     this.browser.history.goForward();
   }
 
+  /**
+   * Use history back.
+   */
   public back(): void {
     this.browser.history.goBack();
   }
@@ -55,7 +77,7 @@ export class Router {
   /**
    * Get the path of a route node.
    *
-   * @param query
+   * @param query   Path/NodeName/RouteName
    */
   public href(query: string | IHrefQuery): string | undefined {
     const href = this.routerProvider.href(query);
@@ -68,8 +90,8 @@ export class Router {
   /**
    * Check if a route node is active.
    *
-   * @param routeName
-   * @param strict
+   * @param routeName     Path/NodeName/RouteName
+   * @param strict        If true, check as STRICT EQUAL not CONTAINS
    */
   public isActive(routeName: string | IHrefQuery, strict: boolean = false): boolean {
 

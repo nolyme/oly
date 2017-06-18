@@ -43,6 +43,9 @@
     {
       "name": "oly-react",
       "icon": "delta",
+      "manuals": [
+        "docs/Router.md"
+      ],
       "decorators": [
         "core/decorators/attach.ts",
         "router/decorators/page.ts",

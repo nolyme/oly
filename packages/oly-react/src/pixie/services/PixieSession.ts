@@ -3,7 +3,11 @@ import { Browser } from "../../router/services/Browser";
 import { Pixie } from "./Pixie";
 
 /**
+ * Session container.
  *
+ * Parse sessionId/token on Cookie.
+ *
+ * All the jobs are already done by PixieBrowserProvider and PixieServerProvider.
  */
 export class PixieSession {
 
@@ -22,25 +26,24 @@ export class PixieSession {
   protected token: string | null;
 
   /**
-   *
-   * @return {boolean}
+   * Check if token exists.
    */
-  public hasToken() {
+  public hasToken(): boolean {
     return !!this.token;
   }
 
   /**
-   *
-   * @return {string|null}
+   * Get in-memory token.
    */
-  public getToken() {
+  public getToken(): string | null {
     return this.token;
   }
 
   /**
+   * Attach token/session on Cookie.
    *
-   * @param token
-   * @param ttl      In second
+   * @param token    SessionId or JWT
+   * @param ttl      Cookie lifetime in second
    */
   public setToken(token: string, ttl?: number): void {
 
@@ -60,7 +63,7 @@ export class PixieSession {
   }
 
   /**
-   *
+   * Delete token. Remove from cookie.
    */
   public removeToken(): void {
     this.token = null;

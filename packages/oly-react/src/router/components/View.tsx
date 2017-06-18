@@ -18,18 +18,40 @@ export interface IViewProps {
   index?: number;
 
   /**
+   * By default, view is named `main` and chunks equal `{main: JSX}`.
+   * Set another name will check another chunk name.
    *
+   * ```ts
+   * class A {
+   *   @layout root() {
+   *     return (
+   *       <div>
+   *         <View name="header"/>
+   *         <View/>
+   *       </div>
+   *     );
+   *   }
+   *   @page index() {
+   *     return {
+   *       header: <Header/>,
+   *       main: <App/>,
+   *     };
+   *   }
+   * }
+   * ```
    */
   name?: string;
 
   /**
-   *
+   * When view is **updated**.
    */
   onChange?: () => any;
 }
 
 /**
+ * Display a JSX ReactRouterProvider layer.
  *
+ * This is useful if you have nested routes.
  */
 @attach
 export class View extends Component<IViewProps, { content: any }> {
