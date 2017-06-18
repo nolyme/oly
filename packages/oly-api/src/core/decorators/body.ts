@@ -1,6 +1,5 @@
 import { Class, IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
 import { IKoaContext } from "oly-http";
-import { IFieldsMetadata, Json, olyMapperKeys } from "oly-json";
 import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
 
@@ -28,7 +27,6 @@ export class BodyDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const json = k.inject(Json);
           const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
           const value: object | object[] = this.options.name ? ctx.request.body[this.options.name] : ctx.request.body;
 
@@ -36,16 +34,7 @@ export class BodyDecorator implements IDecorator {
             throw new BadRequestException(olyApiErrors.missing("request", "body"));
           }
 
-          const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: type}).get<IFieldsMetadata>();
-          if (!fieldsMetadata) {
-            return value;
-          }
-
-          try {
-            return json.build(type as Class, value);
-          } catch (e) {
-            throw new BadRequestException(e, olyApiErrors.validationHasFailed());
-          }
+          return value;
         }
       },
     });

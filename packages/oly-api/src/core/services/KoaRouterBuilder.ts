@@ -1,6 +1,5 @@
 import * as KoaRouter from "koa-router";
-import { Class, inject, Meta } from "oly-core";
-import { IType, Json, olyMapperKeys, TypeUtil } from "oly-json";
+import { Class, inject } from "oly-core";
 import { MetaRouter } from "../../router/MetaRouter";
 import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
@@ -10,9 +9,6 @@ import { ApiMiddlewares } from "./ApiMiddlewares";
  * koa-router build based on metadata.
  */
 export class KoaRouterBuilder {
-
-  @inject
-  protected json: Json;
 
   @inject
   protected apiMiddlewares: ApiMiddlewares;
@@ -63,7 +59,7 @@ export class KoaRouterBuilder {
    * @param argType     Who need this (type)
    * @return            Value, converted if possible
    */
-  public parseAndCast(value: any, type: IType, argKey: string, argType: string): any {
+  public parseAndCast(value: any, type: Class, argKey: string, argType: string): any {
 
     if (!type) {
       return value;
@@ -71,18 +67,18 @@ export class KoaRouterBuilder {
       if (value === "") {
         return true;
       }
-      return TypeUtil.forceBoolean(value);
+      if (typeof value === "string") {
+        return !(value === "false" || value === "0");
+      }
+      return !!value;
     } else if (type === Number) {
       if (value === "") {
         return null;
       }
-      return TypeUtil.forceNumber(value);
-    } else if (Meta.of({key: olyMapperKeys.fields, target: type}).has()) {
-      try {
-        return this.json.build(type as Class, value); // TODO: ValidationException() + .reason or field
-      } catch (e) {
-        throw new BadRequestException(e, olyApiErrors.validationHasFailed());
+      if (typeof value === "number") {
+        return value;
       }
+      return Number(value);
     } else if (type === Object) {
       if (value === "") {
         return null;

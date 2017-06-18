@@ -1,5 +1,5 @@
 import { IKoaMiddleware } from "oly-http";
-import { array, field } from "oly-json";
+import { array, field, build } from "oly-json";
 import { body } from "../../src/core/decorators/body";
 import { del } from "../../src/core/decorators/del";
 import { get } from "../../src/core/decorators/get";
@@ -68,12 +68,12 @@ export class A2 {
   }
 
   @post("/body/parse")
-  bodyParse(@body() a: Data) {
+  bodyParse(@build @body a: Data) {
     return {a};
   }
 
   @post("/upload")
-  upload(@body() a: IUploadedFile) {
+  upload(@body a: IUploadedFile) {
     return {a};
   }
 }

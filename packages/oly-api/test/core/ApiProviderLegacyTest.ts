@@ -1,7 +1,7 @@
 import { equal } from "assert";
 import { Kernel } from "oly-core";
 import { HttpClient, HttpServerException, IHttpRequest } from "oly-http";
-import { field } from "oly-json";
+import { build, field } from "oly-json";
 import { olyApiErrors } from "../../src/core/constants/errors";
 import { body } from "../../src/core/decorators/body";
 import { del } from "../../src/core/decorators/del";
@@ -66,7 +66,7 @@ describe("ApiProviderLegacy", () => {
       }
 
       @post("/check")
-      check(@body(DataCheck) data: DataCheck) {
+      check(@build @body data: DataCheck) {
         return data.username;
       }
 

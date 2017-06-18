@@ -11,7 +11,6 @@
 - (oly-docs): add more and more and more docs.
 - (oly-docs): preprocess links on generated md before runtime.
 - [HARD] (oly-*) better coverage, especially react-router... :)
-- (oly-react/router) scroll top:0 on route change
 - [HARD] (oly-amqp) amqp @retry
 - [HARD] (oly-amqp) memory (for test!)
 - [HARD] (oly-orm): use knex + oly-json
@@ -26,6 +25,7 @@
 - (oly-react/pixie) pixie auto route
 - (oly-react/pixie) Cookie.get() Cookie.set(), cookie sec
 - (oly-cli): init --ssr
+- (oly-react/router) scroll top:0 on route change
 - (oly-amqp): cron no time dependency + Time
 - [HARD] (oly-ws): init, websocket with @on and fork(onconnect)
 - (oly-fs): init, fs api+mock, workspace, tmp
