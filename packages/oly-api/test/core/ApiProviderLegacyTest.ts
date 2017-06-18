@@ -157,7 +157,7 @@ describe("ApiProviderLegacy", () => {
       }
 
       @get("/5")
-      a5(@query("b") b: Data) {
+      a5(@build @query("b") b: Data) {
         return {b};
       }
     }
@@ -198,7 +198,7 @@ describe("ApiProviderLegacy", () => {
     });
     it("should extract query as object", async () => {
       expect((await fetch("5", {params: {b: "h"}})).message)
-        .toBe(olyApiErrors.validationHasFailed());
+        .toBe(olyApiErrors.invalidFormat("query", "b", "json"));
       expect(await fetch("5", {params: {b: {name: "toto"}}})).toEqual({b: {name: "toto"}});
     });
   });

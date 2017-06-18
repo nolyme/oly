@@ -50,7 +50,7 @@ describe("ApiProvider", () => {
   });
   it("@body-parse", async () => {
     expect((await fetch("/body/parse", "post", {b: "c"})).message)
-      .toEqual(olyApiErrors.validationHasFailed());
+      .toContain("Validation has failed");
     expect(await fetch("/body/parse", "post", {e: "g", f: [{g: 4}]}))
       .toEqual({a: {e: "g", f: [{g: 4}]}});
   });

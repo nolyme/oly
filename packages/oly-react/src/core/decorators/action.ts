@@ -28,4 +28,26 @@ export class ActionDecorator implements IDecorator {
   }
 }
 
+/**
+ * Define a method as action.
+ *
+ * ```ts
+ * class A extends Component<any, any> {
+ *
+ *   @action
+ *   onClick(event) {
+ *   }
+ *
+ *   render() {
+ *     return (
+ *       <button onClick={this.onClick}>ok</button>;
+ *     );
+ *   }
+ * }
+ * ```
+ *
+ * Action is "autobind".
+ * There is an error handler.
+ * The global event `ACTIONS_ERROR` is emitted on each error.
+ */
 export const action = Meta.decorator<IActionOptions>(ActionDecorator);

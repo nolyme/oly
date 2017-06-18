@@ -28,7 +28,8 @@ export class JsonValidator {
     const valid = validate(source);
 
     if (!valid) {
-      throw new ValidationException(this.ajv.errorsText(validate.errors), validate.errors || []);
+      throw new ValidationException(
+        `Validation has failed (${this.ajv.errorsText(validate.errors)})`, validate.errors || []);
     }
 
     return source;

@@ -37,6 +37,26 @@ export class AttachDecorator implements IDecorator {
 }
 
 /**
+ * Link component to the kernel.
  *
+ * This works only for `React.Component`.
+ *
+ * Before `componentWillMount`, kernel will process the component:
+ * - process @inject
+ * - process @state/@env
+ * - process @on
+ *
+ * Before `componentWillUnmount`, kernel will __free__ all events of the component.
+ *
+ * ```ts
+ * &shy;@attach
+ * class Home extends Component<any, any> {
+ *   @inject a: B; // now you can do this
+ *
+ *   render() { }
+ * }
+ * ```
+ *
+ * Use @attach only if needed.
  */
 export const attach = Meta.decoratorWithoutOptions(AttachDecorator);

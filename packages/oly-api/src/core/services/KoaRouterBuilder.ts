@@ -79,17 +79,16 @@ export class KoaRouterBuilder {
         return value;
       }
       return Number(value);
-    } else if (type === Object) {
-      if (value === "") {
-        return null;
+    } else if (!!value) {
+      if (type === String) {
+        return value.toString();
+      } else {
+        try {
+          return JSON.parse(value);
+        } catch (ignore) {
+          throw new BadRequestException(olyApiErrors.invalidFormat(argType, argKey, "json"));
+        }
       }
-      try {
-        return JSON.parse(value);
-      } catch (ignore) {
-        throw new BadRequestException(olyApiErrors.invalidFormat(argType, argKey, "json"));
-      }
-    } else if (type === String && !!value) {
-      return value.toString();
     } else {
       return value;
     }

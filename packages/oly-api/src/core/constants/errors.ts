@@ -18,7 +18,7 @@ export const olyApiErrors = {
     `The server encountered an unexpected condition which prevented it from fulfilling the request`,
 
   invalidFormat: (type: string, key: string, expected: string): string =>
-    `Invalid format. The ${type} '${key}' expects ${expected}`,
+    `Invalid format. The ${type} '${key}' should be a ${expected}`,
 
   methodNotAllowed: (): string =>
     `The server has not found anything matching the URI given`,
@@ -40,7 +40,4 @@ export const olyApiErrors = {
 
   undefinedAction: (actionName: string): string =>
     `Undefined action "${actionName}". Function isn't declared`,
-
-  validationHasFailed: (): string =>
-    `Validation has failed`,
 };
