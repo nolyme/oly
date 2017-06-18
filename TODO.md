@@ -4,9 +4,8 @@
 
 - (oly-docs): split module (api & react)
 - (oly-docs): middlewares
-- (oly-docs): exceptions
 - [HARD] (oly-docs): interfaces (popup)
-- [HARD] (oly-docs): version
+- [HARD] (oly-docs): multi version
 - (oly-docs): show env & exception in services/components
 - (oly-docs): add more and more and more docs.
 - (oly-docs): preprocess links on generated md before runtime.
@@ -18,7 +17,6 @@
 ### THOUGHTS
 
 - (oly-tools/cli): better ssr dev workflow (one process)
-- (oly-react/router) base href
 - (oly-react/pixie) pixie auto route
 - (oly-react/pixie) Cookie.get() Cookie.set(), cookie sec
 - (oly-cli): init --ssr

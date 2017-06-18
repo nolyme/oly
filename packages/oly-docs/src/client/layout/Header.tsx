@@ -26,9 +26,13 @@ export class Header extends React.Component<{}, {}> {
   public getSelectedId() {
     const path = this.router.current.path;
     if (path.indexOf("/m/") === -1) {
-      return "/";
+      return this.router.href("home");
     }
-    return path.replace(/(\/m\/[a-z-]*)\/.*/igm, "$1");
+    for (const m of this.docs.modules) {
+      if (this.router.isActive({to: "moduleById", params: {module: m.name}})) {
+        return this.router.href({to: "moduleById", params: {module: m.name}});
+      }
+    }
   }
 
   public renderTabTitle(m: IModuleContent) {
@@ -44,7 +48,7 @@ export class Header extends React.Component<{}, {}> {
     return (
       <Tab2
         className="with-icon"
-        id={`/m/${m.name}`}
+        id={this.router.href({to: "moduleById", params: {module: m.name}}) || ""}
         key={m.name}
         title={this.renderTabTitle(m)}
       />
@@ -63,7 +67,7 @@ export class Header extends React.Component<{}, {}> {
               defaultSelectedTabId={this.getSelectedId()}
             >
               <Tab2
-                id="/"
+                id={this.router.href("home") || ""}
                 title={
                   <div>
                     <div>o<span style={{fontStyle: "italic"}}>l</span>y</div>

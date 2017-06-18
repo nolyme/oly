@@ -13,7 +13,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
   private stepsAllowed: string[];
 
   private blackList = [
-    "c", "s", "@", "m", "x",
+    "c", "s", "@", "m", "x", "oly",
   ];
 
   private transforms: { [key: string]: (before: string) => string } = {
