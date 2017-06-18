@@ -32,6 +32,9 @@ export class QueryDecorator implements IDecorator {
           if (transition.to.query[name] == null) {
             return transition.to.query[name];
           }
+          if (transition.to.query[name] === "") {
+            return null;
+          }
           return Number(transition.to.query[name]);
         } else if (type === String) {
           return String(transition.to.query[name]);

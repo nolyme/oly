@@ -123,7 +123,7 @@ describe("ObjectMapper", () => {
       const ev: ValidationException = e;
       localize.fr(ev.errors);
       expect(json.ajv.errorsText(ev.errors)).toBe("data.username doit être de type string");
-      expect(ev.message).toBe("data.username should be string");
+      expect(ev.message).toBe("Validation has failed (data.username should be string)");
     }
 
     try {
@@ -134,7 +134,7 @@ describe("ObjectMapper", () => {
       const ev: ValidationException = e;
       localize.fr(ev.errors);
       expect(json.ajv.errorsText(ev.errors)).toBe("data doit être de type string");
-      expect(ev.message).toBe("data should be string");
+      expect(ev.message).toBe("Validation has failed (data should be string)");
     }
   });
 });

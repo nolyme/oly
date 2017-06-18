@@ -57,7 +57,7 @@ describe("@query", () => {
     await t("/c?b=1");
     expect($(r.layers[0]).text()).toBe("A number 1");
     await t("/c?b");
-    expect($(r.layers[0]).text()).toBe("A number 0");
+    expect($(r.layers[0]).text()).toBe("A object null");
     await t("/c");
     expect($(r.layers[0]).text()).toBe("A undefined undefined");
   });

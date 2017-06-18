@@ -11,7 +11,7 @@ export class ValidationException extends Exception {
   public status: number = 400;
 
   public constructor(message: string, errors: ErrorObject[]) {
-    super(message);
+    super(`Validation has failed (${message})`);
     this.errors = errors;
   }
 

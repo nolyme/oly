@@ -17,9 +17,6 @@
   
 ### THOUGHTS
 
-- (oly-json): @check/@val, and replace @body check
-  - wrap @body, and check the response !
-  - @val(IField) :))) useful with @header / @params / @query
 - (oly-tools/cli): better ssr dev workflow (one process)
 - (oly-react/router) lazy loading TS2.4 + import()
 - (oly-react/pixie) pixie auto route
@@ -33,6 +30,7 @@
 
 ### MAYBE ONE DAY
 
+- (oly-api): use qs with koa-router (and maybe, remove koa-router, just use koa-mount)
 - (oly-orm): rest
 - (oly-tools): hot reload
 - (oly-api): hal resource
