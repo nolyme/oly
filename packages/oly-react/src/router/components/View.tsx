@@ -44,6 +44,13 @@ export interface IViewProps {
 
   /**
    * When view is **updated**.
+   *
+   * You can use it to force scroll top.
+   * ```ts
+   * <div ref={(div) => el = div}>
+   *   <View onChange={() => el.scrollTop = 0}/>
+   * </div>
+   * ```
    */
   onChange?: () => any;
 }
@@ -71,8 +78,6 @@ export class View extends Component<IViewProps, { content: any }> {
 
   public index: number;
 
-  public id = _.shortid();
-
   public get name(): string {
     return this.props.name || "main";
   }
@@ -93,7 +98,7 @@ export class View extends Component<IViewProps, { content: any }> {
     if (this.layer
       && level === this.index
       && this.content !== this.state.content) {
-      this.logger.trace(`update view ${this.id} ${this.index} (${this.name})`);
+      this.logger.trace(`update view ${this.index} (${this.name})`);
       return new Promise<void>((resolve) => this.setState({content: this.content}, () => {
         resolve();
         if (typeof this.props.onChange === "function") {
@@ -112,7 +117,7 @@ export class View extends Component<IViewProps, { content: any }> {
     if (typeof this.index === "undefined") {
       throw new Error("Can't get an index");
     }
-    this.logger.trace(`init view ${this.id} ${this.index} (${this.name})`);
+    this.logger.trace(`init view ${this.index} (${this.name})`);
     this.state = {
       content: this.content,
     };
@@ -122,7 +127,7 @@ export class View extends Component<IViewProps, { content: any }> {
    *
    */
   public componentWillUnmount(): void {
-    this.logger.trace(`destroy view ${this.id} ${this.index} (${this.name})`);
+    this.logger.trace(`destroy view ${this.index} (${this.name})`);
   }
 
   /**
@@ -130,7 +135,7 @@ export class View extends Component<IViewProps, { content: any }> {
    */
   public render(): JSX.Element | null {
     if (this.content) {
-      this.logger.trace(`render view ${this.id} ${this.index} (${this.name})`);
+      this.logger.trace(`render view ${this.index} (${this.name})`);
       if (this.show) {
         const node = this.routerProvider.layers[this.index].node;
         return (

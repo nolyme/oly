@@ -18,7 +18,7 @@
 ### THOUGHTS
 
 - (oly-tools/cli): better ssr dev workflow (one process)
-- (oly-react/router) lazy loading TS2.4 + import()
+- (oly-react/router) base href
 - (oly-react/pixie) pixie auto route
 - (oly-react/pixie) Cookie.get() Cookie.set(), cookie sec
 - (oly-cli): init --ssr

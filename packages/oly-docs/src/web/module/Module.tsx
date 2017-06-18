@@ -8,12 +8,17 @@ import { ModuleMenu } from "./ModuleMenu";
 @styles(() => require("./Module.scss"))
 export class Module extends Component<{ module: IModuleContent }, {}> {
 
+  div: HTMLElement;
+
   public render() {
     return (
       <div className="Module flex">
         <ModuleMenu module={this.props.module}/>
-        <div className="Module_view flex-full with-scroll">
-          <View index={2}/>
+        <div
+          ref={(div) => this.div = div}
+          className="Module_view flex-full with-scroll"
+        >
+          <View onChange={() => this.div.scrollTop = 0}/>
         </div>
       </div>
     );
