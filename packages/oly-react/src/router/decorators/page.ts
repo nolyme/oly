@@ -1,5 +1,5 @@
-import { IDecorator, inject, Meta } from "oly-core";
-import { olyReactRouterKeys } from "../constants/keys";
+import {IDecorator, inject, Meta} from "oly-core";
+import {olyReactRouterKeys} from "../constants/keys";
 
 /**
  * Page options.
@@ -48,4 +48,17 @@ export class PageDecorator implements IDecorator {
   }
 }
 
+/**
+ * Define a new page.
+ *
+ * ```ts
+ *  class A {
+ *
+ *    @page("/")
+ *    home() {
+ *      return <div>Home</div>
+ *    }
+ *  }
+ * ```
+ */
 export const page = Meta.decorator<string | IPageOptions>(PageDecorator);

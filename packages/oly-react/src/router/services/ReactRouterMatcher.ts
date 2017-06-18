@@ -1,6 +1,7 @@
 import { Global, inject, Logger } from "oly-core";
 import * as pathToRegexp from "path-to-regexp";
 import { compile } from "path-to-regexp";
+import * as qs from "qs";
 import { MatcherException } from "../exceptions/MatcherException";
 import { IHrefQuery, IMatch, INode, IRoute } from "../interfaces";
 
@@ -49,12 +50,8 @@ export class ReactRouterMatcher {
     }
 
     // check query
-    if (options.query) {
-      const keys = Object.keys(options.query);
-      for (const key of keys) {
-        const sep = (url.indexOf("?") > -1) ? "&" : "?";
-        url += sep + key + "=" + options.query[key];
-      }
+    if (options.query && url.indexOf("?") === -1) {
+      url += "?" + qs.stringify(options.query);
     }
 
     return url;
@@ -97,13 +94,9 @@ export class ReactRouterMatcher {
    */
   public query(url: string): { [key: string]: string } {
     try {
-      const [, qs] = url.split("?");
-      if (qs) {
-        return qs.split("&").reduce((o, part) => {
-          const [k, v] = part.split("=");
-          o[k] = v;
-          return o;
-        }, {});
+      const [, raw] = url.split("?");
+      if (raw) {
+        return qs.parse(raw);
       }
     } catch (e) {
       this.logger.warn(`Query parsing of '${url}' has failed`, e);
@@ -122,7 +115,7 @@ export class ReactRouterMatcher {
     const [pathWithoutQuery] = path.split("?");
 
     for (const route of routes) {
-      if (route.regexp) {
+      if (route.regexp && route.name !== "error") {
         const result = route.regexp.exec(pathWithoutQuery);
         if (!result) {
           continue;

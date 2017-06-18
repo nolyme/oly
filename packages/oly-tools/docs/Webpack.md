@@ -5,35 +5,24 @@ However, it's not easy to make a webpack configuration.
 
 oly-tools has a custom "preset" for TypeScript webapps.
 
-*&#60;project&#62;/webpack.config.js*
 ```ts
-import { createConfiguration, loaders } from "oly-tools";
+const { createConfiguration, loaders } = require("oly-tools");
 
-export default (env) => {
+module.exports = (env) => {
 
   const config = createConfiguration({
-    entry: "./src/main.browser.ts",
+    entry: [
+      "oly-core/polyfill",
+      "./src/main.browser.ts"
+    ],
+    assets: "./src/web/assets",
+    template: "./src/web/index.html",
+    styleLoader: loaders.sassLoaderFactory(),
     env,
   });
 
   return config;
 };
-```
-
-### npm scripts
-
-npm allows us some alias without installing stuff globally.
-
-[https://docs.npmjs.com/misc/scripts](https://docs.npmjs.com/misc/scripts)
-
-*&#60;project&#62;/package.json*
-```ts
-{
-  // ...
-  "scripts": {
-    "build": "webpack"
-  }
-}
 ```
 
 After that, we can build an app like that:

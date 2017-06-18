@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/history": "4.5.2",
     "@types/prop-types": "15.5.1",
+    "@types/qs": "^6.2.31",
     "@types/react-dom": "15.5.0",
     "@types/react-helmet": "5.0.2",
     "cheerio": "0.22.0",
@@ -23,6 +24,7 @@
     "oly-http": "^0.11.4",
     "path-to-regexp": "1.7.0",
     "prop-types": "15.5.10",
+    "qs": "^6.4.0",
     "react-dom": "15.5.4",
     "react-helmet": "5.1.3"
   },

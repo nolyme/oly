@@ -4,7 +4,7 @@ import { createElement } from "react";
 import { AppContext } from "../../core/components/AppContext";
 import { View } from "../components/View";
 import { olyReactRouterEvents } from "../constants/events";
-import { ITransition, ITransitionRenderEvent, ITransitionType } from "../interfaces";
+import { ITransitionRenderEvent, ITransitionType } from "../interfaces";
 import { Browser } from "../services/Browser";
 import { ReactRouterProvider } from "./ReactRouterProvider";
 
@@ -63,7 +63,7 @@ export class ReactBrowserProvider implements IProvider {
    * Each time the ReactRouterProvider requests a render, we update the history.
    */
   @on(olyReactRouterEvents.TRANSITION_RENDER)
-  protected onTransitionEnd({ transition }: ITransitionRenderEvent) {
+  protected onTransitionEnd({transition}: ITransitionRenderEvent) {
     if (transition.type === "PUSH") {
       this.logger.trace(`push '${transition.to.path}' history`);
       this.browser.history.push(transition.to.path);
@@ -118,6 +118,6 @@ export class ReactBrowserProvider implements IProvider {
    * Create JSX root element.
    */
   public get rootElement(): JSX.Element {
-    return createElement(AppContext, { kernel: this.kernel }, createElement(View, { index: 0 }));
+    return createElement(AppContext, {kernel: this.kernel}, createElement(View, {index: 0}));
   }
 }

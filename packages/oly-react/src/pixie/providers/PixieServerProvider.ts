@@ -26,9 +26,9 @@ export class PixieServerProvider {
       const kernelOfThisRequestOnly = ctx.kernel;
 
       // get a the pixie and the session of this request
-      const pixie = kernelOfThisRequestOnly.get(Pixie);
-      const session = kernelOfThisRequestOnly.get(PixieSession);
-      const http = kernelOfThisRequestOnly.get(PixieHttp);
+      const pixie = kernelOfThisRequestOnly.inject(Pixie);
+      const session = kernelOfThisRequestOnly.inject(PixieSession);
+      const http = kernelOfThisRequestOnly.inject(PixieHttp);
 
       // force pixie http root here
       // this will write API_ROOT into pixie_data

@@ -22,13 +22,38 @@ export class QueryDecorator implements IDecorator {
     Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
       type: Meta.designParamTypes(target, propertyKey)[index] as any,
       handler: (k: Kernel, [transition]: [ITransition]) => {
-        return transition.to.query[name];
+        const type = Meta.designParamTypes(target, propertyKey)[index];
+        if (type === Boolean) {
+          return !(
+          transition.to.query[name] == null
+          || transition.to.query[name] === "0"
+          || transition.to.query[name] === "false");
+        } else if (type === Number) {
+          if (transition.to.query[name] == null) {
+            return transition.to.query[name];
+          }
+          return Number(transition.to.query[name]);
+        } else if (type === String) {
+          return String(transition.to.query[name]);
+        } else {
+          return transition.to.query[name];
+        }
       },
     });
   }
 }
 
 /**
+ * Extract query param from page url.
  *
+ * ```ts
+ *  class A {
+ *
+ *    @page("/")
+ *    home(@query("from") from: string) {
+ *      return <div>Hello from {from}</div>
+ *    }
+ *  }
+ * ```
  */
 export const query = Meta.decorator<IQueryOptions>(QueryDecorator);

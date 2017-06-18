@@ -1,4 +1,4 @@
-import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { Class, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import {
@@ -42,10 +42,22 @@ export class ReactRouterProvider implements IProvider {
   @inject
   protected resolver: ReactRouterResolver;
 
+  /**
+   * Get the href of routeName/routeQuery/templateUrl.
+   *
+   * @param query
+   * @returns {string|undefined}
+   */
   public href(query: IHrefQuery | string): string | undefined {
     return this.matcher.href(this.routes, query, this.match);
   }
 
+  /**
+   * Start a transition.
+   *
+   * @param query
+   * @returns {Promise<ITransition>}
+   */
   public async transition(query: string | IHrefQuery): Promise<ITransition | undefined> {
 
     const options = typeof query === "string" ? {to: query} : query;
@@ -259,27 +271,6 @@ export class ReactRouterProvider implements IProvider {
   }
 
   /**
-   * Very tiny object comparator.
-   * Used to check the equality of two node params.
-   *
-   * @protected
-   * @param {object} obj1
-   * @param {object} obj2
-   * @returns {boolean}
-   *
-   * @memberof ReactRouterProvider
-   */
-  protected isEqualParams(obj1: object, obj2: object): boolean {
-    const keys = Object.keys(obj1);
-    for (const key of keys) {
-      if (obj1[key] !== obj2[key]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /**
    * Check if definition is a child of someone.
    *
    * @param pageDeclarations      All declarations
@@ -287,17 +278,17 @@ export class ReactRouterProvider implements IProvider {
    */
   protected hasParent(pageDeclarations: IDeclarations, definition: Class): boolean {
     return pageDeclarations
-      .filter((p) => p.definition !== definition)
-      .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())
-      .filter((p) => {
-        if (p) {
-          const keys = Object.keys(p.properties);
-          for (const key of keys) {
-            if (Array.isArray(p.properties[key].children) && p.properties[key].children!.indexOf(definition) > -1) {
-              return true;
+        .filter((p) => p.definition !== definition)
+        .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())
+        .filter((p) => {
+          if (p) {
+            const keys = Object.keys(p.properties);
+            for (const key of keys) {
+              if (Array.isArray(p.properties[key].children) && p.properties[key].children!.indexOf(definition) > -1) {
+                return true;
+              }
             }
           }
-        }
-      }).length > 0;
+        }).length > 0;
   }
 }

@@ -1,5 +1,5 @@
-import { IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
-import { ITransition } from "../interfaces";
+import {IDecorator, Kernel, Meta, olyCoreKeys} from "oly-core";
+import {ITransition} from "../interfaces";
 
 export interface IParamOptions {
   name?: string;
@@ -29,6 +29,16 @@ export class ParamDecorator implements IDecorator {
 }
 
 /**
+ * Extract path param from page url.
  *
+ * ```ts
+ *  class A {
+ *
+ *    @page("/:id")
+ *    home(@param("id") id: string) {
+ *      return <div>{id}</div>
+ *    }
+ *  }
+ * ```
  */
 export const param = Meta.decorator<IParamOptions>(ParamDecorator);
