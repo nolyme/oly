@@ -333,6 +333,7 @@ export class Kernel {
 
   /**
    * @deprecated Use Kernel#inject()
+   * @internal
    */
   public get<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
     return this.inject(definition, options);
@@ -373,8 +374,8 @@ export class Kernel {
     // -> `definition` is the first criteria of research
     // -> but if you are doing a swap, the real criteria is `use`, not `definition`
     const match: IDeclaration | undefined = this.declarations.filter((i) =>
-      _.isEqualClass(i.definition, target.provide) ||
-      _.isEqualClass(i.use, target.provide))[0];
+    _.isEqualClass(i.definition, target.provide) ||
+    _.isEqualClass(i.use, target.provide))[0];
 
     // check if dependency will be updated
     if (target.use && match && match.use !== target.use) {

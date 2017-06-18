@@ -37,11 +37,26 @@ export class InjectableDecorator implements IDecorator {
 }
 
 /**
- * Configure service.
+ * Configure an injection and auto inject constructor.
+ *
+ * > Don't use it by default. This is for special cases only.
+ *
+ * ```ts
+ * &shy;@injectable({
+ *   singleton: true,
+ * })
+ * class A {
+ * }
+ * ```
+ *
+ * Auto inject constructor.
  *
  * ```ts
  * &shy;@injectable
  * class A {
+ *   constructor(
+ *    private b: B
+ *   ) {}
  * }
  * ```
  */

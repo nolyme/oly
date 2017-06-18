@@ -14,10 +14,13 @@ export class LayoutDecorator extends PageDecorator {
  * - abstract = true
  * - layout = true
  *
+ *
  * All other pages of the class will become "child" of this method.
  * Use &lt;View/&gt; to display the child layer.
  *
+ *
  * > You can define only once @layout by class.
+ *
  *
  * ```ts
  * class A {

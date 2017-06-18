@@ -64,7 +64,7 @@ export class InjectDecorator implements IDecorator {
  * ```ts
  * class B {}
  * class A {
- *   constructor(@inject b: B) {}
+ *   constructor(@inject() b: B) {}
  * }
  * ```
  *
