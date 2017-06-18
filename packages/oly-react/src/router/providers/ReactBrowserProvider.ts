@@ -17,7 +17,7 @@ export class ReactBrowserProvider implements IProvider {
    *
    */
   @env("REACT_ID")
-  public mountId: string = "app";
+  public readonly mountId: string = "app";
 
   /**
    *

@@ -9,6 +9,9 @@ describe("Global", () => {
     it("should generate random 8 chars", () => {
       equal(_.shortid(8).length, 8);
     });
+    it("should generate random 20 chars", () => {
+      equal(_.shortid(20).length, 20);
+    });
   });
   describe(".timeout()", () => {
     it("should sleep ~20ms (delta: 10ms)", async () => {

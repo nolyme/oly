@@ -8,10 +8,10 @@ The set is based on known projects, such as [Koa](https://github.com/koajs/koa) 
 
 ### Why
 
-- hide the complexity of server-side rendering
-- make code between client/server consistency
-- easily and quickly test everything
-- unify contexts into one single class
+1. hide the complexity of server-side rendering
+2. make code between client and server consistency
+3. easily and quickly test everything
+4. unify contexts into one single class
 
 ### Overview
 

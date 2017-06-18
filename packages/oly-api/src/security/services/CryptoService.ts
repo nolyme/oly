@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import { createCipher, createDecipher } from "crypto";
-import { env } from "oly-core";
+import { _, env } from "oly-core";
 
 /**
  * Bcrypt and Node cypher.
@@ -8,7 +8,7 @@ import { env } from "oly-core";
 export class CryptoService {
 
   @env("SECURITY_SECRET")
-  public readonly secret: string = "tz7b]K]o2h)796ag=ihB.POz3Q0G0>";
+  public readonly secret: string = _.shortid(20);
 
   @env("SECURITY_SALT_ROUND")
   public readonly saltRound: number | string = 8;

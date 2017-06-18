@@ -1,7 +1,6 @@
 import * as cheerio from "cheerio";
 import { env, IDeclarations, inject, IProvider, Kernel, Logger, state } from "oly-core";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
-import { join } from "path";
 import { ReactRouterProvider } from "../../router/providers/ReactRouterProvider";
 import { ReactProxyService } from "../services/ReactProxyService";
 import { ReactServerRenderer } from "../services/ReactServerRenderer";
@@ -20,7 +19,7 @@ export class ReactServerProvider implements IProvider {
 
   @env("REACT_SERVER_POINTS")
   public points: string[] | string = [
-    join(process.cwd(), "www"),
+    "www",
     "http://localhost:8080",
     "default",
   ];

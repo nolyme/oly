@@ -25,31 +25,27 @@ export class HttpServerProvider implements IProvider {
    * Kernel.
    * We use kernel here to fork context on each request.
    */
-  @inject protected readonly kernel: Kernel;
+  @inject
+  protected readonly kernel: Kernel;
 
   /**
    * Logger.
    */
-  @inject protected readonly logger: Logger;
+  @inject
+  protected readonly logger: Logger;
 
   /**
    * Koa application.
    * Http Server is provided with Koa.
    */
-  @state protected readonly app: Koa;
+  @state
+  protected readonly app: Koa = new Koa();
 
   /**
    * NodeJS Http Server instance.
    */
-  @state protected http: Server;
-
-  /**
-   * Initialize once koa.
-   */
-  public constructor() {
-    // initialize global state with a new koa instance
-    this.app = new Koa();
-  }
+  @state
+  protected http: Server;
 
   /**
    * Hostname getter.
@@ -110,13 +106,5 @@ export class HttpServerProvider implements IProvider {
    */
   protected createServer(): Server {
     return require("http-shutdown")(createServer(this.app.callback()));
-  }
-}
-
-// override default interface
-declare module "http" {
-  // tslint:disable-next-line
-  interface Server {
-    shutdown: Function;
   }
 }
