@@ -1,4 +1,4 @@
-import { Class, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import {
@@ -17,6 +17,12 @@ import { ReactRouterMatcher } from "../services/ReactRouterMatcher";
 import { ReactRouterResolver } from "../services/ReactRouterResolver";
 
 export class ReactRouterProvider implements IProvider {
+
+  /**
+   *
+   */
+  @env("REACT_ROUTER_PREFIX")
+  public readonly prefix: string = "/";
 
   /**
    * This is the current stack.
@@ -48,8 +54,14 @@ export class ReactRouterProvider implements IProvider {
    * @param query
    * @returns {string|undefined}
    */
-  public href(query: IHrefQuery | string): string | undefined {
-    return this.matcher.href(this.routes, query, this.match);
+  public href(query: IHrefQuery): string | undefined {
+    const href = this.matcher.href(this.routes, query, this.match);
+    if (href
+      && this.prefix !== "/"
+      && href.indexOf(this.prefix) !== 0) {
+      return this.prefix + href;
+    }
+    return href;
   }
 
   /**
@@ -58,17 +70,27 @@ export class ReactRouterProvider implements IProvider {
    * @param query
    * @returns {Promise<ITransition>}
    */
-  public async transition(query: string | IHrefQuery): Promise<ITransition | undefined> {
+  public async transition(query: IHrefQuery): Promise<ITransition | undefined> {
 
-    const options = typeof query === "string" ? {to: query} : query;
+    const options = query;
+
+    if (this.prefix !== "/"
+      && options.to[0] === "/"
+      && options.to.indexOf(this.prefix) === 0) {
+      options.to = options.to.replace(this.prefix, "");
+    }
 
     // convert the "query" to a valid url
-    const href = this.href(options);
+    const href = this.matcher.href(this.routes, options, this.match);
     if (!href) {
       throw new Exception(`Can't find href of '${options.to}'`);
     }
 
     const match = this.matcher.match(this.routes, href);
+    if (this.prefix !== "/") {
+      match.path = this.prefix + match.path;
+    }
+
     const transition: ITransition = {
       type: options.type || "PUSH",
       from: this.match,

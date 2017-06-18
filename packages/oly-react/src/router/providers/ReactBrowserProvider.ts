@@ -6,7 +6,7 @@ import { View } from "../components/View";
 import { olyReactRouterEvents } from "../constants/events";
 import { ITransitionRenderEvent, ITransitionType } from "../interfaces";
 import { Browser } from "../services/Browser";
-import { ReactRouterProvider } from "./ReactRouterProvider";
+import { Router } from "../services/Router";
 
 /**
  *
@@ -35,7 +35,7 @@ export class ReactBrowserProvider implements IProvider {
   protected browser: Browser;
 
   @inject
-  protected router: ReactRouterProvider;
+  protected router: Router;
 
   /**
    * Hook - start
@@ -50,7 +50,7 @@ export class ReactBrowserProvider implements IProvider {
       }
     }) as any);
 
-    return this.router.transition({
+    return this.router.go({
       to: this.browser.history.location.pathname,
       type: "NONE",
     }).then(() => {
@@ -95,7 +95,7 @@ export class ReactBrowserProvider implements IProvider {
     return (message: string, callback: Function) => {
       if (message) {
         this.logger.trace(`intercept history ${message}`);
-        this.router.transition({
+        this.router.go({
           to: message,
           type: "POP",
         }).then(() => {

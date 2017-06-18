@@ -1,15 +1,9 @@
-import { env, Exception, inject, Kernel } from "oly-core";
+import { Exception, inject, Kernel } from "oly-core";
 import { IHrefQuery, IMatch, ITransition } from "../interfaces";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
 import { Browser } from "./Browser";
 
 export class Router {
-
-  /**
-   *
-   */
-  @env("REACT_ROUTER_HASH")
-  public readonly useHash: boolean = false;
 
   @inject
   protected kernel: Kernel;
@@ -47,7 +41,7 @@ export class Router {
    * ```
    */
   public go(query: string | IHrefQuery): Promise<ITransition> {
-    return this.routerProvider.transition(query);
+    return this.routerProvider.transition(typeof query === "string" ? {to: query} : query);
   }
 
   /**
@@ -82,8 +76,9 @@ export class Router {
    * @param query   Path/NodeName/RouteName
    */
   public href(query: string | IHrefQuery): string | undefined {
-    const href = this.routerProvider.href(query);
-    if (href && this.useHash) {
+    const options = typeof query === "string" ? {to: query} : query;
+    const href = this.routerProvider.href(options);
+    if (href && this.kernel.env("REACT_ROUTER_HASH", Boolean)) {
       return "#" + href;
     }
     return href;
@@ -97,7 +92,7 @@ export class Router {
    */
   public isActive(routeName: string | IHrefQuery, strict: boolean = false): boolean {
 
-    const href = this.routerProvider.href(routeName);
+    const href = this.href(routeName);
     if (!href) {
       return false;
     }

@@ -5,6 +5,7 @@ import { IHrefQuery, ILayer } from "../../src/router";
 import { page } from "../../src/router/decorators/page";
 import { query } from "../../src/router/decorators/query";
 import { ReactRouterProvider } from "../../src/router/providers/ReactRouterProvider";
+import { Router } from "../../src/router/services/Router";
 
 describe("@query", () => {
 
@@ -29,10 +30,11 @@ describe("@query", () => {
 
   const k = Kernel.create().with(A);
   const r = k.inject(ReactRouterProvider);
+  const o = k.inject(Router);
   const $ = (l: ILayer) => cheerio.load(renderToString(l.chunks.main)).root();
   const t = (url: string | IHrefQuery) => {
     r.layers = [];
-    return r.transition(url);
+    return o.go(url);
   };
 
   it("should extract query from url", async () => {

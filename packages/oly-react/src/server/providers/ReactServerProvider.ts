@@ -11,9 +11,6 @@ import { ReactStaticService } from "../services/ReactStaticService";
  */
 export class ReactServerProvider implements IProvider {
 
-  @env("REACT_SERVER_PREFIX")
-  public prefix: string = "/";
-
   @env("REACT_ID")
   public mountId: string = "app";
 
@@ -52,7 +49,7 @@ export class ReactServerProvider implements IProvider {
    * Get the react app prefix.
    */
   public get hostname(): string {
-    return this.httpServerProvider.hostname + this.prefix;
+    return this.httpServerProvider.hostname + this.reactRouterProvider.prefix;
   }
 
   /**
@@ -61,7 +58,7 @@ export class ReactServerProvider implements IProvider {
    * @param middleware    Koa Middleware
    */
   public use(middleware: IKoaMiddleware): ReactServerProvider {
-    this.httpServerProvider.use(mount(this.prefix, middleware));
+    this.httpServerProvider.use(mount(this.reactRouterProvider.prefix, middleware));
     return this;
   }
 
@@ -83,7 +80,7 @@ export class ReactServerProvider implements IProvider {
    * Get the default template.
    */
   protected async getDefaultTemplate(): Promise<string> {
-    return Promise.resolve(this.reactServerRenderer.generateIndex(this.prefix, this.mountId));
+    return Promise.resolve(this.reactServerRenderer.generateIndex(this.reactRouterProvider.prefix, this.mountId));
   }
 
   /**
@@ -111,7 +108,7 @@ export class ReactServerProvider implements IProvider {
 
         try {
           // find route + resolve
-          await router.transition(ctx.req.url || "/");
+          await router.transition({to: ctx.req.url || "/"});
 
           // build page
           ctx.body = renderer.render(ctx, this.template, this.mountId);
