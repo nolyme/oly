@@ -8,7 +8,6 @@ module.exports = (env) => {
       "./src/client/main.browser.ts",
       "./src/client/styles/main.scss"
     ],
-    dist: __dirname + "/out/www",
     assets: "./src/client/assets",
     template: "./src/client/index.html",
     styleLoader: loaders.sassLoaderFactory(),
