@@ -22,9 +22,9 @@ import {
   IDocMethod,
   IDocParameter,
   IDocService,
-} from "./interfaces";
-import { ModuleConfiguration } from "./models/ModuleConfiguration";
-import "./prism/tsx";
+} from "../../shared/interfaces";
+import { ModuleConfiguration } from "../models/ModuleConfiguration";
+import "./prism/prism-tsx";
 
 const renderer = new marked.Renderer();
 

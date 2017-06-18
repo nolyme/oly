@@ -1,7 +1,7 @@
 import { state } from "oly-core";
 import { layout, page, param } from "oly-react";
 import * as React from "react";
-import { IDocs, IModuleContent } from "../../cli/interfaces";
+import { IDocs, IModuleContent } from "../../shared/interfaces";
 import { NotFound } from "../layout/NotFound";
 import { ApiComponent } from "./ApiComponent";
 import { ApiConfiguration } from "./ApiConfiguration";

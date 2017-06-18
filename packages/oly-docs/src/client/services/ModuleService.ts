@@ -1,6 +1,6 @@
 import { env, inject } from "oly-core";
 import { IHrefQuery, Router } from "oly-react";
-import { IDocs } from "../../cli/interfaces";
+import { IDocs } from "../../shared/interfaces";
 
 export interface ISearchItem {
   href: string;

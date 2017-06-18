@@ -5,11 +5,12 @@ module.exports = (env) => {
   const config = createConfiguration({
     entry: [
       "oly-core/polyfill",
-      "./src/main.browser.ts",
-      "./src/web/styles/main.scss"
+      "./src/client/main.browser.ts",
+      "./src/client/styles/main.scss"
     ],
-    assets: "./src/web/assets",
-    template: "./src/web/index.html",
+    dist: __dirname + "/out/www",
+    assets: "./src/client/assets",
+    template: "./src/client/index.html",
     styleLoader: loaders.sassLoaderFactory(),
     env,
   });

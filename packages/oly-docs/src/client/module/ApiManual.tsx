@@ -1,7 +1,7 @@
 import { attach } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
-import { IDocManual, IModuleContent } from "../../cli/interfaces";
+import { IDocManual, IModuleContent } from "../../shared/interfaces";
 import { Prism } from "../layout/Prism";
 
 @attach

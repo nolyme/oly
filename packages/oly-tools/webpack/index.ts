@@ -6,7 +6,10 @@ import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as NyanProgressPlugin from "nyan-progress-webpack-plugin";
 import { join, resolve } from "path";
 import * as _webpack from "webpack";
-import { Configuration, Entry, Rule } from "webpack";
+import { Configuration } from "webpack";
+import { IToolsOptions } from "./interfaces";
+import * as _loaders from "./loaders";
+import { cssLoaderFactory, fontLoaderFactory, imageLoaderFactory, typescriptLoaderFactory } from "./loaders";
 
 const {
   LoaderOptionsPlugin,
@@ -18,18 +21,13 @@ const {
 
 export { Configuration, NewModule } from "webpack";
 export * from "./synchronize";
+export * from "./node";
+export * from "./interfaces";
 
 /**
  * Loaders ref.
  */
-export const loaders = {
-  lessLoaderFactory,
-  sassLoaderFactory,
-  cssLoaderFactory,
-  typescriptLoaderFactory,
-  imageLoaderFactory,
-  fontLoaderFactory,
-};
+export const loaders = _loaders;
 
 /**
  * Plugins ref.
@@ -50,101 +48,6 @@ export const autoprefixer = _autoprefixer;
  * Webpack ref.
  */
 export const webpack = _webpack;
-
-/**
- * Easy configuration.
- */
-export interface IToolsOptions {
-
-  /**
-   * Required webpack file entries.
-   */
-  entry: string | string[] | Entry;
-
-  /**
-   * Current working directory.
-   * Default is `process.cwd()`.
-   */
-  root?: string;
-
-  /**
-   * Enable css extractor.
-   * Default is true.
-   */
-  extract?: boolean;
-
-  /**
-   * Enable prod mode.
-   * This will minimize bundle size but make compilation slower.
-   * This options is also available with env variables.
-   *
-   * ```
-   * NODE_ENV=production webpack
-   * # or
-   * webpack -p
-   * ```
-   *
-   * Default is false.
-   */
-  production?: boolean;
-
-  /**
-   * Add more env variable to process.env
-   * NODE_ENV is already set by 'production: true' / -p ...
-   */
-  env?: { [key: string]: string };
-
-  /**
-   * Path to the dist directory.
-   * Default is `${root}/www`.
-   */
-  dist?: string;
-
-  /**
-   * Path to the assets directory.
-   * Assets are copied without any transformations in the dist directory.
-   * Disable by default.
-   */
-  assets?: string;
-
-  /**
-   * Absolute path to the `index.html`.
-   * Default is `oly-tools/webpack/index.html`
-   */
-  template?: string;
-
-  /**
-   * Opens a new browser tab when Webpack loads.
-   * Default is false.
-   */
-  open?: boolean;
-
-  /**
-   * Display nyan cat during the compilation.
-   * Default is false.
-   */
-  nyan?: boolean;
-
-  /**
-   * Override typescript loader.
-   */
-  typescriptLoader?: Rule;
-
-  /**
-   * Override font loader.
-   */
-  fontLoader?: Rule;
-
-  /**
-   * Override image loader.
-   */
-  imageLoader?: Rule;
-
-  /**
-   * Override style loader.
-   */
-  styleLoader?: Rule;
-}
 
 /**
  * Create a default webpack configuration.
@@ -213,7 +116,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   // resolve provides options to navigate into node_modules/sources
   config.resolve = {
 
-    extensions: [".webpack.js", ".js", ".web.js", ".ts", ".tsx"],
+    extensions: [".webpack.js", ".js", ".web.js", ".ts", ".tsx", ".json"],
 
     mainFields: ["webpack", "browser", "module", "main"],
 
@@ -240,8 +143,11 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       options.typescriptLoader,
       options.styleLoader,
       options.fontLoader,
-
       options.imageLoader,
+      {
+        test: /\.json$/,
+        use: "json-loader",
+      },
     ],
   };
 
@@ -330,108 +236,4 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   };
 
   return config;
-}
-
-/**
- * Typescript loader factory
- */
-function typescriptLoaderFactory(): Rule {
-  return {
-    exclude: /node_modules/,
-    test: /\.tsx?$/,
-    use: [{
-      loader: "awesome-typescript-loader",
-      options: {
-        silent: true,
-        // speedup compile time, our ide will check error for us beside
-        transpileOnly: true,
-        module: "es2015",
-      },
-    }],
-  };
-}
-
-/**
- * CSS loader factory
- */
-function cssLoaderFactory(): Rule {
-  return {
-    loader: ExtractTextPlugin.extract({
-      fallback: "style-loader",
-      use: [{loader: "css-loader"}],
-    }),
-    test: /\.css$/,
-  };
-}
-
-/**
- * Less loader factory
- *
- * @param lessLoaderOptions   less options
- */
-function lessLoaderFactory(lessLoaderOptions: object = {}): Rule {
-  return {
-    loader: ExtractTextPlugin.extract({
-      fallback: "style-loader",
-      use: [
-        {loader: "css-loader"},
-        {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
-        {loader: "less-loader", options: lessLoaderOptions},
-      ],
-    }),
-    test: /\.(css|less)$/,
-  };
-}
-
-/**
- * Sass loader factory
- *
- * @param sassLoaderOptions  sass options
- */
-function sassLoaderFactory(sassLoaderOptions: object = {}): Rule {
-  return {
-    loader: ExtractTextPlugin.extract({
-      fallback: "style-loader",
-      use: [
-        {loader: "css-loader"},
-        {loader: "postcss-loader", options: {plugins: () => [autoprefixer]}},
-        {loader: "sass-loader", options: sassLoaderOptions},
-      ],
-    }),
-    test: /\.(css|scss|sass)$/,
-  };
-}
-
-/**
- * Image loader factory
- */
-function imageLoaderFactory(isProduction: boolean = false): Rule {
-  return {
-    test: /\.(png|jpeg|jpg|svg)$/,
-    use: [{
-      loader: "file-loader",
-      options: {
-        name: isProduction
-          ? "images/[name].[hash].[ext]"
-          : "images/[name].[ext]",
-      },
-    }],
-  };
-}
-
-/**
- * Font loader factory
- */
-function fontLoaderFactory(isProduction: boolean = false) {
-  return {
-    test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
-    use: [{
-      loader: "file-loader",
-      options: {
-        name: isProduction
-          ? "fonts/[name].[hash].[ext]"
-          : "fonts/[name].[ext]",
-      },
-    }],
-  };
 }

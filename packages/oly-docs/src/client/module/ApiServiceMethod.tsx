@@ -1,6 +1,6 @@
 import { attach } from "oly-react";
 import * as React from "react";
-import { IDocMethod, IDocService } from "../../cli/interfaces";
+import { IDocMethod, IDocService } from "../../shared/interfaces";
 import { Prism } from "../layout/Prism";
 
 @attach

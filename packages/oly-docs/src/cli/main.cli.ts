@@ -1,5 +1,5 @@
 import { Kernel } from "oly-core";
-import { DocProvider } from "./cli/DocProvider";
+import { DocProvider } from "./providers/DocProvider";
 
 new Kernel({
   ...process.env,

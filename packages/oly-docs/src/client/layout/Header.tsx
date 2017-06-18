@@ -2,7 +2,7 @@ import { Tab2, Tabs2 } from "@blueprintjs/core";
 import { inject, on, state } from "oly-core";
 import { action, attach, ITransition, olyReactRouterEvents, Router, styles } from "oly-react";
 import * as React from "react";
-import { IDocs, IModuleContent } from "../../cli/interfaces";
+import { IDocs, IModuleContent } from "../../shared/interfaces";
 import { Search } from "./Search";
 
 @attach

@@ -4,10 +4,10 @@ import { env, inject, Logger } from "oly-core";
 import { Json } from "oly-json";
 import { resolve } from "path";
 import { Application } from "typedoc";
-import { DocParser } from "./DocParser";
-import { IDocs, IModuleContent } from "./interfaces";
-import { Configuration } from "./models/Configuration";
-import { ModuleConfiguration } from "./models/ModuleConfiguration";
+import { IDocs, IModuleContent } from "../../shared/interfaces";
+import { Configuration } from "../models/Configuration";
+import { ModuleConfiguration } from "../models/ModuleConfiguration";
+import { DocParser } from "../services/DocParser";
 
 export class DocProvider {
 

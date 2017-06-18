@@ -2,7 +2,7 @@ import { inject, state } from "oly-core";
 import { attach, Router } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
-import { IDocs } from "../../cli/interfaces";
+import { IDocs } from "../../shared/interfaces";
 import { ModuleService } from "../services/ModuleService";
 
 @attach

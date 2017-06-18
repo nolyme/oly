@@ -2,19 +2,6 @@ import * as chalk from "chalk";
 
 (chalk as any).enabled = true;
 
-require("ansi-html").setColors({
-  reset: ["fff", "000"],
-  black: "000",
-  red: "ff0000",
-  green: "209805",
-  yellow: "e8bf03",
-  blue: "0000ff",
-  magenta: "ff00ff",
-  cyan: "3dbbcc",
-  lightgrey: "f0f0f0",
-  darkgrey: "888",
-});
-
 export class AnsiColor {
 
   public static html: any = require("ansi-html");

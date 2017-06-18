@@ -1,7 +1,7 @@
 import { state } from "oly-core";
 import { attach, styles } from "oly-react";
 import * as React from "react";
-import { IDocs } from "../../cli/interfaces";
+import { IDocs } from "../../shared/interfaces";
 import { Prism } from "./Prism";
 
 @attach

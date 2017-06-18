@@ -3,7 +3,7 @@ import { inject } from "oly-core";
 import { action, attach, Go, Router, styles } from "oly-react";
 import * as React from "react";
 import { ChangeEvent, KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
-import { IDocs } from "../../cli/interfaces";
+import { IDocs } from "../../shared/interfaces";
 import { ISearchItem, ModuleService } from "../services/ModuleService";
 
 export interface IState {

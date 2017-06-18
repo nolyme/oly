@@ -1,19 +1,21 @@
-import { Exception, inject, Kernel } from "oly-core";
+import { env, Exception, inject, Kernel } from "oly-core";
 import { IHrefQuery, IMatch, ITransition } from "../interfaces";
-import { ReactBrowserProvider } from "../providers/ReactBrowserProvider";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
 import { Browser } from "./Browser";
 
 export class Router {
+
+  /**
+   *
+   */
+  @env("REACT_ROUTER_HASH")
+  public readonly useHash: boolean = false;
 
   @inject
   protected kernel: Kernel;
 
   @inject
   protected routerProvider: ReactRouterProvider;
-
-  @inject
-  protected browserProvider: ReactBrowserProvider;
 
   @inject
   protected browser: Browser;
@@ -81,7 +83,7 @@ export class Router {
    */
   public href(query: string | IHrefQuery): string | undefined {
     const href = this.routerProvider.href(query);
-    if (href && this.browserProvider.useHash) {
+    if (href && this.useHash) {
       return "#" + href;
     }
     return href;
