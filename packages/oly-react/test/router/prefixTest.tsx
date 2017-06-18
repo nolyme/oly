@@ -37,39 +37,79 @@ describe("REACT_ROUTER_PREFIX", () => {
     }
   }
 
-  const k = Kernel
-    .create({REACT_ROUTER_PREFIX: "/toto"})
-    .with(App);
-  const r = k.inject(Router);
-  const p = k.inject(ReactRouterProvider);
-  const c = () => cheerio.load(renderToString(
-    <AppContext kernel={k}>{p.layers[0].chunks.main}</AppContext>)).root();
+  describe("without hash", () => {
+    const k = Kernel
+      .create({REACT_ROUTER_PREFIX: "/toto"})
+      .with(App);
+    const r = k.inject(Router);
+    const p = k.inject(ReactRouterProvider);
+    const c = () => cheerio.load(renderToString(
+      <AppContext kernel={k}>{p.layers[0].chunks.main}</AppContext>)).root();
 
-  it("should go without prefix", async () => {
-    await r.go("/wrong/");
-    expect(c().text()).toBe("FAIL");
-    await r.go("/toto/");
-    expect(c().text()).toBe("OK");
-    await r.go("/");
-    expect(c().text()).toBe("OK");
-    await r.go("/a/b");
-    expect(c().text()).toBe("FINE");
-    await r.go("/toto/a/b");
-    expect(c().text()).toBe("FINE");
+    it("should go without prefix", async () => {
+      await r.go("/wrong/");
+      expect(c().text()).toBe("FAIL");
+      await r.go("/toto/");
+      expect(c().text()).toBe("OK");
+      await r.go("/");
+      expect(c().text()).toBe("OK");
+      await r.go("/a/b");
+      expect(c().text()).toBe("FINE");
+      await r.go("/toto/a/b");
+      expect(c().text()).toBe("FINE");
+    });
+
+    it("should find href with prefix", async () => {
+      expect(r.href("b")).toBe("/toto/a/b");
+      expect(r.href("/")).toBe("/toto/");
+    });
+
+    it("should isActive with prefix", async () => {
+      await r.go("/a/b");
+      expect(c().text()).toBe("FINE");
+      expect(r.isActive("b")).toBeTruthy();
+      expect(r.isActive("/a/b")).toBeTruthy();
+      expect(r.isActive("/toto/a/b")).toBeTruthy();
+      expect(r.isActive("/toto/a")).toBeTruthy();
+      expect(r.isActive("/toto/a", true)).toBeFalsy();
+    });
   });
 
-  it("should find href with prefix", async () => {
-    expect(r.href("b")).toBe("/toto/a/b");
-    expect(r.href("/")).toBe("/toto/");
-  });
+  describe("with hash", () => {
+    const k = Kernel
+      .create({REACT_ROUTER_HASH: true})
+      .with(App);
+    const r = k.inject(Router);
+    const p = k.inject(ReactRouterProvider);
+    const c = () => cheerio.load(renderToString(
+      <AppContext kernel={k}>{p.layers[0].chunks.main}</AppContext>)).root();
 
-  it("should isActive with prefix", async () => {
-    await r.go("/a/b");
-    expect(c().text()).toBe("FINE");
-    expect(r.isActive("b")).toBeTruthy();
-    expect(r.isActive("/a/b")).toBeTruthy();
-    expect(r.isActive("/toto/a/b")).toBeTruthy();
-    expect(r.isActive("/toto/a")).toBeTruthy();
-    expect(r.isActive("/toto/a", true)).toBeFalsy();
+    it("should go without prefix", async () => {
+      await r.go("/wrong/");
+      expect(c().text()).toBe("FAIL");
+      await r.go("/");
+      expect(c().text()).toBe("OK");
+      await r.go("#/");
+      expect(c().text()).toBe("OK");
+      await r.go("#/a/b");
+      expect(c().text()).toBe("FINE");
+      await r.go("#/a/b");
+      expect(c().text()).toBe("FINE");
+    });
+
+    it("should find href with prefix", async () => {
+      expect(r.href("b")).toBe("#/a/b");
+      expect(r.href("/")).toBe("#/");
+    });
+
+    it("should isActive with prefix", async () => {
+      await r.go("/a/b");
+      expect(c().text()).toBe("FINE");
+      expect(r.isActive("b")).toBeTruthy();
+      expect(r.isActive("/a/b")).toBeTruthy();
+      expect(r.isActive("#/a/b")).toBeTruthy();
+      expect(r.isActive("#/a")).toBeTruthy();
+      expect(r.isActive("#/a", true)).toBeFalsy();
+    });
   });
 });
