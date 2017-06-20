@@ -1,1 +1,1 @@
-export * from "oly-mapper";
+export * from "oly-json";
