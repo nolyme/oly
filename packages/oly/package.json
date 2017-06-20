@@ -1,0 +1,32 @@
+{
+  "name": "oly",
+  "description": "oly",
+  "version": "0.11.4",
+  "license": "MIT",
+  "main": "core/index.js",
+  "types": "core/index.d.ts",
+  "typings": "core/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript"
+  ],
+  "dependencies": {
+    "@types/react": "15.0.25",
+    "oly-api": "^0.11.4",
+    "oly-security": "^0.11.4",
+    "oly-swagger": "^0.11.4",
+    "oly-core": "^0.11.4",
+    "oly-http": "^0.11.4",
+    "oly-json": "^0.11.4",
+    "oly-react": "^0.11.4",
+    "react": "15.5.4"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib **/*.js **/*.js.map **/*.d.ts",
+    "build": "tsc",
+    "test": "echo"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  }
+}

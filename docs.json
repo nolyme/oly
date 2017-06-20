@@ -85,9 +85,7 @@
         "core/decorators/body.ts",
         "core/decorators/param.ts",
         "core/decorators/header.ts",
-        "core/decorators/query.ts",
-        "router/decorators/use.ts",
-        "router/decorators/router.ts"
+        "core/decorators/query.ts"
       ],
       "services": [
         "core/providers/ApiProvider.ts"
