@@ -2,9 +2,9 @@
 
 There is a wonderful tool called [jest](https://facebook.github.io/jest/).
 
-- very fast
+- fast
 - coverage
-- env browser/server
+- browser and server
 - async/await
 - typescript (with ts-jest)
 
@@ -17,14 +17,13 @@ $ npm i -D jest ts-jest @types/jest
 ```ts
 describe("A", () => {
 
-  // when NODE_ENV=test, Kernel.create() binds 
-  // Kernel#start() to beforeAll()
-  // and Kernel#stop() to afterAll()
-  // 
+  // when NODE_ENV=test, Kernel.create() runs 
+  // Kernel#start() on beforeAll()
+  // and Kernel#stop() on afterAll()
+  // + logger level is set to ERROR by default
   
   const k = Kernel.create({
-    // set ENV here,
-    // like DATABASE_URL: ":memory:"
+    "A": "B",
   });
   
   // inject regular service
@@ -32,6 +31,7 @@ describe("A", () => {
   
   it("should be ok", () => {
   
+    expect(k.state("A")).toBe("B");
   });
 });
 ```

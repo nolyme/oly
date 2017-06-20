@@ -4,11 +4,11 @@
 
 - (oly-docs): split module (api & react)
 - (oly-docs): middlewares
-- [HARD] (oly-docs): interfaces (popup)
+- (oly-docs): static method (Kernel.create) and getter property (Browser.window)
+- [HARD] (oly-docs): interfaces (popup) 
 - [HARD] (oly-docs): multi version
 - (oly-docs): show env & exception in services/components
 - (oly-docs): add more and more and more docs.
-- (oly-docs): preprocess links on generated md before runtime.
 - [HARD] (oly-*) better coverage, especially react-router... :)
 - [HARD] (oly-amqp) amqp @retry
 - [HARD] (oly-amqp) memory (for test!)

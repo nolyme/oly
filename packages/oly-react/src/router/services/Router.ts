@@ -99,7 +99,7 @@ export class Router {
 
     const current = this.current.path.replace(/\/$/, "").replace("#", "");
     const target = href.replace(/\/$/, "").replace("#", "");
-    
+
     if (strict) {
       return current === target;
     }

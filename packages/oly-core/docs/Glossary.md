@@ -28,7 +28,8 @@ class Person {
 Class supposed to be used everywhere in your code. 
 
 Most of the time, services:
- - are stateless.
+ - are **stateless**.
+ - have no hooks.
  - follow the [singleton](https://en.wikipedia.org/wiki/Singleton_pattern) pattern.
 
 Some services:
@@ -49,12 +50,14 @@ const r = s.add(1, 1); // 2
 
 #### Providers
 
-Big and heavy service which provides stuffs. **Don't use providers directly.** 
+Big and heavy service which provides stuffs. 
+
+**Do not use providers directly.** 
 
 Most of the time, providers:
  - are stateful.
  - use Kernel#start() to initialize their states.
- - are linked to a service.
+ - are linked to one service.
 
 Some providers:
  - ApiProvider

@@ -8,7 +8,7 @@ import { parse } from "url";
 export class DatabaseProvider implements IProvider {
 
   @env("DATABASE_URL")
-  public url: string;
+  public url: string = ":memory:";
 
   @env("DATABASE_AUTO_SYNC")
   public autoSync: boolean = true;

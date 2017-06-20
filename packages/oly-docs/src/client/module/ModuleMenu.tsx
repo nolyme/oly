@@ -17,7 +17,6 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
 
   @on(olyReactRouterEvents.TRANSITION_END)
   public onTransitionEnd(): void {
-    // je m'en bats les couilles
     this.forceUpdate();
   }
 
@@ -43,13 +42,15 @@ export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> 
             <Go to="service" params={{service: s.name}}>
               {s.name}
             </Go>
-            <Collapse isOpen={this.router.isActive({to: "service", params: {service: s.name}})}>
-              {s.methods.map((m) => (
-                <div key={m.name} className="sub">
-                  <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
-                </div>
-              ))}
-            </Collapse>
+            {!provider &&
+              <Collapse isOpen={this.router.isActive({to: "service", params: {service: s.name}})}>
+                {s.methods.map((m) => (
+                  <div key={m.name} className="sub">
+                    <Go to={this.rel(`s/${s.name}/${m.name}`)}>{m.static ? "." : "#"}{m.name}()</Go>
+                  </div>
+                ))}
+              </Collapse>
+            }
           </div>
         ))}
       </div>
