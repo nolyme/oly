@@ -5,7 +5,7 @@ import { CryptoService } from "../../src/security/services/CryptoService";
 describe("CryptoService", () => {
   describe("#hash()", () => {
     it("should destroy my text", async () => {
-      const crypto = Kernel.create().get(CryptoService);
+      const crypto = Kernel.create().inject(CryptoService);
       const password = "azertylol";
       const hash = await crypto.hash(password);
       notEqual(hash, password);
@@ -14,7 +14,7 @@ describe("CryptoService", () => {
   });
   describe("#encrypt()", () => {
     it("should eat my text", async () => {
-      const crypto = Kernel.create().get(CryptoService);
+      const crypto = Kernel.create().inject(CryptoService);
       const message = JSON.stringify({user: "tintin", pass: "aPkdo2kdm1ld)"});
       const token = await crypto.encrypt(message);
       notEqual(token, message);
