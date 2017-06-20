@@ -10,7 +10,7 @@ describe("Global", () => {
       equal(_.shortid(8).length, 8);
     });
     it("should generate random 20 chars", () => {
-      equal(_.shortid(20).length, 20);
+      equal(_.shortid(18).length, 18);
     });
   });
   describe(".timeout()", () => {

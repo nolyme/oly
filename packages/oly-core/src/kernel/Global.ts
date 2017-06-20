@@ -37,8 +37,11 @@ export class Global {
    *
    * @param size  Size of the Id
    */
-  public static shortid(size = 12): string {
-    return Math.random().toString(36).substr(2, size);
+  public static shortid(size: number = 12): string {
+    if (size < 4 || size > 18) {
+      throw new Error("shortid length > 4 && < 18");
+    }
+    return (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).slice(0, size);
   }
 
   /**
