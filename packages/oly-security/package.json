@@ -1,6 +1,6 @@
 {
-  "name": "oly-api",
-  "description": "oly-api",
+  "name": "oly-security",
+  "description": "oly-security",
   "version": "0.11.4",
   "license": "MIT",
   "main": "lib/index.js",
@@ -16,21 +16,17 @@
   "dependencies": {
     "@types/bcryptjs": "2.4.0",
     "@types/jsonwebtoken": "7.2.0",
-    "@types/koa-bodyparser": "3.0.23",
-    "@types/koa-router": "7.0.22",
     "bcryptjs": "2.4.3",
     "jsonwebtoken": "7.4.1",
-    "koa-bodyparser": "3.2.0",
-    "koa-multer": "1.0.1",
-    "koa-router": "7.2.0",
-    "oly-router": "^0.11.4",
     "oly-http": "^0.11.4",
-    "oly-json": "^0.11.4"
+    "oly-router": "^0.11.4"
   },
   "devDependencies": {
+    "oly-api": "^0.11.4",
     "oly-core": "^0.11.4"
   },
   "peerDependencies": {
+    "oly-api": "^0.11.4",
     "oly-core": "^0.11.4"
   },
   "scripts": {

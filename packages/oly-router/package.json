@@ -1,0 +1,33 @@
+{
+  "name": "oly-router",
+  "description": "oly-router",
+  "version": "0.11.4",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "browser": "esm/index.browser.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "api",
+    "router"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "oly-core": "^0.11.4"
+  },
+  "peerDependencies": {
+    "oly-core": "^0.11.4"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc && tsc --outDir esm -m es2015 --moduleResolution node",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  }
+}

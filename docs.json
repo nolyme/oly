@@ -90,9 +90,7 @@
         "router/decorators/router.ts"
       ],
       "services": [
-        "core/providers/ApiProvider.ts",
-        "security/services/JwtAuthService.ts",
-        "security/services/CryptoService.ts"
+        "core/providers/ApiProvider.ts"
       ]
     },
     {
