@@ -78,17 +78,17 @@
       "name": "oly-api",
       "icon": "satellite",
       "decorators": [
-        "core/decorators/get.ts",
-        "core/decorators/post.ts",
-        "core/decorators/put.ts",
-        "core/decorators/del.ts",
-        "core/decorators/body.ts",
-        "core/decorators/param.ts",
-        "core/decorators/header.ts",
-        "core/decorators/query.ts"
+        "decorators/get.ts",
+        "decorators/post.ts",
+        "decorators/put.ts",
+        "decorators/del.ts",
+        "decorators/body.ts",
+        "decorators/param.ts",
+        "decorators/header.ts",
+        "decorators/query.ts"
       ],
       "services": [
-        "core/providers/ApiProvider.ts"
+        "providers/ApiProvider.ts"
       ]
     },
     {
