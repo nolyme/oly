@@ -32,7 +32,7 @@ export class ApiComponent extends Component<{ module: IModuleContent; component:
               <td><strong>{prop.name}</strong></td>
               <td><code>{prop.type.replace("undefined | ", "")}</code></td>
               <td>{prop.optional ? "" : "true"}</td>
-              <td><Prism html={prop.description}/></td>
+              <td><Prism html={prop.description} className="naked"/></td>
             </tr>
           ))}
           </tbody>

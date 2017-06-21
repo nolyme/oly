@@ -9,11 +9,6 @@ import {
   IMetaIdentifier,
 } from "./interfaces";
 
-// tslint:disable-next-line
-declare global {
-  const Reflect: any;
-}
-
 /**
  *
  */
@@ -25,8 +20,9 @@ export class Meta {
   public static get reflect() {
     const R = _.get("Reflect");
     if (!R || !R.decorate) {
+      const g: any = (typeof window === "undefined" ? global : window);
       require("reflect-metadata");
-      _.set("Reflect", Reflect);
+      _.set("Reflect", g.Reflect);
     }
     return _.get("Reflect");
   }
