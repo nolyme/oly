@@ -2,13 +2,13 @@
 
 o*l*y react is a module of the [o*l*y project](https://noly.me/oly).
 
-## Installation
+### Installation
 
 ```bash
 $ npm install oly-core oly-react react @types/react
 ```
 
-## Why
+### Why
 
 - use Kernel and @inject/@env/@on in React components.
 - provide a Router.

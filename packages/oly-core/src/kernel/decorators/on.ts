@@ -23,8 +23,11 @@ export class OnDecorator implements IDecorator {
  *
  * ```ts
  * class A {
- *   @on b = () => console.log("Hey");
+ *   @on b() {
+ *     console.log("Hey");
+ *   }
  * }
+ * Kernel.create().with(A).emit("A.b");
  * ```
  *
  * #### Free

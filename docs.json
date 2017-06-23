@@ -49,7 +49,7 @@
     },
     {
       "name": "oly-react",
-      "icon": "delta",
+      "icon": "application",
       "manuals": [
         "docs/Routing.md"
       ],
@@ -72,7 +72,7 @@
     },
     {
       "name": "oly-react-ssr",
-      "icon": "page-layout",
+      "icon": "applications",
       "services": [
         "server/providers/ReactServerProvider.ts",
         "pixie/providers/PixieBrowserProvider.ts",

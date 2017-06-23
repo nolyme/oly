@@ -53,6 +53,9 @@ export class Breadcrumbs extends React.Component<{}, {}> {
 
   public render() {
     this.build();
+    if (this.stepsAllowed.length === 0) {
+      this.stepsAllowed.push("home");
+    }
     return (
       <div className="breadcrumbs">
         <Helmet>

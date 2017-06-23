@@ -2,7 +2,7 @@
 
 o*l*y core is a module of the [o*l*y project](https://noly.me/oly).
 
-## Installation
+### Installation
 
 ```bash
 $ npm install oly-core
@@ -11,7 +11,7 @@ $ npm install oly-core
 > All o*l*y modules depend on oly-core. 
 This is the only module written without external library.
 
-## Why
+### Why
 
 - create a master class: Kernel.
 - provide a Logger.

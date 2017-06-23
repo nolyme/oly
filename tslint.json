@@ -9,6 +9,7 @@
     "max-classes-per-file": false,
     "member-access": false,
     "no-string-literal": false,
-    "no-var-requires": false
+    "no-var-requires": false,
+    "no-empty-interface": false
   }
 }

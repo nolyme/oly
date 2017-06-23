@@ -42,8 +42,13 @@
     color: $dark-gray1;
   }
 
-  h3, h4 {
+  h4 {
     box-shadow: -2px 0 rgba($pt-intent-primary, 0.5);
+    padding-left: 10px;
+  }
+
+  h3 {
+    box-shadow: -3px 0 rgba($pt-intent-primary, 0.8);
     padding-left: 10px;
   }
 }

@@ -1,0 +1,37 @@
+{
+  "name": "oly-socket",
+  "description": "oly-socket",
+  "version": "0.12.2",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "browser": "esm/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "socket.io"
+  ],
+  "dependencies": {
+    "@types/socket.io": "1.4.29",
+    "@types/socket.io-client": "1.4.29",
+    "socket.io": "2.0.3",
+    "socket.io-client": "2.0.3",
+    "oly-http": "0.12.2"
+  },
+  "devDependencies": {
+    "oly-core": "^0.12.2"
+  },
+  "peerDependencies": {
+    "oly-core": "^0.12.2"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc && tsc --outDir esm -m es2015 --moduleResolution node",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  }
+}

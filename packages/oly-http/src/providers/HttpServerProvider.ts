@@ -45,7 +45,7 @@ export class HttpServerProvider implements IProvider {
    * NodeJS Http Server instance.
    */
   @state
-  protected http: Server;
+  public http: Server;
 
   /**
    * Hostname getter.
