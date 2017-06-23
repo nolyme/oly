@@ -1,10 +1,6 @@
 @import "../styles/variables";
 
 .breadcrumbs {
-  padding: 10px 50px;
-  box-shadow: 0 10px 10px rgba($black, 0.1);
-  position: relative;
-
   .breadcrumb-icon {
     padding: 8px;
     background: $pt-text-color-muted;

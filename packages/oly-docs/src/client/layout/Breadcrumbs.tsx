@@ -1,5 +1,5 @@
 import { inject, on } from "oly-core";
-import { attach, Browser, Go, olyReactRouterEvents, Router, styles } from "oly-react";
+import { attach, Go, olyReactRouterEvents, Router, styles } from "oly-react";
 import { Helmet } from "oly-react-ssr";
 import * as React from "react";
 
@@ -8,7 +8,6 @@ import * as React from "react";
 export class Breadcrumbs extends React.Component<{}, {}> {
 
   @inject private router: Router;
-  @inject private browser: Browser;
 
   private steps: string[];
   private stepsAllowed: string[];
@@ -54,9 +53,6 @@ export class Breadcrumbs extends React.Component<{}, {}> {
 
   public render() {
     this.build();
-    if (this.stepsAllowed.length <= 0) {
-      return <div/>;
-    }
     return (
       <div className="breadcrumbs">
         <Helmet>

@@ -3,9 +3,11 @@ import { IPixieSetOptions } from "../interfaces";
 
 /**
  * Use Pixie for handling ServerClient data use cases.
- * Pixie writes server-data into HTML and browser use HTML data.
- * The main goal is to not fetch API twice (Server+Client)
- * But you can "cache" future browser calls.
+ *
+ * For cache http call: PixieHttp.
+ * For cache session: PixieSession.
+ *
+ * Pixie writes server-data into HTML then browser use this data.
  */
 export class Pixie {
 
@@ -60,8 +62,16 @@ export class Pixie {
 
   /**
    * Like set, but for functions.
+   *
    * Function will be executed only in Server.
-   * Browser will reused function result.
+   * ```ts
+   * // SERVER
+   * pixie.fly(() => "DATA"); // called + cached
+   * // BROWSER
+   * pixie.fly(() => "DATA"); // use cache, remove cache
+   * pixie.fly(() => "DATA"); // called
+   * ```
+   *
    * Async function with Promise is allowed.
    *
    * @param key     Identifier

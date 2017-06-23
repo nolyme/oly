@@ -2,7 +2,20 @@
 
 .header {
 
-  &.pt-navbar {
+  .header-secondary {
+    display: flex;
+    padding: 10px 50px;
+    box-shadow: 0 10px 10px rgba($black, 0.1);
+    position: relative;
+  }
+
+  .headers-links {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+  }
+
+  .pt-navbar {
     background: whitesmoke;
     box-shadow: none;
     .pt-tab {
@@ -12,6 +25,11 @@
       width: 64px;
       text-align: center;
       margin-right: 0;
+      a {
+        color: inherit;
+        text-decoration: none !important;
+        display: block;
+      }
       &.title {
         height: 50px;
         font-weight: 200;

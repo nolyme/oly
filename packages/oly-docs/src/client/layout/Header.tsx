@@ -1,8 +1,9 @@
 import { Tab2, Tabs2 } from "@blueprintjs/core";
 import { inject, on, state } from "oly-core";
-import { action, attach, ITransition, olyReactRouterEvents, Router, styles } from "oly-react";
+import { action, attach, Go, ITransition, olyReactRouterEvents, Router, styles } from "oly-react";
 import * as React from "react";
 import { IDocs, IModuleContent } from "../../shared/interfaces";
+import { Breadcrumbs } from "./Breadcrumbs";
 import { Search } from "./Search";
 
 @attach
@@ -37,10 +38,10 @@ export class Header extends React.Component<{}, {}> {
 
   public renderTabTitle(m: IModuleContent) {
     return (
-      <div>
+      <Go to="moduleById" params={{module: m.name}}>
         <span className={"pt-icon-standard pt-icon-" + (m.icon || "code-block")}/>
         <div style={{marginTop: "-10px"}}>{m.name.replace("oly-", "")}</div>
-      </div>
+      </Go>
     );
   }
 
@@ -57,29 +58,36 @@ export class Header extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <nav className="header pt-navbar">
-        <div className="container">
-          <div className="pt-navbar-group pt-align-left">
-            <Tabs2
-              onChange={this.handleTabChange}
-              id="TabsHeader"
-              selectedTabId={this.getSelectedId()}
-              defaultSelectedTabId={this.getSelectedId()}
-            >
-              <Tab2
-                id={this.router.href("home") || ""}
-                title={
-                  <div>
-                    <div>o<span style={{fontStyle: "italic"}}>l</span>y</div>
-                    <small>{this.docs.version}</small>
-                  </div>
-                }
-                className="title"
-              />
-              {this.docs.modules.map((m) => this.renderTab(m))}
-            </Tabs2>
+      <div className="header">
+        <nav className="pt-navbar">
+          <div className="container">
+            <div className="pt-navbar-group pt-align-left">
+              <Tabs2
+                id="TabsHeader"
+                selectedTabId={this.getSelectedId()}
+                defaultSelectedTabId={this.getSelectedId()}
+              >
+                <Tab2
+                  id={this.router.href("home") || ""}
+                  title={
+                    <Go to="home">
+                      <div>o<span style={{fontStyle: "italic"}}>l</span>y</div>
+                      <small>{this.docs.version}</small>
+                    </Go>
+                  }
+                  className="title"
+                />
+                {this.docs.modules.map((m) => this.renderTab(m))}
+              </Tabs2>
+            </div>
+            <div className="pt-navbar-group pt-align-right">
+
+            </div>
           </div>
-          <div className="pt-navbar-group pt-align-right">
+        </nav>
+        <div className="header-secondary">
+          <Breadcrumbs/>
+          <div className="headers-links">
             <Search docs={this.docs}/>
             <a
               className="pt-button pt-minimal pt-icon-git-repo"
@@ -89,7 +97,7 @@ export class Header extends React.Component<{}, {}> {
             </a>
           </div>
         </div>
-      </nav>
+      </div>
     );
   }
 }

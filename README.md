@@ -37,7 +37,8 @@ export class Home extends React.Component<IHomeProps, {}> {
 Maybe, we need to fetch some data before the rendering.
 ```ts
 import { inject } from "oly-core";
-import { page, PixieHttp } from "oly-react";
+import { page } from "oly-react";
+import { PixieHttp } from "oly-react-ssr";
 import { Home } from "./Home";
 
 export class App {
@@ -82,7 +83,7 @@ And: main.server.ts
 ```ts
 import { Kernel } from "oly-core";
 import { ApiProvider } from "oly-api";
-import { ReactServerProvider } from "oly-react";
+import { ReactServerProvider } from "oly-react-ssr";
 import { App } from "./App";
 import { Api } from "./Api";
 

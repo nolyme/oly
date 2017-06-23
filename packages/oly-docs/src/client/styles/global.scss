@@ -71,7 +71,10 @@
 
 .flex {
   display: flex;
-  height: 100%;
+
+  &.flex-full {
+    height: 100%;
+  }
 
   &.flex-row {
     flex-direction: column;

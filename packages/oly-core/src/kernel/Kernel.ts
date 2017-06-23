@@ -275,7 +275,7 @@ export class Kernel {
       }
 
     } catch (e) {
-      this.getLogger().warn("kernel can't start");
+      this.getLogger().warn("the kernel's starting has failed.");
       await this.stop();
       throw e;
     }

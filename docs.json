@@ -72,9 +72,11 @@
     },
     {
       "name": "oly-react-ssr",
-      "icon": "delta",
+      "icon": "page-layout",
       "services": [
         "server/providers/ReactServerProvider.ts",
+        "pixie/providers/PixieBrowserProvider.ts",
+        "pixie/providers/PixieServerProvider.ts",
         "pixie/services/PixieHttp.ts",
         "pixie/services/Pixie.ts",
         "pixie/services/PixieSession.ts"
@@ -95,6 +97,31 @@
       ],
       "services": [
         "providers/ApiProvider.ts"
+      ]
+    },
+    {
+      "name": "oly-security",
+      "icon": "id-number",
+      "exceptions": [
+        "exceptions/JsonWebTokenException.ts",
+        "exceptions/TokenExpiredException.ts"
+      ],
+      "decorators": [
+        "decorators/auth.ts"
+      ],
+      "services": [
+        "services/CryptoService.ts",
+        "services/JwtAuthService.ts"
+      ]
+    },
+    {
+      "name": "oly-swagger",
+      "icon": "manual",
+      "decorators": [
+        "decorators/api.ts"
+      ],
+      "services": [
+        "providers/SwaggerProvider.ts"
       ]
     },
     {

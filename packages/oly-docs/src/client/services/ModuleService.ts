@@ -169,23 +169,25 @@ export class ModuleService {
             return results;
           }
         }
-        for (const me of s.methods) {
-          const meId = me.name.toUpperCase();
-          const ultraQueryCleaned = queryCleaned.replace(sId, "").replace(/[#.]/, "");
-          if (meId.indexOf(ultraQueryCleaned) > -1) {
-            if (push({
-                href: {
-                  to: "serviceMethod",
-                  params: {
-                    module: m.name,
-                    service: s.name,
-                    method: me.name,
+        if (s.name.indexOf("Provider") === -1) {
+          for (const me of s.methods) {
+            const meId = me.name.toUpperCase();
+            const ultraQueryCleaned = queryCleaned.replace(sId, "").replace(/[#.]/, "");
+            if (meId.indexOf(ultraQueryCleaned) > -1) {
+              if (push({
+                  href: {
+                    to: "serviceMethod",
+                    params: {
+                      module: m.name,
+                      service: s.name,
+                      method: me.name,
+                    },
                   },
-                },
-                module: m.name,
-                name: s.name + "#" + me.name + "()",
-              })) {
-              return results;
+                  module: m.name,
+                  name: s.name + "#" + me.name + "()",
+                })) {
+                return results;
+              }
             }
           }
         }

@@ -7,6 +7,8 @@
       border: 1px solid $pt-intent-primary;
       color: $pt-intent-primary;
       width: 52px;
+      font-size: 10px;
+      padding: 0px 0px 2px;
       background-color: transparent;
       text-align: center;
     }
@@ -14,7 +16,7 @@
       opacity: .8;
       display: block;
       height: 100%;
-      padding: 5px 20px;
+      padding: 5px 5px;
       margin: 0 4px;
       text-decoration: none !important;
       font-size: 12px;
