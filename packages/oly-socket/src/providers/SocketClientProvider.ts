@@ -1,13 +1,13 @@
 import { env, inject, Kernel, Logger, state } from "oly-core";
 import * as io from "socket.io-client";
-import { ISocket } from "../interfaces";
+import { ISocketClient } from "../interfaces";
 
 export class SocketClientProvider {
 
   public static readonly io = io;
 
   @state("socket")
-  protected socket: ISocket;
+  protected socket: ISocketClient;
 
   @inject
   protected kernel: Kernel;
@@ -22,22 +22,26 @@ export class SocketClientProvider {
   protected readonly url: string = "";
 
   public async connect(): Promise<void> {
-    this.socket = SocketClientProvider.io.connect(this.url);
-    this.socket.kernel = this.kernel;
-    this.logger.info(`connect to '${this.url}'`);
-    await new Promise<void>((resolve, reject) => {
-      this.socket.once("connect", () => resolve());
-      this.socket.once("error", reject);
-    });
-    this.socket.on("oly:message", ({data, event}: any) => {
-      this.logger.trace(`receive message ${event}`, {data});
-      this.kernel.emit(event, data);
-    });
-    this.kernel.state("socket", this.socket);
+    if (!this.socket || !this.socket.connected) {
+      this.socket = SocketClientProvider.io.connect(this.url) as any;
+      this.socket.kernel = this.kernel;
+      this.logger.info(`connect to '${this.url}'`);
+      await new Promise<void>((resolve, reject) => {
+        this.socket.once("connect", () => resolve());
+        this.socket.once("error", reject);
+      });
+      this.socket.on("oly:message", ({data, event}: any) => {
+        this.logger.trace(`receive message ${event}`, {data});
+        this.kernel.emit(event, data);
+      });
+      this.kernel.state("socket", this.socket);
+    }
   }
 
   public async close() {
-    this.socket.close();
+    if (this.socket.connected) {
+      this.socket.close();
+    }
   }
 
   public async onStart() {
