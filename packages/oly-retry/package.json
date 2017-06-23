@@ -1,20 +1,18 @@
 {
-  "name": "oly-amqp",
-  "description": "oly-amqp",
+  "name": "oly-retry",
+  "description": "oly-retry",
   "version": "0.12.2",
   "license": "MIT",
   "main": "lib/index.js",
-  "browser": "lib/index.browser.js",
+  "browser": "esm/index.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "keywords": [
     "oly",
     "typescript",
-    "amqp"
+    "retry"
   ],
   "dependencies": {
-    "@types/amqplib": "0.5.2",
-    "amqplib": "0.5.1"
   },
   "devDependencies": {
     "oly-core": "^0.12.2"
@@ -24,7 +22,8 @@
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
-    "build": "tsc",
+    "build": "tsc && tsc --outDir esm -m es2015 --moduleResolution node",
+    "watch": "tsc -w",
     "test": "jest"
   },
   "jest": {

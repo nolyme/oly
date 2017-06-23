@@ -36,6 +36,9 @@ export interface ITimer {
  */
 export class Time {
 
+  public static setTimeout = setTimeout;
+  public static now = Date.now;
+
   /**
    * Time cursor.
    */
@@ -47,10 +50,20 @@ export class Time {
   private timers: any[] = [];
 
   /**
+   * Patch global setTimeout and Date.now
+   */
+  public global(): this {
+    const g: any = (typeof window === "undefined" ? global : window);
+    g.Date.now = this.now.bind(this);
+    g.setTimeout = this.timeout.bind(this);
+    return this;
+  }
+
+  /**
    * Date.now like
    */
   public now(): number {
-    return this.cursor || Date.now();
+    return this.cursor || Time.now();
   }
 
   /**
@@ -72,9 +85,10 @@ export class Time {
     this.timers.push(timer);
 
     if (!this.cursor) {
-      timer.id = setTimeout(() => {
+      timer.id = Time.setTimeout(() => {
         if (!this.cursor) {
           func();
+          this.timers.splice(this.timers.indexOf(timer), 1);
         }
       }, ms);
     }
@@ -86,7 +100,7 @@ export class Time {
    * Pause fake time.
    */
   public pause(): void {
-    this.cursor = Date.now();
+    this.cursor = Time.now();
   }
 
   /**
@@ -105,8 +119,9 @@ export class Time {
     if (this.cursor) {
       this.cursor += ms;
       for (const timer of this.timers) {
-        if (timer.now + timer.ms < this.cursor) {
+        if (timer.now + timer.ms <= this.cursor) {
           timer.tick();
+          this.timers.splice(this.timers.indexOf(timer), 1);
         }
       }
     }

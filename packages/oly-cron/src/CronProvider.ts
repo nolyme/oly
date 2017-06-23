@@ -55,7 +55,7 @@ export class CronProvider implements IProvider {
       cronTime: scheduler.cron,
       onTick: async () => {
         const child = this.kernel.fork();
-        const logger = child.get(Logger).as("Scheduler");
+        const logger = child.inject(Logger).as("Scheduler");
         try {
           logger.debug("start scheduled job");
           await child.invoke(target, propertyKey, []);

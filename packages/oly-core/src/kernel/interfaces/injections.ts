@@ -92,9 +92,7 @@ export type IFactory<T = any> = (kernel: Kernel, parent?: Class) => T;
 /**
  *
  */
-export interface Class<T = any> { // tslint:disable-line
-  name: string;
-
+export interface Class<T = any> extends Function { // tslint:disable-line
   new(...args: any[]): T;
 }
 
