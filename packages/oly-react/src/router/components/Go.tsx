@@ -1,6 +1,6 @@
 import { inject, on } from "oly-core";
 import * as React from "react";
-import { Component, createElement, HTMLAttributes } from "react";
+import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
 import { action } from "../../core/decorators/action";
 import { attach } from "../../core/decorators/attach";
 import { olyReactRouterEvents } from "../constants/events";
@@ -54,13 +54,27 @@ export class Go extends Component<IGoProps, IGoState> {
    *
    */
   @action
-  public onClick(e: any): Promise<any> {
-    e.preventDefault();
+  public async onClick(e: any): Promise<any> {
+
     if (this.props.onClick) {
       this.props.onClick(e);
     }
-    const {to, params, query} = this.props;
-    return this.router.go({to, params, query});
+
+    const isModifiedEvent = (event: MouseEvent<HTMLAnchorElement>) =>
+      (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
+
+    if (
+      !e.defaultPrevented && // onClick prevented default
+      e.button === 0 && // ignore right clicks
+      !this.props.target && // let browser handle "target=_blank" etc.
+      !isModifiedEvent(e) // ignore clicks with modifier keys
+    ) {
+      e.preventDefault();
+
+      const {to, params, query} = this.props;
+
+      return this.router.go({to, params, query});
+    }
   }
 
   /**
