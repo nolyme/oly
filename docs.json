@@ -67,7 +67,13 @@
         "router/services/Router.ts",
         "router/services/Browser.ts",
         "router/providers/ReactRouterProvider.ts",
-        "router/providers/ReactBrowserProvider.ts",
+        "router/providers/ReactBrowserProvider.ts"
+      ]
+    },
+    {
+      "name": "oly-react-ssr",
+      "icon": "delta",
+      "services": [
         "server/providers/ReactServerProvider.ts",
         "pixie/services/PixieHttp.ts",
         "pixie/services/Pixie.ts",

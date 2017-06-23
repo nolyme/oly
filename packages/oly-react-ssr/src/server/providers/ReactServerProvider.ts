@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { env, IDeclarations, inject, IProvider, Kernel, Logger, state } from "oly-core";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
-import { ReactRouterProvider } from "../../router/providers/ReactRouterProvider";
+import { ReactRouterProvider } from "oly-react";
 import { ReactProxyService } from "../services/ReactProxyService";
 import { ReactServerRenderer } from "../services/ReactServerRenderer";
 import { ReactStaticService } from "../services/ReactStaticService";

@@ -1,10 +1,10 @@
 import * as cheerio from "cheerio";
 import { inject, Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
+import { page } from "oly-react";
 import * as React from "react";
 import { PixieServerProvider } from "../../src/pixie/providers/PixieServerProvider";
 import { Pixie } from "../../src/pixie/services/Pixie";
-import { page } from "../../src/router/decorators/page";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 class App {

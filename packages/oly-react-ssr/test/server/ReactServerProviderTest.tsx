@@ -1,11 +1,8 @@
 import * as cheerio from "cheerio";
 import { Class, inject, Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
+import { attach, ITransitionError, page, View } from "oly-react";
 import * as React from "react";
-import { attach } from "../../src/core/decorators/attach";
-import { View } from "../../src/router/components/View";
-import { page } from "../../src/router/decorators/page";
-import { ITransitionError } from "../../src/router/interfaces";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 interface IAppTest {

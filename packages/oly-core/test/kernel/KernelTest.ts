@@ -320,28 +320,46 @@ describe("Kernel", () => {
         .toThrow(olyCoreErrors.noDepAfterStart("A"));
     });
 
-    it("should reject #start() after #start()", async () => {
-
-      const k = createKernel();
-      await k.start();
-
-      expect(() => k.start())
-        .toThrow(olyCoreErrors.alreadyStarted());
-    });
-
-    it("should reject #stop() before #start()", async () => {
-
-      const k = createKernel();
-
-      expect(() => k.stop())
-        .toThrow(olyCoreErrors.notStarted());
-    });
-
     it("should accept #start() again after #stop()", async () => {
       const k = createKernel();
       await k.start();
       await k.stop();
       await k.start();
+    });
+
+    it("should #stop() each started when #start() fails", async () => {
+
+      class A {
+        state = 0;
+
+        onStart() {
+          this.state = 1;
+        }
+
+        onStop() {
+          this.state = 2;
+        }
+      }
+
+      class B {
+        @inject a: A;
+
+        onStart() {
+          throw new Error("Oops");
+        }
+      }
+
+      const k = createKernel().with(B);
+      expect(k.inject(A).state).toBe(0);
+
+      try {
+        await k.start();
+        fail("!");
+      } catch (e) {
+        expect(e.message).toBe("Oops");
+      }
+
+      expect(k.inject(A).state).toBe(2);
     });
 
     it("should respect all cascading priorities", async () => {
@@ -494,7 +512,7 @@ describe("Kernel", () => {
     }
 
     class B {
-      @state() data = "a";
+      @state data = "a";
     }
 
     it("should create new context", () => {

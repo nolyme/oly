@@ -2,37 +2,30 @@
 
 ### SOON
 
-- (oly-*): IEnv ... :(
-- (oly-core): investigate es5 typescript Kernel#inject()
+- (oly-core): error nodejs bad format
 - (oly-docs): split module (api & react)
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)
-- [HARD] (oly-docs): interfaces (popup) 
-- [HARD] (oly-docs): multi version
+- (oly-docs): interfaces (popup) 
+- (oly-docs): multi version
 - (oly-docs): show env & exception in services/components
-- (oly-docs): add more and more and more docs.
-- [HARD] (oly-*) better coverage, especially react-router... :)
-- [HARD] (oly-amqp) amqp @retry
-- [HARD] (oly-amqp) memory (for test!)
-- [HARD] (oly-orm): use knex + oly-json
+- (oly-*) better coverage, especially react-router... :)
+- (oly-amqp) memory (for test & embedded)
   
 ### THOUGHTS
 
-- (oly-tools/cli): better ssr dev workflow (one process)
+- (oly-*): IEnv ... :(
+- (oly-orm): use knex + oly-json
 - (oly-react/pixie) pixie auto route
 - (oly-react/pixie) Cookie.get() Cookie.set(), cookie sec
 - (oly-cli): init --ssr
-- (oly-react/router) scroll top:0 on route change
-- (oly-amqp): cron no time dependency + Time
-- [HARD] (oly-ws): init, websocket with @on and fork(onconnect)
+- (oly-ws): init, websocket with @on and fork(onconnect)
 - (oly-fs): init, fs api+mock, workspace, tmp
-- (oly-*): tree shaking experiences
 
 ### MAYBE ONE DAY
 
+- (oly-tools/cli): better ssr dev workflow (one process)
 - (oly-api): use qs with koa-router (and maybe, remove koa-router, just use koa-mount)
 - (oly-orm): rest
-- (oly-tools): hot reload
 - (oly-api): hal resource
 - (oly-orm): pagination Page
-- (oly-*): use "oly" pkg

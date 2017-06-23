@@ -1,38 +1,36 @@
 {
-  "name": "oly-react",
-  "description": "oly-react",
+  "name": "oly-react-ssr",
+  "description": "oly-react-ssr",
   "version": "0.12.2",
   "license": "MIT",
   "main": "lib/index.js",
-  "browser": "esm/index.js",
+  "browser": "esm/index.browser.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "keywords": [
     "oly",
     "typescript",
     "react",
-    "router"
+    "ssr"
   ],
   "dependencies": {
-    "@types/history": "4.5.2",
-    "@types/prop-types": "15.5.1",
-    "@types/qs": "^6.2.31",
     "@types/react-dom": "15.5.0",
-    "history": "4.6.2",
-    "path-to-regexp": "1.7.0",
-    "prop-types": "15.5.10",
-    "qs": "^6.4.0",
-    "react-dom": "15.5.4"
+    "@types/react-helmet": "5.0.2",
+    "cheerio": "0.22.0",
+    "oly-http": "^0.12.2",
+    "react-dom": "15.5.4",
+    "react-helmet": "5.1.3"
   },
   "devDependencies": {
-    "cheerio": "0.22.0",
     "@types/cheerio": "0.22.1",
     "@types/react": "15.0.25",
     "oly-core": "^0.12.2",
+    "oly-react": "^0.12.2",
     "react": "15.5.4"
   },
   "peerDependencies": {
     "oly-core": "^0.12.2",
+    "oly-react": "^0.12.2",
     "react": "^15.5.4"
   },
   "scripts": {

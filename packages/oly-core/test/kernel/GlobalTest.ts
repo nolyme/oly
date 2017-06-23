@@ -39,19 +39,6 @@ describe("Global", () => {
       expect(_.isEqualClass(f1(), f2())).toBeTruthy();
     });
   });
-  describe(".cascade()", () => {
-    it("should always chain one by one promises", async () => {
-      const stack: string[] = [];
-      const tasks = [
-        () => new Promise((r) => r(stack.push("A"))),
-        () => new Promise((r) => r(stack.push("B"))),
-        () => new Promise((r) => r(stack.push("C"))),
-        () => new Promise((r) => r(stack.push("D"))),
-      ];
-      await _.cascade(tasks);
-      equal(stack.join(""), "ABCD");
-    });
-  });
   describe(".bubble()", () => {
     it("should bubble sort array", () => {
       const deps = [0, 1, 4, 19, 120, 3, 5, 0, 1];

@@ -17,6 +17,7 @@
     "oly-http": "^0.12.2",
     "oly-json": "^0.12.2",
     "oly-react": "^0.12.2",
+    "oly-react-ssr": "^0.12.2",
     "oly-retry": "^0.12.2",
     "oly-security": "^0.12.2",
     "oly-swagger": "^0.12.2",

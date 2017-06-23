@@ -1,5 +1,6 @@
 import { inject, on } from "oly-core";
-import { attach, Browser, Go, Helmet, olyReactRouterEvents, Router, styles } from "oly-react";
+import { attach, Browser, Go, olyReactRouterEvents, Router, styles } from "oly-react";
+import { Helmet } from "oly-react-ssr";
 import * as React from "react";
 
 @attach

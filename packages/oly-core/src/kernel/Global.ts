@@ -140,26 +140,6 @@ export class Global {
   }
 
   /**
-   * Run promises one by one.
-   * Used for chained #onStart.
-   *
-   * @param tasks     Array of promises
-   */
-  public static cascade(tasks: Array<() => Promise<any>>) {
-    const wait = (): Promise<any> => {
-      if (tasks.length > 0) {
-        const task = tasks.shift();
-        if (typeof task === "function") {
-          return new Promise((eat) => eat(task())).then(() => wait());
-        }
-        return Promise.resolve();
-      }
-      return Promise.resolve();
-    };
-    return wait();
-  }
-
-  /**
    * Generic bubble sort.
    * Used to sort kernel dependencies.
    *

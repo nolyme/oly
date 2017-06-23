@@ -1,3 +1,4 @@
+import { Declaration } from "babel-types";
 import { IArgumentsMetadata, IInjectionsMetadata, olyCoreKeys } from "../index";
 import { BrowserLogger } from "../logger/BrowserLogger";
 import { Logger } from "../logger/Logger";
@@ -175,6 +176,7 @@ export class Kernel {
         children: d.children,
         definition: d.definition,
         singleton: d.singleton,
+        started: d.started,
         use: d.use,
       }));
     } else {
@@ -189,6 +191,7 @@ export class Kernel {
       }
     }
 
+    // TODO: remove this, replace by @kernelId with args
     this.store.KERNEL_ID = this.id;
   }
 
@@ -248,64 +251,59 @@ export class Kernel {
    * All onStart() have a access to "this.declarations".
    * All onStart() are asynchronous, promise based.
    */
-  public start(): Promise<Kernel> {
-
-    if (this.started) {
-      throw new KernelException(olyCoreErrors.alreadyStarted());
-    }
+  public async start(): Promise<Kernel> {
 
     this.getLogger().trace("start kernel");
 
-    this.started = true;
-
     const declarations = this.sortDeclarations(this.declarations);
 
-    return _.cascade(declarations
-      .map((d) => () => {
-        if (d.instance && d.instance.onConfigure) {
-          this.getLogger().debug("configure " + d.definition.name);
-          return d.instance.onConfigure(this.declarations);
+    try {
+
+      for (const declaration of declarations) {
+        if (declaration.instance && !declaration.started && declaration.instance.onConfigure) {
+          this.getLogger().debug("configure " + declaration.definition.name);
+          await declaration.instance.onConfigure(this.declarations);
         }
-      }),
-    ).then(() =>
-      _.cascade(declarations
-        .map((d) => () => {
-          if (d.instance && d.instance.onStart) {
-            this.getLogger().debug("start " + d.definition.name);
-            return d.instance.onStart(this.declarations);
-          }
-        }),
-      ),
-    ).then(() => {
-      this.getLogger().info("kernel has been successfully started");
-      return this;
-    });
+      }
+
+      for (const declaration of declarations) {
+        if (declaration.instance && !declaration.started && declaration.instance.onStart) {
+          this.getLogger().debug("start " + declaration.definition.name);
+          await declaration.instance.onStart(this.declarations);
+          declaration.started = true;
+        }
+      }
+
+    } catch (e) {
+      this.getLogger().warn("kernel can't start");
+      await this.stop();
+      throw e;
+    }
+
+    this.started = true;
+    this.getLogger().info("kernel has been successfully started");
+    return this;
   }
 
   /**
    * Unlock the kernel. Trigger #onStop on each provider.
    */
-  public stop(): Promise<Kernel> {
-
-    if (!this.started) {
-      throw new KernelException(olyCoreErrors.notStarted());
-    }
+  public async stop(): Promise<Kernel> {
 
     this.getLogger().trace("stop kernel");
 
-    return _.cascade(this.sortDeclarations(this.declarations)
-      .reverse()
-      .map((d) => () => {
-        if (d.instance && d.instance.onStop) {
-          this.getLogger().debug("stop " + d.definition.name);
-          return d.instance.onStop(this.declarations);
-        }
-      }),
-    ).then(() => {
-      this.started = false;
-      this.getLogger().info("kernel has been successfully stopped");
-      return this;
-    });
+    const declarations = this.sortDeclarations(this.declarations).reverse();
+
+    for (const declaration of declarations) {
+      if (declaration.instance && declaration.started && declaration.instance.onStop) {
+        this.getLogger().debug("stop " + declaration.definition.name);
+        await declaration.instance.onStop(this.declarations);
+      }
+    }
+
+    this.started = false;
+    this.getLogger().info("kernel has been successfully stopped");
+    return this;
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -510,6 +508,7 @@ export class Kernel {
         this.events.splice(this.events.indexOf(event), 1);
       },
       wait: () => {
+        event.disabled = true;
         this.events.splice(this.events.indexOf(event), 1);
         return new Promise((resolve) => this.on(key, resolve, unique));
       },
@@ -523,9 +522,9 @@ export class Kernel {
    * @param data              Event data (parameters)
    * @param options           Emitter options
    */
-  public emit(key: string, data?: any, options: IKernelEmitOptions = {}): Promise<any> {
+  public async emit(key: string, data?: any, options: IKernelEmitOptions = {}): Promise<any> {
 
-    const createAction = (event: IEventListener, additionalArguments: any[]): Function => {
+    const invokeAction = (event: IEventListener, additionalArguments: any[]): Function => {
       if (typeof event.action === "function") {
         return event.action(additionalArguments[0]);
       }
@@ -540,26 +539,31 @@ export class Kernel {
       if (event.unique) {
         this.events.splice(this.events.indexOf(event), 1);
       }
-      return () => {
+      return async (): Promise<any> => {
+
         if (event.disabled) {
           this.getLogger().trace(`event '${event.key}' is disabled`);
-          return Promise.resolve();
+          return;
         }
-        // ensure promise
-        return new Promise((resolve) => {
-          resolve(createAction(event, [data]));
-        }).catch((e) => {
+
+        try {
+          return await invokeAction(event, [data]);
+        } catch (e) {
           this.getLogger().warn(`handle event '${key}' error`, e);
           return e;
-        });
+        }
       };
     });
 
     if (options.sequential === true) {
-      return _.cascade(actions);
+      const results = [];
+      for (const a of actions) {
+        results.push(await a());
+      }
+      return results;
     }
 
-    return Promise.all<any>(actions.map((a) => a()));
+    return Promise.all(actions.map((a) => a()));
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -646,6 +650,7 @@ export class Kernel {
         .keys(injectionsMetadata.properties)
         .map((k) => injectionsMetadata.properties[k]) : [],
       definition: target.provide,
+      started: false,
       singleton,
       use,
     };

@@ -11,6 +11,8 @@ export interface IDeclaration<T extends IProvider = IProvider> {
   definition: Class<T>;
   // cached instance
   instance?: T;
+  // is started ?
+  started: boolean;
   // how to create our instance
   use: Class<T> | IFactory<T>;
   // who rely on it

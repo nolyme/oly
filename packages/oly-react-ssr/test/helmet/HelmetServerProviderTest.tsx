@@ -1,10 +1,10 @@
 import * as cheerio from "cheerio";
 import { Kernel } from "oly-core";
 import { HttpClient } from "oly-http";
+import { page } from "oly-react";
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import { HelmetServerProvider } from "../../src/helmet/HelmetServerProvider";
-import { page } from "../../src/router/decorators/page";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 describe("HelmetServiceProvider", () => {
