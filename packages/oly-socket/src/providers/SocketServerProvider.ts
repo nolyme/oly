@@ -24,7 +24,7 @@ export class SocketServerProvider {
 
   public onStart() {
     this.sockets = [];
-    this.server = SocketServerProvider.io.listen(this.httpServerProvider.http);
+    this.server = SocketServerProvider.io.listen(this.httpServerProvider["http"]);
     this.server.on("connection", (socket: ISocket) => {
       socket.kernel = this.kernel.fork();
       socket.kernel["events"] = this.kernel["events"].concat([]);
