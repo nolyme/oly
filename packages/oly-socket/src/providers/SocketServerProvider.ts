@@ -33,7 +33,7 @@ export class SocketServerProvider {
       logger.debug(`create new connection`);
       socket.kernel.emit("connect");
       this.sockets.push(socket);
-      socket.on("oly:message", ({event, data}) => {
+      socket.on("oly:message", ({event, data}: any) => {
         logger.trace(`receive message ${event}`, {data});
         socket.kernel.emit(event, data);
       });

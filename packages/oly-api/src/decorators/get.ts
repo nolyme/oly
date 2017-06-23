@@ -5,7 +5,7 @@ import { route } from "oly-router";
  *
  * ```ts
  * class A {
- *  @get("/") find() {}
+ *   @get("/") find() {}
  * }
  * ```
  *
