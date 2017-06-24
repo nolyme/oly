@@ -14,7 +14,7 @@
     "router"
   ],
   "dependencies": {
-    "@types/history": "4.6.2",
+    "@types/history": "4.6.0",
     "@types/prop-types": "15.5.1",
     "@types/qs": "6.2.31",
     "@types/react-dom": "15.5.1",

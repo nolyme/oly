@@ -45,11 +45,15 @@ export class ReactProxyService {
         }, (res) => {
           ctx.body = res;
           ctx.status = res.statusCode || 500;
-          for (const name of Object.keys(res.headers)) {
+          const keys = Object.keys(res.headers);
+          for (const name of keys) {
             if (name === "transfer-encoding") {
               continue;
             }
-            ctx.set(name, res.headers[name]);
+            const header = res.headers[name];
+            if (header) {
+              ctx.set(name, header);
+            }
           }
           resolve();
         }).end();

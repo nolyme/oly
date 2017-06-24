@@ -8,7 +8,7 @@ import { ModuleMenu } from "./ModuleMenu";
 @styles(() => require("./Module.scss"))
 export class Module extends Component<{ module: IModuleContent }, {}> {
 
-  div: HTMLElement;
+  div: HTMLElement | null;
 
   public render() {
     return (
@@ -18,7 +18,11 @@ export class Module extends Component<{ module: IModuleContent }, {}> {
           ref={(div) => this.div = div}
           className="Module_view flex-full with-scroll"
         >
-          <View onChange={() => this.div.scrollTop = 0}/>
+          <View onChange={() => {
+            if (this.div) {
+              this.div.scrollTop = 0;
+            }
+          }}/>
         </div>
       </div>
     );
