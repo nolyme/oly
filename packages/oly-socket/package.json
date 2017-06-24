@@ -4,7 +4,7 @@
   "version": "0.12.3",
   "license": "MIT",
   "main": "lib/index.js",
-  "browser": "esm/index.js",
+  "browser": "esm/index.browser.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "keywords": [
