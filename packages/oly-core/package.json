@@ -24,7 +24,7 @@
     "tslib": "1.7.1"
   },
   "scripts": {
-    "clean": "rimraf node_modules coverage lib",
+    "clean": "rimraf node_modules coverage lib esm",
     "build": "tsc && tsc --outDir esm -m es2015 --moduleResolution node",
     "watch": "tsc -w",
     "test": "jest"
