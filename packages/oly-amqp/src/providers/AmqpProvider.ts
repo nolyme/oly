@@ -23,32 +23,6 @@ export class AmqpProvider implements IProvider {
   protected readonly logger: Logger;
 
   /**
-   * Push message into a queue.
-   * Queue isn't asserted.
-   *
-   * @param queue       Queue name
-   * @param payload     Custom data
-   * @param options     Amqp publish options
-   */
-  public publish(queue: string, payload: string = "", options: Options.Publish = {}): boolean {
-
-    this.logger.debug(`publish into ${queue}`);
-
-    options.correlationId = this.kernel.id;
-
-    return this.channel.sendToQueue(queue, new Buffer(payload), options);
-  }
-
-  /**
-   * Purge a queue.
-   *
-   * @param taskName    Task name (= queue name)
-   */
-  public async purge(taskName: string): Promise<Replies.PurgeQueue> {
-    return await this.channel.purgeQueue(taskName);
-  }
-
-  /**
    *
    */
   public async onStart() {

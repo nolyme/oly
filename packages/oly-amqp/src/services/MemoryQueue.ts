@@ -8,7 +8,7 @@ import { IMemoryWorker } from "../interfaces";
  */
 export class MemoryQueue extends EventEmitter implements Channel {
 
-  queues: {
+  static queues: {
     [queue: string]: IMemoryWorker,
   } = {};
 
@@ -33,14 +33,14 @@ export class MemoryQueue extends EventEmitter implements Channel {
   }
 
   async deleteQueue(queue: string, options?: Options.DeleteQueue): Bluebird<Replies.DeleteQueue> {
-    delete this.queues[queue];
+    delete MemoryQueue.queues[queue];
     return {
       messageCount: 0,
     };
   }
 
   async purgeQueue(queue: string): Bluebird<Replies.PurgeQueue> {
-    this.queues[queue].tasks = [];
+    MemoryQueue.queues[queue].tasks = [];
     return {
       messageCount: 0,
     };
@@ -83,9 +83,9 @@ export class MemoryQueue extends EventEmitter implements Channel {
   }
 
   sendToQueue(queue: string, content: Buffer, options?: Options.Publish): boolean {
-    if (this.queues[queue]) {
+    if (MemoryQueue.queues[queue]) {
       const message = {fields: {}, properties: options, content};
-      this.queues[queue].tasks.push(message);
+      MemoryQueue.queues[queue].tasks.push(message);
       this.next(queue);
     }
     return true;
@@ -94,7 +94,7 @@ export class MemoryQueue extends EventEmitter implements Channel {
   async consume(queue: string,
                 onMessage: (msg: Message) => any,
                 options?: Options.Consume): Bluebird<Replies.Consume> {
-    this.queues[queue] = {
+    MemoryQueue.queues[queue] = {
       executor: onMessage,
       tasks: [],
     };
@@ -112,10 +112,10 @@ export class MemoryQueue extends EventEmitter implements Channel {
   }
 
   ack(message: Message, allUpTo?: boolean): void {
-    for (const q of Object.keys(this.queues)) {
-      const i = this.queues[q].tasks.indexOf(message);
+    for (const q of Object.keys(MemoryQueue.queues)) {
+      const i = MemoryQueue.queues[q].tasks.indexOf(message);
       if (i) {
-        this.queues[q].tasks.slice(i, 1);
+        MemoryQueue.queues[q].tasks.slice(i, 1);
         this.next(q);
       }
     }
@@ -146,8 +146,10 @@ export class MemoryQueue extends EventEmitter implements Channel {
   }
 
   private next(queue: string) {
-    if (this.queues[queue].tasks.length > 0) {
-      this.queues[queue].executor(this.queues[queue].tasks[0]);
+    if (MemoryQueue.queues[queue].tasks.length > 0) {
+      process.nextTick(() => {
+        MemoryQueue.queues[queue].executor(MemoryQueue.queues[queue].tasks[0]);
+      });
     }
   }
 }

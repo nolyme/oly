@@ -55,7 +55,7 @@ export class WorkerProvider implements IProvider {
   protected createHandler(target: Class<any>, propertyKey: string, name: string) {
     return async (message: Message) => {
       const kernel = this.kernel.fork();
-      kernel.state("Amqp.message", message);
+      kernel.state("AmqpClient.message", message);
       const logger = kernel.inject(Logger).as("ConsumerProvider");
       try {
         logger.info(`begin task "${name}:${message.properties.correlationId}"`);
