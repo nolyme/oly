@@ -29,7 +29,8 @@
       "decorators": [
         "decorators/field.ts",
         "decorators/array.ts",
-        "decorators/date.ts"
+        "decorators/date.ts",
+        "decorators/build.ts"
       ],
       "services": [
         "services/Json.ts"
@@ -73,6 +74,9 @@
     {
       "name": "oly-react-ssr",
       "icon": "applications",
+      "manuals": [
+        "docs/Example.md"
+      ],
       "services": [
         "server/providers/ReactServerProvider.ts",
         "pixie/providers/PixieBrowserProvider.ts",
@@ -110,8 +114,8 @@
         "decorators/auth.ts"
       ],
       "services": [
-        "services/CryptoService.ts",
-        "services/JwtAuthService.ts"
+        "services/Crypto.ts",
+        "services/JwtAuth.ts"
       ]
     },
     {
@@ -122,6 +126,18 @@
       ],
       "services": [
         "providers/SwaggerProvider.ts"
+      ]
+    },
+    {
+      "name": "oly-amqp",
+      "icon": "stacked-chart",
+      "decorators": [
+        "decorators/task.ts"
+      ],
+      "services": [
+        "providers/AmqpProvider.ts",
+        "providers/WorkerProvider.ts",
+        "services/AmqpClient.ts"
       ]
     },
     {

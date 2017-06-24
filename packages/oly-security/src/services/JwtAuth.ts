@@ -6,12 +6,12 @@ import { olySecurityErrors } from "../constants/errors";
 import { JsonWebTokenException } from "../exceptions/JsonWebTokenException";
 import { TokenExpiredException } from "../exceptions/TokenExpiredException";
 import { IPayload, IToken } from "../interfaces";
-import { CryptoService } from "./CryptoService";
+import { Crypto } from "./Crypto";
 
 /**
  * Use JWT.
  */
-export class JwtAuthService {
+export class JwtAuth {
 
   @env("SECURITY_TOKEN_EXPIRATION")
   public readonly tokenExpiration: number = 60 * 60 * 3;
@@ -22,7 +22,7 @@ export class JwtAuthService {
   protected logger: Logger;
 
   @inject
-  protected cryptoService: CryptoService;
+  protected cryptoService: Crypto;
 
   /**
    *

@@ -5,7 +5,7 @@ import { _, env } from "oly-core";
 /**
  * Bcrypt and Node cypher.
  */
-export class CryptoService {
+export class Crypto {
 
   @env("SECURITY_SECRET")
   public readonly secret: string = _.shortid(18);

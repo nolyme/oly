@@ -61,8 +61,17 @@
   }
 
   @media (max-width: $tablet) {
-    .pt-align-right {
+    .pt-navbar {
+      padding: 0;
+    }
+    .breadcrumbs, .pt-button {
       display: none;
+    }
+    .pt-popover-target {
+      display: block;
+    }
+    .search, .pt-input {
+      width: 100% !important;
     }
   }
 }

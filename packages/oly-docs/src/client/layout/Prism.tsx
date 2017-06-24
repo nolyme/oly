@@ -80,7 +80,7 @@ export class Prism extends Component<{ html: string; className?: string }, {}> {
   public render() {
     return (
       <div
-        className={this.props.className}
+        className={"prism " + this.props.className}
         dangerouslySetInnerHTML={{__html: this.html}}
       />
     );

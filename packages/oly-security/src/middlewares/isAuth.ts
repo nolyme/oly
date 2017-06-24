@@ -1,6 +1,6 @@
 import { UnauthorizedException } from "oly-api";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
-import { JwtAuthService } from "../services/JwtAuthService";
+import { JwtAuth } from "../services/JwtAuth";
 import { parseToken } from "./parseToken";
 
 /**
@@ -11,7 +11,7 @@ export const isAuth = (): IKoaMiddleware => {
 
     await parseToken()(ctx, () => Promise.resolve());
 
-    const authenticationService = ctx.kernel.inject(JwtAuthService);
+    const authenticationService = ctx.kernel.inject(JwtAuth);
 
     if (!authenticationService.token) {
       throw new UnauthorizedException();

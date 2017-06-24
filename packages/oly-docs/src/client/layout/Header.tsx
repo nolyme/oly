@@ -90,6 +90,7 @@ export class Header extends React.Component<{}, {}> {
           <div className="headers-links">
             <Search docs={this.docs}/>
             <a
+              style={{marginLeft: "20px"}}
               className="pt-button pt-minimal pt-icon-git-repo"
               href="https://github.com/nolyme/oly"
             >

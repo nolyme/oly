@@ -1,6 +1,6 @@
 import { Logger } from "oly-core";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
-import { JwtAuthService } from "../services/JwtAuthService";
+import { JwtAuth } from "../services/JwtAuth";
 
 /**
  *
@@ -18,12 +18,12 @@ export const parseToken = (): IKoaMiddleware => {
 
       const token = authorization.replace("Bearer ", "");
 
-      ctx.kernel.inject(JwtAuthService).checkToken(token);
+      ctx.kernel.inject(JwtAuth).checkToken(token);
     } else if (!!tokenName && !!ctx.cookies.get(tokenName)) {
 
       logger.trace("cookie token detected");
 
-      ctx.kernel.inject(JwtAuthService).checkToken(ctx.cookies.get(tokenName));
+      ctx.kernel.inject(JwtAuth).checkToken(ctx.cookies.get(tokenName));
     }
 
     await next();

@@ -51,4 +51,9 @@ describe("@build", () => {
     expect(k.invoke(B, "b", []))
       .toBeInstanceOf(Foo);
   });
+
+  it("should validate object", () => {
+    expect(() => k.invoke(A, "b", [{}]))
+      .toThrow(/Validation has failed/);
+  });
 });

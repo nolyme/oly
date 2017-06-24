@@ -25,10 +25,9 @@
 
   .separator {
     border-bottom: 2px solid rgba($pt-intent-primary, 0.6);
-    margin-left: -50px;
-    margin-right: -150px;
     padding-left: 50px;
     padding-bottom: 10px;
+    box-shadow: 0 4px rgba(0, 0, 0, 0.1);
   }
 
   .pt-table {
@@ -51,54 +50,62 @@
     box-shadow: -3px 0 rgba($pt-intent-primary, 0.8);
     padding-left: 10px;
   }
-}
 
-.Footer {
-  font-size: 10px;
-  padding: 5px;
-  color: $gray1;
-  text-align: center;
-  box-shadow: 0 -5px 5px rgba($black, 0.1);
-  position: relative;
-  z-index: 100;
-}
-
-.readme {
-  background-color: $white;
-  padding: 20px;
-  margin: 40px;
-  border: 2px solid $light-gray2;
-}
-
-.container {
-  margin: 0 40px;
-}
-
-.flex {
-  display: flex;
-
-  &.flex-full {
-    height: 100%;
+  .Footer {
+    font-size: 10px;
+    padding: 5px;
+    color: $gray1;
+    text-align: center;
+    box-shadow: 0 -5px 5px rgba($black, 0.1);
+    position: relative;
+    z-index: 100;
   }
 
-  &.flex-row {
-    flex-direction: column;
+  .readme {
+    background-color: $white;
+    padding: 20px;
+    margin: 40px;
+    border: 2px solid $light-gray2;
+  }
+
+  .container {
+    margin: 0 40px;
+  }
+
+  .flex {
+    display: flex;
+
+    &.flex-full {
+      height: 100%;
+    }
+
+    &.flex-row {
+      flex-direction: column;
+    }
+  }
+
+  .flex-full {
+    flex: 1;
+
+    &.with-scroll {
+      overflow-y: auto;
+    }
+  }
+
+  .card {
+    box-shadow: none;
+  }
+
+  pre {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: $tablet) {
+    .container {
+      margin: 0;
+    }
   }
 }
 
-.flex-full {
-  flex: 1;
 
-  &.with-scroll {
-    overflow-y: auto;
-  }
-}
-
-.card {
-  box-shadow: none;
-}
-
-pre {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}

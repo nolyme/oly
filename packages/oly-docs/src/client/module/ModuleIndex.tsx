@@ -8,7 +8,7 @@ export class ModuleIndex extends React.Component<{ module: IModuleContent }, {}>
 
   public render() {
     return (
-      <div>
+      <div className="Module_body">
         <Prism html={this.props.module.home}/>
       </div>
     );

@@ -1,11 +1,11 @@
 import { equal, notEqual } from "assert";
 import { Kernel } from "oly-core";
-import { CryptoService } from "../src/services/CryptoService";
+import { Crypto } from "../src/services/Crypto";
 
-describe("CryptoService", () => {
+describe("Crypto", () => {
   describe("#hash()", () => {
     it("should destroy my text", async () => {
-      const crypto = Kernel.create().inject(CryptoService);
+      const crypto = Kernel.create().inject(Crypto);
       const password = "azertylol";
       const hash = await crypto.hash(password);
       notEqual(hash, password);
@@ -14,7 +14,7 @@ describe("CryptoService", () => {
   });
   describe("#encrypt()", () => {
     it("should eat my text", async () => {
-      const crypto = Kernel.create().inject(CryptoService);
+      const crypto = Kernel.create().inject(Crypto);
       const message = JSON.stringify({user: "tintin", pass: "aPkdo2kdm1ld)"});
       const token = await crypto.encrypt(message);
       notEqual(token, message);

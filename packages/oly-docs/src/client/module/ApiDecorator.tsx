@@ -10,12 +10,16 @@ export class ApiDecorator extends Component<{ module: IModuleContent; decorator:
   public render() {
     return (
       <div>
-        <small className="pt-text-muted">Decorator</small>
-        <h2>@{this.props.decorator.name}</h2>
+        <div className="Module_head">
+          <small className="pt-text-muted">Decorator</small>
+          <h2>@{this.props.decorator.name}</h2>
+        </div>
         <div className="separator"/>
-        <Prism html={this.props.decorator.install} className="naked"/>
-        <h3>Description</h3>
-        <Prism html={this.props.decorator.description}/>
+        <div className="Module_body">
+          <Prism html={this.props.decorator.install} className="naked"/>
+          <h3>Description</h3>
+          <Prism html={this.props.decorator.description}/>
+        </div>
       </div>
     );
   }

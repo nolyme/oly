@@ -3,7 +3,7 @@ import { Kernel } from "oly-core";
 import { HttpClient, HttpClientException } from "oly-http";
 import { olySecurityErrors } from "../src/constants/errors";
 import { auth } from "../src/decorators/auth";
-import { JwtAuthService } from "../src/services/JwtAuthService";
+import { JwtAuth } from "../src/services/JwtAuth";
 import { Jwt } from "../src/utils/Jwt";
 
 class App {
@@ -21,7 +21,7 @@ describe("SecurityMiddlewares", () => {
     HTTP_SERVER_PORT: 6049,
   }).with(App);
   const server = kernel.inject(ApiProvider);
-  const jwt = kernel.inject(JwtAuthService);
+  const jwt = kernel.inject(JwtAuth);
   const client = kernel.inject(HttpClient).with({
     baseURL: server.hostname,
   });

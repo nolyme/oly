@@ -9,12 +9,16 @@ export class ApiService extends React.Component<{ module: IModuleContent; servic
   public render() {
     return (
       <div>
-        <small className="pt-text-muted">Service</small>
-        <h2>{this.props.service.name}</h2>
+        <div className="Module_head">
+          <small className="pt-text-muted">Service</small>
+          <h2>{this.props.service.name}</h2>
+        </div>
         <div className="separator"/>
-        <Prism html={this.props.service.install} className="naked"/>
-        <h3>Description</h3>
-        <Prism html={this.props.service.description}/>
+        <div className="Module_body">
+          <Prism html={this.props.service.install} className="naked"/>
+          <h3>Description</h3>
+          <Prism html={this.props.service.description}/>
+        </div>
       </div>
     );
   }

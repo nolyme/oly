@@ -133,7 +133,6 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
         >
           <form
             className="pt-input-group"
-            style={{marginRight: "20px"}}
             onSubmit={this.onSubmit}
           >
             <span className="pt-icon pt-icon-search"/>

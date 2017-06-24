@@ -6,12 +6,27 @@
 }
 
 .Module_view {
-  padding: 50px 150px 50px 50px;
   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.02));
+  p {
+    padding: 5px;
+    text-align: justify;
+  }
+}
+
+.Module_head {
+  padding: 50px 50px 0;
+}
+
+.Module_body {
+  padding: 50px 200px 50px 100px;
 }
 
 @media (max-width: $tablet) {
-  .Module_view {
-    padding: 20px;
+  .Module_head {
+    padding: 20px 20px 0;
+  }
+
+  .Module_body {
+    padding: 10px 20px 10px 20px;
   }
 }
