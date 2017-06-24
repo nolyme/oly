@@ -1,7 +1,7 @@
 {
   "name": "oly-retry",
   "description": "oly-retry",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "esm/index.js",
@@ -12,13 +12,11 @@
     "typescript",
     "retry"
   ],
-  "dependencies": {
-  },
   "devDependencies": {
-    "oly-core": "^0.12.2"
+    "oly-core": "^0.12.3"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.2"
+    "oly-core": "^0.12.3"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib esm",
