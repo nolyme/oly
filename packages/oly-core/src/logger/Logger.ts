@@ -65,7 +65,8 @@ export class Logger {
 
   /**
    * Change the componentName after instantiation.
-   * ```
+   *
+   * ```ts
    * kernel.inject(Logger).as('MyComponent');
    * ```
    *

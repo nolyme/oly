@@ -15,7 +15,7 @@
  *   try {
  *     throw new Error("A");
  *   } catch (e) {
- *    throw new Exception(e, "B");
+ *     throw new Exception(e, "B");
  *   }
  * } catch (e) {
  *  throw new Exception(e, "C");

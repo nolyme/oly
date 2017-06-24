@@ -17,11 +17,13 @@
     "oly-http": "^0.12.2",
     "oly-json": "^0.12.2",
     "oly-react": "^0.12.2",
+    "oly-socket": "^0.12.2",
+    "oly-orm": "^0.12.2",
     "oly-react-ssr": "^0.12.2",
     "oly-retry": "^0.12.2",
     "oly-security": "^0.12.2",
     "oly-swagger": "^0.12.2",
-    "react": "15.5.4"
+    "react": "15.6.1"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib **/*.js **/*.js.map **/*.d.ts",
