@@ -9,14 +9,6 @@ import { state } from "../../src/kernel/decorators/state";
 import { KernelException } from "../../src/kernel/exceptions/KernelException";
 import { Kernel } from "../../src/kernel/Kernel";
 
-declare global {
-  namespace jest {
-    interface Matchers { // tslint:disable-line
-      rejects: Matchers;
-    }
-  }
-}
-
 const createKernel = (o: any = {}): Kernel => {
   return Kernel.create({LOGGER_LEVEL: "ERROR", ...o});
 };

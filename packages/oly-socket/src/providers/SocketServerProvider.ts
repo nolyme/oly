@@ -11,7 +11,7 @@ export class SocketServerProvider {
   public sockets: ISocket[] = [];
 
   @state
-  protected server: ISocketServer;
+  public server: ISocketServer;
 
   @inject
   protected kernel: Kernel;
@@ -26,30 +26,51 @@ export class SocketServerProvider {
     this.sockets = [];
     this.server = SocketServerProvider.io.listen(this.httpServerProvider["http"]);
     this.server.on("connection", (socket: ISocket) => {
-      socket.kernel = this.kernel.fork();
-      socket.kernel["events"] = this.kernel["events"].concat([]);
-      socket.kernel.state("socket", socket);
-      const logger = socket.kernel.inject(Logger).as("SocketConnection");
-      logger.debug(`create new connection`);
-      socket.kernel.emit("connect");
-      this.sockets.push(socket);
-      socket.on("oly:message", ({event, data}: any) => {
-        logger.trace(`receive message ${event}`, {data});
-        socket.kernel.emit(event, data);
-      });
-      socket.on("disconnect", () => {
-        const i = this.sockets.indexOf(socket);
-        if (i > -1) {
-          this.sockets.slice(i, 1);
-        }
-        logger.debug("disconnect");
-        socket.kernel.emit("disconnect");
-      });
+      this.handleConnection(socket);
     });
   }
 
   public onStop(): Promise<void> {
     this.sockets = [];
     return new Promise<void>((resolve) => this.server.close(resolve));
+  }
+
+  protected handleConnection(socket: ISocket) {
+    socket.kernel = this.kernel.fork();
+
+    for (const e of this.kernel["events"]) {
+      if (typeof e.action !== "function") {
+        socket.kernel["events"].push({
+          ...e,
+          action: {
+            target: e.action.target,
+            propertyKey: e.action.propertyKey,
+          },
+        });
+      }
+    }
+
+    socket.kernel.state("socket", socket);
+
+    const logger = socket.kernel.inject(Logger).as("SocketConnection");
+    logger.debug(`create new connection`);
+
+    socket.kernel.emit("connect");
+
+    socket.on("oly:message", ({event, data}: any) => {
+      logger.trace(`receive message ${event}`, {data});
+      socket.kernel.emit(event, data);
+    });
+
+    socket.on("disconnect", () => {
+      const i = this.sockets.indexOf(socket);
+      if (i > -1) {
+        this.sockets.slice(i, 1);
+      }
+      logger.debug("disconnect");
+      socket.kernel.emit("disconnect");
+    });
+
+    this.sockets.push(socket);
   }
 }

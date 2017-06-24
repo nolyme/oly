@@ -31,7 +31,8 @@ export class WorkerProvider implements IProvider {
 
           this.logger.debug(`consume ${task.name} -> ${target.name}#${propertyKey}()`);
           await this.amqp.channel.assertQueue(task.name, task.assert);
-          await this.amqp.channel.consume(task.name, this.createHandler(target, propertyKey, task.name), task.consume);
+          await this.amqp.channel.consume(task.name,
+            this.createHandler(target, propertyKey, task.name), task.consume);
         }
       }
     }

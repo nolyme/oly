@@ -1,5 +1,6 @@
 import { Channel, connect, Connection, Options, Replies } from "amqplib";
 import { env, inject, IProvider, Kernel, Logger, state } from "oly-core";
+import { MemoryQueue } from "../services/MemoryQueue";
 
 export class AmqpProvider implements IProvider {
 
@@ -7,7 +8,7 @@ export class AmqpProvider implements IProvider {
    *
    */
   @env("AMQP_URL")
-  public readonly url: string = "amqp://localhost";
+  public readonly url: string = ":memory:";
 
   @state
   public connection: Connection;
@@ -52,8 +53,12 @@ export class AmqpProvider implements IProvider {
    */
   public async onStart() {
     this.logger.info(`connect to ${this.url}`);
-    this.connection = await connect(this.url);
-    this.channel = await this.connection.createChannel();
+    if (this.url === ":memory:") {
+      this.channel = new MemoryQueue();
+    } else {
+      this.connection = await connect(this.url);
+      this.channel = await this.connection.createChannel();
+    }
   }
 
   /**
@@ -61,7 +66,9 @@ export class AmqpProvider implements IProvider {
    */
   public async onStop() {
     this.logger.info(`close connection`);
-    await this.channel.close();
-    await this.connection.close();
+    if (this.url !== ":memory:") {
+      await this.channel.close();
+      await this.connection.close();
+    }
   }
 }

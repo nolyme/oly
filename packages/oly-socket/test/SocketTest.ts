@@ -27,7 +27,9 @@ describe("Socket", () => {
     }
   }
 
-  const kernelServer = Kernel.create().with(SocketServerProvider, MyServerService);
+  const kernelServer = Kernel.create({
+    HTTP_SERVER_PORT: 4039,
+  }).with(SocketServerProvider, MyServerService);
 
   const kernelClient = Kernel.create({
     SOCKET_REMOTE_URL: kernelServer.inject(HttpServerProvider).hostname,

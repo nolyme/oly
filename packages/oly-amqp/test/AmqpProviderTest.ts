@@ -9,7 +9,7 @@ describe("AmqpProvider", () => {
   class Tasks {
     static stack: IMessage[] = [];
 
-    @task("abc.queue")
+    @task
     abc(message: IMessage) {
       if (Tasks.stack.length === 1) {
         throw new Exception("boom");
@@ -22,10 +22,10 @@ describe("AmqpProvider", () => {
   const amqp = kernel.inject(AmqpProvider);
 
   it("should publish a message", async () => {
-    await amqp.purge("abc.queue");
-    await amqp.publish("abc.queue", "Hello");
-    await amqp.publish("abc.queue", "Hello");
-    await _.timeout(500);
+    await amqp.purge("Tasks.abc");
+    await amqp.publish("Tasks.abc", "Hello");
+    await amqp.publish("Tasks.abc", "Hello");
+    await _.timeout(50);
     expect(Tasks.stack.length).toBe(1);
     expect(Tasks.stack[0].properties.correlationId).toBe(kernel.id);
     expect(Tasks.stack[0].content.toString("UTF-8")).toBe("Hello");

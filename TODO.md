@@ -10,7 +10,6 @@
 - (oly-docs): multi version
 - (oly-docs): show env & exception in services/components
 - (oly-*) better coverage, especially react-router... :)
-- (oly-amqp) memory (for test & embedded)
   
 ### THOUGHTS
 

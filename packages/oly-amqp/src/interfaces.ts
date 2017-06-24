@@ -14,3 +14,8 @@ export interface ITasksMetadata extends IMetadata {
     [key: string]: ITaskProperty;
   };
 }
+
+export interface IMemoryWorker {
+  executor: (message: Message) => Promise<void> | void;
+  tasks: Message[];
+}
