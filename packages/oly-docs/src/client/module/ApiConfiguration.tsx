@@ -1,6 +1,7 @@
 import { attach, Go } from "oly-react";
 import * as React from "react";
 import { IModuleContent } from "../../shared/interfaces";
+import { Prism } from "../layout/Prism";
 
 @attach
 export class ApiConfiguration extends React.Component<{ module: IModuleContent }, {}> {
@@ -36,7 +37,7 @@ export class ApiConfiguration extends React.Component<{ module: IModuleContent }
                 </Go>
                 </td>
                 <td>{env.default}</td>
-                <td dangerouslySetInnerHTML={{__html: env.description}}/>
+                <td ><Prism html={env.description}/></td>
               </tr>
             ))}
             </tbody>

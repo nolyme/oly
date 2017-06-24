@@ -48,7 +48,7 @@ export class ApiServiceMethod extends React.Component<{ service: IDocService; me
                 <tr key={prop.name}>
                   <td><strong>{prop.name}</strong></td>
                   <td><code>{prop.type.replace("undefined | ", "")}</code></td>
-                  <td><Prism html={prop.default || ""}/></td>
+                  <td><Prism html={prop.default || "N/A"}/></td>
                   <td>{(prop.optional || !!prop.default) ? "" : "true"}</td>
                   <td><Prism html={prop.description}/></td>
                 </tr>

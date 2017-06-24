@@ -16,6 +16,6 @@ The set is based on known projects, such as [Koa](https://github.com/koajs/koa) 
 |                                            |                                        |
 |-------------------------------------------:|----------------------------------------|
 | [CORE](https://noly.me/oly/#/m/oly-core)   | The foundations.                       | 
-| [API](https://noly.me/oly/#/m/oly-api)     | REST api with Koa    .                 | 
+| [API](https://noly.me/oly/#/m/oly-api)     | REST api with Koa.                     | 
 | [REACT](https://noly.me/oly/#/m/oly-react) | React, SSR and routing.                | 
 | [TOOLS](https://noly.me/oly/#/m/oly-tools) | How to use TypeScript in browsers.     | 

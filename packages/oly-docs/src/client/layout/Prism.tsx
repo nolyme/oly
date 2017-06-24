@@ -78,6 +78,14 @@ export class Prism extends Component<{ html: string; className?: string }, {}> {
   }
 
   public render() {
+    if (!this.props.html) {
+      return (
+        <div className="pt-callout pt-icon-info-sign">
+          <h5>Documentation is missing</h5>
+          I'm so sorry, but it seems like there is no description about this thing yet. Come back later!
+        </div>
+      );
+    }
     return (
       <div
         className={"prism " + this.props.className}
