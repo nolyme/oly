@@ -1,3 +1,4 @@
+import { Global } from "../kernel/Global";
 /**
  * It's an enhancement of Error with toJSON and cause.
  * There is also a hack that allow instanceof with es5.
@@ -60,20 +61,20 @@ export class Exception extends Error {
    * It's not virtual, it's mutable.
    * By default, `name = constructor.name`.
    */
-  public name: string;
+  public readonly name: string;
 
   /**
    * Error cause.
    * Optional Error/Exception which has triggered this exception.
    * It's useful when you have long business logic.
    */
-  public cause?: Throwable;
+  public readonly cause?: Throwable;
 
   /**
    * Our witness error.
    * It's useful because we have a virtual #stack and #message.
    */
-  private source: Error & { isMutable?: boolean };
+  private readonly source: Error & { isMutable?: boolean };
 
   /**
    * Create a new exception.
@@ -87,20 +88,29 @@ export class Exception extends Error {
     this.__proto__ = trueProto;
 
     const sourceMessage = (typeof cause === "string"
-      ? cause
-      : message) || Exception.DEFAULT_MESSAGE;
+        ? cause
+        : message) || Exception.DEFAULT_MESSAGE;
 
-    this.name = (this.constructor as any).name || "Error";
-    // because we have a virtual message and a virtual stack
-    this.source = new Error();
+    const name = (this.constructor as any).name || "Error";
+    const source = new Error();
+
+    Object.defineProperty(this, "source", {get: () => source});
+    Object.defineProperty(this, "name", {get: () => name});
+
     this.source.message = sourceMessage;
 
     if (typeof cause !== "string" && typeof cause !== "undefined") {
-      this.cause = cause;
+      Object.defineProperty(this, "cause", {get: () => cause});
     }
 
     // if we have a default message, it will be overridden by children "default message"
     this.source.isMutable = this.source.message === Exception.DEFAULT_MESSAGE;
+
+    // show real stack trace on Node
+    // this breaks sourcemaps on browsers
+    if (!Global.isBrowser()) {
+      Object.defineProperty(this, "stack", {get: () => this.getLongStackTrace()});
+    }
   }
 
   /**

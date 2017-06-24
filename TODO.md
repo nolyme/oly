@@ -2,7 +2,6 @@
 
 ### SOON
 
-- (oly-core): error nodejs bad format
 - (oly-docs): split module (api & react)
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)
