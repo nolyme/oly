@@ -48,7 +48,7 @@ describe("HttpServerProvider", () => {
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(409);
       expect(e.message).toBe("MegaBoom");
-      expect(e.name).toBe("BoomBoomException");
+      expect(e.exception).toBe("BoomBoomException");
     }
   });
 });

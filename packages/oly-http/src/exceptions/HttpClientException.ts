@@ -1,4 +1,3 @@
-
 import { AxiosError } from "axios";
 import { Exception } from "oly-core";
 import { olyHttpErrors } from "../constants/errors";
@@ -12,6 +11,8 @@ export class HttpClientException extends Exception {
 
   public status: number = -1;
 
+  public exception: string;
+
   public cause: AxiosError;
 
   public constructor(source: AxiosError) {
@@ -24,7 +25,7 @@ export class HttpClientException extends Exception {
     if (this.isHttpServerException(source.response)) {
       this.message = source.response.data.message;
       this.status = source.response.data.status;
-      this.name = source.response.data.name;
+      this.exception = source.response.data.name;
     } else {
       this.message = olyHttpErrors.requestHasFailed(source.config.method, source.config.url);
       this.status = source.response.status;
