@@ -8,7 +8,6 @@ import { HttpClient } from "../src/services/HttpClient";
 describe("HttpServerProvider", () => {
 
   class BoomException extends HttpServerException {
-    name = "BoomBoomException";
     message = "Boom";
     status = 409;
   }
@@ -48,7 +47,7 @@ describe("HttpServerProvider", () => {
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(409);
       expect(e.message).toBe("MegaBoom");
-      expect(e.exception).toBe("BoomBoomException");
+      expect(e.exception).toBe("BoomException");
     }
   });
 });
