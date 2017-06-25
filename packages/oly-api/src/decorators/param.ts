@@ -31,7 +31,7 @@ export class ParamDecorator implements IDecorator {
           const builder = k.inject(KoaRouterBuilder);
           const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
           const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
-          const value: string = ctx.params[name.toLowerCase()];
+          const value: string = ctx.params[name];
 
           if (!value && this.options.required === true) {
             throw new BadRequestException(olyApiErrors.missing("param", name));

@@ -12,6 +12,7 @@
   
 ### THOUGHTS
 
+- (oly-react): transition-css, transition+reload
 - (oly-*): IEnv ... :(
 - (oly-orm): use knex + oly-json
 - (oly-react/pixie) pixie auto route
