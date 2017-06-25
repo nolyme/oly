@@ -18,3 +18,9 @@
     text-align: center;
   }
 }
+
+@media (max-width: $tablet) {
+  .Home > div {
+    padding: 20px;
+  }
+}

@@ -12,6 +12,7 @@ export interface IDocService {
   description: string;
   methods: IDocMethod[];
   install: string;
+  path: string;
 }
 
 export interface IDocParameter {
@@ -25,6 +26,7 @@ export interface IDocParameter {
 export interface IDocManual {
   content: string;
   name: string;
+  path: string;
 }
 
 export interface IDocComponent {
@@ -32,6 +34,7 @@ export interface IDocComponent {
   description: string;
   props: IDocParameter[];
   install: string;
+  path: string;
 }
 
 export interface IDocDecorator {
@@ -39,12 +42,14 @@ export interface IDocDecorator {
   description: string;
   parameters: IDocParameter[];
   install: string;
+  path: string;
 }
 
 export interface IDocException {
   name: string;
   description: string;
   install: string;
+  path: string;
 }
 
 export interface IDocEnv {
@@ -68,6 +73,7 @@ export interface IModuleContent {
   name: string;
   icon?: string;
   home: string;
+  version: string;
   interfaces: IInterface[];
   services: IDocService[];
   manuals: IDocManual[];

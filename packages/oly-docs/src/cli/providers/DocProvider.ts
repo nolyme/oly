@@ -76,11 +76,13 @@ export class DocProvider {
       ignoreCompilerErrors: true,
       tsconfig: resolve(project, "tsconfig.json"),
     });
+    const pkg = require(resolve(project, "package.json"));
     const sources = resolve(project, this.src);
 
     this.logger.info(`add module ${m.name}`);
 
     return {
+      version: pkg.version,
       decorators: this.parser.generateDecorator(app, sources, m),
       interfaces: [],
       components: this.parser.generateComponents(app, sources, m),

@@ -10,7 +10,9 @@ export class ApiService extends React.Component<{ module: IModuleContent; servic
     return (
       <div>
         <div className="Module_head">
-          <small className="pt-text-muted">Service</small>
+          <small className="pt-text-muted">
+            {this.props.service.name.indexOf("Provider") > -1 ? "Provider" : "Service"}
+          </small>
           <h2>{this.props.service.name}</h2>
         </div>
         <div className="separator"/>

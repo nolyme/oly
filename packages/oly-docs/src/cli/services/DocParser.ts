@@ -63,6 +63,7 @@ export class DocParser {
     results.map((r) => this.check(resolve(path, r)));
     return results.map((filepath) => {
       return {
+        path: filepath,
         name: basename(filepath, ".md"),
         content: this.mark(readFileSync(resolve(path, filepath), "UTF-8")),
       };
@@ -75,16 +76,15 @@ export class DocParser {
     results.map((r) => this.check(resolve(path, r)));
 
     const components = this.generateDeclarations(app, path, results);
-    return components.map((c) => {
-      const clazz = c.children.filter(
-        (p) => p.kindString === "Class")[0];
-      const props = c.children.filter(
-        (p) => p.kindString === "Interface" && p.name.indexOf("Props") > -1)[0];
+    return components.map((file) => {
+      const clazz = file.children.filter((p) => p.kindString === "Class")[0];
+      const props = file.children.filter((p) => p.kindString === "Interface" && p.name.indexOf("Props") > -1)[0];
       if (!clazz) {
         throw new Error("Invalid " + props);
       }
       this.logger.info(`push <${clazz.name}/>`);
       return {
+        path: file.originalName.replace(path, ""),
         name: clazz.name,
         description: this.getDescription(clazz),
         install: this.markInstall(clazz.name, m.name),
@@ -110,13 +110,17 @@ export class DocParser {
     results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
 
-    return declarations
-      .map((i) => i.children[i.children.length - 1])
-      .map((i) => this.mapDecorators(i, m.name))
-      .map((i) => {
-        this.logger.info(`push @${i.name}`);
-        return i;
-      });
+    return declarations.map((file) => {
+      const decorator = file.children[file.children.length - 1];
+      this.logger.info(`push @${decorator.name}`);
+      return {
+        path: file.originalName.replace(path, ""),
+        description: this.getDescription(decorator),
+        name: decorator.name,
+        install: this.markInstall(decorator.name, m.name),
+        parameters: [],
+      };
+    });
   }
 
   public generateService(app: Application, path: string, m: ModuleConfiguration): IDocService[] {
@@ -125,13 +129,17 @@ export class DocParser {
     results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
 
-    return declarations
-      .map((i) => i.children[i.children.length - 1])
-      .map((i) => this.mapService(i, m.name))
-      .map((i) => {
-        this.logger.info(`push ${i.name}`);
-        return i;
-      });
+    return declarations.map((file) => {
+      const service = file.children[file.children.length - 1];
+      this.logger.info(`push ${service.name}`);
+      return {
+        path: file.originalName.replace(path, ""),
+        description: this.getDescription(service),
+        methods: this.getPublicMethods(service),
+        install: this.markInstall(service.name, m.name),
+        name: service.name,
+      };
+    });
   }
 
   public generateException(app: Application, path: string, m: ModuleConfiguration): IDocException[] {
@@ -139,13 +147,16 @@ export class DocParser {
     const results = m.exceptions || [];
     results.map((r) => this.check(resolve(path, r)));
     const declarations = this.generateDeclarations(app, path, results);
-    return declarations
-      .map((i) => i.children.filter((c) => c.kind = ReflectionKind.Class)[0])
-      .map((i) => this.mapException(i, m.name))
-      .map((i) => {
-        this.logger.info(`push ${i.name}`);
-        return i;
-      });
+    return declarations.map((file) => {
+      const exception = file.children.filter((c) => c.kind = ReflectionKind.Class)[0];
+      this.logger.info(`push ${exception.name}`);
+      return {
+        path: file.originalName.replace(path, ""),
+        description: this.getDescription(exception),
+        install: this.markInstall(exception.name, m.name),
+        name: exception.name,
+      };
+    });
   }
 
   public generateEnv(app: Application, path: string, results: string[] = []): IDocEnv[] {
@@ -196,17 +207,8 @@ export class DocParser {
       return children;
     }
 
-    return children.filter((i: any) => files
-      .indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
-  }
-
-  public mapDecorators(decorator: DeclarationReflection, module: string): IDocDecorator {
-    return {
-      description: this.getDescription(decorator),
-      name: decorator.name,
-      install: this.markInstall(decorator.name, module),
-      parameters: [],
-    };
+    return children
+      .filter((i: any) => files.indexOf(i.originalName.replace(/\.tsx?/mgi, "")) > -1);
   }
 
   public mapParameter(parameter: ParameterReflection): IDocParameter {
@@ -216,23 +218,6 @@ export class DocParser {
       name: parameter.name,
       optional: this.getIsOptional(parameter),
       type: this.getType(parameter.type),
-    };
-  }
-
-  public mapService(service: DeclarationReflection, module: string): IDocService {
-    return {
-      description: this.getDescription(service),
-      methods: this.getPublicMethods(service),
-      install: this.markInstall(service.name, module),
-      name: service.name,
-    };
-  }
-
-  public mapException(exception: DeclarationReflection, module: string): IDocException {
-    return {
-      description: this.getDescription(exception),
-      install: this.markInstall(exception.name, module),
-      name: exception.name,
     };
   }
 

@@ -17,7 +17,7 @@ export class Layout extends Component<{}, {}> {
         <Helmet>
           <title>Docs</title>
           <link rel="icon" href="favicon.png" sizes="64x64" type="image/png"/>
-          <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         </Helmet>
         <Header/>
         <div className="flex flex-row flex-full">

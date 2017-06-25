@@ -43,6 +43,7 @@ export class SocketServerProvider {
         socket.kernel["events"].push({
           ...e,
           action: {
+            // skip instance
             target: e.action.target,
             propertyKey: e.action.propertyKey,
           },

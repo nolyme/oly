@@ -81,7 +81,7 @@ export class Header extends React.Component<{}, {}> {
               </Tabs2>
             </div>
             <div className="pt-navbar-group pt-align-right">
-
+              <div className="pt-tag pt-round">v{this.docs.modules[0].version}</div>
             </div>
           </div>
         </nav>
