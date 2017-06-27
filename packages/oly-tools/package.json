@@ -38,5 +38,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "echo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nolyme/oly.git"
   }
 }

@@ -48,7 +48,7 @@ export class Breadcrumbs extends React.Component<{}, {}> {
 
   @on(olyReactRouterEvents.TRANSITION_RENDER)
   public onTransitionRender() {
-    this.forceUpdate();
+    this.forceUpdate(); // :(
   }
 
   public render() {

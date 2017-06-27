@@ -6,6 +6,14 @@ export interface ISynchronizeOptions {
   verbose?: boolean;
 }
 
+/**
+ * Experimental
+ *
+ * Reload webpack dev server only if a remote server is up.
+ * This is useful if we have wds + nodemon
+ *
+ * @param options
+ */
 export const synchronize = (options: ISynchronizeOptions = {}) => {
   const http = require("http");
   const Server = require("webpack-dev-server/lib/Server");

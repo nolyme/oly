@@ -2,4 +2,4 @@
 "use strict";
 
 require("source-map-support/register");
-require("../lib/cli/main.cli");
+require("../lib/extractor/main.cli");

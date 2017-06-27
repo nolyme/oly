@@ -8,7 +8,4 @@ new Kernel({
 })
   .with(DocProvider)
   .start()
-  .catch((e) => {
-    console.error(e); // tslint:disable-line
-    process.exit(1);
-  });
+  .catch(console.error);
