@@ -58,5 +58,6 @@ export const helmet = (opt: object = {}): IKoaMiddleware => koaHelmet(opt || {no
  */
 export const context = (kernel: Kernel) => (ctx: IKoaContext, next: Function) => {
   ctx.kernel = kernel.fork();
+  ctx.kernel.state("Koa.context", ctx);
   return next();
 };

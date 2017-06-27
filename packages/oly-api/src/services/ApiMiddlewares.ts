@@ -90,9 +90,6 @@ export class ApiMiddlewares {
    */
   public invoke(definition: Class, propertyKey: string): IKoaMiddleware {
     return (ctx: IKoaContext) => {
-
-      ctx.kernel.state("Koa.context", ctx);
-
       return new Promise((eat) => eat(ctx.kernel.invoke(definition, propertyKey, [ctx]))).then((response) => {
         if (response != null) {
           // if controller returns 'something' => set to the response body

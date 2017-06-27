@@ -1,7 +1,8 @@
 import { AxiosError, AxiosInstance, AxiosRequestConfig, default as axiosInstance } from "axios";
-import { Exception, inject, Logger, state } from "oly-core";
+import { Exception, inject, Kernel, Logger, state } from "oly-core";
+import { olyHttpEvents } from "../constants/events";
 import { HttpClientException } from "../exceptions/HttpClientException";
-import { IHttpRequest, IHttpResponse } from "../interfaces";
+import { IHttpClientErrorEvent, IHttpRequest, IHttpResponse } from "../interfaces";
 
 /**
  * Simple wrapper of Axios.
@@ -14,6 +15,9 @@ export class HttpClient {
 
   @inject
   protected logger: Logger;
+
+  @inject
+  protected kernel: Kernel;
 
   /**
    * Configure a new axios instance.
@@ -124,6 +128,10 @@ export class HttpClient {
     this.logger.debug(`request ${options.method || "GET"} ${options.url} has failed`,
       {response: error.response.data});
 
-    throw new HttpClientException(error);
+    const e = new HttpClientException(error);
+
+    this.kernel.emit(olyHttpEvents.HTTP_CLIENT_ERROR, {error: e} as IHttpClientErrorEvent);
+
+    throw e;
   }
 }

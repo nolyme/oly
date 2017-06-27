@@ -11,6 +11,9 @@ export const olyApiErrors = {
   badRequest: (): string =>
     `The request had bad syntax or was inherently impossible to be satisfied`,
 
+  conflict: (): string =>
+    `The request could not be completed due to a conflict with the current state of the target resource.`,
+
   forbidden: (): string =>
     `Authentication was provided, but you are not permitted to perform the requested operation`,
 

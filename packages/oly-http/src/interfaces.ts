@@ -2,6 +2,7 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 import * as Koa from "koa";
 import { Kernel } from "oly-core";
 import { ZlibOptions } from "zlib";
+import { HttpClientException } from "./exceptions/HttpClientException";
 
 /**
  * Override default koa context.
@@ -95,3 +96,7 @@ export interface IHttpResponse<T> extends AxiosResponse {
  * @alias
  */
 export type IHttpRequest = AxiosRequestConfig;
+
+export interface IHttpClientErrorEvent {
+  error: HttpClientException;
+}
