@@ -1,8 +1,11 @@
-import { AxiosError, AxiosInstance, AxiosRequestConfig, default as axiosInstance } from "axios";
-import { Exception, inject, Kernel, Logger, state } from "oly-core";
+import { AxiosInstance, AxiosRequestConfig, default as axiosInstance } from "axios";
+import { inject, Kernel, Logger, state } from "oly-core";
 import { olyHttpEvents } from "../constants/events";
 import { HttpClientException } from "../exceptions/HttpClientException";
-import { IHttpClientErrorEvent, IHttpRequest, IHttpResponse } from "../interfaces";
+import {
+  IHttpClientBeforeEvent, IHttpClientErrorEvent, IHttpClientSuccessEvent, IHttpRequest,
+  IHttpResponse,
+} from "../interfaces";
 
 /**
  * Simple wrapper of Axios.
@@ -22,25 +25,48 @@ export class HttpClient {
   /**
    * Configure a new axios instance.
    * Useful for attach BASE_URL or similar stuff.
-   * Use it for test only.
+   * > Use it for test only.
    *
    * @param options   Axios configuration
    */
   public with(options: AxiosRequestConfig): this {
+
     this.axios = axiosInstance.create(options);
+
     return this;
   }
 
   /**
    * Create a new http request.
    *
-   * @param options   Http Request Options
+   * @param request   Http Request Options
    */
-  public request<T>(options: IHttpRequest): Promise<IHttpResponse<T>> {
-    this.logger.debug(`fetch ${options.method || "GET"} ${options.url}`, {request: options});
-    return this.axios
-      .request(options)
-      .catch((e: AxiosError) => this.errorHandler(options, e));
+  public async request<T>(request: IHttpRequest): Promise<IHttpResponse<T>> {
+
+    request.method = request.method || "GET";
+    request.url = request.url || "/";
+
+    this.logger.debug(`fetch ${request.method} ${request.url}`, {request});
+
+    await this.kernel.emit(olyHttpEvents.HTTP_CLIENT_BEFORE, {request} as IHttpClientBeforeEvent);
+
+    try {
+      const response = await this.axios.request(request);
+
+      await this.kernel.emit(olyHttpEvents.HTTP_CLIENT_SUCCESS, {response} as IHttpClientSuccessEvent);
+
+      return response;
+
+    } catch (e) {
+
+      const error = new HttpClientException(e);
+
+      this.logger.debug(`request ${request.method} ${request.url} has failed`, {error});
+
+      await this.kernel.emit(olyHttpEvents.HTTP_CLIENT_ERROR, {error} as IHttpClientErrorEvent);
+
+      throw error;
+    }
   }
 
   /**
@@ -48,7 +74,7 @@ export class HttpClient {
    * GET should be use by default.
    *
    * @param url       Complete url
-   * @param options   Request options (headers?)
+   * @param options   Request options
    */
   public get<T>(url: string, options: IHttpRequest = {}): Promise<IHttpResponse<T>> {
 
@@ -63,7 +89,7 @@ export class HttpClient {
    *
    * @param url       Complete url
    * @param data      Request body
-   * @param options   Request options (headers?)
+   * @param options   Request options
    */
   public post<T>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<IHttpResponse<T>> {
 
@@ -80,7 +106,7 @@ export class HttpClient {
    *
    * @param url       Complete url
    * @param data      Request body
-   * @param options   Request options (headers?)
+   * @param options   Request options
    */
   public put<T>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<IHttpResponse<T>> {
 
@@ -96,7 +122,7 @@ export class HttpClient {
    * DEL should be use when you remove data.
    *
    * @param url       Complete url
-   * @param options   Request options (headers?)
+   * @param options   Request options
    */
   public del<T>(url: string, options: IHttpRequest = {}): Promise<IHttpResponse<T>> {
 
@@ -109,29 +135,7 @@ export class HttpClient {
   /**
    *
    */
-  protected createAxios() {
+  protected createAxios(): AxiosInstance {
     return axiosInstance.create();
-  }
-
-  /**
-   * Catch any response with status >= 400.
-   *
-   * @param options     Request configuration
-   * @param error       Axios error
-   */
-  protected errorHandler(options: IHttpRequest, error: AxiosError) {
-
-    if (!error.response) {
-      throw new Exception(error.message);
-    }
-
-    this.logger.debug(`request ${options.method || "GET"} ${options.url} has failed`,
-      {response: error.response.data});
-
-    const e = new HttpClientException(error);
-
-    this.kernel.emit(olyHttpEvents.HTTP_CLIENT_ERROR, {error: e} as IHttpClientErrorEvent);
-
-    throw e;
   }
 }

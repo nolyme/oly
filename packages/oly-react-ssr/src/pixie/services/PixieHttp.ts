@@ -33,22 +33,14 @@ export class PixieHttp {
   public get root(): string {
     if (Global.isBrowser()) {
 
-      return this.apiRoot || this.pixie.get<string>("API_ROOT") || "/api";
+      return this.apiRoot || this.kernel.state("API_PREFIX") || "";
 
     } else {
-
-      if (this.apiRoot) {
-        return this.pixie.set("API_ROOT", this.apiRoot);
-      }
 
       // try to create API_ROOT based on oly-http an oly-api if available
       const port = this.kernel.state("HTTP_SERVER_PORT") || 3000;
       const host = this.kernel.state("HTTP_SERVER_HOST") || "localhost";
       const prefix = this.kernel.state("API_PREFIX") || "";
-
-      if (!!prefix) {
-        this.pixie.set("API_ROOT", prefix);
-      }
 
       return `http://${host}:${port}${prefix}`;
     }
@@ -75,9 +67,9 @@ export class PixieHttp {
    */
   public request<T>(options: IHttpRequest): Promise<T> {
 
+    options.method = options.method || "GET";
     options.url = options.url || "/";
     options.headers = options.headers || {};
-    options.method = options.method || "GET";
 
     const cacheKey = this.createCacheKey(options.method, options.url);
 
@@ -91,7 +83,6 @@ export class PixieHttp {
       }
     }
 
-    return this.pixie.fly<T>(cacheKey,
-      () => this.client.request<T>(options).then(({data}) => data));
+    return this.pixie.fly<T>(cacheKey, () => this.client.request<T>(options).then(({data}) => data));
   }
 }

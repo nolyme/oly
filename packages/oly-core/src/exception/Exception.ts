@@ -108,8 +108,10 @@ export class Exception extends Error {
 
     // show real stack trace on Node
     // this breaks sourcemaps on browsers
+
     if (!Global.isBrowser()) {
-      Object.defineProperty(this, "stack", {get: () => this.getLongStackTrace()});
+      // [DISABLED] perf reason : 200ms, this is not acceptable
+      // Object.defineProperty(this, "stack", {get: () => this.getLongStackTrace()});
     }
   }
 

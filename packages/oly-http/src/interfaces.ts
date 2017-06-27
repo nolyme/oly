@@ -97,6 +97,23 @@ export interface IHttpResponse<T> extends AxiosResponse {
  */
 export type IHttpRequest = AxiosRequestConfig;
 
+/**
+ *
+ */
+export interface IHttpClientBeforeEvent {
+  request: IHttpRequest;
+}
+
+/**
+ *
+ */
+export interface IHttpClientSuccessEvent<T = any> {
+  response: IHttpResponse<T>;
+}
+
+/**
+ *
+ */
 export interface IHttpClientErrorEvent {
   error: HttpClientException;
 }

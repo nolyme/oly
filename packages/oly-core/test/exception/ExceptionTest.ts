@@ -2,6 +2,14 @@ import { Exception } from "../../src/exception/Exception";
 
 describe("Exception", () => {
 
+  it("T2", () => {
+    const now = Date.now();
+    expect(new Exception()).toBeDefined();
+    const delta = Date.now() - now;
+    // most of the time delta is equal to 1
+    expect(delta).toBeLessThanOrEqual(10);
+  });
+
   class ExtendedException extends Exception {
   }
 

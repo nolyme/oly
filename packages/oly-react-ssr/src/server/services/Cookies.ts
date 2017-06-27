@@ -1,7 +1,6 @@
 import * as JsCookies from "js-cookie";
-import { Global, inject, Kernel } from "oly-core";
+import { Exception, Global, inject, Kernel } from "oly-core";
 import { IKoaContext } from "oly-http";
-import { Exception } from "../../../../oly-core/src/exception/Exception";
 
 export class Cookies {
 

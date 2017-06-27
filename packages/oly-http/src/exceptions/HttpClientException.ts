@@ -19,6 +19,8 @@ export class HttpClientException extends Exception {
     super(source);
 
     if (!source.response) {
+      this.exception = source.name;
+      this.message = source.message;
       return;
     }
 
