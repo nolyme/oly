@@ -1,5 +1,6 @@
-import { Class, IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
+import { IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
 import { IKoaContext } from "oly-http";
+import { olyRouterKeys } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
 import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
@@ -23,14 +24,19 @@ export class HeaderDecorator implements IDecorator {
   }
 
   public asParameter(target: object, propertyKey: string, index: number): void {
+    const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
+    const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
+    Meta.of({key: olyRouterKeys.router, target, propertyKey, index}).set({
+      kind: "header",
+      name,
+      type,
+    });
     Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
       type: Meta.designParamTypes(target, propertyKey)[index] as any,
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
           const builder = k.inject(KoaRouterBuilder);
-          const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
-          const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
           const value: string = ctx.header[name.toLowerCase()]; // TODO: Check if we need toLowerCase()
 
           if (!value && this.options.required === true) {

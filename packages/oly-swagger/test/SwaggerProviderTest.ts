@@ -1,28 +1,34 @@
-import { ApiProvider, get } from "oly-api";
-import { Kernel } from "oly-core";
+import { ApiProvider, body, get } from "oly-api";
+import { Kernel, Meta } from "oly-core";
 import { HttpClient } from "oly-http";
-import { use } from "oly-router";
+import { field } from "oly-json";
+import { olyRouterKeys } from "oly-router";
 import { api } from "../src/decorators/api";
 import { ISwaggerSpec } from "../src/interfaces";
 import { SwaggerProvider } from "../src/providers/SwaggerProvider";
 
-const toto = () =>
-  function hasRoleMiddleware(ctx: any, next: any) {
-    return next();
+describe("SwaggerProvider", () => {
+
+  const auth = (...roles: string[]) => (target: object, propertyKey: string) => {
+    Meta.of({key: olyRouterKeys.router, target, propertyKey}).set({
+      roles,
+    });
   };
 
-class Ctrl {
-  @use(toto())
-  @get("/")
-  @api({
-    description: "Toto",
-  })
-  index() {
-    return {ok: true};
+  class Data {
+    @field tata: string;
   }
-}
 
-describe("SwaggerProvider", () => {
+  class Ctrl {
+    @auth("ADMIN")
+    @get("/")
+    @api({
+      description: "Toto",
+    })
+    index(@body body: Data) {
+      return {ok: true};
+    }
+  }
 
   const kernel = Kernel.create({
     HTTP_SERVER_PORT: 6833,
@@ -36,6 +42,8 @@ describe("SwaggerProvider", () => {
       expect(data.swagger).toBe("2.0");
       expect(data.securityDefinitions.Bearer.in).toBe("header");
       expect(data.paths["/"].get.description).toBe("Toto");
+      expect(data.paths["/"].get.parameters[0].name).toBe("Data");
+      expect(data.definitions.Data.properties.tata.type).toBe("string");
     });
     it("should provide ui", async () => {
       const {data} = await client.get<any>("/swagger/ui");

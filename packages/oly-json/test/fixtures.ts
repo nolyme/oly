@@ -7,13 +7,16 @@ export enum Status {
   DISABLED,
 }
 
-export class Address {
+export abstract class AbstractAddress {
 
   @field({
     trim: false,
     upper: true,
   })
   street: string;
+}
+
+export class Address extends AbstractAddress {
 
   @field({
     of: String,

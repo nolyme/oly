@@ -5,10 +5,7 @@
 - attention: PixieBrowserProvider must be injected before ReactBro
 - router.go("/", {force: true}) ???
 - swagger/ui with my.domain.com is broken
-- ui oly-router in oly-react, with @route,@router and @use
-  - @use(secured) -> show <Login/> if not connected
 
-- (oly-react/pixie) universal Cookie.get() Cookie.set()
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)
 - (oly-docs): interfaces (popup) 
@@ -25,6 +22,7 @@
 - (oly-cli): init --ssr
 - (oly-ws): init, websocket with @on and fork(onconnect)
 - (oly-fs): init, fs api+mock, workspace, tmp
+- (oly-react): middleware react router ? (redirect login)
 
 ### MAYBE ONE DAY
 

@@ -1,4 +1,4 @@
-import { IMetadata } from "oly-core";
+import { Class, IMetadata } from "oly-core";
 
 /**
  *
@@ -20,6 +20,16 @@ export interface IRouterProperty {
   path: string;
   middlewares: Function[];
   api: any;
+  roles: string[];
+}
+
+/**
+ *
+ */
+export interface IRouterArgument {
+  kind: "param" | "query" | "header" | "body";
+  type: Class;
+  name: string;
 }
 
 /**
@@ -29,5 +39,8 @@ export interface IRouterMetadata extends IMetadata {
   target: IRouterTarget;
   properties: {
     [key: string]: IRouterProperty;
+  };
+  args: {
+    [key: string]: IRouterArgument[];
   };
 }

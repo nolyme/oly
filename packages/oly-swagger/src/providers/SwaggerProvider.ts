@@ -1,9 +1,12 @@
-import { ApiProvider, KoaRouterBuilder } from "oly-api";
+import { ApiProvider } from "oly-api";
 import { Global, IDeclarations, inject, Kernel, Logger } from "oly-core";
 import { HttpServerProvider, serve } from "oly-http";
-import { Json } from "oly-json";
-import { MetaRouter } from "oly-router";
+import { Json, olyMapperKeys } from "oly-json";
+import { IRouterProperty, MetaRouter } from "oly-router";
 import { join } from "path";
+import { Meta } from "../../../oly-core/src/metadata/Meta";
+import { IRouterArgument } from "../../../oly-router/src/interfaces";
+import { ISwaggerApi } from "../interfaces";
 
 /**
  * Auto-generate SwaggerSpec based on @route.
@@ -24,9 +27,6 @@ export class SwaggerProvider {
   protected httpServerProvider: HttpServerProvider;
 
   @inject
-  protected koaRouterBuilder: KoaRouterBuilder;
-
-  @inject
   protected apiProvider: ApiProvider;
 
   @inject
@@ -37,9 +37,9 @@ export class SwaggerProvider {
 
   /**
    *
-   * @param deps
+   * @param declarations
    */
-  protected onConfigure(deps: IDeclarations) {
+  protected onConfigure(declarations: IDeclarations) {
 
     this.swagger = {
       basePath: this.apiProvider.prefix || "/",
@@ -56,19 +56,18 @@ export class SwaggerProvider {
       tags: [],
     };
 
-    for (const dep of deps) {
-      if (MetaRouter.get(dep.definition)) {
-
-        const router = this.koaRouterBuilder.createFromDefinition(dep.definition);
+    for (const dep of declarations) {
+      const meta = MetaRouter.get(dep.definition);
+      if (meta) {
 
         this.swagger.tags.push({
           description: "",
           name: dep.definition.name,
         });
 
-        for (const layer of router.stack) {
-
-          const route: any = this.getRouteByLayer(dep.definition, layer);
+        const keys = Object.keys(meta.properties);
+        for (const propertyKey of keys) {
+          const prop = meta.properties[propertyKey];
           const api: any = Global.merge({
             parameters: [],
             produces: [
@@ -79,77 +78,27 @@ export class SwaggerProvider {
                 description: "successful operation",
               },
             },
-            summary: route.propertyKey,
+            summary: propertyKey,
             tags: [dep.definition.name],
-          }, route.api || {});
+          }, prop.api || {});
 
-          const isAuthOnly = !!layer.stack.filter((md: any) => md.name === "hasRoleMiddleware")[0];
-          if (isAuthOnly) {
-            this.swagger.securityDefinitions = {
-              Bearer: {
-                in: "header",
-                name: "Authorization",
-                type: "apiKey",
-              },
-            };
-            api.security = [{Bearer: []}];
-          }
+          this.parseSecurity(api, prop);
+          this.parseArguments(api, meta.args[propertyKey] || []);
 
-          if (route.args) {
-            for (const i of Object.keys(route.args)) {
-              const arg = route.args[i];
-              if (arg.path) {
-                api.parameters.push({
-                  description: "ID",
-                  in: "path",
-                  name: arg.path,
-                  required: true,
-                  type: "string",
-                });
-              }
-              if (arg.query) {
-                api.parameters.push({
-                  description: "Query Parameter",
-                  in: "query",
-                  name: arg.query,
-                  required: false,
-                  type: "string",
-                });
-              }
-              if (arg.body) {
-                api.parameters.push({
-                  description: "JSON Body",
-                  in: "body",
-                  name: "",
-                  required: true,
-                  schema: {
-                    $ref: "#/definitions/" + arg.body.name,
-                  },
-                });
-                this.swagger.definitions[arg.body.name] = this.json.schema(arg.body);
-              }
-            }
-          }
-
-          if (layer.stack.filter((md: any) => md.name === "hasRoleMiddleware")[0]) {
-            this.swagger.securityDefinitions = {
-              Bearer: {
-                in: "header",
-                name: "Authorization",
-                type: "apiKey",
-              },
-            };
-          }
-
-          // replace /toto/:id/toto by /toto/{id}/toto
-          const path = layer.path.replace(/:(\w*)/g, "{$1}");
+          const path = ((meta.target.prefix || "/") + prop.path)
+            .replace(/\/\//g, "/")
+            .replace(/:(\w*)/g, "{$1}");
 
           this.swagger.paths[path] = this.swagger.paths[path] || {};
-          this.swagger.paths[path][layer.methods[layer.methods.length - 1].toLowerCase()] = api;
+          this.swagger.paths[path][prop.method.toLowerCase()] = api;
         }
       }
     }
 
+    this.mountSwagger();
+  }
+
+  protected mountSwagger() {
     this.apiProvider.mount("/swagger/ui", serve(join(__dirname, "/../../resources/swagger-ui")));
     this.apiProvider.mount("/swagger.json", async (ctx) => {
       ctx.body = JSON.stringify(this.swagger);
@@ -159,25 +108,57 @@ export class SwaggerProvider {
     this.logger.info(`swagger ui ready on ${swaggerURL}`);
   }
 
-  /**
-   *
-   * @param Type
-   * @param layer
-   */
-  private getRouteByLayer(Type: any, layer: any): any {
+  protected parseSecurity(api: ISwaggerApi, prop: IRouterProperty) {
+    if (prop.roles) {
+      this.swagger.securityDefinitions = {
+        Bearer: {
+          in: "header",
+          name: "Authorization",
+          type: "apiKey",
+        },
+      };
+      api.security = [{Bearer: []}];
+      this.swagger.securityDefinitions = {
+        Bearer: {
+          in: "header",
+          name: "Authorization",
+          type: "apiKey",
+        },
+      };
+    }
+  }
 
-    const router = MetaRouter.get(Type);
-    if (router) {
-      for (const propertyKey of Object.keys(router.properties)) {
-        const r = router.properties[propertyKey];
-
-        if (r.method === "DEL" && (router.target.prefix || "") + r.path === layer.path) {
-          return Global.merge(r, {propertyKey});
-        }
-
-        if (r.method === layer.methods[layer.methods.length - 1]
-          && (router.target.prefix || "") + r.path === layer.path) {
-          return Global.merge(r, {propertyKey});
+  protected parseArguments(api: ISwaggerApi, args: IRouterArgument[]) {
+    for (const arg of args) {
+      if (arg.kind === "param") {
+        api.parameters.push({
+          description: "ID",
+          in: "path",
+          name: arg.name,
+          required: true,
+          type: "string",
+        });
+      } else if (arg.kind === "query") {
+        api.parameters.push({
+          description: "Query Parameter",
+          in: "query",
+          name: arg.name,
+          required: false,
+          type: "string",
+        });
+      } else if (arg.kind === "body") {
+        const hasMeta = Meta.of({key: olyMapperKeys.fields, target: arg.type}).has();
+        api.parameters.push({
+          description: "JSON Body",
+          in: "body",
+          name: arg.type.name,
+          required: true,
+          schema: hasMeta ? {
+            $ref: "#/definitions/" + arg.type.name,
+          } : undefined,
+        });
+        if (hasMeta) {
+          this.swagger.definitions[arg.type.name] = this.json.schema(arg.type);
         }
       }
     }

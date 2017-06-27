@@ -39,7 +39,7 @@ export class JsonSchemaReader {
     };
     jsonSchema.properties = {};
 
-    const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).get<IFieldsMetadata>();
+    const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).deep<IFieldsMetadata>();
     if (fieldsMetadata) {
 
       const keys = Object.keys(fieldsMetadata.properties);

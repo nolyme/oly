@@ -13,7 +13,7 @@ export class JsonMapper {
    */
   public mapClass<T>(definition: Class<T>, source: object): T {
     const obj = new definition();
-    const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).get<IFieldsMetadata>();
+    const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).deep<IFieldsMetadata>();
     if (fieldsMetadata) {
 
       const keys = Object.keys(fieldsMetadata.properties);

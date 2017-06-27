@@ -1,5 +1,6 @@
 import { Class, IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
 import { IKoaContext } from "oly-http";
+import { olyRouterKeys } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
 
@@ -22,12 +23,16 @@ export class BodyDecorator implements IDecorator {
   }
 
   public asParameter(target: object, propertyKey: string, index: number): void {
+    const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
+    Meta.of({key: olyRouterKeys.router, target, propertyKey, index}).set({
+      kind: "body",
+      name: "body",
+      type,
+    });
     Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
-      type: Meta.designParamTypes(target, propertyKey)[index] as any,
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
           const value: object | object[] = this.options.name ? ctx.request.body[this.options.name] : ctx.request.body;
 
           if (!value && this.options.required === true) {

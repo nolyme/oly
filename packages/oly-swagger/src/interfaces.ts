@@ -11,6 +11,32 @@ export interface IRouterPropertyApi {
 /**
  *
  */
+export interface ISwaggerApi {
+  parameters: any[];
+  produces: string[];
+  summary: string;
+  tags: string[];
+  description: string;
+  security: any[];
+  responses: {
+    [status: string]: {
+      description: string;
+    };
+  };
+}
+
+/**
+ *
+ */
+export interface IPaths {
+  [path: string]: {
+    [method: string]: ISwaggerApi;
+  };
+}
+
+/**
+ *
+ */
 export interface ISwaggerSpec {
   swagger: string;
   basePath: string;
@@ -23,23 +49,7 @@ export interface ISwaggerSpec {
   };
   schemes: string[];
   tags: Array<{ description: string; name: string }>;
-  paths: {
-    [path: string]: {
-      [method: string]: {
-        parameters: any[];
-        produces: string[];
-        summary: string;
-        tags: string[]
-        description: string;
-        security: any[];
-        responses: {
-          [status: string]: {
-            description: string;
-          };
-        }
-      };
-    };
-  };
+  paths: IPaths;
   securityDefinitions: {
     Bearer: {
       in: string;
