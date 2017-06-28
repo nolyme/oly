@@ -72,7 +72,7 @@ export class KoaRouterBuilder {
       }
       return !!value;
     } else if (type === Number) {
-      if (value === "") {
+      if (value === "" || value == null) {
         return null;
       }
       if (typeof value === "number") {

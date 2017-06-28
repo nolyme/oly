@@ -2,10 +2,10 @@
 
 ### SOON
 
-- attention: PixieBrowserProvider must be injected before ReactBro
 - router.go("/", {force: true}) ???
 - swagger/ui with my.domain.com is broken
-
+- koaParserAndCast merge with react query -> (oly-core): QueryParse (+qs?)
+- (oly-api): show http server error cause (options!!)
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)
 - (oly-docs): show env & exception in services/components

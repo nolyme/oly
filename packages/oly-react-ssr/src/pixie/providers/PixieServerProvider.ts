@@ -16,7 +16,7 @@ export class PixieServerProvider {
   /**
    * Hook - start
    */
-  protected onStart() {
+  protected onConfigure() {
 
     // /!\ this is a token handler for pixie-session in server side, SERVER SIDE
     this.reactServerProvider.use((ctx, next) => {

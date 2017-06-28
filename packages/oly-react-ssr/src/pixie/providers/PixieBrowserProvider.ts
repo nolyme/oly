@@ -43,7 +43,7 @@ export class PixieBrowserProvider {
   /**
    *
    */
-  protected onStart(): void {
+  protected onConfigure(): void {
 
     const data = this.browser.window[Pixie.stateName];
     if (!!data) {

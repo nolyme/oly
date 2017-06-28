@@ -87,8 +87,10 @@ export class SwaggerProvider {
             .replace(/\/\//g, "/")
             .replace(/:(\w*)/g, "{$1}");
 
+          const method = prop.method === "DEL" ? "DELETE" : prop.method;
+
           this.swagger.paths[path] = this.swagger.paths[path] || {};
-          this.swagger.paths[path][prop.method.toLowerCase()] = api;
+          this.swagger.paths[path][method.toLowerCase()] = api;
         }
       }
     }

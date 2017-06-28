@@ -37,7 +37,12 @@ export class A1 {
 
 export class A2 {
   @get("/query")
-  query(@query("a") a: string) {
+  query(@query a: string) {
+    return {a};
+  }
+
+  @get("/query/number")
+  queryNumber(@query a: number) {
     return {a};
   }
 
