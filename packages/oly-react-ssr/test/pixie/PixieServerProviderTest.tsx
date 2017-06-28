@@ -22,7 +22,7 @@ class App {
 
 describe("PixieServerProvider", () => {
 
-  const kernel = Kernel.create()
+  const kernel = Kernel.create({HTTP_SERVER_PORT: 12029})
     .with(App, PixieServerProvider);
   const server = kernel.inject(ReactServerProvider);
   const client = kernel.inject(HttpClient).with({
