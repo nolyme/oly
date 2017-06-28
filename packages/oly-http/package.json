@@ -1,7 +1,7 @@
 {
   "name": "oly-http",
   "description": "oly-http",
-  "version": "0.12.5",
+  "version": "0.12.6",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "esm/index.browser.js",
@@ -25,10 +25,10 @@
     "koa-static": "3.0.0"
   },
   "devDependencies": {
-    "oly-core": "^0.12.5"
+    "oly-core": "^0.12.6"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.5"
+    "oly-core": "^0.12.6"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib esm",
