@@ -9,28 +9,42 @@ import { IHttpResponse } from "../interfaces";
  */
 export class HttpClientException extends Exception {
 
+  /**
+   * Status of the failed request.
+   */
   public status: number = -1;
 
-  public exception: string;
+  /**
+   * Identifier (or not) exception/error name.
+   */
+  public type: string;
 
-  public cause: AxiosError;
+  /**
+   * Raw body is exists.
+   * Body can be a string/object/... and null!
+   */
+  public error?: AxiosError;
 
-  public constructor(source: AxiosError) {
-    super(source);
+  public constructor(error: AxiosError) {
+    super();
+    this.error = error;
 
-    if (!source.response) {
-      this.exception = source.name;
-      this.message = source.message;
+    if (!error.response) {
+      this.type = error.name;
+      this.message = error.message;
       return;
     }
 
-    if (this.isHttpServerException(source.response)) {
-      this.message = source.response.data.message;
-      this.status = source.response.data.status;
-      this.exception = source.response.data.name;
+    if (this.isHttpServerException(error.response)) {
+      // Error come from our Server with an HttpServerException
+      this.message = error.response.data.message;
+      this.status = error.response.data.status;
+      this.type = error.response.data.name;
     } else {
-      this.message = olyHttpErrors.requestHasFailed(source.config.method, source.config.url);
-      this.status = source.response.status;
+      // Error come from somewhere else
+      this.message = olyHttpErrors.requestHasFailed(error.config.method, error.config.url);
+      this.status = error.response.status;
+      this.type = "UnknownError";
     }
   }
 

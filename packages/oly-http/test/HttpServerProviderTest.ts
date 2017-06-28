@@ -43,11 +43,12 @@ describe("HttpServerProvider", () => {
     try {
       await client.del("/");
       throw new Error("");
-    } catch (e) {
+    } catch (b) {
+      const e: HttpClientException = b;
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(409);
       expect(e.message).toBe("MegaBoom");
-      expect(e.exception).toBe("BoomException");
+      expect(e.type).toBe("BoomException");
     }
   });
 });

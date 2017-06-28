@@ -14,3 +14,4 @@ export * from "./exceptions/ForbiddenException";
 export * from "./exceptions/MethodNotAllowedException";
 export * from "./exceptions/UnauthorizedException";
 export * from "./exceptions/ConflictException";
+export * from "oly-router";

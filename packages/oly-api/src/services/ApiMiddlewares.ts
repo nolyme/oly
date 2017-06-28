@@ -39,7 +39,7 @@ export class ApiMiddlewares {
 
       }).catch((e: any) => {
 
-        const exception = (e instanceof HttpServerException || typeof e === "object" && e.message && e.status && e.name)
+        const exception = (e instanceof HttpServerException)
           ? e
           : new HttpServerException(e);
 

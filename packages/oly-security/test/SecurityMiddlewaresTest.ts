@@ -52,7 +52,7 @@ describe("SecurityMiddlewares", () => {
     } catch (e) {
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(401);
-      expect(e.exception).toBe("JsonWebTokenException");
+      expect(e.type).toBe("JsonWebTokenException");
       expect(e.message).toBe(olySecurityErrors.invalidToken("jwt malformed"));
     }
   });
@@ -96,7 +96,7 @@ describe("SecurityMiddlewares", () => {
       expect(e.message).toBe(olySecurityErrors.tokenExpired());
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(401);
-      expect(e.exception).toBe("TokenExpiredException");
+      expect(e.type).toBe("TokenExpiredException");
     }
   });
 });
