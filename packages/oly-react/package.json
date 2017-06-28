@@ -21,12 +21,12 @@
     "history": "4.6.3",
     "path-to-regexp": "1.7.0",
     "prop-types": "15.5.10",
-    "qs": "6.4.0",
+    "qs": "6.5.0",
     "react-dom": "15.6.1"
   },
   "devDependencies": {
     "@types/cheerio": "0.22.1",
-    "@types/react": "15.0.31",
+    "@types/react": "15.0.33",
     "cheerio": "0.22.0",
     "oly-core": "^0.12.6",
     "react": "15.6.1"

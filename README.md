@@ -13,24 +13,6 @@ The set is based on known projects, such as [Koa](https://github.com/koajs/koa) 
 - easily and quickly test everything
 - unify contexts into one single class
 
-```ts
-import { Kernel, Logger, inject, state } from "oly-core";
-
-class Hello {
-  @inject logger: Logger;
-  @state("name") name;
-  
-  onStart() {
-    this.logger.info(`Hello ${this.name}`);
-  }
-}
-
-Kernel
-  .create({name: "world"})
-  .with(Hello)
-  .start();
-```
-
 ### Getting started
 
 |                                            |                                        |
@@ -38,4 +20,3 @@ Kernel
 | [CORE](https://noly.me/oly/#/m/oly-core)   | The foundations.                       | 
 | [API](https://noly.me/oly/#/m/oly-api)     | REST api with Koa.                     | 
 | [REACT](https://noly.me/oly/#/m/oly-react) | React, SSR and routing.                | 
-| [TOOLS](https://noly.me/oly/#/m/oly-tools) | How to use TypeScript in browsers.     | 

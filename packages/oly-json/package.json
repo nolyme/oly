@@ -14,7 +14,7 @@
     "ajv"
   ],
   "dependencies": {
-    "ajv": "5.1.5"
+    "ajv": "5.2.0"
   },
   "devDependencies": {
     "ajv-i18n": "2.0.2",

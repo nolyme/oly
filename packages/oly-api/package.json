@@ -14,12 +14,8 @@
     "koa"
   ],
   "dependencies": {
-    "@types/bcryptjs": "2.4.0",
-    "@types/jsonwebtoken": "7.2.0",
     "@types/koa-bodyparser": "3.0.23",
     "@types/koa-router": "7.0.22",
-    "bcryptjs": "2.4.3",
-    "jsonwebtoken": "7.4.1",
     "koa-bodyparser": "3.2.0",
     "koa-multer": "1.0.1",
     "koa-router": "7.2.1",

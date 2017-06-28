@@ -63,18 +63,6 @@ export interface IToolsOptions {
   template?: string;
 
   /**
-   * Opens a new browser tab when Webpack loads.
-   * Default is false.
-   */
-  open?: boolean;
-
-  /**
-   * Display nyan cat during the compilation.
-   * Default is false.
-   */
-  nyan?: boolean;
-
-  /**
    * Override typescript loader.
    */
   typescriptLoader?: Rule;

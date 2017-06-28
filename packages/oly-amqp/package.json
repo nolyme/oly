@@ -13,7 +13,7 @@
     "amqp"
   ],
   "dependencies": {
-    "@types/amqplib": "0.5.2",
+    "@types/amqplib": "0.5.3",
     "amqplib": "0.5.1"
   },
   "devDependencies": {
