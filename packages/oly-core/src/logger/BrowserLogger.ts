@@ -20,6 +20,7 @@ export class BrowserLogger extends Logger {
     const output = console[type.toLowerCase()] || console.log;
 
     if (text instanceof Error) {
+      // don't show .stack or .getLongStack, chrome doesn't like it
       output.apply(console, [text]);
     } else {
       if (Global.isBrowser() && this.hasColor) {

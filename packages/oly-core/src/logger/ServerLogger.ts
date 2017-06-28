@@ -1,3 +1,4 @@
+import { Exception } from "../exception/Exception";
 import { AnsiColor } from "./AnsiColor";
 import { Logger } from "./Logger";
 import { ILogLevel } from "./LogLevels";
@@ -18,7 +19,12 @@ export class ServerLogger extends Logger {
     const output = console.log;
 
     if (text instanceof Error) {
-      output.apply(console, [text]);
+      const stack = "\n" + (text instanceof Exception ? text.getLongStackTrace() : text.stack) + "\n";
+      if (AnsiColor.isSupported() && this.hasColor) {
+        output.apply(console, [AnsiColor.chalk.red(stack)]);
+      } else {
+        output.apply(console, [stack]);
+      }
     } else {
       if (AnsiColor.isSupported() && this.hasColor) {
         output.apply(console, [text]);
