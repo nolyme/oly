@@ -4,6 +4,7 @@ import { BrowserLogger } from "../logger/BrowserLogger";
 import { Logger } from "../logger/Logger";
 import { ServerLogger } from "../logger/ServerLogger";
 import { Meta } from "../metadata/Meta";
+import { TypeParser } from "../type/TypeParser";
 import { olyCoreErrors } from "./constants/errors";
 import { olyCoreEvents } from "./constants/events";
 import { Parent } from "./decorators/parent";
@@ -466,16 +467,15 @@ export class Kernel {
    * @param forceType   Convert string on given type (number or boolean only) when it's possible
    */
   public env(key: string, forceType?: Function): any {
-    const value = this.state(key);
+
+    let value = this.state(key);
 
     if (typeof value === "string") {
-      if (forceType && forceType === Boolean) {
-        return !(value === "0" || value === "false");
-      } else if (forceType && forceType === Number) {
-        return Number(value);
-      } else {
-        return _.template(value, this.store);
-      }
+      value = _.template(value, this.store);
+    }
+
+    if (forceType) {
+      value = TypeParser.parse(forceType, value);
     }
 
     return value;

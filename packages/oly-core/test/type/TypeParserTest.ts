@@ -1,0 +1,86 @@
+import { TypeParser } from "../../src/type/TypeParser";
+
+describe("TypeParser", () => {
+
+  it("should parse as string", () => {
+    expect(TypeParser.parse(String, undefined)).toBe(null);
+    expect(TypeParser.parse(String, null)).toBe(null);
+    expect(TypeParser.parse(String, "true")).toBe("true");
+    expect(TypeParser.parse(String, "false")).toBe("false");
+    expect(TypeParser.parse(String, "")).toBe("");
+    expect(TypeParser.parse(String, "azd")).toBe("azd");
+    expect(TypeParser.parse(String, "0")).toBe("0");
+    expect(TypeParser.parse(String, "1")).toBe("1");
+    expect(TypeParser.parse(String, 1)).toBe("1");
+    expect(TypeParser.parse(String, 0)).toBe("0");
+    expect(TypeParser.parse(String, -1)).toBe("-1");
+    expect(TypeParser.parse(String, true)).toBe("true");
+    expect(TypeParser.parse(String, false)).toBe("false");
+    expect(TypeParser.parse(String, {})).toBe("{}");
+    expect(TypeParser.parse(String, {a: "b"})).toBe("{\"a\":\"b\"}");
+    expect(TypeParser.parse(String, [])).toBe("[]");
+    expect(TypeParser.parse(String, [1, 2, 3])).toBe("[1,2,3]");
+  });
+
+  it("should parse as boolean", () => {
+    expect(TypeParser.parse(Boolean, undefined)).toBe(false);
+    expect(TypeParser.parse(Boolean, null)).toBe(false);
+    expect(TypeParser.parse(Boolean, "true")).toBe(true);
+    expect(TypeParser.parse(Boolean, "false")).toBe(false);
+    expect(TypeParser.parse(Boolean, "")).toBe(false);
+    expect(TypeParser.parse(Boolean, "azd")).toBe(true);
+    expect(TypeParser.parse(Boolean, "0")).toBe(false);
+    expect(TypeParser.parse(Boolean, "1")).toBe(true);
+    expect(TypeParser.parse(Boolean, 1)).toBe(true);
+    expect(TypeParser.parse(Boolean, 0)).toBe(false);
+    expect(TypeParser.parse(Boolean, -1)).toBe(true);
+    expect(TypeParser.parse(Boolean, true)).toBe(true);
+    expect(TypeParser.parse(Boolean, false)).toBe(false);
+    expect(TypeParser.parse(Boolean, {})).toBe(true);
+    expect(TypeParser.parse(Boolean, {a: "b"})).toBe(true);
+    expect(TypeParser.parse(Boolean, [])).toBe(true);
+    expect(TypeParser.parse(Boolean, [1, 2, 3])).toBe(true);
+  });
+
+  it("should parse as number", () => {
+    expect(TypeParser.parse(Number, undefined)).toBe(null);
+    expect(TypeParser.parse(Number, null)).toBe(null);
+    expect(TypeParser.parse(Number, "true")).toBeNaN();
+    expect(TypeParser.parse(Number, "false")).toBeNaN();
+    expect(TypeParser.parse(Number, "")).toBe(null);
+    expect(TypeParser.parse(Number, "azd")).toBeNaN();
+    expect(TypeParser.parse(Number, "0")).toBe(0);
+    expect(TypeParser.parse(Number, "1")).toBe(1);
+    expect(TypeParser.parse(Number, 1)).toBe(1);
+    expect(TypeParser.parse(Number, 0)).toBe(0);
+    expect(TypeParser.parse(Number, -1)).toBe(-1);
+    expect(TypeParser.parse(Number, true)).toBe(1);
+    expect(TypeParser.parse(Number, false)).toBe(0);
+    expect(TypeParser.parse(Number, {})).toBeNaN();
+    expect(TypeParser.parse(Number, {a: "b"})).toBeNaN();
+    expect(TypeParser.parse(Number, [])).toBe(0); // wtf ?
+    expect(TypeParser.parse(Number, [1, 2, 3])).toBeNaN();
+  });
+
+  it("should parse as object", () => {
+    expect(TypeParser.parse(Object, undefined)).toBe(null);
+    expect(TypeParser.parse(Object, null)).toBe(null);
+    expect(TypeParser.parse(Object, "true")).toEqual({});
+    expect(TypeParser.parse(Object, "false")).toEqual({});
+    expect(TypeParser.parse(Object, "")).toBe(null);
+    expect(TypeParser.parse(Object, "azd")).toEqual({});
+    expect(TypeParser.parse(Object, "0")).toEqual({});
+    expect(TypeParser.parse(Object, "1")).toEqual({});
+    expect(TypeParser.parse(Object, 1)).toEqual({});
+    expect(TypeParser.parse(Object, 0)).toBe(null);
+    expect(TypeParser.parse(Object, -1)).toEqual({});
+    expect(TypeParser.parse(Object, true)).toEqual({});
+    expect(TypeParser.parse(Object, false)).toBe(null);
+    expect(TypeParser.parse(Object, {})).toEqual({});
+    expect(TypeParser.parse(Object, {a: "b"})).toEqual({a: "b"});
+    expect(TypeParser.parse(Object, "{\"a\":\"b\"}")).toEqual({a: "b"});
+    expect(TypeParser.parse(Object, [])).toEqual([]);
+    expect(TypeParser.parse(Object, [1, 2, 3])).toEqual([1, 2, 3]);
+    expect(TypeParser.parse(Object, "[1,2,3]")).toEqual([1, 2, 3]);
+  });
+});
