@@ -2,7 +2,7 @@
   "private": true,
   "devDependencies": {
     "@types/jest": "20.0.2",
-    "@types/node": "8.0.5",
+    "@types/node": "8.0.6",
     "jest": "20.0.4",
     "lerna": "2.0.0-rc.5",
     "rimraf": "2.6.1",
