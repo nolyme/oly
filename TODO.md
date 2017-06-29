@@ -2,12 +2,8 @@
 
 ### SOON
 
-- KoaRouterbuilder on @param !!!!!!!!!!!!
-- @body should allow string/number/bool...
 - swagger/ui with my.domain.com is broken (use url=/api/swagger.json)
 - https://www.npmjs.com/package/swagger-ui-dist
-- koaParserAndCast merge with react query -> (oly-core): QueryParse (+qs?)
-- forward HttpClientException ? 
 
 - router.go("/", {force: true}) ???
 - (oly-api): show http server error cause (options!!)

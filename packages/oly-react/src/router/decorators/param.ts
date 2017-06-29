@@ -1,5 +1,5 @@
-import {IDecorator, Kernel, Meta, olyCoreKeys} from "oly-core";
-import {ITransition} from "../interfaces";
+import { IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly-core";
+import { ITransition } from "../interfaces";
 
 export interface IParamOptions {
   name?: string;
@@ -19,10 +19,11 @@ export class ParamDecorator implements IDecorator {
 
   public asParameter(target: object, propertyKey: string, index: number): void {
     const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
+    const type = Meta.designParamTypes(target, propertyKey)[index];
     Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
       type: Meta.designParamTypes(target, propertyKey)[index] as any,
       handler: (k: Kernel, [transition]: [ITransition]) => {
-        return transition.to.params[name];
+        return TypeParser.parse(type, transition.to.params[name]);
       },
     });
   }

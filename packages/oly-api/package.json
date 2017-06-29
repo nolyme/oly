@@ -14,8 +14,10 @@
     "koa"
   ],
   "dependencies": {
+    "@types/co-body": "^0.0.1",
     "@types/koa-bodyparser": "3.0.23",
     "@types/koa-router": "7.0.22",
+    "co-body": "^5.1.1",
     "koa-bodyparser": "3.2.0",
     "koa-multer": "1.0.1",
     "koa-router": "7.2.1",

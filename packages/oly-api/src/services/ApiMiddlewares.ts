@@ -1,4 +1,4 @@
-import { Class, Logger } from "oly-core";
+import { Class, env, Logger } from "oly-core";
 import { HttpServerException, IKoaContext, IKoaMiddleware } from "oly-http";
 import { olyApiErrors } from "../constants/errors";
 import { NotFoundException } from "../exceptions/NotFoundException";
@@ -26,6 +26,12 @@ import { NotFoundException } from "../exceptions/NotFoundException";
 export class ApiMiddlewares {
 
   /**
+   * Hide cause of HttpServerException.
+   */
+  @env("API_ERROR_HIDE_CAUSE")
+  public readonly hideCause: boolean = false;
+
+  /**
    * Basic error handler.
    */
   public errorHandler(): IKoaMiddleware {
@@ -48,6 +54,10 @@ export class ApiMiddlewares {
         ))
           ? e
           : new HttpServerException(e);
+
+        if (this.hideCause) {
+          delete exception.cause;
+        }
 
         ctx.status = exception.status;
         ctx.body = exception;

@@ -27,7 +27,7 @@ export const olyApiErrors = {
     `The server has not found anything matching the URI given`,
 
   missing: (what: string, name: string): string =>
-    `The ${what} '${name}' is missing`,
+    `The ${what} '${name}' is missing or invalid`,
 
   notFound: (): string =>
     `The server has not found anything matching the URI given`,

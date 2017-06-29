@@ -31,7 +31,7 @@ describe("ApiProvider", () => {
   });
   it("@query", async () => {
     expect(await fetch("/query?a=1")).toEqual({a: "1"});
-    expect(await fetch("/query")).toEqual({});
+    expect(await fetch("/query")).toEqual({a: null});
   });
   it("@query-required", async () => {
     expect((await fetch("/query/required")).message)
@@ -64,6 +64,10 @@ describe("ApiProvider", () => {
       message: olyApiErrors.internalError(),
       name: "HttpServerException",
       status: 500,
+      cause: {
+        message: "BOOM",
+        name: "Error",
+      },
     });
   });
 });

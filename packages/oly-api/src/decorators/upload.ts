@@ -40,6 +40,7 @@ export class UploadDecorator implements IDecorator {
 }
 
 /**
- *
+ * TODO: rename to @file("...") files: IFileUpload | IFileUpload[]
+ * Don't import multer here!!!
  */
 export const upload = Meta.decorator<IUploadOptions>(UploadDecorator);

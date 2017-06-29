@@ -1,9 +1,8 @@
-import { IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
+import { IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly-core";
 import { IKoaContext } from "oly-http";
 import { olyRouterKeys } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
-import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
 
 export interface IHeaderOptions {
   name?: string;
@@ -36,18 +35,15 @@ export class HeaderDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const builder = k.inject(KoaRouterBuilder);
           const value: string = ctx.header[name.toLowerCase()]; // TODO: Check if we need toLowerCase()
 
-          if (!value && this.options.required === true) {
+          const result = TypeParser.parse(type, value);
+
+          if (result == null && this.options.required === true) {
             throw new BadRequestException(olyApiErrors.missing("header", name));
           }
 
-          return builder.parseAndCast(
-            value,
-            type,
-            name,
-            "header");
+          return result;
         }
       },
     });

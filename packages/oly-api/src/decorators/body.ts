@@ -1,4 +1,4 @@
-import { Class, IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
+import { Class, IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly-core";
 import { IKoaContext } from "oly-http";
 import { olyRouterKeys } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
@@ -39,7 +39,19 @@ export class BodyDecorator implements IDecorator {
             throw new BadRequestException(olyApiErrors.missing("request", "body"));
           }
 
-          return value;
+          // !!!
+          // body is already parsed by the middleware koa-bodyparser (see ApiProvider)
+          // however, we MUST double check as we know here the "wanted type"
+
+          // hack
+          // {"Key": ""} - to -> "Key"
+          if (type === Number || type === String || type === Boolean) {
+            const keys = Object.keys(value);
+            const body = (keys.length === 1 && value[keys[0]] === "") ? keys[0] : value;
+            return TypeParser.parse(type, body);
+          }
+
+          return TypeParser.parse(type, value);
         }
       },
     });

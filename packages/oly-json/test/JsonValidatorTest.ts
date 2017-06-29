@@ -1,7 +1,6 @@
-import { Kernel } from "oly-core";
+import { Kernel, TypeParser } from "oly-core";
 import { IField } from "../src/interfaces";
 import { JsonValidator } from "../src/services/JsonValidator";
-import { TypeUtil } from "../src/utils/TypeUtil";
 
 describe("JsonValidator", () => {
 
@@ -37,6 +36,6 @@ describe("JsonValidator", () => {
     expect(() => validator.validateField(test, 1)).toThrow();
     expect(() => validator.validateField(test, "akzdnl")).toThrow();
     expect(() => validator.validateField(test, {})).toThrow();
-    expect(() => validator.validateField(test, TypeUtil.forceBoolean("true"))).not.toThrow();
+    expect(() => validator.validateField(test, TypeParser.parse(Boolean, "true"))).not.toThrow();
   });
 });

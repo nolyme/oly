@@ -1,4 +1,4 @@
-import { IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
+import { IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly-core";
 import { ITransition } from "../interfaces";
 
 export interface IQueryOptions {
@@ -19,28 +19,15 @@ export class QueryDecorator implements IDecorator {
 
   public asParameter(target: object, propertyKey: string, index: number): void {
     const name = this.options.name || Meta.getParamNames(target[propertyKey])[index];
+    const type = Meta.designParamTypes(target, propertyKey)[index];
     Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
       type: Meta.designParamTypes(target, propertyKey)[index] as any,
       handler: (k: Kernel, [transition]: [ITransition]) => {
-        const type = Meta.designParamTypes(target, propertyKey)[index];
-        if (type === Boolean) {
-          return !(
-          transition.to.query[name] == null
-          || transition.to.query[name] === "0"
-          || transition.to.query[name] === "false");
-        } else if (type === Number) {
-          if (transition.to.query[name] == null) {
-            return transition.to.query[name];
-          }
-          if (transition.to.query[name] === "") {
-            return null;
-          }
-          return Number(transition.to.query[name]);
-        } else if (type === String) {
-          return String(transition.to.query[name]);
-        } else {
-          return transition.to.query[name];
+        // /a?b -> b = true if Boolean
+        if (transition.to.query[name] === "" && type === Boolean) {
+          return true;
         }
+        return TypeParser.parse(type, transition.to.query[name]);
       },
     });
   }

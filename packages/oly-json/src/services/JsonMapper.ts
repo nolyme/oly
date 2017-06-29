@@ -1,4 +1,4 @@
-import { Class, Meta } from "oly-core";
+import { Class, Meta, TypeParser } from "oly-core";
 import { olyMapperKeys } from "../constants/keys";
 import { IField, IFieldsMetadata } from "../interfaces";
 import { TypeUtil } from "../utils/TypeUtil";
@@ -47,11 +47,11 @@ export class JsonMapper {
     } else if (type === "object" && typeof field.type === "function") {
       return this.mapObject(field, value);
     } else if (type === "boolean") {
-      return TypeUtil.forceBoolean(value);
+      return TypeParser.parseBoolean(value);
     } else if (type === "number") {
-      return TypeUtil.forceNumber(value);
+      return TypeParser.parseNumber(value);
     } else if (type === "string") {
-      return TypeUtil.forceString(value);
+      return TypeParser.parseString(value);
     } else {
       // nothing to do (null & any)
       return value;
@@ -88,13 +88,12 @@ export class JsonMapper {
         return this.mapClass(definition, value);
       } else if (definition === Object) {
         // if you have set an interface, but THIS IS UGLY
-        try {
-          return TypeUtil.forceObject(value);
-        } catch (e) {
+        const r = TypeParser.parseObject(value);
+        if (typeof r !== "object") {
           throw new Error(
             `You can't map '${field.name}' into an object, `
             + `it's a ${typeof value} and we have no information about this field.\n       `
-            + `Set @field({type: Class}) for a real auto-cast like Date or use @field({map: a => b})`);
+            + `Set @field({type: <Class>}) for a real auto-cast like Date or use @field({map: a => b})`);
         }
       } else {
         return new definition(value);

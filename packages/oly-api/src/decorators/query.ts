@@ -1,9 +1,8 @@
-import { IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
+import { IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly-core";
 import { IKoaContext } from "oly-http";
 import { olyRouterKeys } from "oly-router";
 import { olyApiErrors } from "../constants/errors";
 import { BadRequestException } from "../exceptions/BadRequestException";
-import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
 
 export interface IQueryOptions {
   name?: string;
@@ -35,18 +34,20 @@ export class QueryDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const builder = k.inject(KoaRouterBuilder);
           const value: string = ctx.query[name];
 
-          if (!value && this.options.required === true) {
+          // /a?b -> b = true if Boolean
+          if (value === "" && type === Boolean) {
+            return true;
+          }
+
+          const result = TypeParser.parse(type, value);
+
+          if (result == null && this.options.required === true) {
             throw new BadRequestException(olyApiErrors.missing("query", name));
           }
 
-          return builder.parseAndCast(
-            value,
-            type,
-            name,
-            "query");
+          return result;
         }
       },
     });

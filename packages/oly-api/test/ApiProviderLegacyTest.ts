@@ -175,7 +175,7 @@ describe("ApiProviderLegacy", () => {
       expect(await fetch("1?b=A")).toEqual({b: "A"});
     });
     it("should skip query if not set", async () => {
-      expect(await fetch("1")).toEqual({});
+      expect(await fetch("1")).toEqual({b: null});
     });
     it("should extract query as boolean", async () => {
       expect(await fetch("1?b=true")).toEqual({b: "true"});
@@ -192,14 +192,10 @@ describe("ApiProviderLegacy", () => {
       expect(await fetch("3?b=toto")).toEqual({b: null});
     });
     it("should extract query as object", async () => {
-      expect((await fetch("4", {params: {b: "h"}})).message)
-        .toBe(olyApiErrors.invalidFormat("query", "b", "json"));
       expect(await fetch("4", {params: {b: {h: 3}}})).toEqual({b: {h: 3}});
-    });
-    it("should extract query as object", async () => {
-      expect((await fetch("5", {params: {b: "h"}})).message)
-        .toBe(olyApiErrors.invalidFormat("query", "b", "json"));
+      expect(await fetch("4", {params: {b: {h: "2"}}})).toEqual({b: {h: "2"}});
       expect(await fetch("5", {params: {b: {name: "toto"}}})).toEqual({b: {name: "toto"}});
+      expect((await fetch("5", {params: {b: {name2: "toto"}}})).message).toContain("Validation has failed");
     });
   });
 });
