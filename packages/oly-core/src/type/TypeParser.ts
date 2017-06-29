@@ -1,7 +1,6 @@
 export class TypeParser {
 
   public static parse(as: Function, something: any): any {
-
     if (typeof as === "function") {
       switch (as) {
         case Boolean:

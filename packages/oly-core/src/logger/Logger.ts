@@ -32,9 +32,10 @@ export class Logger {
 
   /**
    * Set the level of your logger.
+   * TRACE < DEBUG < INFO < WARN < ERROR
    */
   @env("LOGGER_LEVEL")
-  protected logLevel: ILogLevel = "INFO";
+  protected logLevel: string = "INFO";
 
   /**
    * Enable or disable color.
@@ -135,7 +136,7 @@ export class Logger {
    * @param data
    */
   protected log(type: ILogLevel, message: string, data?: object) {
-    if (LogLevels[this.logLevel] <= LogLevels[type]) {
+    if (LogLevels[this.logLevel.toUpperCase()] <= LogLevels[type.toUpperCase()]) {
       if (data && data instanceof Error) {
         this.appender(type, this.format(type, message));
         this.appender(type, data);
