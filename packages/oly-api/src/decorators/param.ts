@@ -43,4 +43,4 @@ export class ParamDecorator implements IDecorator {
 /**
  *
  */
-export const param = Meta.decorator<IParamOptions>(ParamDecorator);
+export const param = Meta.decorator<IParamOptions | string>(ParamDecorator);

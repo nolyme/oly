@@ -5,6 +5,7 @@
 - swagger/ui with my.domain.com is broken (use url=/api/swagger.json)
 - https://www.npmjs.com/package/swagger-ui-dist
 
+- order between pixie / ssr / api
 - router.go("/", {force: true}) ???
 - (oly-api): show http server error cause (options!!)
 - (oly-docs): middlewares

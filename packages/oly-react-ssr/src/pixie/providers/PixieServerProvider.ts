@@ -16,7 +16,7 @@ export class PixieServerProvider {
   /**
    * Hook - start
    */
-  protected onConfigure() {
+  protected onStart() {
 
     // /!\ this is a token handler for pixie-session in server side, SERVER SIDE
     this.reactServerProvider.use((ctx, next) => {
@@ -49,7 +49,7 @@ export class PixieServerProvider {
 
     // set pixie store into index.html
     this.reactServerRenderer.templateTransforms.push(((template, context) => {
-      return template.replace(/<body(.*)>/, `<body$1>${context.get(Pixie).toHTML()}`);
+      return template.replace(/<body(.*)>/, `<body$1>${context.inject(Pixie).toHTML()}`);
     }));
   }
 }

@@ -53,4 +53,4 @@ export class HeaderDecorator implements IDecorator {
 /**
  *
  */
-export const header = Meta.decorator<IHeaderOptions>(HeaderDecorator);
+export const header = Meta.decorator<IHeaderOptions | string>(HeaderDecorator);

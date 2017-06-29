@@ -71,4 +71,4 @@ export class BodyDecorator implements IDecorator {
  * }
  * ```
  */
-export const body = Meta.decorator<IBodyOptions>(BodyDecorator);
+export const body = Meta.decorator<IBodyOptions | Class>(BodyDecorator);

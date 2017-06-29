@@ -15,7 +15,7 @@ export class Header extends React.Component<{}, {}> {
   @state("DOCS") private docs: IDocs;
 
   @action
-  public handleTabChange(module: string): Promise<ITransition> {
+  public handleTabChange(module: string): Promise<any> {
     return this.router.go({to: module});
   }
 

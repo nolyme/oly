@@ -49,7 +49,7 @@ export abstract class Repository<T> extends TypeRepository<T> implements IProvid
    * @param key     Name of the property
    * @param value   Value of the property
    */
-  public findOneBy(key: string, value: string): Promise<T> {
+  public findOneBy(key: string, value: string): Promise<T | undefined> {
     return this
       .createQueryBuilder("el")
       .where(`el.${key}=:value`)

@@ -40,7 +40,7 @@ describe("ObjectMapper", () => {
       },
     };
 
-    const json = Kernel.create().get(Json);
+    const json = Kernel.create().inject(Json);
     const obj = json.build(Data, JSON.stringify(raw));
 
     expect(obj.msg).toBe("hello world a1true");
@@ -50,9 +50,9 @@ describe("ObjectMapper", () => {
     expect(json.schema(Data)).toEqual({
       name: "Data",
       properties: {
-        arr1: {items: [{type: "string"}], type: "array"},
+        arr1: {items: {type: "string"}, type: "array"},
         arr2: {
-          items: [{
+          items: {
             name: "SubData",
             properties: {
               hello: {
@@ -63,7 +63,7 @@ describe("ObjectMapper", () => {
               "hello",
             ],
             type: "object",
-          }],
+          },
           type: "array",
         },
         bo: {
@@ -106,7 +106,7 @@ describe("ObjectMapper", () => {
       @field() password: string;
     }
 
-    const json = Kernel.create().get(JsonValidator);
+    const json = Kernel.create().inject(JsonValidator);
     const entry = {
       username: 2,
     };

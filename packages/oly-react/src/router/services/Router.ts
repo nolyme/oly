@@ -40,7 +40,7 @@ export class Router {
    * router.go({to: "/", query: {a: "b"}});
    * ```
    */
-  public go(query: string | IHrefQuery): Promise<ITransition> {
+  public go(query: string | IHrefQuery): Promise<ITransition | undefined> {
     return this.routerProvider.transition(typeof query === "string" ? {to: query} : query);
   }
 
@@ -51,7 +51,7 @@ export class Router {
    * router.reload();
    * ```
    */
-  public reload(): Promise<ITransition> {
+  public reload(): Promise<ITransition | undefined> {
     this.routerProvider.layers = [];
     return this.go({to: this.current.path, type: "REPLACE"});
   }

@@ -46,4 +46,4 @@ export class QueryDecorator implements IDecorator {
  *  }
  * ```
  */
-export const query = Meta.decorator<IQueryOptions>(QueryDecorator);
+export const query = Meta.decorator<IQueryOptions | string>(QueryDecorator);

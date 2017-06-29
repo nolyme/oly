@@ -37,7 +37,7 @@ describe("SecurityMiddlewares", () => {
     } catch (e) {
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(401);
-      expect(e.message).toBe(olyApiErrors.unauthorized());
+      expect(e.message).toContain(olyApiErrors.unauthorized());
     }
   });
 
@@ -52,8 +52,8 @@ describe("SecurityMiddlewares", () => {
     } catch (e) {
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(401);
-      expect(e.type).toBe("JsonWebTokenException");
-      expect(e.message).toBe(olySecurityErrors.invalidToken("jwt malformed"));
+      expect(e.body.name).toBe("JsonWebTokenException");
+      expect(e.message).toContain(olySecurityErrors.invalidToken("jwt malformed"));
     }
   });
 
@@ -66,7 +66,7 @@ describe("SecurityMiddlewares", () => {
       });
       throw new Error("That's not the expected error");
     } catch (e) {
-      expect(e.message).toBe(olyApiErrors.forbidden());
+      expect(e.message).toContain(olyApiErrors.forbidden());
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(403);
     }
@@ -93,10 +93,10 @@ describe("SecurityMiddlewares", () => {
       });
       throw new Error("That's not the expected error");
     } catch (e) {
-      expect(e.message).toBe(olySecurityErrors.tokenExpired());
+      expect(e.message).toContain(olySecurityErrors.tokenExpired());
       expect(e).toBeInstanceOf(HttpClientException);
       expect(e.status).toBe(401);
-      expect(e.type).toBe("TokenExpiredException");
+      expect(e.body.name).toBe("TokenExpiredException");
     }
   });
 });

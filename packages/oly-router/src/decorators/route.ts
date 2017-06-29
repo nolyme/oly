@@ -35,4 +35,4 @@ export class RouteDecorator implements IDecorator {
 /**
  *
  */
-export const route = Meta.decoratorWithOptions<IRouteOptions>(RouteDecorator);
+export const route = Meta.decoratorWithOptions<IRouteOptions | string>(RouteDecorator);

@@ -334,7 +334,7 @@ export class Kernel {
    * @deprecated Use Kernel#inject()
    * @internal
    */
-  public get<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
+  public get<T>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
     return this.inject(definition, options);
   }
 
@@ -349,7 +349,7 @@ export class Kernel {
    * @param definition          IDefinition or IDefinition
    * @param options             Injection options
    */
-  public inject<T extends IProvider>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
+  public inject<T>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
 
     // skip declaration, just inject
     if (typeof definition === "function" && (options.register === false || !!options.instance)) {
@@ -510,7 +510,7 @@ export class Kernel {
       wait: () => {
         event.disabled = true;
         this.events.splice(this.events.indexOf(event), 1);
-        return new Promise((resolve) => this.on(key, resolve, unique));
+        return new Promise((resolve) => this.on(key, resolve, {unique}));
       },
     };
   }
@@ -847,7 +847,7 @@ export class Kernel {
    * @param definition    IDefinition with event metadata
    * @param instance      Instance to decorate
    */
-  private processEvents<T extends IListener>(definition: Class<T>, instance: T): T {
+  private processEvents<T>(definition: Class<T>, instance: T): T {
 
     const eventsMetadata = Meta.of({key: olyCoreKeys.events, target: definition}).deep<IEventsMetadata>();
     if (eventsMetadata) {
@@ -864,7 +864,7 @@ export class Kernel {
 
       if (observers.length > 0) {
         // this is currently used by oly-react
-        instance.__free__ = () => {
+        (instance as IListener).__free__ = () => {
           observers.forEach((obs) => obs.free());
         };
       }

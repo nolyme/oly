@@ -4,7 +4,7 @@ import { Kernel } from "../Kernel";
 /**
  * How to define a declaration.
  */
-export interface IDeclaration<T extends IProvider = IProvider> {
+export interface IDeclaration<T = any> {
   // each or once ?
   singleton: boolean;
   // the definition
@@ -31,7 +31,7 @@ export type IDeclarations = IDeclaration[];
 /**
  * Inline complex definition.
  */
-export interface IDefinition<T extends IProvider = IProvider> {
+export interface IDefinition<T = any> {
   // definition identifier
   provide: Class<T>;
   // the used definition/factory. default is value of `provide`

@@ -80,7 +80,7 @@ export class JsonSchemaReader {
     if (jsonSchema.type === "array") {
       const array = field as IMetaArray;
       const item: IField = typeof array.of === "function" ? {type: array.of, name: ""} : array.of;
-      jsonSchema.items = [this.extractProperty(item)];
+      jsonSchema.items = this.extractProperty(item);
     }
 
     return jsonSchema;

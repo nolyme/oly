@@ -67,8 +67,8 @@ export class ReactRouterProvider implements IProvider {
   /**
    * Start a transition.
    *
-   * @param query
-   * @returns {Promise<ITransition>}
+   * @param query     Query href
+   * @returns         A transition object or nothing if transition was aborted
    */
   public async transition(query: IHrefQuery): Promise<ITransition | undefined> {
 
