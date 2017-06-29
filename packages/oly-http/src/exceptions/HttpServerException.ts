@@ -32,8 +32,7 @@ export class HttpServerException extends Exception {
 
   public toJSON(): object {
     return {
-      message: this.message,
-      name: this.name,
+      ...super.toJSON(),
       status: this.status,
     };
   }
