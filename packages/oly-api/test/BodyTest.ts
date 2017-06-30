@@ -20,7 +20,7 @@ describe("BodyTest", () => {
     }
   }
 
-  const kernel = Kernel.create({LOGGER_LEVEL: "TRACE"}).with(A);
+  const kernel = Kernel.create().with(A);
   const server = kernel.inject(ApiProvider);
   const client = kernel.inject(HttpClient).with({baseURL: server.hostname});
   const extract = ({data}: any) => data.data;

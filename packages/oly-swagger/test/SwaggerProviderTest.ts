@@ -31,7 +31,7 @@ describe("SwaggerProvider", () => {
   }
 
   const kernel = Kernel.create({
-    HTTP_SERVER_PORT: 6833,
+    HTTP_SERVER_PORT: 6331,
   }).with(Ctrl, SwaggerProvider);
   const server = kernel.inject(ApiProvider);
   const client = kernel.inject(HttpClient).with({baseURL: server.hostname});

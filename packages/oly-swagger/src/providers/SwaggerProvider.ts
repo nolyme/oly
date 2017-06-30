@@ -3,7 +3,7 @@ import { Global, IDeclarations, inject, Kernel, Logger, Meta } from "oly-core";
 import { HttpServerProvider, serve } from "oly-http";
 import { Json, olyMapperKeys } from "oly-json";
 import { IRouterArgument, IRouterProperty, MetaRouter } from "oly-router";
-import { join } from "path";
+import { dirname } from "path";
 import { ISwaggerApi } from "../interfaces";
 
 /**
@@ -99,7 +99,7 @@ export class SwaggerProvider {
   }
 
   protected mountSwagger() {
-    this.apiProvider.mount("/swagger/ui", serve(join(__dirname, "/../../node_modules/swagger-ui-dist")));
+    this.apiProvider.mount("/swagger/ui", serve(dirname(require.resolve("swagger-ui-dist"))));
     this.apiProvider.mount("/swagger.json", async (ctx) => {
       ctx.body = JSON.stringify(this.swagger);
     });
