@@ -1,5 +1,6 @@
+import { use } from "oly-api";
 import { Meta } from "oly-core";
-import { olyRouterKeys, use } from "oly-router";
+import { olyRouterKeys } from "oly-router";
 import { hasRole } from "../middlewares/hasRole";
 
 /**

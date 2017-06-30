@@ -7,6 +7,8 @@ export * from "./decorators/param";
 export * from "./decorators/post";
 export * from "./decorators/put";
 export * from "./decorators/query";
+export * from "./decorators/use";
+export * from "./decorators/router";
 export * from "./exceptions/BadRequestException";
 export * from "./exceptions/NotFoundException";
 export * from "./exceptions/UnauthorizedException";

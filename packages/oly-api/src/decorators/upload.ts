@@ -1,6 +1,6 @@
 import { IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
 import { IKoaContext } from "oly-http";
-import { use } from "oly-router";
+import { use } from "./use";
 
 export const multer: any = require("koa-multer"); // tslint:disable-line
 

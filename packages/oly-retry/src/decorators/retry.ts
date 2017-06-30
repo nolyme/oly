@@ -24,6 +24,6 @@ export class RetryDecorator implements IDecorator {
 }
 
 /**
- * Debug time of a function.
+ *
  */
 export const retry = Meta.decoratorWithOptions<IRetryOptions>(RetryDecorator);

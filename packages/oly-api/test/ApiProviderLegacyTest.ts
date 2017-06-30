@@ -2,7 +2,6 @@ import { equal } from "assert";
 import { Kernel } from "oly-core";
 import { HttpClient, HttpServerException, IHttpRequest } from "oly-http";
 import { build, field } from "oly-json";
-import { router } from "oly-router";
 import { olyApiErrors } from "../src/constants/errors";
 import { body } from "../src/decorators/body";
 import { del } from "../src/decorators/del";
@@ -10,6 +9,7 @@ import { get } from "../src/decorators/get";
 import { param } from "../src/decorators/param";
 import { post } from "../src/decorators/post";
 import { query } from "../src/decorators/query";
+import { router } from "../src/decorators/router";
 import { ApiProvider } from "../src/providers/ApiProvider";
 
 describe("ApiProviderLegacy", () => {

@@ -1,6 +1,5 @@
 import { IKoaMiddleware } from "oly-http";
 import { array, build, field } from "oly-json";
-import { router, use } from "oly-router";
 import { body } from "../src/decorators/body";
 import { del } from "../src/decorators/del";
 import { get } from "../src/decorators/get";
@@ -9,6 +8,8 @@ import { param } from "../src/decorators/param";
 import { post } from "../src/decorators/post";
 import { put } from "../src/decorators/put";
 import { query } from "../src/decorators/query";
+import { router } from "../src/decorators/router";
+import { use } from "../src/decorators/use";
 import { IUploadedFile } from "../src/interfaces";
 
 export const dummyMiddleware: IKoaMiddleware = async (ctx, next) => {
