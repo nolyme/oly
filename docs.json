@@ -97,7 +97,9 @@
         "decorators/body.ts",
         "decorators/param.ts",
         "decorators/header.ts",
-        "decorators/query.ts"
+        "decorators/query.ts",
+        "decorators/router.ts",
+        "decorators/use.ts"
       ],
       "services": [
         "providers/ApiProvider.ts"

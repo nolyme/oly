@@ -99,24 +99,17 @@ export class SwaggerProvider {
   }
 
   protected mountSwagger() {
-    this.apiProvider.mount("/swagger/ui", serve(join(__dirname, "/../../resources/swagger-ui")));
+    this.apiProvider.mount("/swagger/ui", serve(join(__dirname, "/../../node_modules/swagger-ui-dist")));
     this.apiProvider.mount("/swagger.json", async (ctx) => {
       ctx.body = JSON.stringify(this.swagger);
     });
 
-    const swaggerURL = `${this.apiProvider.hostname}/swagger/ui/?url=${this.apiProvider.hostname}/swagger.json`;
+    const swaggerURL = `${this.apiProvider.hostname}/swagger/ui/?url=${this.apiProvider.prefix}/swagger.json`;
     this.logger.info(`swagger ui ready on ${swaggerURL}`);
   }
 
   protected parseSecurity(api: ISwaggerApi, prop: IRouterProperty) {
     if (prop.roles) {
-      this.swagger.securityDefinitions = {
-        Bearer: {
-          in: "header",
-          name: "Authorization",
-          type: "apiKey",
-        },
-      };
       api.security = [{Bearer: []}];
       this.swagger.securityDefinitions = {
         Bearer: {

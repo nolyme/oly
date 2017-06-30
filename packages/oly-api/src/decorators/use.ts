@@ -1,5 +1,5 @@
 import { IDecorator, Meta } from "oly-core";
-import { olyRouterKeys } from "../constants/keys";
+import { olyRouterKeys } from "oly-router";
 
 export type IUseOptions = Function;
 
@@ -29,6 +29,6 @@ export class UseDecorator implements IDecorator {
 }
 
 /**
- *
+ * Define a middleware.
  */
 export const use = Meta.decoratorWithOptions<IUseOptions>(UseDecorator);

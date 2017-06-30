@@ -1,5 +1,5 @@
 import { IDecorator, Meta } from "oly-core";
-import { olyRouterKeys } from "../constants/keys";
+import { olyRouterKeys } from "oly-router";
 
 export interface IRouterOptions {
   prefix?: string;
@@ -27,6 +27,6 @@ export class RouterDecorator implements IDecorator {
 }
 
 /**
- *
+ * Configure router.
  */
 export const router = Meta.decoratorWithOptions<IRouterOptions | string>(RouterDecorator);

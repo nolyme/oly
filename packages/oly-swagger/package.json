@@ -16,7 +16,8 @@
   "dependencies": {
     "oly-http": "^0.12.7",
     "oly-json": "^0.12.7",
-    "oly-router": "^0.12.7"
+    "oly-router": "^0.12.7",
+    "swagger-ui-dist": "3.0.17"
   },
   "devDependencies": {
     "oly-api": "^0.12.7",
