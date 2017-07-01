@@ -3,6 +3,7 @@
  *
  * ```ts
  * import { olyApiErrors } from "oly-api";
+ *
  * olyApiErrors.missing = (w, n) => "override message like that";
  * ```
  */
@@ -19,9 +20,6 @@ export const olyApiErrors = {
 
   internalError: (): string =>
     `The server encountered an unexpected condition which prevented it from fulfilling the request`,
-
-  invalidFormat: (type: string, key: string, expected: string): string =>
-    `Invalid format. The ${type} '${key}' should be a ${expected}`,
 
   methodNotAllowed: (): string =>
     `The server has not found anything matching the URI given`,
@@ -40,7 +38,4 @@ export const olyApiErrors = {
 
   unauthorized: (): string =>
     `The request requires user authentication`,
-
-  undefinedAction: (actionName: string): string =>
-    `Undefined action "${actionName}". Function isn't declared`,
 };

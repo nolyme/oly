@@ -9,7 +9,6 @@ $ npm install oly-core
 ```
 
 > All o*l*y modules depend on oly-core. 
-This is the only module written without external library.
 
 ### Why
 

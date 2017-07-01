@@ -1,6 +1,6 @@
 import { get } from "oly-api";
 
-export class RootController {
+export class RootApi {
 
   @get("/")
   public index() {

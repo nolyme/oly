@@ -11,12 +11,11 @@
     "typescript"
   ],
   "dependencies": {
-    "@types/react": "^15.0.33",
+    "@types/react": "15.0.33",
     "oly-api": "^0.12.7",
     "oly-core": "^0.12.7",
     "oly-http": "^0.12.7",
     "oly-json": "^0.12.7",
-    "oly-orm": "^0.12.7",
     "oly-react": "^0.12.7",
     "oly-react-ssr": "^0.12.7",
     "oly-retry": "^0.12.7",

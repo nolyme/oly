@@ -1,5 +1,5 @@
+import { Exception } from "../exception/Exception";
 import { _ } from "../kernel/Global";
-import { DecoratorException } from "./DecoratorException";
 import {
   IDecorator,
   IDecoratorConstructor,
@@ -84,7 +84,7 @@ export class Meta {
           !!Decorator.prototype[n]);
         const target = meta.target.name + (p ? `#${p}` : "");
 
-        throw new DecoratorException(`You can't use '${name}' on '${target}' (${name}: ${accepts})`);
+        throw new Exception(`You can't use '${name}' on '${target}' (${name}: ${accepts})`);
       }
     };
   }

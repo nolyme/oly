@@ -102,7 +102,8 @@
         "decorators/use.ts"
       ],
       "services": [
-        "providers/ApiProvider.ts"
+        "providers/ApiProvider.ts",
+        "services/ApiMiddlewares.ts"
       ]
     },
     {

@@ -1,4 +1,5 @@
 import * as koaBodyParser from "koa-bodyparser";
+import * as KoaRouter from "koa-router";
 import { Class, env, IDeclarations, inject, IProvider, Logger } from "oly-core";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
 import { MetaRouter } from "oly-router";
@@ -6,7 +7,6 @@ import { MethodNotAllowedException } from "../exceptions/MethodNotAllowedExcepti
 import { NotImplementedException } from "../exceptions/NotImplementedException";
 import { IKoaRouter } from "../interfaces";
 import { ApiMiddlewares } from "../services/ApiMiddlewares";
-import { KoaRouterBuilder } from "../services/KoaRouterBuilder";
 
 /**
  *
@@ -18,9 +18,6 @@ export class ApiProvider implements IProvider {
    */
   @env("API_PREFIX")
   public prefix: string = "/api";
-
-  @inject
-  protected koaRouterBuilder: KoaRouterBuilder;
 
   @inject
   protected apiMiddlewares: ApiMiddlewares;
@@ -60,7 +57,7 @@ export class ApiProvider implements IProvider {
    * @param definition   Class with Router Metadata
    */
   public register(definition: Class): this {
-    const router = this.koaRouterBuilder.createFromDefinition(definition);
+    const router = this.createFromDefinition(definition);
     return this
       .logRouter(router, definition)
       .mountRouter(router);
@@ -128,5 +125,41 @@ export class ApiProvider implements IProvider {
       this.logger.debug(`mount ${method} ${path} -> ${definition.name}#${(layer as any).propertyKey}()`);
     }
     return this;
+  }
+
+  /**
+   * Transform router metadata into a fresh koa-router object.
+   *
+   * @param definition   Annotated class with router metadata
+   */
+  protected createFromDefinition(definition: Class): KoaRouter {
+
+    const routerMetadata = MetaRouter.get(definition);
+    if (!routerMetadata) {
+      throw new Error("There is no meta router in this class");
+    }
+
+    const prefix = (routerMetadata.target.prefix && routerMetadata.target.prefix !== "/")
+      ? routerMetadata.target.prefix
+      : "";
+    const koaRouter = new KoaRouter({prefix});
+
+    const keys = Object.keys(routerMetadata.properties);
+    for (const propertyKey of keys) {
+
+      const route = routerMetadata.properties[propertyKey];
+      const mount = koaRouter[route.method.toLowerCase()];
+
+      mount.apply(koaRouter, [
+        route.path,
+        ...route.middlewares,
+        this.apiMiddlewares.invoke(definition, propertyKey),
+      ]);
+
+      // hack used for logging only (@see ApiProvider)
+      (koaRouter.stack[koaRouter.stack.length - 1] as any).propertyKey = propertyKey;
+    }
+
+    return koaRouter;
   }
 }

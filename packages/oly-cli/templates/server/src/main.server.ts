@@ -1,11 +1,11 @@
 import { ApiProvider } from "oly-api";
 import { Kernel } from "oly-core";
-import { RootController } from "./controllers/RootController";
+import { RootApi } from "./api/RootApi";
 
 new Kernel()
   .with(
     ApiProvider,
-    RootController,
+    RootApi,
   )
   .start()
   .catch(console.error);
