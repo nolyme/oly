@@ -1,7 +1,6 @@
-import { Class } from "oly-core";
+import { Class, inject } from "oly-core";
 import { EntityManager, QueryRunner, Repository as TypeRepository } from "typeorm";
 import { EntityMetadata } from "typeorm/metadata/EntityMetadata";
-import { inject } from "../../../oly-core/src/kernel/decorators/inject";
 import { IRepository } from "../interfaces";
 import { DatabaseProvider } from "../providers/DatabaseProvider";
 
