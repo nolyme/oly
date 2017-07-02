@@ -1,6 +1,6 @@
 export * from "./decorators";
 export * from "./providers/DatabaseProvider";
-export * from "./providers/Repository";
+export * from "./services/Repository";
 
 import * as _orm from "typeorm";
 

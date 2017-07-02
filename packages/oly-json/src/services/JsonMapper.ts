@@ -1,9 +1,12 @@
-import { Class, Meta, TypeParser } from "oly-core";
+import { Class, inject, Kernel, Meta, TypeParser } from "oly-core";
 import { olyMapperKeys } from "../constants/keys";
 import { IField, IFieldsMetadata } from "../interfaces";
 import { TypeUtil } from "../utils/TypeUtil";
 
 export class JsonMapper {
+
+  @inject
+  protected kernel: Kernel;
 
   /**
    * Map object to class based on definition.
@@ -12,7 +15,11 @@ export class JsonMapper {
    * @param source          Json object data
    */
   public mapClass<T>(definition: Class<T>, source: object): T {
-    const obj = new definition();
+
+    const obj = source instanceof definition
+      ? this.kernel.inject(definition, {instance: source as any})
+      : this.kernel.inject(definition, {register: false});
+
     const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).deep<IFieldsMetadata>();
     if (fieldsMetadata) {
 

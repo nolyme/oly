@@ -20,6 +20,7 @@
     "oly-react-ssr": "^0.12.7",
     "oly-retry": "^0.12.7",
     "oly-security": "^0.12.7",
+    "oly-orm": "^0.12.7",
     "oly-socket": "^0.12.7",
     "oly-swagger": "^0.12.7",
     "react": "15.6.1"

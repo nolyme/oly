@@ -1,9 +1,44 @@
-import { Class, env, IDeclaration, inject, IProvider, Logger, state } from "oly-core";
-import { Connection, createConnection, DriverOptions, Entity, getMetadataArgsStorage } from "typeorm";
+import { Class, env, IDeclaration, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { IFieldsMetadata, olyMapperKeys } from "oly-json";
+import {
+  Column,
+  ColumnOptions,
+  Connection,
+  createConnection,
+  Entity,
+  EventSubscriber,
+  getMetadataArgsStorage,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { TableMetadataArgs } from "typeorm/metadata-args/TableMetadataArgs";
 import { parse } from "url";
+import { IRepository } from "../interfaces";
+import { EverythingSubscriber } from "../services/EverythingSubscriber";
+
+declare module "oly-json/lib/interfaces" {
+  interface IField {
+    column: ColumnOptions;
+  }
+}
 
 /**
- * Typeorm connection manager.
+ * TypeORM connection provider.
+ *
+ * ```ts
+ *  class MyDatabaseProvider extends DatabaseProvider {
+ *
+ *    createConnection(entities) {
+ *      return {
+ *        entities,
+ *        // ...
+ *      };
+ *    }
+ *  }
+ *
+ *  Kernel
+ *    .create()
+ *    .with({provide: DatabaseProvider, use: MyDatabaseProvider});
+ * ```
  */
 export class DatabaseProvider implements IProvider {
 
@@ -13,29 +48,34 @@ export class DatabaseProvider implements IProvider {
   @env("DATABASE_AUTO_SYNC")
   public autoSync: boolean = true;
 
-  @env("DATABASE_SHOW_LOGS")
-  public showLogs: boolean = false;
-
   @state
   public connection: Connection;
 
   @inject
+  protected kernel: Kernel;
+
+  @inject
   protected logger: Logger;
+
+  @inject
+  protected subscriber: EverythingSubscriber;
 
   /**
    * Hook - start
    *
-   * @param deps  Kernel dependencies
+   * @param declarations  Kernel dependencies
    */
-  public async onStart(deps: Array<IDeclaration<{ type: Class }>>): Promise<void> {
+  public async onStart(declarations: Array<IDeclaration<IRepository>>): Promise<void> {
     this.logger.info(`connect to '${this.url}' ...`);
-    this.connection = await this.createConnection(deps);
+    const entities = this.getEntities(declarations);
+    this.connection = await this.createConnection(entities);
   }
 
   /**
    * Hook - stop
    */
   public async onStop(): Promise<void> {
+    this.logger.info(`close '${this.url}' ...`);
     await this.connection.close();
   }
 
@@ -43,11 +83,11 @@ export class DatabaseProvider implements IProvider {
    *
    * @param url
    */
-  protected getDriver(url: string): DriverOptions {
+  protected getDriver(url: string) {
 
     if (url === ":memory:") {
       return {
-        storage: ":memory:",
+        database: ":memory:",
         type: "sqlite",
       };
     }
@@ -62,8 +102,7 @@ export class DatabaseProvider implements IProvider {
     };
 
     if (url.indexOf("sqlite") > -1) {
-      driver.storage = url.replace(/sqlite:\/?/, "");
-      driver.database = "";
+      driver.database = url.replace(/sqlite:\/?/, "");
     } else {
       driver.host = info.hostname;
       driver.port = info.port;
@@ -78,13 +117,16 @@ export class DatabaseProvider implements IProvider {
    *
    * @param declarations
    */
-  protected getEntities(declarations: Array<IDeclaration<{ type?: Class }>>): Function[] {
+  protected getEntities(declarations: Array<IDeclaration<IRepository>>): Function[] {
 
-    const tables = getMetadataArgsStorage().tables.toArray();
+    const tables = getMetadataArgsStorage().tables;
     const entities: Class[] = [];
+
     for (const d of declarations) {
-      if (d.instance && d.instance.type) {
-        entities.push(d.instance.type);
+      if (d.instance && d.instance.entityType) {
+        this.logger.debug(`register entity ${d.instance.entityType.name}`);
+
+        entities.push(this.processEntity(tables, d.instance.entityType));
       }
     }
 
@@ -93,36 +135,81 @@ export class DatabaseProvider implements IProvider {
       const undeclaredEntities = getMetadataArgsStorage()
         .relations
         .filter((c) => c.target === entity)
-        .toArray()
         .map((c: any) => c.type())
-        .filter((type) => entities.indexOf(type) === -1);
+        .filter((type) => entities.indexOf(type) === -1)
+        .map((e) => this.processEntity(tables, e));
 
       entities.push(...undeclaredEntities);
     }
-
-    entities.forEach((e) => {
-      // ensure @entity on each Entity
-      if (tables.filter((t) => t.target === e).length === 0) {
-        Entity()(e);
-      }
-    });
 
     return entities;
   }
 
   /**
+   *
+   */
+  protected processEntity(tables: TableMetadataArgs[],
+                          entity: Class): Class {
+
+    // ensure @entity on each Entity
+    if (tables.filter((t) => t.target === entity).length === 0) {
+      this.logger.trace(`force @Entity() to ${entity.name}`);
+      Entity()(entity);
+    }
+
+    const meta = Meta.of({key: olyMapperKeys.fields, target: entity}).get<IFieldsMetadata>();
+    if (meta) {
+      const keys = Object.keys(meta.properties);
+      for (const propertyKey of keys) {
+        const prop = meta.properties[propertyKey];
+        const metaType = Meta.of({key: olyMapperKeys.fields, target: prop.type}).get<IFieldsMetadata>();
+        if (metaType) {
+          const options = prop.column || {type: "json", nullable: !prop.required};
+          Column(options)(entity.prototype, propertyKey);
+        } else if (propertyKey === "id") {
+          meta.properties[propertyKey].required = false;
+          PrimaryGeneratedColumn(prop.column || {})(entity.prototype, propertyKey);
+        } else {
+          const options = prop.column || {type: "json", nullable: !prop.required};
+          Column(options)(entity.prototype, propertyKey);
+        }
+      }
+    }
+
+    return entity;
+  }
+
+  /**
    * Create a new connection.
    *
-   * @param deps  Kernel dependencies
+   * @param entities  Kernel dependencies
    */
-  protected createConnection(deps: Array<IDeclaration<{ type: Class }>>): Promise<Connection> {
+  protected createConnection(entities: Function[]): Promise<Connection> {
+    const driver = this.getDriver(this.url);
+    const subscriber = this.createSubscriber();
     return createConnection({
       autoSchemaSync: this.autoSync,
-      driver: this.getDriver(this.url),
-      entities: this.getEntities(deps),
+      ...driver,
+      subscribers: [subscriber],
+      entities,
       logging: {
-        logQueries: this.showLogs,
+        logQueries: true,
+        logger: (level: string, message: string) => {
+          this.logger.trace(`(${level}) ${message}`);
+        },
       },
     });
+  }
+
+  protected createSubscriber() {
+    const subscriber = this.subscriber;
+
+    function Wrapper() {
+      return subscriber;
+    }
+
+    EventSubscriber()(Wrapper);
+
+    return Wrapper as any;
   }
 }

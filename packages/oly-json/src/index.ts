@@ -9,3 +9,4 @@ export * from "./services/JsonValidator";
 export * from "./services/JsonSchemaReader";
 export * from "./services/JsonMapper";
 export * from "./services/JsonSanitizer";
+export * from "./exceptions/ValidationException";
