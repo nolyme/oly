@@ -28,6 +28,7 @@
     "@types/cheerio": "0.22.1",
     "@types/react": "15.0.33",
     "cheerio": "0.22.0",
+    "oly-json": "^0.12.7",
     "oly-core": "^0.12.7",
     "react": "15.6.1"
   },

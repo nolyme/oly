@@ -27,7 +27,8 @@
     "webpack-node-externals": "1.6.0"
   },
   "devDependencies": {
-    "webpack": "3.0.0"
+    "webpack": "3.0.0",
+    "webpack-dev-server": "^2.5.0"
   },
   "peerDependencies": {
     "webpack": "^3.0.0"

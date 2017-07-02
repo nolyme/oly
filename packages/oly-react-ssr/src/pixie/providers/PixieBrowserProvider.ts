@@ -1,8 +1,9 @@
 import { inject, Logger } from "oly-core";
-import { Browser } from "oly-react";
+import { Browser, ReactBrowserProvider } from "oly-react";
 import { Pixie } from "../services/Pixie";
 import { PixieHttp } from "../services/PixieHttp";
 import { PixieSession } from "../services/PixieSession";
+import { AutoPixieHttpProvider } from "./AutoPixieHttpProvider";
 
 export class PixieBrowserProvider {
 
@@ -20,6 +21,12 @@ export class PixieBrowserProvider {
 
   @inject
   protected browser: Browser;
+
+  @inject
+  protected autoPixieHttpProvider: AutoPixieHttpProvider;
+
+  @inject
+  protected reactBrowserProvider: ReactBrowserProvider;
 
   /**
    *

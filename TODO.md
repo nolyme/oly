@@ -1,8 +1,12 @@
 ## TODO
 
+### BUG
+
+- (oly-react-ssr): '/abc?' is active in server, not browser => conflict
+- (oly-react): @action is broken in custom func by props
+
 ### SOON
 
-- order between pixie / ssr / api
 - router.go("/", {force: true}) ???
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)

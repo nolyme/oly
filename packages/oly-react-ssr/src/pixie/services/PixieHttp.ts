@@ -33,7 +33,7 @@ export class PixieHttp {
   public get root(): string {
     if (Global.isBrowser()) {
 
-      return this.apiRoot || this.kernel.state("API_PREFIX") || "";
+      return this.apiRoot || this.pixie.get<string>("API_PREFIX") || "";
 
     } else {
 
@@ -41,6 +41,10 @@ export class PixieHttp {
       const port = this.kernel.state("HTTP_SERVER_PORT") || 3000;
       const host = this.kernel.state("HTTP_SERVER_HOST") || "localhost";
       const prefix = this.kernel.state("API_PREFIX") || "";
+
+      if (prefix) {
+        this.pixie.set("API_PREFIX", prefix);
+      }
 
       return `http://${host}:${port}${prefix}`;
     }
@@ -54,7 +58,7 @@ export class PixieHttp {
    * @internal
    */
   public createCacheKey(method: string, url: string) {
-    return `${method} ${url.replace(/\//img, "")}`;
+    return `${method}_${url}`;
   }
 
   /**

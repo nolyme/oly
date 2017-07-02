@@ -26,7 +26,9 @@ export * from "./interfaces";
 /**
  * Loaders ref.
  */
-export const loaders = _loaders;
+export const loaders = {
+  ..._loaders,
+};
 
 /**
  * Plugins ref.
@@ -135,6 +137,19 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     path: options.dist,
   };
 
+  if (options.exclude) {
+    const exclude = options.exclude;
+    config.externals = [
+      (context, request, callback: any) => {
+        if (exclude.test(request)) {
+          const chunks = request.split("/");
+          return callback(null, `{${chunks[chunks.length - 1]}: class Empty {}};`);
+        }
+        callback();
+      },
+    ];
+  }
+
   // Loaders
 
   config.module = {
@@ -200,16 +215,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
     config.plugins.push(
       new UglifyJsPlugin({
-        beautify: false,
         comments: false,
-        compress: {
-          screw_ie8: true,
-          warnings: false,
-        },
-        mangle: {
-          keep_fnames: true,
-          screw_ie8: true,
-        },
       }),
     );
   }

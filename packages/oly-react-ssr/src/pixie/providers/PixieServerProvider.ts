@@ -4,6 +4,7 @@ import { ReactServerRenderer } from "../../server/services/ReactServerRenderer";
 import { Pixie } from "../services/Pixie";
 import { PixieHttp } from "../services/PixieHttp";
 import { PixieSession } from "../services/PixieSession";
+import { AutoPixieHttpProvider } from "./AutoPixieHttpProvider";
 
 export class PixieServerProvider {
 
@@ -12,6 +13,9 @@ export class PixieServerProvider {
 
   @inject
   protected readonly reactServerRenderer: ReactServerRenderer;
+
+  @inject
+  protected readonly autoPixieHttpProvider: AutoPixieHttpProvider;
 
   /**
    * Hook - start
@@ -29,6 +33,9 @@ export class PixieServerProvider {
       const pixie = kernelOfThisRequestOnly.inject(Pixie);
       const session = kernelOfThisRequestOnly.inject(PixieSession);
       const http = kernelOfThisRequestOnly.inject(PixieHttp);
+      const autoPixieHttpProvider = kernelOfThisRequestOnly.inject(AutoPixieHttpProvider);
+
+      autoPixieHttpProvider.onStart(ctx.kernel["declarations"]);
 
       // force pixie http root here
       // this will write API_ROOT into pixie_data

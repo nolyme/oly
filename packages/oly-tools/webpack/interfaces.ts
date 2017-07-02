@@ -38,6 +38,11 @@ export interface IToolsOptions {
   production?: boolean;
 
   /**
+   * Don't bundle files that match pattern.
+   */
+  exclude?: RegExp;
+
+  /**
    * Add more env variable to process.env
    * NODE_ENV is already set by 'production: true' / -p ...
    */
