@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import { Kernel } from "oly-core";
+import { page } from "oly-react";
 import { PixieBrowserProvider } from "../../src/pixie/providers/PixieBrowserProvider";
 import { Pixie } from "../../src/pixie/services/Pixie";
 
@@ -12,6 +13,10 @@ describe("PixieBrowserProvider", () => {
   };
 
   class FakeApp {
+    @page
+    home() {
+      return "";
+    }
   }
 
   const kernel = Kernel.create()

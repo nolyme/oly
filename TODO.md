@@ -7,7 +7,8 @@
 
 ### SOON
 
-- router.go("/", {force: true}) ???
+- json val allErrors
+- router.go({to: "/", force: true})
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)
 - (oly-docs): show env & exception in services/components
