@@ -79,7 +79,6 @@ export class JsonValidator {
   protected createAjv(): Ajv.Ajv {
     return new Ajv({
       useDefaults: true,
-      allErrors: true,
     });
   }
 }
