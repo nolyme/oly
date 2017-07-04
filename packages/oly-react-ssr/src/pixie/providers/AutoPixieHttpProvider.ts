@@ -119,7 +119,6 @@ export class AutoPixieHttpProvider {
 
     if (request.method === "POST" || request.method === "PUT") {
 
-      console.log(args);
       const multiParts = args.filter((arg) => arg.kind === "file");
       if (multiParts.length > 0) {
         // extract @file
@@ -127,9 +126,7 @@ export class AutoPixieHttpProvider {
         multiParts.forEach((arg) => {
           const i = args.indexOf(arg);
           fd.append(arg.name, entries[i]);
-          console.log("azd", arg.name, "azd", entries[i]);
         });
-        console.log(fd);
         request.body = fd;
       } else {
         // extract @body
