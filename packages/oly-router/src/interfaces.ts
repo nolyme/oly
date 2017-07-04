@@ -27,7 +27,7 @@ export interface IRouterProperty {
  *
  */
 export interface IRouterArgument {
-  kind: "param" | "query" | "header" | "body";
+  kind: "param" | "query" | "header" | "body" | "file";
   type: Class;
   name: string;
 }

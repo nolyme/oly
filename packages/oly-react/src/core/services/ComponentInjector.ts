@@ -63,7 +63,7 @@ export class ComponentInjector {
         instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutateEvent) {
           if (
             typeof event.oldValue !== "undefined" // skip initialization
-            && event.key === (state.name || _.identity(target, propertyKey))
+            && event.key === (state.name || _.identity(target, propertyKey)).toUpperCase().replace(/[.-]/g, "_")
           ) {
             this.setState({[event.key]: event.newValue});
           }

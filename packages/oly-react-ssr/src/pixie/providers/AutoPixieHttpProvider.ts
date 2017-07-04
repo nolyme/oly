@@ -7,6 +7,7 @@ export interface IAutoRequest {
   query: object;
   url: string;
   method: string;
+  headers: object;
 }
 
 /**
@@ -31,6 +32,7 @@ export class AutoPixieHttpProvider {
   public fetchRequest(request: IAutoRequest): Promise<any> {
     return this.http.request({
       url: request.url,
+      headers: request.headers,
       method: request.method,
       params: request.query,
       data: request.body,
@@ -90,6 +92,14 @@ export class AutoPixieHttpProvider {
       return obj;
     }, {});
 
+    // extract @header
+    const headers = args.reduce((obj, item, index) => {
+      if (item.kind === "header") {
+        obj[item.name] = entries[index];
+      }
+      return obj;
+    }, {});
+
     const url = (prefix + prop.path
       // (?) replace '/abc/:id' by '/abc/0001'
         .replace(/:(\w*)/g, (match, name) => pathParams[name])
@@ -99,6 +109,7 @@ export class AutoPixieHttpProvider {
       url,
       method: prop.method.toUpperCase(),
       query: queryParams,
+      headers,
     };
 
     // DEL is used everywhere, but in fact, it's DELETE, not DEL
@@ -107,9 +118,24 @@ export class AutoPixieHttpProvider {
     }
 
     if (request.method === "POST" || request.method === "PUT") {
-      // extract @body
-      const index = args.findIndex((arg) => arg.kind === "body");
-      request.body = entries[index];
+
+      console.log(args);
+      const multiParts = args.filter((arg) => arg.kind === "file");
+      if (multiParts.length > 0) {
+        // extract @file
+        const fd = new FormData();
+        multiParts.forEach((arg) => {
+          const i = args.indexOf(arg);
+          fd.append(arg.name, entries[i]);
+          console.log("azd", arg.name, "azd", entries[i]);
+        });
+        console.log(fd);
+        request.body = fd;
+      } else {
+        // extract @body
+        const index = args.findIndex((arg) => arg.kind === "body");
+        request.body = entries[index];
+      }
     }
 
     return request;

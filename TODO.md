@@ -3,11 +3,17 @@
 ### BUG
 
 - (oly-react-ssr): '/abc?' is active in server, not browser => conflict
-- (oly-react): @action is broken in custom func by props
+ - always remove (?+)
+- (oly-react): @action is broken in custom func by props (not verified)
 
 ### SOON
 
+- (oly-json): JsonPath.get JsonPath.set
+- 'toto(@build @body body: Type)' is very ugly
+ - auto @build when body
+- (oly): auto import :( ... 
 - json val allErrors
+- integr test
 - router.go({to: "/", force: true})
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)

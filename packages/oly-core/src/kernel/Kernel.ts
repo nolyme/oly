@@ -164,7 +164,7 @@ export class Kernel {
     this.store = {};
 
     for (const key of Object.keys(store)) {
-      this.store[key] = store[key];
+      this.state(key, store[key]);
     }
 
     if (!!parent) {
@@ -191,9 +191,6 @@ export class Kernel {
         this.inject({provide: Logger, use: ServerLogger});
       }
     }
-
-    // TODO: remove this, replace by @kernelId with args
-    this.store.KERNEL_ID = this.id;
   }
 
   /**
@@ -373,8 +370,8 @@ export class Kernel {
     // -> `definition` is the first criteria of research
     // -> but if you are doing a swap, the real criteria is `use`, not `definition`
     const match: IDeclaration | undefined = this.declarations.filter((i) =>
-    _.isEqualClass(i.definition, target.provide) ||
-    _.isEqualClass(i.use, target.provide))[0];
+      _.isEqualClass(i.definition, target.provide) ||
+      _.isEqualClass(i.use, target.provide))[0];
 
     // check if dependency will be updated
     if (target.use && match && match.use !== target.use) {
@@ -417,10 +414,17 @@ export class Kernel {
    * References can be updated. This is the power of @state, everybody has the same value at the same time.
    * An event is fired on each mutation: "state:mutate" {@see IStateMutateEvent}.
    *
-   * @param identifier    Identifier as string who defined the value
+   * @param key           Identifier as string who defined the value
    * @param newValue      Optional new value (setter mode)
    */
-  public state(identifier: string, newValue?: any): any {
+  public state(key: string, newValue?: any): any {
+
+    // identifier is case insensitive
+    const identifier = key.toUpperCase().replace(/[.-]/g, "_");
+
+    if (identifier === "KERNEL_ID") {
+      return this.id;
+    }
 
     if (typeof this.store[identifier] !== "undefined" && typeof newValue === "undefined") {
       return this.store[identifier];
