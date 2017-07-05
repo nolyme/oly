@@ -1,7 +1,7 @@
 {
   "name": "oly-api",
   "description": "oly-api",
-  "version": "0.12.8",
+  "version": "0.12.9",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "esm/index.browser.js",
@@ -21,15 +21,15 @@
     "koa-bodyparser": "3.2.0",
     "koa-multer": "1.0.1",
     "koa-router": "7.2.1",
-    "oly-http": "^0.12.8",
-    "oly-json": "^0.12.8",
-    "oly-router": "^0.12.8"
+    "oly-http": "^0.12.9",
+    "oly-json": "^0.12.9",
+    "oly-router": "^0.12.9"
   },
   "devDependencies": {
-    "oly-core": "^0.12.8"
+    "oly-core": "^0.12.9"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.8"
+    "oly-core": "^0.12.9"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
