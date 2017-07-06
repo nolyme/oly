@@ -1,7 +1,7 @@
 {
   "name": "oly-react",
   "description": "oly-react",
-  "version": "0.12.9",
+  "version": "0.12.10",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "esm/index.js",
@@ -28,12 +28,12 @@
     "@types/cheerio": "0.22.1",
     "@types/react": "15.0.33",
     "cheerio": "0.22.0",
-    "oly-core": "^0.12.9",
-    "oly-json": "^0.12.9",
+    "oly-core": "^0.12.10",
+    "oly-json": "^0.12.10",
     "react": "15.6.1"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.9",
+    "oly-core": "^0.12.10",
     "react": "^15.6.1"
   },
   "scripts": {

@@ -1,7 +1,7 @@
 {
   "name": "oly-socket",
   "description": "oly-socket",
-  "version": "0.12.9",
+  "version": "0.12.10",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "esm/index.browser.js",
@@ -15,15 +15,15 @@
   "dependencies": {
     "@types/socket.io": "1.4.29",
     "@types/socket.io-client": "1.4.29",
-    "oly-http": "^0.12.9",
+    "oly-http": "^0.12.10",
     "socket.io": "2.0.3",
     "socket.io-client": "2.0.3"
   },
   "devDependencies": {
-    "oly-core": "^0.12.9"
+    "oly-core": "^0.12.10"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.9"
+    "oly-core": "^0.12.10"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib esm",
