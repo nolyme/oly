@@ -72,6 +72,7 @@ describe("REACT_ROUTER_PREFIX", () => {
       expect(r.isActive("/toto/a/b")).toBeTruthy();
       expect(r.isActive("/toto/a")).toBeTruthy();
       expect(r.isActive("/toto/a", true)).toBeFalsy();
+      expect(r.isActive("/toto/a?toto", true)).toBeFalsy();
     });
   });
 

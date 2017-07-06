@@ -1,32 +1,24 @@
 ## TODO
 
-### BUG
-
-- (oly-react-ssr): '/abc?' is active in server, not browser => conflict
- - always remove (?+)
-- (oly-react): @action is broken in custom func by props (not verified)
-
 ### SOON
 
 - (oly-json): JsonPath.get JsonPath.set
 - 'toto(@build @body body: Type)' is very ugly
  - auto @build when body
-- (oly): auto import :( ... 
-- json val allErrors
+- (oly): auto import ... :( 
 - integr test
-- router.go({to: "/", force: true})
 - (oly-docs): middlewares
 - (oly-docs): static method (Kernel.create) and getter property (Browser.window)
 - (oly-docs): show env & exception in services/components
-- (oly-*) better coverage, especially react-router... :)
+- (oly-*) better coverage, especially react-router ... :)
   
 ### THOUGHTS
 
 - (oly-react): transition-css, transition+reload
 - (oly-*): IEnv ... :(
-- (oly-orm): use knex + oly-json
+- (oly-orm): use knex + oly-json {HARD}
 - (oly-cli): init --ssr
-- (oly-fs): init, fs api+mock, workspace, tmp
+- (oly-fs): init, fs api+mock, workspace, tmp, sftp
 - (oly-swagger): throws/response/...
 - (oly-docs): interfaces (popup) 
 

@@ -27,7 +27,7 @@ describe("ApiProviderLegacy", () => {
       }
     }
 
-    const kernel = Kernel.create({HTTP_SERVER_PORT: 2910}).with(MyController);
+    const kernel = Kernel.create({HTTP_SERVER_PORT: 19220}).with(MyController);
     const server = kernel.inject(ApiProvider);
     const client = kernel.inject(HttpClient).with({
       baseURL: server.hostname,
@@ -175,7 +175,7 @@ describe("ApiProviderLegacy", () => {
       expect(await fetch("1?b=A")).toEqual({b: "A"});
     });
     it("should skip query if not set", async () => {
-      expect(await fetch("1")).toEqual({b: null});
+      expect(await fetch("1")).toEqual({});
     });
     it("should extract query as boolean", async () => {
       expect(await fetch("1?b=true")).toEqual({b: "true"});
@@ -186,8 +186,8 @@ describe("ApiProviderLegacy", () => {
     });
     it("should extract query as number", async () => {
       expect(await fetch("1?b=1")).toEqual({b: "1"});
-      expect(await fetch("3")).toEqual({b: null});
-      expect(await fetch("3?b")).toEqual({b: null});
+      expect(await fetch("3")).toEqual({});
+      expect(await fetch("3?b")).toEqual({});
       expect(await fetch("3?b=1")).toEqual({b: 1});
       expect(await fetch("3?b=toto")).toEqual({b: null});
     });

@@ -38,7 +38,7 @@ export class A1 {
 
 export class A2 {
   @get("/query")
-  query(@query a: string) {
+  query(@query a: string = "default") {
     return {a};
   }
 

@@ -3,8 +3,8 @@ import { TypeParser } from "../../src/type/TypeParser";
 describe("TypeParser", () => {
 
   it("should parse as string", () => {
-    expect(TypeParser.parse(String, undefined)).toBe(null);
-    expect(TypeParser.parse(String, null)).toBe(null);
+    expect(TypeParser.parse(String, undefined)).toBe(undefined);
+    expect(TypeParser.parse(String, null)).toBe(undefined);
     expect(TypeParser.parse(String, "true")).toBe("true");
     expect(TypeParser.parse(String, "false")).toBe("false");
     expect(TypeParser.parse(String, "")).toBe("");
@@ -43,11 +43,11 @@ describe("TypeParser", () => {
   });
 
   it("should parse as number", () => {
-    expect(TypeParser.parse(Number, undefined)).toBe(null);
-    expect(TypeParser.parse(Number, null)).toBe(null);
+    expect(TypeParser.parse(Number, undefined)).toBe(undefined);
+    expect(TypeParser.parse(Number, null)).toBe(undefined);
     expect(TypeParser.parse(Number, "true")).toBeNaN();
     expect(TypeParser.parse(Number, "false")).toBeNaN();
-    expect(TypeParser.parse(Number, "")).toBe(null);
+    expect(TypeParser.parse(Number, "")).toBe(undefined);
     expect(TypeParser.parse(Number, "azd")).toBeNaN();
     expect(TypeParser.parse(Number, "0")).toBe(0);
     expect(TypeParser.parse(Number, "1")).toBe(1);
@@ -63,19 +63,19 @@ describe("TypeParser", () => {
   });
 
   it("should parse as object", () => {
-    expect(TypeParser.parse(Object, undefined)).toBe(null);
-    expect(TypeParser.parse(Object, null)).toBe(null);
+    expect(TypeParser.parse(Object, undefined)).toBe(undefined);
+    expect(TypeParser.parse(Object, null)).toBe(undefined);
     expect(TypeParser.parse(Object, "true")).toEqual({});
     expect(TypeParser.parse(Object, "false")).toEqual({});
-    expect(TypeParser.parse(Object, "")).toBe(null);
+    expect(TypeParser.parse(Object, "")).toBe(undefined);
     expect(TypeParser.parse(Object, "azd")).toEqual({});
     expect(TypeParser.parse(Object, "0")).toEqual({});
     expect(TypeParser.parse(Object, "1")).toEqual({});
     expect(TypeParser.parse(Object, 1)).toEqual({});
-    expect(TypeParser.parse(Object, 0)).toBe(null);
+    expect(TypeParser.parse(Object, 0)).toBe(undefined);
     expect(TypeParser.parse(Object, -1)).toEqual({});
     expect(TypeParser.parse(Object, true)).toEqual({});
-    expect(TypeParser.parse(Object, false)).toBe(null);
+    expect(TypeParser.parse(Object, false)).toBe(undefined);
     expect(TypeParser.parse(Object, {})).toEqual({});
     expect(TypeParser.parse(Object, {a: "b"})).toEqual({a: "b"});
     expect(TypeParser.parse(Object, "{\"a\":\"b\"}")).toEqual({a: "b"});

@@ -299,8 +299,11 @@ export class Kernel {
       }
     }
 
-    this.started = false;
-    this.getLogger().info("kernel has been successfully stopped");
+    if (this.started) {
+      this.started = false;
+      this.getLogger().info("kernel has been successfully stopped");
+    }
+
     return this;
   }
 

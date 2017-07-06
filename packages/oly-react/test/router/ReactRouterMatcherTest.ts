@@ -32,7 +32,7 @@ describe("ReactRouterMatcher", () => {
     node("404", "/*", {parent: "root"}),
   ];
 
-  const matcher = Kernel.create().get(ReactRouterMatcher);
+  const matcher = Kernel.create().inject(ReactRouterMatcher);
   const routes = matcher.createRoutes(nodes);
   const notAbstract = (r: IRoute) => !r.abstract;
 

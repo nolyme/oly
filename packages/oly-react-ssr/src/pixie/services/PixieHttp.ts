@@ -89,4 +89,67 @@ export class PixieHttp {
 
     return this.pixie.fly<T>(cacheKey, () => this.client.request<T>(options).then(({data}) => data));
   }
+
+  /**
+   * Make a GET request.
+   * GET should be used by default.
+   *
+   * @param url       Complete url
+   * @param options   Request options
+   */
+  public get<T>(url: string, options: IHttpRequest = {}): Promise<T> {
+
+    options.url = url;
+
+    return this.request(options);
+  }
+
+  /**
+   * Make a POST request.
+   * POST should be used when you create data.
+   *
+   * @param url       Complete url
+   * @param data      Request body
+   * @param options   Request options
+   */
+  public post<T>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<T> {
+
+    options.method = "POST";
+    options.url = url;
+    options.data = data;
+
+    return this.request(options);
+  }
+
+  /**
+   * Make a PUT request.
+   * PUT should be used when you update data.
+   *
+   * @param url       Complete url
+   * @param data      Request body
+   * @param options   Request options
+   */
+  public put<T>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<T> {
+
+    options.method = "PUT";
+    options.url = url;
+    options.data = data;
+
+    return this.request(options);
+  }
+
+  /**
+   * Make a DEL request.
+   * DEL should be used when you remove data.
+   *
+   * @param url       Complete url
+   * @param options   Request options
+   */
+  public del<T>(url: string, options: IHttpRequest = {}): Promise<T> {
+
+    options.method = "DELETE";
+    options.url = url;
+
+    return this.request(options);
+  }
 }

@@ -31,7 +31,7 @@ describe("ApiProvider", () => {
   });
   it("@query", async () => {
     expect(await fetch("/query?a=1")).toEqual({a: "1"});
-    expect(await fetch("/query")).toEqual({a: null});
+    expect(await fetch("/query")).toEqual({a: "default"});
   });
   it("@query-required", async () => {
     expect((await fetch("/query/required")).message)

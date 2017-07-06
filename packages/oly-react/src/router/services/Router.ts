@@ -97,8 +97,14 @@ export class Router {
       return false;
     }
 
-    const current = this.current.path.replace(/\/$/, "").replace("#", "");
-    const target = href.replace(/\/$/, "").replace("#", "");
+    const current = this.current.path
+      .replace(/\?.*$/, "")
+      .replace(/\/$/, "")
+      .replace("#", "");
+    const target = href
+      .replace(/\?.*$/, "")
+      .replace(/\/$/, "")
+      .replace("#", "");
 
     if (strict) {
       return current === target;

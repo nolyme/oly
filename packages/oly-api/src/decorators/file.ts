@@ -46,6 +46,6 @@ export class FileDecorator implements IDecorator {
 }
 
 /**
- *
+ * File upload.
  */
 export const file = Meta.decorator<IFileOptions | string>(FileDecorator);

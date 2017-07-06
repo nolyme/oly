@@ -1,6 +1,6 @@
 import * as Ajv from "ajv";
 import { ValidateFunction } from "ajv";
-import { inject, state } from "oly-core";
+import { env, inject, state } from "oly-core";
 import { ValidationException } from "../exceptions/ValidationException";
 import { IField } from "../interfaces";
 import { JsonSchemaReader } from "./JsonSchemaReader";
@@ -13,8 +13,11 @@ export class JsonValidator {
   @state
   protected cache: Array<[Function, ValidateFunction]> = [];
 
+  @env("JSON_VALIDATOR_ALL_ERRORS")
+  protected readonly allErrors: boolean = false;
+
   @inject
-  protected schemaReader: JsonSchemaReader;
+  protected readonly schemaReader: JsonSchemaReader;
 
   /**
    * Valid object based on definition.
@@ -79,6 +82,7 @@ export class JsonValidator {
   protected createAjv(): Ajv.Ajv {
     return new Ajv({
       useDefaults: true,
+      allErrors: this.allErrors,
     });
   }
 }

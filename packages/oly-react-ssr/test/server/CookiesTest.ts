@@ -7,7 +7,7 @@ import { CookiesApp } from "./fixtures/CookiesApp";
 
 describe("Cookies", () => {
 
-  const kernel = Kernel.create().with(CookiesApp, ReactServerProvider);
+  const kernel = Kernel.create({HTTP_SERVER_PORT: 19223}).with(CookiesApp, ReactServerProvider);
   const http = kernel.inject(HttpClient).with({
     baseURL: kernel.inject(HttpServerProvider).hostname,
   });

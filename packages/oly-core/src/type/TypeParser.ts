@@ -67,9 +67,9 @@ export class TypeParser {
    * @param value     Any value
    * @returns         A number (NaN also) or null if parse has failed
    */
-  public static parseNumber(value: any): number | null {
+  public static parseNumber(value: any): number | undefined {
     if (value === "" || value == null) {
-      return null;
+      return undefined;
     }
     return Number(value);
   }
@@ -81,7 +81,7 @@ export class TypeParser {
    * @param value       Any value
    * @returns           A string or null if parse has failed
    */
-  public static parseString(value: any): string | null {
+  public static parseString(value: any): string | undefined {
     if (value != null) {
       if (typeof value === "object") {
         try {
@@ -92,7 +92,7 @@ export class TypeParser {
       }
       return value.toString();
     }
-    return null;
+    return undefined;
   }
 
   /**
@@ -101,12 +101,12 @@ export class TypeParser {
    * @param value       Any value
    * @returns           An object or null
    */
-  public static parseObject(value: any): object | null {
+  public static parseObject(value: any): object | undefined {
     if (!value) {
-      return null;
+      return undefined;
     }
     if (typeof value === "number" || typeof value === "boolean") {
-      return {}; // TODO: {} or null ?
+      return {}; // TODO: {} or undefined ?
     }
     if (typeof value === "string") {
       try {

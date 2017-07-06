@@ -99,6 +99,7 @@
         "decorators/header.ts",
         "decorators/query.ts",
         "decorators/router.ts",
+        "decorators/file.ts",
         "decorators/use.ts"
       ],
       "services": [
