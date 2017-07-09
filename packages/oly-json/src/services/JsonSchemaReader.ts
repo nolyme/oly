@@ -1,5 +1,4 @@
-import { Meta } from "oly-core";
-import { Global } from "../../../oly-core/src/kernel/Global";
+import { Global, Meta } from "oly-core";
 import { olyMapperKeys } from "../constants/keys";
 import { IField, IFieldsMetadata, IJsonSchema, IMetaArray, ISchemaMetadata } from "../interfaces";
 import { TypeUtil } from "../utils/TypeUtil";
