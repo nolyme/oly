@@ -28,4 +28,9 @@ describe("JsonMapper", () => {
     expect(person.addresses[0] instanceof Address).toBeTruthy();
     expect(person.addresses[0].details[1]).toBe("b");
   });
+
+  it("should reverse map", () => {
+    const person = mapper.mapClass(Person, JSON.parse(data));
+    expect(JSON.parse(JSON.stringify(person))).toEqual(JSON.parse(data));
+  });
 });

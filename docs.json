@@ -30,7 +30,9 @@
         "decorators/field.ts",
         "decorators/array.ts",
         "decorators/date.ts",
-        "decorators/build.ts"
+        "decorators/build.ts",
+        "decorators/choice.ts",
+        "decorators/schema.ts"
       ],
       "services": [
         "services/Json.ts"

@@ -169,6 +169,13 @@ export interface IFieldsMetadata extends IMetadata {
 }
 
 /**
+ *
+ */
+export interface ISchemaMetadata extends IMetadata {
+  target: { transforms: Array<IJsonSchema | ((before: IJsonSchema) => IJsonSchema)> };
+}
+
+/**
  * Union of primitive type.
  */
 export type PrimitiveType = number | boolean | string | null;

@@ -1,7 +1,13 @@
 ## TODO
 
+### Bug
+
+- @action endless loop if processed twice (if willMount is called twice...)
+- (oly-react): crash on transition rendering crash app ...
+
 ### SOON
 
+- (oly-core): no mutation before start
 - (oly-json): JsonPath.get JsonPath.set
 - 'toto(@build @body body: Type)' is very ugly
  - auto @build when body

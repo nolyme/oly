@@ -1,6 +1,7 @@
 import { Meta } from "oly-core";
+import { Global } from "../../../oly-core/src/kernel/Global";
 import { olyMapperKeys } from "../constants/keys";
-import { IField, IFieldsMetadata, IJsonSchema, IMetaArray } from "../interfaces";
+import { IField, IFieldsMetadata, IJsonSchema, IMetaArray, ISchemaMetadata } from "../interfaces";
 import { TypeUtil } from "../utils/TypeUtil";
 
 export class JsonSchemaReader {
@@ -33,7 +34,7 @@ export class JsonSchemaReader {
    */
   public extractSchema(definition: Function): IJsonSchema {
 
-    const jsonSchema: IJsonSchema = {
+    let jsonSchema: IJsonSchema = {
       name: definition.name,
       type: "object",
     };
@@ -51,6 +52,17 @@ export class JsonSchemaReader {
         if (field.required) {
           jsonSchema.required = jsonSchema.required || [];
           jsonSchema.required.push(field.name);
+        }
+      }
+    }
+
+    const schemaMetadata = Meta.of({key: olyMapperKeys.schema, target: definition}).deep<ISchemaMetadata>();
+    if (schemaMetadata && schemaMetadata.target.transforms) {
+      for (const transform of schemaMetadata.target.transforms) {
+        if (typeof transform === "function") {
+          jsonSchema = (transform(jsonSchema) || jsonSchema);
+        } else {
+          jsonSchema = Global.merge(jsonSchema, transform);
         }
       }
     }

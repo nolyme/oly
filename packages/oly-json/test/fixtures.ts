@@ -31,7 +31,10 @@ export class Person {
     upper: true,
   }) name: string;
 
-  @date() birthdate: Date;
+  @field({
+    format: "date-time",
+    type: Date,
+  }) birthdate: Date;
 
   @field({
     map: (value: any) => new Date(value),
