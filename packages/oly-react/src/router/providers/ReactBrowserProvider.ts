@@ -51,7 +51,7 @@ export class ReactBrowserProvider implements IProvider {
     }) as any);
 
     return this.router.go({
-      to: this.browser.history.location.pathname,
+      to: this.browser.history.location.pathname + this.browser.history.location.search,
       type: "NONE",
     }).then(() => {
       this.logger.info("render react view");

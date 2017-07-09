@@ -19,7 +19,7 @@ export class Router {
    */
   public get current(): IMatch {
     if (!this.routerProvider.match) {
-      throw new Exception(`There is no route yet`);
+      throw new Exception(`There is no current route yet. You can't use Router#current in resolvers for now`);
     }
     return this.routerProvider.match;
   }
