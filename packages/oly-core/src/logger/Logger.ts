@@ -141,7 +141,10 @@ export class Logger {
         this.appender(type, this.format(type, message));
         this.appender(type, data);
       } else {
-        this.appender(type, this.format(type, message, data));
+        this.appender(type, this.format(type, message));
+        if (data) {
+          this.appender(type, data);
+        }
       }
     }
   }
@@ -152,7 +155,7 @@ export class Logger {
    * @param type  Log level
    * @param text  Message
    */
-  protected appender(type: ILogLevel, text: string | Error): void {
+  protected appender(type: ILogLevel, text: string | Error | object): void {
     console.log.apply(console, [text]);
   }
 

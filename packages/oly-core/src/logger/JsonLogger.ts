@@ -16,7 +16,7 @@ export class JsonLogger extends Logger {
     }
   }
 
-  protected appender(type: string, text: any) {
+  protected appender(type: string, text: string) {
     console.log.apply(console, [text]);
   }
 

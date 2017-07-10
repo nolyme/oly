@@ -19,6 +19,8 @@ export * from "./kernel/Kernel";
 export * from "./kernel/configuration";
 export * from "./logger/LogLevels";
 export * from "./logger/Logger";
+export * from "./logger/BrowserLogger";
+export * from "./logger/ServerLogger";
 export * from "./logger/JsonLogger";
 export * from "./time/Time";
 export * from "./type/TypeParser";

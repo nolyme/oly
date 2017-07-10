@@ -14,9 +14,9 @@ export class ServerLogger extends Logger {
    * @param type
    * @param text
    */
-  protected appender(type: ILogLevel, text: string | Error): void {
+  protected appender(type: ILogLevel, text: string | object | Error): void {
 
-    const output = console.log;
+    const output = console[type.toLowerCase()] || console.log;
 
     if (text instanceof Error) {
       const stack = "\n" + (text instanceof Exception ? text.getLongStackTrace() : text.stack) + "\n";
@@ -26,7 +26,7 @@ export class ServerLogger extends Logger {
         output.apply(console, [stack]);
       }
     } else {
-      if (AnsiColor.isSupported() && this.hasColor) {
+      if (typeof text === "object" || (AnsiColor.isSupported() && this.hasColor)) {
         output.apply(console, [text]);
       } else {
         output.apply(console, [AnsiColor.clear(text)]);
