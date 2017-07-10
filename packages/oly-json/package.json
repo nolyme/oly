@@ -1,7 +1,7 @@
 {
   "name": "oly-json",
   "description": "oly-json",
-  "version": "0.12.10",
+  "version": "0.12.11",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "esm/index.js",
@@ -18,10 +18,10 @@
   },
   "devDependencies": {
     "ajv-i18n": "2.0.2",
-    "oly-core": "^0.12.10"
+    "oly-core": "^0.12.11"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.10"
+    "oly-core": "^0.12.11"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib esm",

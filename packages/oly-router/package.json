@@ -1,7 +1,7 @@
 {
   "name": "oly-router",
   "description": "oly-router",
-  "version": "0.12.10",
+  "version": "0.12.11",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "esm/index.browser.js",
@@ -14,10 +14,10 @@
     "router"
   ],
   "devDependencies": {
-    "oly-core": "^0.12.10"
+    "oly-core": "^0.12.11"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.10"
+    "oly-core": "^0.12.11"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib esm",
