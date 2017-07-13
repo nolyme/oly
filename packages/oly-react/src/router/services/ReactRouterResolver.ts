@@ -17,7 +17,7 @@ export class ReactRouterResolver {
    * @param transition    Current transition to parse
    * @param index         Level in the stack of the resolve
    */
-  public async resolve(transition: ITransition, index: number): Promise<IChunks | undefined> {
+  public async resolve(transition: ITransition, index: number): Promise<IChunks | ITransition | undefined> {
 
     const target = transition.to.route.stack[index].target;
     const propertyKey = transition.to.route.stack[index].propertyKey;
@@ -30,9 +30,17 @@ export class ReactRouterResolver {
 
     // nothing is allowed, this will block the transition
     if (!raw) {
+      this.logger.debug("resolve is aborted: nothing was returned");
       return;
     }
 
+    // also, if you return another transition (redirection is this case) we stop this one
+    if (typeof raw === "object" && typeof raw.to === "object" && typeof raw.to.path === "string") {
+      this.logger.debug("resolve is aborted: redirection", {raw});
+      return raw;
+    }
+
+    // try to create chunks (map of string - jsx.element)
     if (typeof raw === "function") {
       raw = {main: createElement(raw)};
     } else if (typeof raw === "object") {

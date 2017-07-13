@@ -73,16 +73,15 @@ export class ReactServerRenderer {
    */
   public renderError(ctx: IKoaContext, template: string, mountId: string, error: Error): string {
     return template.replace(/<body(.*)>[\s\S]*<\/body>/igm, `
-       <body$1>
+        <body$1>
         <div style="padding: 50px">
         <strong>Looks like something went wrong!</strong>
-        <div></div>
-        ${
-      !_.isProduction()
-        ? `<pre style="overflow-x: auto; padding: 10px; font-size: 12px">${error.stack || error.message || error}</pre>`
-        : ""}
+        <div>${!_.isProduction()
+      ? `<pre style="overflow-x: auto; padding: 10px; font-size: 12px">${error.stack || error.message || error}</pre>`
+      : ""}
         </div>
-       </body>
+        </div>
+        </body>
     `);
   }
 

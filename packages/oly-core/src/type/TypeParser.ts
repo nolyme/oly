@@ -40,6 +40,8 @@ export class TypeParser {
           return this.parseString(something);
         case Number:
           return this.parseNumber(something);
+        case Array:
+          return this.parseArray(something);
         default:
           return this.parseObject(something);
       }
@@ -120,5 +122,22 @@ export class TypeParser {
       }
     }
     return value;
+  }
+
+  /**
+   * Ensure array.
+   *
+   * @param value
+   * @returns {any[]}
+   */
+  public static parseArray(value: any): any[] {
+    if (Array.isArray(value)) {
+      return value;
+    }
+    const result = this.parseObject(value);
+    if (Array.isArray(result)) {
+      return result;
+    }
+    return [result];
   }
 }

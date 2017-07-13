@@ -143,13 +143,13 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       (context, request, callback: any) => {
         if (exclude.test(request)) {
           const chunks = request.split("/");
-          return callback(null, `{${chunks[chunks.length - 1]}: class Empty {}};`);
+          return callback(null, `{${chunks[chunks.length - 1]}: function Empty() {}};`);
         }
         callback();
       },
     ];
   }
-
+  
   // Loaders
 
   config.module = {

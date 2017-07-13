@@ -1,4 +1,5 @@
 import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { IChunks } from "../";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import {
@@ -86,6 +87,10 @@ export class ReactRouterProvider implements IProvider {
       throw new Exception(`Can't find href of '${options.to}'`);
     }
 
+    /**
+     * Matching
+     */
+
     const match = this.matcher.match(this.routes, href);
     if (this.prefix !== "/") {
       match.path = this.prefix + match.path;
@@ -102,6 +107,10 @@ export class ReactRouterProvider implements IProvider {
     await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
 
     try {
+
+      /**
+       * Resolving
+       */
 
       const newLayers: ILayer[] = [];
       const stack = match.route.stack;
@@ -129,17 +138,32 @@ export class ReactRouterProvider implements IProvider {
           newLayers.push(this.layers[i]);
         } else {
           this.logger.trace(`create layer ${i}`);
-          const chunks = await this.resolver.resolve(transition, i);
-          if (chunks) {
-            newLayers.push({
-              node: stack[i],
-              // resolve
-              chunks,
-            });
-            if (newLevel === -1) {
-              newLevel = i;
+
+          //
+          // start resolve for one layer
+          const result = await this.resolver.resolve(transition, i);
+          if (result) {
+
+            // check if redirection
+            const redirection = result as ITransition;
+            const chunks = result as IChunks;
+            if (redirection.to && redirection.to.path) {
+              this.logger.info(`transition is replaced by another one, layer ${i} has created a redirection`);
+              await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+              return redirection;
+            } else {
+
+              // else, push to our layers
+              newLayers.push({
+                node: stack[i],
+                chunks,
+              });
+              if (newLevel === -1) {
+                newLevel = i;
+              }
             }
           } else {
+            // if nothing was returned
             this.logger.info(`transition is aborted, layer ${i} has return no chunks`);
             await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
             return;
@@ -153,14 +177,37 @@ export class ReactRouterProvider implements IProvider {
         return;
       }
 
+      /**
+       * Rendering
+       */
+
+      const oldLayers = this.layers;
+      const oldMatch = this.match;
       this.layers = newLayers;
       this.match = match;
-      await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
+
+      const errors = await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
         transition,
         level: newLevel,
       });
+
+      for (const error of errors) {
+        if (error) {
+          // revert
+          this.layers = oldLayers;
+          this.match = oldMatch;
+          throw error;
+        }
+      }
+
+      /**
+       * Epilogue
+       */
+
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+
       this.logger.info(`transition is done`);
+
       return transition;
 
     } catch (error) {
@@ -168,22 +215,33 @@ export class ReactRouterProvider implements IProvider {
       this.logger.warn(`transition to '${options.to}' has failed`);
 
       const errorHandler = this.routes.filter((r) => r.name === "error")[0] as IRoute;
+
       const errorTransition: ITransitionError = {
         ...transition,
         to: {
           ...transition.to,
           route: errorHandler,
         },
+        type: "REPLACE",
         error,
       };
 
-      const chunks = await this.resolver.resolve(errorTransition, 0);
-      if (chunks) {
-        this.layers = [{node: errorHandler.node, chunks}];
-        await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
-          transition: errorTransition,
-          level: 0,
-        });
+      const result = await this.resolver.resolve(errorTransition, 0);
+      if (result) {
+
+        const redirection = result as ITransition;
+        const chunks = result as IChunks;
+
+        if (redirection.to && redirection.to.path) {
+          await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, errorTransition);
+          return redirection;
+        } else {
+          this.layers = [{node: errorHandler.node, chunks}];
+          await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
+            transition: errorTransition,
+            level: 0,
+          });
+        }
       }
 
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, errorTransition);
@@ -300,17 +358,17 @@ export class ReactRouterProvider implements IProvider {
    */
   protected hasParent(pageDeclarations: IDeclarations, definition: Class): boolean {
     return pageDeclarations
-        .filter((p) => p.definition !== definition)
-        .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())
-        .filter((p) => {
-          if (p) {
-            const keys = Object.keys(p.properties);
-            for (const key of keys) {
-              if (Array.isArray(p.properties[key].children) && p.properties[key].children!.indexOf(definition) > -1) {
-                return true;
-              }
+      .filter((p) => p.definition !== definition)
+      .map((p) => Meta.of({key: olyReactRouterKeys.pages, target: p.definition}).deep<IPagesMetadata>())
+      .filter((p) => {
+        if (p) {
+          const keys = Object.keys(p.properties);
+          for (const key of keys) {
+            if (Array.isArray(p.properties[key].children) && p.properties[key].children!.indexOf(definition) > -1) {
+              return true;
             }
           }
-        }).length > 0;
+        }
+      }).length > 0;
   }
 }

@@ -14,10 +14,10 @@
     "ajv"
   ],
   "dependencies": {
-    "ajv": "5.2.0"
+    "ajv": "5.2.2"
   },
   "devDependencies": {
-    "ajv-i18n": "2.0.2",
+    "ajv-i18n": "2.1.0",
     "oly-core": "^0.12.11"
   },
   "peerDependencies": {

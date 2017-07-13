@@ -10,12 +10,10 @@ export function typescriptLoaderFactory(): Rule {
     exclude: /node_modules/,
     test: /\.tsx?$/,
     use: [{
-      loader: "awesome-typescript-loader",
+      loader: "ts-loader",
       options: {
         silent: true,
-        // speedup compile time, our ide will check error for us beside
         transpileOnly: true,
-        module: "es2015",
       },
     }],
   };

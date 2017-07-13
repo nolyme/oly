@@ -39,6 +39,15 @@ describe("Global", () => {
       expect(_.isEqualClass(f1(), f2())).toBeTruthy();
     });
   });
+  describe(".keyify()", () => {
+    it("should transform text", () => {
+      expect(_.keyify("")).toBe("");
+      expect(_.keyify("JSON_VALIDATOR_AJV")).toBe("JSON_VALIDATOR_AJV");
+      expect(_.keyify("JsonValidator.ajv")).toBe("JSON_VALIDATOR_AJV");
+      expect(_.keyify("logger.level")).toBe("LOGGER_LEVEL");
+      expect(_.keyify("json-validator.ajv")).toBe("JSON_VALIDATOR_AJV");
+    });
+  });
   describe(".bubble()", () => {
     it("should bubble sort array", () => {
       const deps = [0, 1, 4, 19, 120, 3, 5, 0, 1];

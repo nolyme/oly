@@ -423,7 +423,7 @@ export class Kernel {
   public state(key: string, newValue?: any): any {
 
     // identifier is case insensitive
-    const identifier = key.toUpperCase().replace(/[.-]/g, "_");
+    const identifier = Global.keyify(key);
 
     if (identifier === "KERNEL_ID") {
       return this.id;

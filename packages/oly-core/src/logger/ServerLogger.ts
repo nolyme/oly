@@ -16,11 +16,7 @@ export class ServerLogger extends Logger {
    */
   protected appender(type: ILogLevel, text: string | object | Error): void {
 
-    if (type === "TRACE") {
-      type = "DEBUG";
-    }
-
-    const output = console[type.toLowerCase()] || console.log;
+    const output = console.log;
 
     if (text instanceof Error) {
       const stack = "\n" + (text instanceof Exception ? text.getLongStackTrace() : text.stack) + "\n";

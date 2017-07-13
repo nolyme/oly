@@ -3,14 +3,16 @@
 ### Bug
 
 - @action endless loop if processed twice (if willMount is called twice...)
-- (oly-react): crash on transition rendering crash app ...
 
 ### SOON
 
+- (oly-core): start is very slow when > 100 els (~1sec)
+- (oly-react): PureComponent everywhere
+- (oly-react): one *$$refresh func by comp?
 - (oly-core): no mutation before start
-- (oly-json): JsonPath.get JsonPath.set
+- (oly-json): JsonPath.get JsonPath.set (lodash.get like)
 - 'toto(@build @body body: Type)' is very ugly
- - auto @build when body
+ -> auto @build when body
 - (oly): auto import ... :( 
 - integr test
 - (oly-docs): middlewares

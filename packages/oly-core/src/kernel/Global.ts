@@ -140,6 +140,22 @@ export class Global {
   }
 
   /**
+   * Convert a text to a key.
+   *
+   * A.b -> A_B
+   * HelloWorld.toto -> HELLO_WORLD_TOTO
+   *
+   * @param {string} text
+   * @returns {string}
+   */
+  public static keyify(text: string): string {
+    return text
+      .replace(/[a-z][A-Z]/g, ($1) => `${$1[0]}_${$1[1]}`)
+      .toUpperCase()
+      .replace(/[.-]/g, "_");
+  }
+
+  /**
    * Generic bubble sort.
    * Used to sort kernel dependencies.
    *
