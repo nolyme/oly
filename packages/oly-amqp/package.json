@@ -25,6 +25,7 @@
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
+    "watch": "tsc -w",
     "test": "jest"
   },
   "jest": {

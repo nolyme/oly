@@ -4,7 +4,7 @@
   "version": "0.12.11",
   "license": "MIT",
   "main": "lib/index.js",
-  "browser": "esm/index.js",
+  "browser": "lib/index.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "keywords": [
@@ -19,8 +19,8 @@
     "oly-core": "^0.12.11"
   },
   "scripts": {
-    "clean": "rimraf node_modules coverage lib esm",
-    "build": "tsc && tsc --outDir esm -m es2015 --moduleResolution node",
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
     "watch": "tsc -w",
     "test": "jest"
   },

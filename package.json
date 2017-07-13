@@ -2,16 +2,17 @@
   "private": true,
   "devDependencies": {
     "@types/jest": "20.0.2",
-    "@types/node": "8.0.6",
+    "@types/node": "8.0.12",
     "jest": "20.0.4",
-    "lerna": "2.0.0-rc.5",
+    "lerna": "2.0.0",
     "rimraf": "2.6.1",
-    "ts-jest": "20.0.6",
-    "ts-node": "3.1.0",
-    "tslint": "5.4.3",
+    "ts-jest": "20.0.7",
+    "ts-node": "3.2.0",
+    "tslint": "5.5.0",
     "typescript": "2.4.1"
   },
   "scripts": {
+    "reset": "rm -rf node_modules yarn.lock packages/**/yarn.lock && yarn && yarn all",
     "docs": "packages/oly-docs/bin/oly-docs",
     "docs:dev": "HTML=false OUT=packages/oly-docs/src/client/assets yarn docs -- --verbose",
     "all": "lerna run clean && lerna bootstrap && lerna run build && lerna run test",

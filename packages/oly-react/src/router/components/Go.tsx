@@ -9,7 +9,7 @@ import { Router } from "../services/Router";
 /**
  *
  */
-export interface IGoProps extends HTMLAttributes<HTMLElement> {
+export interface IGoProps extends HTMLAttributes<HTMLAnchorElement> {
 
   /**
    * Route name / url.
@@ -47,7 +47,7 @@ export interface IGoState {
 @attach
 export class Go extends Component<IGoProps, IGoState> {
 
-  @inject(Router)
+  @inject
   private router: Router;
 
   /**
@@ -66,7 +66,7 @@ export class Go extends Component<IGoProps, IGoState> {
     if (
       !e.defaultPrevented && // onClick prevented default
       e.button === 0 && // ignore right clicks
-      !this.props.target && // let browser handle "target=_blank" etc.
+      !this.props["target"] && // let browser handle "target=_blank" etc.
       !isModifiedEvent(e) // ignore clicks with modifier keys
     ) {
       e.preventDefault();

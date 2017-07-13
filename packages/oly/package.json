@@ -11,7 +11,7 @@
     "typescript"
   ],
   "dependencies": {
-    "@types/react": "15.0.33",
+    "@types/react": "15.0.38",
     "oly-api": "^0.12.11",
     "oly-core": "^0.12.11",
     "oly-http": "^0.12.11",
@@ -28,6 +28,7 @@
   "scripts": {
     "clean": "rimraf node_modules coverage lib **/*.js **/*.js.map **/*.d.ts",
     "build": "tsc",
+    "watch": "tsc -w",
     "test": "echo"
   },
   "jest": {
