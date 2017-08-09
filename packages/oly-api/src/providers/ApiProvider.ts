@@ -8,8 +8,6 @@ import { NotImplementedException } from "../exceptions/NotImplementedException";
 import { IKoaRouter } from "../interfaces";
 import { ApiMiddlewares } from "../services/ApiMiddlewares";
 
-const multer: any = require("koa-multer"); // tslint:disable-line
-
 /**
  *
  */
@@ -102,6 +100,7 @@ export class ApiProvider implements IProvider {
    * Default multipart parser.
    */
   protected useMulter(file: string): IKoaMiddleware {
+    const multer: any = require("koa-multer"); // tslint:disable-line
     return multer({
       storage: multer.memoryStorage(),
       limit: {fileSize: 5000000},
@@ -160,7 +159,7 @@ export class ApiProvider implements IProvider {
     for (const propertyKey of keys) {
 
       const route = routerMetadata.properties[propertyKey];
-      const mount = koaRouter[route.method.toLowerCase()];
+      const mountFunction = koaRouter[route.method.toLowerCase()];
       const middlewares = route.middlewares.concat([]);
 
       if (routerMetadata.args[propertyKey]) {
@@ -170,7 +169,7 @@ export class ApiProvider implements IProvider {
         }
       }
 
-      mount.apply(koaRouter, [
+      mountFunction.apply(koaRouter, [
         route.path,
         ...middlewares,
         this.apiMiddlewares.invoke(definition, propertyKey),

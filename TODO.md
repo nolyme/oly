@@ -2,37 +2,43 @@
 
 ### Bug
 
-- @action endless loop if processed twice (if willMount is called twice...)
+- @action endless loop if processed twice (if will*Mount is called twice...)
+- @state is always processed, even with {use: () => } which is fine, but not accepted if item is already processed
+  -> check if processed, to define getter twice or allow override
+- (oly-react): remove "react show views"
+- (oly-react): @env in components (crash on #get)
 
 ### SOON
 
-- (oly-core): start is very slow when > 100 els (~1sec)
-- (oly-react): PureComponent everywhere
-- (oly-react): one *$$refresh func by comp?
-- (oly-core): no mutation before start
-- (oly-json): JsonPath.get JsonPath.set (lodash.get like)
-- 'toto(@build @body body: Type)' is very ugly
- -> auto @build when body
-- (oly): auto import ... :( 
-- integr test
-- (oly-docs): middlewares
-- (oly-docs): static method (Kernel.create) and getter property (Browser.window)
-- (oly-docs): show env & exception in services/components
-- (oly-*) better coverage, especially react-router ... :)
-  
+- (oly-core): Kernel#state("key", undefined) -> check arguments.length === 2 :)
+- (oly-react): transitionEnd if aborted
+- (oly-core): kernel.on("before:process", ({definition, instance}) => {}) 
+\--- (oly-react): @inject|state? -> @attach
+- (oly-react): @action({post: () => this.setState({loading: false})})
+- (oly-react): @action({prevent: true})
+- (oly-react): @action({name: true})
+- (oly-react): @action -> @on
+- (oly-json): Merge all into Json, no @inject, new Json()
+- (oly-react): <Active></Active> update on transition end, set class if match /
+- (oly-react): @attach({watch: [/** states | events **/]})
+- (oly-react): @attach({styles: () => null | {}})
+- (oly-tools): css source maps ?
+
 ### THOUGHTS
 
+- (oly-*) better coverage, especially react-router ... :)
+- (oly-core): no mutation before start options ?
+- (oly): intellij auto import ... :( 
+- (oly-docs): show env & exception in services/components
+- (oly-mongo): again, with browser/memory/local.json support
 - (oly-react): transition-css, transition+reload
 - (oly-*): IEnv ... :(
-- (oly-orm): use knex + oly-json {HARD}
 - (oly-cli): init --ssr
-- (oly-fs): init, fs api+mock, workspace, tmp, sftp
+- (oly-fs): init, fs api+mock, workspace, tmp, sftp?/
 - (oly-swagger): throws/response/...
-- (oly-docs): interfaces (popup) 
 
 ### MAYBE ONE DAY
 
-- (oly-orm): rest
+- (oly-docs): static method (Kernel.create) and getter property (Browser.window)
+- (oly-docs): interfaces (popup) 
 - (oly-api): hal resource
-- (oly-orm): pagination Page
-- (oly-docs): multi version

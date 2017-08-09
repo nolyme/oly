@@ -1,4 +1,3 @@
-import { Declaration } from "babel-types";
 import { IArgumentsMetadata, IInjectionsMetadata, olyCoreKeys } from "../index";
 import { BrowserLogger } from "../logger/BrowserLogger";
 import { Logger } from "../logger/Logger";

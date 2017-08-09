@@ -149,7 +149,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       },
     ];
   }
-  
+
   // Loaders
 
   config.module = {
@@ -216,6 +216,9 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     config.plugins.push(
       new UglifyJsPlugin({
         comments: false,
+        mangle: {
+          keep_fnames: true,
+        },
       }),
     );
   }
