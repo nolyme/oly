@@ -21,3 +21,7 @@ deploy:
   github_token: $GITHUB_TOKEN
   on:
     branch: master
+
+after_script:
+  - npm install codecov
+  - ./node_modules/.bin/codecov
