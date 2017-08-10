@@ -11,9 +11,15 @@
     "ts",
     "tsx"
   ],
+  "coverageReporters": [
+    "html",
+    "lcov"
+  ],
   "mapCoverage": true,
   "testURL": "http://127.0.0.1/",
   "globals": {
-    "__TS_CONFIG__": "test/tsconfig.json"
+    "ts-jest": {
+      "tsConfigFile": "test/tsconfig.json"
+    }
   }
 }

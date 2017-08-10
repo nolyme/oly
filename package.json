@@ -39,7 +39,9 @@
       "!packages/oly-tools/**/*.{ts,tsx}"
     ],
     "globals": {
-      "__TS_CONFIG__": "packages/oly-core/test/tsconfig.json"
+      "ts-jest": {
+        "tsConfigFile": "packages/oly-core/test/tsconfig.json"
+      }
     }
   }
 }
