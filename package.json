@@ -38,6 +38,7 @@
       "!packages/oly-cli/**/*.{ts,tsx}",
       "!packages/oly-tools/**/*.{ts,tsx}"
     ],
+    "setupTestFrameworkScriptFile": "./jest.env.js",
     "globals": {
       "ts-jest": {
         "tsConfigFile": "packages/oly-core/test/tsconfig.json"
