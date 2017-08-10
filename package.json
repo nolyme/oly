@@ -22,7 +22,7 @@
     "lint": "tslint --fix packages/**/src/**/*.ts",
     "test": "lerna run test",
     "lint:ci": "tslint --force -o checkstyle-result.xml -t checkstyle packages/**/src/**/*.ts",
-    "test:ci": "jest --coverage --no-cache",
+    "test:ci": "jest --coverage",
     "publish": "lerna publish --force-publish=*"
   },
   "jest": {

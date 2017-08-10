@@ -6,6 +6,8 @@ import { auth } from "../src/decorators/auth";
 import { JwtAuth } from "../src/services/JwtAuth";
 import { Jwt } from "../src/utils/Jwt";
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 40000;
+
 class App {
 
   @auth("ADMIN")

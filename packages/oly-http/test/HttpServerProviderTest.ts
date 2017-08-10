@@ -6,6 +6,8 @@ import { HttpServerException } from "../src/exceptions/HttpServerException";
 import { HttpServerProvider } from "../src/providers/HttpServerProvider";
 import { HttpClient } from "../src/services/HttpClient";
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 40000;
+
 describe("HttpServerProvider", () => {
 
   class BoomException extends HttpServerException {
