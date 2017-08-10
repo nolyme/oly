@@ -1,4 +1,4 @@
-import { Entry, Rule } from "webpack";
+import { Entry, Options, Rule } from "webpack";
 
 /**
  * Easy configuration.
@@ -21,6 +21,18 @@ export interface IToolsOptions {
    * Default is true.
    */
   extract?: boolean;
+
+  /**
+   * Webpack devtool.
+   * Default if production: false, otherwise: 'source-maps'
+   */
+  sourceMaps: Options.Devtool;
+
+  /**
+   * Set hash to all filenames.
+   * Default is isProduction.
+   */
+  hash: boolean;
 
   /**
    * Enable prod mode.

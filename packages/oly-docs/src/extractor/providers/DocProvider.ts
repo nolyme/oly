@@ -35,7 +35,7 @@ export class DocProvider {
     const config = this.json.build(Configuration, readFileSync(configPath, "UTF-8"));
     const output = resolve(this.cwd, this.out);
     const modules: IModuleContent[] = [];
-    const command = `${webpackPath} --output-path=${output} `
+    const command = `${webpackPath} --env.NODE_ENV=production --output-path=${output} `
       + `--config=${webpackConfig} --context=${webpackContext} ${webpackArgv}`;
 
     // build webpack (this is not cached)

@@ -1,6 +1,7 @@
 import * as autoprefixer from "autoprefixer";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 import { Rule } from "webpack";
+import { IToolsOptions } from "./interfaces";
 
 /**
  * Typescript loader factory
@@ -73,13 +74,13 @@ export function sassLoaderFactory(sassLoaderOptions: object = {}): Rule {
 /**
  * Image loader factory
  */
-export function imageLoaderFactory(isProduction: boolean = false): Rule {
+export function imageLoaderFactory(options: IToolsOptions): Rule {
   return {
     test: /\.(png|jpeg|jpg|svg)$/,
     use: [{
       loader: "file-loader",
       options: {
-        name: isProduction
+        name: options.hash
           ? "images/[name].[hash].[ext]"
           : "images/[name].[ext]",
       },
@@ -90,13 +91,13 @@ export function imageLoaderFactory(isProduction: boolean = false): Rule {
 /**
  * Font loader factory
  */
-export function fontLoaderFactory(isProduction: boolean = false) {
+export function fontLoaderFactory(options: IToolsOptions) {
   return {
     test: /\.(ttf|otf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
     use: [{
       loader: "file-loader",
       options: {
-        name: isProduction
+        name: options.hash
           ? "fonts/[name].[hash].[ext]"
           : "fonts/[name].[ext]",
       },

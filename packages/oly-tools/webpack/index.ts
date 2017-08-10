@@ -97,14 +97,18 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   options.entry = options.entry || "./src/index.ts";
   options.dist = options.dist || resolve(root, "www");
   options.template = options.template || resolve(__dirname, "index.html");
-  options.fontLoader = options.fontLoader || fontLoaderFactory(isProduction);
-  options.imageLoader = options.imageLoader || imageLoaderFactory(isProduction);
+  options.hash = typeof options.hash === "undefined" ? isProduction : options.hash;
+  options.fontLoader = options.fontLoader || fontLoaderFactory(options);
+  options.imageLoader = options.imageLoader || imageLoaderFactory(options);
   options.typescriptLoader = options.typescriptLoader || typescriptLoaderFactory();
   options.styleLoader = options.styleLoader || cssLoaderFactory();
 
   // define the format of the source-map
   // set to false for disabled it
-  config.devtool = "source-map";
+  config.devtool =
+    typeof options.sourceMaps === "undefined"
+      ? (isProduction ? false : "source-map")
+      : options.sourceMaps;
 
   // set a default context (base)
   // it's the root directory for all relative path
@@ -133,7 +137,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   };
 
   config.output = {
-    filename: isProduction ? "[name].[hash].js" : "[name].js",
+    filename: options.hash ? "[name].[hash].js" : "[name].js",
     path: options.dist,
   };
 
@@ -181,7 +185,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     // extract css from js
     new ExtractTextPlugin({
       disable: !options.extract,
-      filename: isProduction ? "[name].[hash].css" : "[name].css",
+      filename: options.hash ? "[name].[hash].css" : "[name].css",
     }),
     // create index.html for us
     new HtmlWebpackPlugin({
