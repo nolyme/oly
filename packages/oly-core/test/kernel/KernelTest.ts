@@ -471,6 +471,14 @@ describe("Kernel", () => {
       expect(() => createKernel().with(A))
         .toThrow(olyCoreErrors.envNotDefined("x"));
     });
+
+    it("should accept undefined as new value", async () => {
+
+      const k = createKernel({A: "B"});
+      expect(k.state("A")).toBe("B");
+      k.state("A", undefined);
+      expect(k.state("A")).toBeUndefined();
+    });
   });
 
   describe("#env()", () => {

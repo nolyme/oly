@@ -10,7 +10,6 @@
 
 ### SOON
 
-- (oly-core): Kernel#state("key", undefined) -> check arguments.length === 2 :)
 - (oly-react): transitionEnd if aborted
 - (oly-core): kernel.on("before:process", ({definition, instance}) => {}) 
 \--- (oly-react): @inject|state? -> @attach

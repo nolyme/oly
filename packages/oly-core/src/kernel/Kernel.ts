@@ -418,8 +418,9 @@ export class Kernel {
    *
    * @param key           Identifier as string who defined the value
    * @param newValue      Optional new value (setter mode)
+   * @param callback      Optional callback triggered after the mutation
    */
-  public state(key: string, newValue?: any): any {
+  public state(key: string, newValue?: any, callback: () => any = () => null): any {
 
     // identifier is case insensitive
     const identifier = Global.keyify(key);
@@ -428,7 +429,7 @@ export class Kernel {
       return this.id;
     }
 
-    if (typeof this.store[identifier] !== "undefined" && typeof newValue === "undefined") {
+    if (typeof this.store[identifier] !== "undefined" && arguments.length === 1) {
       return this.store[identifier];
     }
 
@@ -444,11 +445,11 @@ export class Kernel {
       }
     }
 
-    if (typeof newValue !== "undefined") {
+    if (arguments.length === 2) {
       if (this.store[identifier] !== newValue) {
         const event: IStateMutateEvent = {key: identifier, newValue, oldValue: this.store[identifier]};
         this.store[identifier] = newValue;
-        this.emit(olyCoreEvents.STATE_MUTATE, event);
+        this.emit(olyCoreEvents.STATE_MUTATE, event).then(callback);
       }
     }
 

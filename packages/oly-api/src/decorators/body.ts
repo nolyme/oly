@@ -42,7 +42,7 @@ export class BodyDecorator implements IDecorator {
           // !!!
           // body is already parsed by the middleware koa-bodyparser (see ApiProvider)
           // however, we MUST double check as we know here the "wanted type"
-          
+
           // hack
           // {"Key": ""} - to -> "Key"
           if (type === Number || type === String || type === Boolean) {
