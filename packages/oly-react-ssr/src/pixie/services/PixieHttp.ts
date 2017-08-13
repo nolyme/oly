@@ -33,7 +33,7 @@ export class PixieHttp {
   public get root(): string {
     if (Global.isBrowser()) {
 
-      return this.apiRoot || this.pixie.get<string>("API_PREFIX") || "";
+      return this.apiRoot || this.pixie.get<string>("API_PREFIX") || "/api";
 
     } else {
 

@@ -61,7 +61,11 @@ export class Json {
 
   /**
    *  Validator based on ajv.
-   *  Data can be updated (depend on ajv configuration).
+   *  Result can be different (depend on ajv configuration).
+   *
+   *  ```ts
+   *  const validData = this.json.validate(Definition, rawData);
+   *  ```
    *
    * @param type   Class definition with JsonSchemaReader
    * @param data   Json data

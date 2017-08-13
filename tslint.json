@@ -10,6 +10,7 @@
     "member-access": false,
     "no-string-literal": false,
     "no-var-requires": false,
-    "no-empty-interface": false
+    "no-empty-interface": false,
+    "variable-name": false
   }
 }

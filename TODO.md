@@ -10,12 +10,10 @@
 
 ### SOON
 
-- (oly-react): transitionEnd if aborted
 - (oly-core): kernel.on("before:process", ({definition, instance}) => {}) 
 \--- (oly-react): @inject|state? -> @attach
-- (oly-react): @action({post: () => this.setState({loading: false})})
 - (oly-react): @action({prevent: true})
-- (oly-react): @action({name: true})
+- (oly-react): @action({name: ''})
 - (oly-react): @action -> @on
 - (oly-json): Merge all into Json, no @inject, new Json()
 - (oly-react): <Active></Active> update on transition end, set class if match /
@@ -29,7 +27,6 @@
 - (oly-core): no mutation before start options ?
 - (oly): intellij auto import ... :( 
 - (oly-docs): show env & exception in services/components
-- (oly-mongo): again, with browser/memory/local.json support
 - (oly-react): transition-css, transition+reload
 - (oly-*): IEnv ... :(
 - (oly-cli): init --ssr

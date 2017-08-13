@@ -27,14 +27,15 @@ export class JsonValidator {
    */
   public validateClass<T>(definition: Function, source: T): T {
 
+    const target = JSON.parse(JSON.stringify(source));
     const validate = this.getValidationFunction(definition);
-    const valid = validate(source);
+    const valid = validate(target);
 
     if (!valid) {
       throw new ValidationException(this.ajv.errorsText(validate.errors), validate.errors || []);
     }
 
-    return source;
+    return target;
   }
 
   /**

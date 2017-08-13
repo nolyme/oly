@@ -6,6 +6,7 @@
 /packages/*/lib
 /packages/*/out
 /packages/*/www
+/packages/*/data
 /packages/*/coverage
 /.idea
 *.log

@@ -4,6 +4,7 @@ export * from "./decorators/field";
 export * from "./decorators/build";
 export * from "./decorators/choice";
 export * from "./decorators/schema";
+export * from "./decorators/date";
 export * from "./interfaces";
 export * from "./utils/TypeUtil";
 export * from "./services/Json";

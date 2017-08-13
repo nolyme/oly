@@ -16,8 +16,8 @@ describe("@schema", () => {
   }
 
   @choice(["a", "b"])
-  @schema((schema) => ({
-    ...schema,
+  @schema((s) => ({
+    ...s,
     description: "Hi!",
   }))
   @schema({

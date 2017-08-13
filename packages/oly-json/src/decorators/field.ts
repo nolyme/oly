@@ -21,6 +21,29 @@ export class FieldDecorator implements IDecorator {
 }
 
 /**
+ * Attach a TypeScript property to a JsonSchema property.
  *
+ * ```
+ * class A {
+ *   @field({
+ *    // json-schema options like minLength, ...
+ *    // "required" is also available
+ *   })
+ *   myProperty: string;
+ * }
+ * ```
+ *
+ * Mapping requires a "type", most of the time TypeScript type is enough.
+ * Exceptions:
+ * - array (see @array)
+ * - native type (see @date)
+ *
+ * Like a Typescript property, @field property is required by default.
+ *
+ * ```ts
+ * class A {
+ *   @field({required: false}) myProperty?: string; // now it's optional
+ * }
+ * ```
  */
 export const field = Meta.decorator<Partial<IField> | IType>(FieldDecorator);

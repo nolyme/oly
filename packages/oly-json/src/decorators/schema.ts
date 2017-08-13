@@ -16,6 +16,16 @@ export class SchemaDecorator implements IDecorator {
 }
 
 /**
+ * Override/replace generated schema.
  *
+ * ```ts
+ * &shy;@schema({name: "Toto"})
+ * class A {
+ * }
+ *
+ * &shy;@schema((s) => ({...s, description: "test"}))
+ * class B {
+ * }
+ * ```
  */
 export const schema = Meta.decoratorWithOptions<IJsonSchema | ((before: IJsonSchema) => IJsonSchema)>(SchemaDecorator);

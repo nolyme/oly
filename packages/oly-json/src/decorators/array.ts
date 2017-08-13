@@ -13,6 +13,13 @@ export class ArrayDecorator extends FieldDecorator {
 }
 
 /**
+ * It's like @field + embedded list of @field.
  *
+ * ```ts
+ * class A {
+ *   @array({of: String}) myProp: string[];
+ *   @array({of: Data}) myProp2: Data[];
+ * }
+ * ```
  */
 export const array = Meta.decoratorWithOptions<IMetaArray>(ArrayDecorator);

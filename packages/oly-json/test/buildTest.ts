@@ -8,8 +8,8 @@ describe("@build", () => {
   const body = (target: any, propertyKey: any, index: number) => {
 
     Meta.of({key: olyCoreKeys.arguments, target, propertyKey, index}).set({
-      handler: (k: Kernel) => {
-        return k.state("Fake.context");
+      handler: (kernel: Kernel) => {
+        return kernel.state("Fake.context");
       },
     });
   };

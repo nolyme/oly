@@ -260,7 +260,7 @@ export class Meta {
   /**
    *
    */
-  public deep<T extends IMetadata>(): T | undefined {
+  public deep<R extends IMetadata>(): R | undefined {
     const $deep = <T extends IMetadata>(key: string, target: Function): T | undefined => {
       const meta: T = Meta.reflect.getOwnMetadata(key, target);
 
@@ -278,8 +278,7 @@ export class Meta {
 
       return meta;
     };
-
-    return $deep<T>(this.identifier.key, this.target);
+    return $deep<R>(this.identifier.key, this.target);
   }
 
   /**

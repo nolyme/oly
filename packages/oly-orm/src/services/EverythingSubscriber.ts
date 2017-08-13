@@ -11,12 +11,12 @@ export class EverythingSubscriber implements EntitySubscriberInterface<any> {
   protected json: Json;
 
   public async beforeInsert(event: InsertEvent<any>) {
-    this.build(event.entity);
+    Object.assign(event.entity, this.build(event.entity));
     await this.trigger("onBeforeInsert", event.entity);
   }
 
   public async beforeUpdate(event: UpdateEvent<any>) {
-    this.build(event.entity);
+    Object.assign(event.entity, this.build(event.entity));
     await this.trigger("onBeforeUpdate", event.entity);
   }
 
@@ -65,7 +65,8 @@ export class EverythingSubscriber implements EntitySubscriberInterface<any> {
       .of({key: olyMapperKeys.fields, target: entity.constructor})
       .get<IFieldsMetadata>();
     if (meta) {
-      this.json.build(entity.constructor as Class, entity);
+      return this.json.build(entity.constructor as Class, entity);
     }
+    return entity;
   }
 }
