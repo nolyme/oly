@@ -23,7 +23,7 @@ export class FieldDecorator implements IDecorator {
 /**
  * Attach a TypeScript property to a JsonSchema property.
  *
- * ```
+ * ```ts
  * class A {
  *   @field({
  *    // json-schema options like minLength, ...

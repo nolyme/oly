@@ -15,6 +15,7 @@
 - (oly-react): @action({prevent: true})
 - (oly-react): @action({name: ''})
 - (oly-react): @action -> @on
+- (oly-react): @action({before, after})
 - (oly-json): Merge all into Json, no @inject, new Json()
 - (oly-react): <Active></Active> update on transition end, set class if match /
 - (oly-react): @attach({watch: [/** states | events **/]})

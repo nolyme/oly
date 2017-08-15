@@ -8,6 +8,8 @@ import { olyHttpErrors } from "../constants/errors";
  * Default status is -1 (no status).
  * Default body is null.
  *
+ * You can "follow" HttpServerException.
+ *
  * ```ts
  * try { } catch(e) {
  *   if(e instanceof HttpClientException && e.isHttpServerException()) {
@@ -17,6 +19,8 @@ import { olyHttpErrors } from "../constants/errors";
  *   }
  * }
  * ```
+ *
+ * Axios Error is always available.
  */
 export class HttpClientException<T = any> extends Exception {
 
@@ -31,8 +35,8 @@ export class HttpClientException<T = any> extends Exception {
   public body: T;
 
   /**
-   * AxiosError is ALWAYS the cause.
-   * This is veryyyyy useful when you have no response (like e no network)
+   * AxiosError is always the cause.
+   * This is very useful when you have no response (like e no network)
    */
   public cause: AxiosError;
 
@@ -81,7 +85,7 @@ export class HttpClientException<T = any> extends Exception {
     };
   }
 
-  protected isHttpServerException(): boolean {
+  public isHttpServerException(): boolean {
     return !!this.cause
       && !!this.cause.response
       && !!this.cause.response.data
