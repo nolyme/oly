@@ -479,6 +479,23 @@ describe("Kernel", () => {
       k.state("A", undefined);
       expect(k.state("A")).toBeUndefined();
     });
+
+    it("should override state processing", async () => {
+
+      class C {
+      }
+
+      class A {
+        @inject c: C;
+        @state("B") b: string;
+        @env("D") d: string;
+      }
+
+      const kernel = createKernel({B: "B", D: "D"});
+      // without "configuration:true", we should get an error "Cannot redefine property" blahblahblah..
+      // problem is only for @state
+      kernel.with({provide: A, use: (k) => k.inject(A, {register: false})});
+    });
   });
 
   describe("#env()", () => {

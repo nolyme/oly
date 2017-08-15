@@ -2,6 +2,7 @@ import { Class, Global, inject, IStateMutateEvent, Kernel, Logger, Meta, olyCore
 import { Component } from "react";
 import { olyReactEvents } from "../constants/events";
 import { olyReactKeys } from "../constants/keys";
+import { IAttachOptions } from "../decorators/attach";
 import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty } from "../interfaces";
 
 /**
@@ -29,12 +30,21 @@ export class ComponentInjector {
    *
    * @param definition    Component definition
    * @param instance      Instance
+   * @param options
    */
-  public inject(definition: Class, instance: Component) {
+  public inject(definition: Class, instance: Component, options: IAttachOptions = {}) {
 
     // pre-process states (before the real kernel#processStates())
     this.processStates(definition, instance);
     this.processActions(definition, instance);
+
+    if (Array.isArray(options.watch)) {
+      for (const name of options.watch) {
+        Meta
+          .of({key: olyCoreKeys.events, target: definition.prototype, propertyKey: "forceUpdate"})
+          .set({name});
+      }
+    }
 
     // just make a processing, skip registration and instantiation
     // NEVER REGISTER A REACT COMPONENT INSIDE THE KERNEL, NEVER; gygnygguuygnkuguyn

@@ -831,6 +831,7 @@ export class Kernel {
           Object.defineProperty(instance, propertyKey, {
             get: () => this.state(stateName),
             set: (newValue: any) => this.state(stateName, newValue),
+            configurable: true,
           });
         } else {
           if (typeof this.state(stateName) === "undefined") {
@@ -840,6 +841,7 @@ export class Kernel {
           }
           Object.defineProperty(instance, propertyKey, {
             get: () => this.env(stateName, state.type),
+            configurable: true,
           });
         }
       }

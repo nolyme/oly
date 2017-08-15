@@ -1,4 +1,4 @@
-import { _, env, inject, Logger, on } from "oly-core";
+import { env, inject, Logger, on } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";
@@ -67,9 +67,6 @@ export class View extends Component<IViewProps, { content: any }> {
     layer: PropTypes.number,
   };
 
-  @env("REACT_SHOW_VIEWS")
-  public readonly show: boolean = false;
-
   @inject
   public logger: Logger;
 
@@ -136,21 +133,6 @@ export class View extends Component<IViewProps, { content: any }> {
   public render(): JSX.Element | null {
     if (this.content) {
       this.logger.trace(`render view ${this.index} (${this.name})`);
-      if (this.show) {
-        const node = this.routerProvider.layers[this.index].node;
-        return (
-          <details style={{boxShadow: "inset 0 0 0 1px rgba(128, 128, 128, 0.3)"}}>
-            <summary
-              style={{padding: "4px", background: "grey", color: "white", cursor: "pointer"}}
-            >
-              layer[{this.index}].{this.name}: {_.identity(node.target, node.propertyKey)}
-            </summary>
-            <div style={{padding: "10px"}}>
-              {this.content}
-            </div>
-          </details>
-        );
-      }
       return this.content;
     }
     if (this.props.children) {

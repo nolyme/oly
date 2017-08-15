@@ -1,11 +1,24 @@
-import { _, IDecorator, Meta } from "oly-core";
+import { Global, IDecorator, Kernel, Meta } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { ComponentInjector } from "../services/ComponentInjector";
 
+export type InjectableComponent = React.Component<{}, {}> & { injected$$: boolean, context: { kernel: Kernel } };
+
+export interface IAttachOptions {
+  watch?: string[]; // events
+  styles?: any;
+}
+
 export class AttachDecorator implements IDecorator {
 
+  public constructor(private options: IAttachOptions = {}) {
+  }
+
   public asClass(target: { contextTypes?: any; prototype?: any }): void {
+    const self = this;
+
+    // check if @attach is already set
     if (target && target.contextTypes && target.contextTypes.kernel) {
       return;
     }
@@ -19,17 +32,24 @@ export class AttachDecorator implements IDecorator {
     // patch react component hooks (stateful only)
     if (!!target.prototype) {
 
+      // TODO: HOC, plz
+
       // force Kernel#inject() before #componentWillMount()
-      target.prototype.componentWillMount$$ = target.prototype.componentWillMount || _.noop;
-      target.prototype.componentWillMount = function componentWillMount(this: React.Component<{}, {}>) {
-        this.context.kernel.inject(ComponentInjector).inject(target, this);
+      target.prototype.componentWillMount$$ = target.prototype.componentWillMount || Global.noop;
+      target.prototype.componentWillMount = function componentWillMount(this: InjectableComponent) {
+        if (!this.injected$$ && this.context.kernel) { // you can call #componentWillMount more than once now
+          this.context.kernel.inject(ComponentInjector).inject(target, this, self.options);
+          this.injected$$ = true;
+        }
         return target.prototype.componentWillMount$$.apply(this, arguments);
       };
 
       // try to clean event-listeners before componentWillUnmount
-      target.prototype.componentWillUnmount$$ = target.prototype.componentWillUnmount || _.noop;
-      target.prototype.componentWillUnmount = function componentWillUnmount(this: React.Component<{}, {}>) {
-        this.context.kernel.inject(ComponentInjector).free(this);
+      target.prototype.componentWillUnmount$$ = target.prototype.componentWillUnmount || Global.noop;
+      target.prototype.componentWillUnmount = function componentWillUnmount(this: InjectableComponent) {
+        if (this.context.kernel) {
+          this.context.kernel.inject(ComponentInjector).free(this);
+        }
         return target.prototype.componentWillUnmount$$.apply(this, arguments);
       };
     }
@@ -60,4 +80,4 @@ export class AttachDecorator implements IDecorator {
  *
  * > Use @attach only if needed.
  */
-export const attach = Meta.decoratorWithoutOptions(AttachDecorator);
+export const attach = Meta.decorator<IAttachOptions>(AttachDecorator);
