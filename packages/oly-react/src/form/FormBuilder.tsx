@@ -36,7 +36,10 @@ export class FormBuilder<T extends object = any> {
       try {
         this.json.validate(type, value);
       } catch (e) {
-        return e.errors.map(this.mapError);
+        if (e && Array.isArray(e.errors)) {
+          return e.errors.map(this.mapError);
+        }
+        throw e;
       }
     };
   }

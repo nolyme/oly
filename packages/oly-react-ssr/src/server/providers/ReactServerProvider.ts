@@ -89,41 +89,52 @@ export class ReactServerProvider implements IProvider {
   protected requestHandlerMiddleware(): IKoaMiddleware {
     return async (ctx, next) => {
 
-      // wait the end
+      // await the end
       await next();
 
       // now,
       // - check if we are in 404 (default behavior with koa)
+      if (ctx.status !== 404) {
+        return;
+      }
+
       // - check if body is empty (default behavior with koa)
       // - check if url is not a file / assets
-      if (ctx.status === 404 && !ctx.body && ctx.url.indexOf(".") === -1) {
+      if (!!ctx.body || ctx.url.indexOf(".") === -1) {
+        return;
+      }
 
-        const kernel: Kernel = ctx.kernel;
-        const logger: Logger = kernel.inject(Logger).as("ReactRouter");
-        const router = kernel.inject(ReactRouterProvider);
-        const renderer = kernel.inject(ReactServerRenderer);
+      // - check if we are in /api
+      const prefix = ctx.kernel.env("API_PREFIX");
+      if (!!prefix && ctx.url.indexOf(prefix) !== 0) {
+        return;
+      }
 
-        logger.info(`incoming request ${ctx.method} ${ctx.path}`);
-        logger.trace("page data", ctx.request.toJSON());
+      const kernel: Kernel = ctx.kernel;
+      const logger: Logger = kernel.inject(Logger).as("ReactRouter");
+      const router = kernel.inject(ReactRouterProvider);
+      const renderer = kernel.inject(ReactServerRenderer);
 
-        try {
-          // find route + resolve
-          const tr = await router.transition({to: ctx.req.url || "/"});
+      logger.info(`incoming request ${ctx.method} ${ctx.path}`);
+      logger.trace("page data", ctx.request.toJSON());
 
-          if (tr && tr.type === "REPLACE") {
-            logger.trace(`redirect request to ${tr.to.path}`);
-            ctx.redirect(tr.to.path);
-            return;
-          }
+      try {
+        // find route + resolve
+        const tr = await router.transition({to: ctx.req.url || "/"});
 
-          // build page
-          ctx.body = renderer.render(ctx, this.template, this.mountId);
-
-        } catch (e) {
-          logger.error("server rendering has failed", e);
-          ctx.status = e.status || 500;
-          ctx.body = renderer.renderError(ctx, this.template, this.mountId, e);
+        if (tr && tr.type === "REPLACE") {
+          logger.trace(`redirect request to ${tr.to.path}`);
+          ctx.redirect(tr.to.path);
+          return;
         }
+
+        // build page
+        ctx.body = renderer.render(ctx, this.template, this.mountId);
+
+      } catch (e) {
+        logger.error("server rendering has failed", e);
+        ctx.status = e.status || 500;
+        ctx.body = renderer.renderError(ctx, this.template, this.mountId, e);
       }
     };
   }

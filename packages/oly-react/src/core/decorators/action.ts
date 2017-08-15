@@ -3,6 +3,10 @@ import { olyReactKeys } from "../constants/keys";
 
 export interface IActionOptions {
   name?: string;
+  prevent?: boolean;
+  loading?: boolean;
+  before?: object | Function;
+  after?: object | Function;
 }
 
 export class ActionDecorator implements IDecorator {
@@ -19,6 +23,7 @@ export class ActionDecorator implements IDecorator {
 
   public asMethod(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>): void {
     Meta.of({key: olyReactKeys.actions, target, propertyKey}).set({
+      ...this.options,
       name: this.options.name || Global.identity(target, propertyKey),
     });
   }

@@ -1,4 +1,5 @@
 import { Class, Global, inject, IStateMutateEvent, Kernel, Logger, Meta, olyCoreEvents, olyCoreKeys } from "oly-core";
+import { Component } from "react";
 import { olyReactEvents } from "../constants/events";
 import { olyReactKeys } from "../constants/keys";
 import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty } from "../interfaces";
@@ -29,17 +30,15 @@ export class ComponentInjector {
    * @param definition    Component definition
    * @param instance      Instance
    */
-  public inject(definition: Class, instance: object) {
+  public inject(definition: Class, instance: Component) {
 
     // pre-process states (before the real kernel#processStates())
     this.processStates(definition, instance);
+    this.processActions(definition, instance);
 
     // just make a processing, skip registration and instantiation
     // NEVER REGISTER A REACT COMPONENT INSIDE THE KERNEL, NEVER; gygnygguuygnkuguyn
     this.kernel.inject(definition, {instance});
-
-    // process actions
-    this.processActions(definition, instance);
   }
 
   /**
@@ -51,28 +50,30 @@ export class ComponentInjector {
   public processStates(target: Class, instance: object) {
 
     const statesMetadata = Meta.of({key: olyCoreKeys.states, target}).get();
-    if (statesMetadata) {
-      const keys = Object.keys(statesMetadata.properties);
-      for (const propertyKey of keys) {
-        const state = statesMetadata.properties[propertyKey];
-        if (state.readonly) {
-          continue;
-        }
+    if (!statesMetadata) {
+      return;
+    }
 
-        const eventPropertyKey = propertyKey + "$$refresh";
-        instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutateEvent) {
-          if (
-            typeof event.oldValue !== "undefined" // skip initialization
-            && event.key === Global.keyify(state.name || Global.identity(target, propertyKey))
-          ) {
-            this.setState({[event.key]: event.newValue});
-          }
-        };
-
-        Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey: eventPropertyKey}).set({
-          name: olyCoreEvents.STATE_MUTATE,
-        });
+    const keys = Object.keys(statesMetadata.properties);
+    for (const propertyKey of keys) {
+      const state = statesMetadata.properties[propertyKey];
+      if (state.readonly) {
+        continue;
       }
+
+      const eventPropertyKey = propertyKey + "$$refresh";
+      instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutateEvent) {
+        if (
+          typeof event.oldValue !== "undefined" // skip initialization
+          && event.key === Global.keyify(state.name || Global.identity(target, propertyKey))
+        ) {
+          this.setState({[event.key]: event.newValue});
+        }
+      };
+
+      Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey: eventPropertyKey}).set({
+        name: olyCoreEvents.STATE_MUTATE,
+      });
     }
   }
 
@@ -82,33 +83,62 @@ export class ComponentInjector {
    * @param target        React component
    * @param instance      Instance
    */
-  public processActions(target: Class, instance: object) {
+  public processActions(target: Class, instance: Component) {
 
     const logger = this.kernel.inject(Logger).as("Actions");
     const actionsMetadata = Meta.of({key: olyReactKeys.actions, target}).get<IActionsMetadata>();
-    if (actionsMetadata) {
-      const keys = Object.keys(actionsMetadata.properties);
-      for (const propertyKey of keys) {
+    if (!actionsMetadata) {
+      return;
+    }
 
-        const action = actionsMetadata.properties[propertyKey];
-        const resolve = this.actionResolveFactory(logger, target, action);
-        const reject = this.actionRejectFactory(logger, target, action);
+    const keys = Object.keys(actionsMetadata.properties);
+    for (const propertyKey of keys) {
 
-        instance[propertyKey + "$$copy"] = instance[propertyKey];
-        instance[propertyKey] = function actionWrapper(event: any) {
-          try {
-            logger.trace(`run ${action.name}`);
-            const data = instance[propertyKey + "$$copy"].apply(instance, arguments);
-            if (!!data && !!data.then && !!data.catch) {
-              return data.then(resolve).catch(reject);
-            } else {
-              return resolve(data);
-            }
-          } catch (e) {
-            reject(e);
+      const action = actionsMetadata.properties[propertyKey];
+      const resolve = this.actionResolveFactory(logger, target, action, instance);
+      const reject = this.actionRejectFactory(logger, target, action, instance);
+
+      instance[propertyKey + "$$copy"] = instance[propertyKey];
+      instance[propertyKey] = function actionWrapper(event: any) {
+
+        if (action.prevent && event) {
+          if (typeof event.stopPropagation === "function") {
+            event.stopPropagation();
           }
-        };
-      }
+          if (typeof event.preventDefault === "function") {
+            event.preventDefault();
+          }
+        }
+
+        if (action.loading === true) {
+          instance.setState({loading: true});
+        } else if (typeof action.loading === "string") {
+          instance.setState({[action.loading]: true});
+        }
+
+        if (typeof action.before === "object") {
+          instance.setState(action.before);
+        } else if (typeof action.before === "function") {
+          action.before();
+        }
+
+        try {
+          logger.trace(`run ${action.name}`);
+
+          const data = instance[propertyKey + "$$copy"].apply(instance, arguments);
+          if (!!data && !!data.then && !!data.catch) {
+            return data.then(resolve).catch(reject);
+          } else {
+            return resolve(data);
+          }
+        } catch (e) {
+          reject(e);
+        }
+      };
+
+      Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey}).set({
+        name: action.name,
+      });
     }
   }
 
@@ -127,9 +157,10 @@ export class ComponentInjector {
    * @param logger
    * @param definition
    * @param action
+   * @param instance
    * @return {(data:any)=>any}
    */
-  protected actionResolveFactory(logger: Logger, definition: Function, action: IActionsProperty) {
+  protected actionResolveFactory(logger: Logger, definition: Function, action: IActionsProperty, instance: Component) {
     return (data: any) => {
 
       logger.debug(`action ${action.name} is done`);
@@ -139,6 +170,18 @@ export class ComponentInjector {
         component: definition,
         data,
       };
+
+      if (action.loading === true) {
+        instance.setState({loading: false});
+      } else if (typeof action.loading === "string") {
+        instance.setState({[action.loading]: false});
+      }
+
+      if (typeof action.after === "object") {
+        instance.setState(action.after);
+      } else if (typeof action.after === "function") {
+        action.after();
+      }
 
       this.kernel.emit(olyReactEvents.ACTIONS_SUCCESS, actionResult);
 
@@ -153,9 +196,10 @@ export class ComponentInjector {
    * @param logger
    * @param definition
    * @param action
+   * @param instance
    * @return {(e:Error)=>undefined}
    */
-  protected actionRejectFactory(logger: Logger, definition: Function, action: IActionsProperty) {
+  protected actionRejectFactory(logger: Logger, definition: Function, action: IActionsProperty, instance: Component) {
     return (e: Error) => {
 
       logger.warn(`action '${action.name}' has failed`, e);
@@ -165,6 +209,18 @@ export class ComponentInjector {
         component: definition,
         error: e,
       };
+
+      if (action.loading === true) {
+        instance.setState({loading: false});
+      } else if (typeof action.loading === "string") {
+        instance.setState({[action.loading]: false});
+      }
+
+      if (typeof action.after === "object") {
+        instance.setState(action.after);
+      } else if (typeof action.after === "function") {
+        action.after();
+      }
 
       this.kernel.emit(olyReactEvents.ACTIONS_ERROR, actionResult);
 

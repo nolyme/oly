@@ -31,6 +31,10 @@ export interface IActionResult<T> {
  */
 export interface IActionsProperty {
   name: string;
+  prevent: boolean;
+  after?: object | Function;
+  before?: object | Function;
+  loading?: boolean | string;
 }
 
 /**
