@@ -3,6 +3,7 @@ import { _ } from "../kernel/Global";
 import {
   IDecorator,
   IDecoratorConstructor,
+  IDecoratorHooks,
   IGenericDecorator,
   IGenericDecoratorFactory,
   IMetadata,
@@ -46,12 +47,19 @@ export class Meta {
                              data1?: any,
                              data2?: any,
                              data3?: any): (IGenericDecoratorFactory<T> & IGenericDecorator) {
-    return (t: any, p?: any, i?: any) => {
+    const decorator = (t: any, p?: any, i?: any) => {
       const d = new Decorator(data1, data2, data3);
-      if (!this.negotiator(t, p, i, d)) {
+      if (!this.negotiator(t, p, i, d, decorator["hooks"])) {
         return this.decoratorWithoutOptions(Decorator, t, p, i) as any;
       }
     };
+    decorator["hooks"] = {
+      beforeAsClass: [],
+      beforeAsProperty: [],
+      beforeAsMethod: [],
+      beforeAsParameter: [],
+    };
+    return decorator;
   }
 
   /**
@@ -59,9 +67,21 @@ export class Meta {
    * @param Decorator
    */
   public static decoratorWithOptions<T>(Decorator: IDecoratorConstructor): IGenericDecoratorFactory<T> {
-    return (data1: T, data2: any, data3: any) => {
-      return this.decorator(Decorator, data1, data2, data3);
+    const decorator = (data1: T, data2: any, data3: any) => {
+      return (t: any, p?: any, i?: any) => {
+        const d = new Decorator(data1, data2, data3);
+        if (!this.negotiator(t, p, i, d, decorator["hooks"])) {
+          return this.decoratorWithoutOptions(Decorator, t, p, i) as any;
+        }
+      };
     };
+    decorator["hooks"] = {
+      beforeAsClass: [],
+      beforeAsProperty: [],
+      beforeAsMethod: [],
+      beforeAsParameter: [],
+    };
+    return decorator;
   }
 
   /**
@@ -75,9 +95,9 @@ export class Meta {
                                         data1?: any,
                                         data2?: any,
                                         data3?: any): IGenericDecorator {
-    return (t: any, p?: any, i?: any) => {
+    const decorator = (t: any, p?: any, i?: any) => {
       const d = new Decorator(data1, data2, data3);
-      if (!this.negotiator(t, p, i, d)) {
+      if (!this.negotiator(t, p, i, d, decorator["hooks"])) {
         const name = "@" + Decorator.name.replace("Decorator", "").toLowerCase();
         const meta = Meta.of({key: "fake", target: t, propertyKey: p});
         const accepts = ["asClass", "asProperty", "asMethod", "asParameter"].filter((n) =>
@@ -87,6 +107,13 @@ export class Meta {
         throw new Exception(`You can't use '${name}' on '${target}' (${name}: ${accepts})`);
       }
     };
+    decorator["hooks"] = {
+      beforeAsClass: [],
+      beforeAsProperty: [],
+      beforeAsMethod: [],
+      beforeAsParameter: [],
+    };
+    return decorator;
   }
 
   /**
@@ -144,26 +171,32 @@ export class Meta {
    * @param p
    * @param i
    * @param d
+   * @param hooks
    */
-  private static negotiator(t: any, p: any, i: any, d: IDecorator): boolean {
+  private static negotiator(t: any, p: any, i: any, d: IDecorator, hooks: IDecoratorHooks): boolean {
 
     if (typeof t === "object" && typeof p === "string" && typeof i === "number" && d.asParameter) {
+      hooks.beforeAsParameter.forEach((call) => call(t, p, i));
       d.asParameter(t, p, i);
       return true;
     }
     if (typeof t === "function" && typeof p === "undefined" && typeof i === "number" && d.asParameter) {
+      hooks.beforeAsParameter.forEach((call) => call(t, p, i));
       d.asParameter(t.prototype, "$constructor", i);
       return true;
     }
     if (typeof t === "object" && typeof p === "string" && typeof i === "object" && d.asMethod) {
+      hooks.beforeAsMethod.forEach((call) => call(t, p, i));
       d.asMethod(t, p, i);
       return true;
     }
     if (typeof t === "object" && typeof p === "string" && typeof i === "undefined" && d.asProperty) {
+      hooks.beforeAsProperty.forEach((call) => call(t, p, i));
       d.asProperty(t, p);
       return true;
     }
     if (typeof t === "function" && typeof p === "undefined" && typeof i === "undefined" && d.asClass) {
+      hooks.beforeAsClass.forEach((call) => call(t, p, i));
       d.asClass(t);
       return true;
     }

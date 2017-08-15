@@ -25,6 +25,13 @@ export interface IDecorator {
   asParameter?(target: object, propertyKey: string, index: number): void;
 }
 
+export interface IDecoratorHooks {
+  beforeAsClass: Function[];
+  beforeAsProperty: Function[];
+  beforeAsMethod: Function[];
+  beforeAsParameter: Function[];
+}
+
 /**
  *
  */

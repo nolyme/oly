@@ -100,13 +100,13 @@ export class ReactServerProvider implements IProvider {
 
       // - check if body is empty (default behavior with koa)
       // - check if url is not a file / assets
-      if (!!ctx.body || ctx.url.indexOf(".") === -1) {
+      if (!!ctx.body || ctx.url.indexOf(".") > -1) {
         return;
       }
 
       // - check if we are in /api
       const prefix = ctx.kernel.env("API_PREFIX");
-      if (!!prefix && ctx.url.indexOf(prefix) !== 0) {
+      if (!!prefix && ctx.url.indexOf(prefix) === 0) {
         return;
       }
 
