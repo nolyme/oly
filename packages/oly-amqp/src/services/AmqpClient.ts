@@ -21,13 +21,17 @@ export class AmqpClient {
    * @param payload     Custom data
    * @param options     AmqpClient publish options
    */
-  public publish(queue: string, payload: string = "", options: Options.Publish = {}): boolean {
+  public publish(queue: string, payload: string | object = "", options: Options.Publish = {}): boolean {
+
+    const content = typeof payload === "string"
+      ? payload
+      : JSON.stringify(payload);
 
     this.logger.debug(`publish into ${queue}`);
 
     options.correlationId = this.kernel.id;
 
-    return this.amqpProvider.channel.sendToQueue(queue, new Buffer(payload), options);
+    return this.amqpProvider.channel.sendToQueue(queue, new Buffer(content), options);
   }
 
   /**
