@@ -42,11 +42,7 @@ export class DocProvider {
     if (this.html) {
       this.logger.trace(command);
       this.logger.info("run webpack...");
-      try {
-        execSync(command);
-      } catch (e) {
-        throw new Error(`Webpack has failed (${e.message})`);
-      }
+      execSync(command, {stdio: [0, 1, 2]});
       this.logger.info("webpack ok");
     }
 
