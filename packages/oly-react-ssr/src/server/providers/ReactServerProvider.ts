@@ -123,7 +123,7 @@ export class ReactServerProvider implements IProvider {
         const tr = await router.transition({to: ctx.req.url || "/"});
 
         if (tr && tr.type === "REPLACE") {
-          logger.trace(`redirect request to ${tr.to.path}`);
+          logger.debug(`redirect request to ${tr.to.path}`);
           ctx.redirect(tr.to.path);
           return;
         }

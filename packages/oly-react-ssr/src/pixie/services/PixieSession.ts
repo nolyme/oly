@@ -1,5 +1,7 @@
-import { env, Global, inject, Logger } from "oly-core";
+import { env, inject, Logger, state } from "oly-core";
 import { Browser } from "oly-react";
+import { Cookies } from "../../server/services/Cookies";
+import { olyReactPixieStates } from "../constants/states";
 import { Pixie } from "./Pixie";
 
 /**
@@ -12,7 +14,7 @@ import { Pixie } from "./Pixie";
 export class PixieSession {
 
   @env("PIXIE_COOKIE")
-  public cookieName: string = "SSID";
+  public cookieName: string = "TK";
 
   @inject
   protected pixie: Pixie;
@@ -23,19 +25,28 @@ export class PixieSession {
   @inject
   protected logger: Logger;
 
+  @inject
+  protected cookies: Cookies;
+
+  @state(olyReactPixieStates.PIXIE_SESSION_TOKEN)
   protected token: string | null;
 
   /**
    * Check if token exists.
    */
   public hasToken(): boolean {
-    return !!this.token;
+    return !!this.getToken();
   }
 
   /**
    * Get in-memory token.
    */
   public getToken(): string | null {
+
+    if (!this.token && this.cookies.get(this.cookieName)) {
+      this.token = this.cookies.get(this.cookieName);
+    }
+
     return this.token;
   }
 
@@ -46,30 +57,25 @@ export class PixieSession {
    * @param ttl      Cookie lifetime in second
    */
   public setToken(token: string, ttl?: number): void {
+    this.logger.info("set token");
+
+    this.cookies.set(this.cookieName, token, {
+      path: "/",
+      httpOnly: false,
+      expires: ttl ? new Date(new Date().getTime() + ttl * 1000) : undefined,
+    });
 
     this.token = token;
-
-    if (Global.isBrowser()) {
-
-      const path = "Path=/;";
-      const expires = ttl
-        ? `expires=${new Date(new Date().getTime() + ttl * 1000).toUTCString()};`
-        : "";
-      const cookie = `${this.cookieName}=${this.token};` + path + expires;
-
-      this.logger.info(cookie);
-      this.browser.window.document.cookie = cookie;
-    }
   }
 
   /**
    * Delete token. Remove from cookie.
    */
   public removeToken(): void {
+    this.logger.info("remove token");
+
+    this.cookies.set(this.cookieName, undefined);
+
     this.token = null;
-    if (Global.isBrowser()) {
-      this.logger.info("remove cookie");
-      this.browser.window.document.cookie = `${this.cookieName}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
-    }
   }
 }

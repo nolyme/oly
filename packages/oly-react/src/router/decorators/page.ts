@@ -1,14 +1,34 @@
-import {IDecorator, inject, Meta} from "oly-core";
-import {olyReactRouterKeys} from "../constants/keys";
+import { IDecorator, inject, Meta } from "oly-core";
+import { olyReactRouterKeys } from "../constants/keys";
 
 /**
  * Page options.
  */
 export interface IPageOptions {
+
+  /**
+   * Path match.
+   */
   path?: string;
+
+  /**
+   * Create a new layer with all child nodes.
+   */
   children?: Function[];
+
+  /**
+   * Wrap all other nodes of the class in children[].
+   */
   layout?: boolean;
+
+  /**
+   * Node name. Default is the function name.
+   */
   name?: string;
+
+  /**
+   * If true, node will not be accessible.
+   */
   abstract?: boolean;
 }
 

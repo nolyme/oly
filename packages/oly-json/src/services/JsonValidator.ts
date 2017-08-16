@@ -1,4 +1,4 @@
-import * as Ajv from "ajv";
+ import * as Ajv from "ajv";
 import { ValidateFunction } from "ajv";
 import { env, inject, state } from "oly-core";
 import { ValidationException } from "../exceptions/ValidationException";

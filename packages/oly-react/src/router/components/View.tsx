@@ -1,4 +1,4 @@
-import { env, inject, Logger, on } from "oly-core";
+import { inject, Logger, on } from "oly-core";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";
@@ -60,7 +60,9 @@ export interface IViewProps {
  *
  * This is useful if you have nested routes.
  */
-@attach
+@attach({
+  watch: [], // View does not need auto-watch
+})
 export class View extends Component<IViewProps, { content: any }> {
 
   public static contextTypes = {

@@ -7,8 +7,4 @@ export class Document {
 
   @field({required: false})
   public _v: number;
-
-  public get id() {
-    return this._id;
-  }
 }

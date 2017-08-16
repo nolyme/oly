@@ -40,7 +40,7 @@ export class ActionDecorator implements IDecorator {
  * class A extends Component<any, any> {
  *
  *   @action
- *   onClick(event) {
+ *   onClick() {
  *   }
  *
  *   render() {
@@ -54,5 +54,9 @@ export class ActionDecorator implements IDecorator {
  * Action is "autobind".
  * There is an error handler.
  * The global event `ACTIONS_ERROR` is emitted on each error.
+ *
+ * #### prevent
+ *
+ * use @action({prevent: true}) to stop propagation. Useful with onSubmit={}.
  */
 export const action = Meta.decorator<IActionOptions>(ActionDecorator);

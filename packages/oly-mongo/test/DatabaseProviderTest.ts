@@ -46,7 +46,7 @@ describe("DatabaseProvider", () => {
   it("should insert data", async () => {
 
     const r = await personRepository.save({firstname: "John", lastname: "Doe"});
-    expect(r.id).toBeDefined();
+    expect(r._id).toBeDefined();
 
     const list = await personRepository.find();
     expect(list.length).toBe(1);
@@ -64,7 +64,7 @@ describe("DatabaseProvider", () => {
     time.pause();
     await personRepository.save({firstname: "Time", lastname: "Test"});
     const result = await personRepository.findOne({firstname: "Time"});
-    expect(result.createdAt).toEqual(new Date(time.now()));
+    expect(result!.createdAt).toEqual(new Date(time.now()));
   });
 
   it("should check update version", async () => {
@@ -76,11 +76,11 @@ describe("DatabaseProvider", () => {
 
     expect(v1).toEqual(v1b);
 
-    v1b.lastname = "toto";
-    await personRepository.save(v1b);
+    v1b!.lastname = "toto";
+    await personRepository.save(v1b!);
 
-    v1.lastname = "tata";
-    await expect(personRepository.save(v1))
+    v1!.lastname = "tata";
+    await expect(personRepository.save(v1!))
       .rejects
       .toBeInstanceOf(MongoError);
   });

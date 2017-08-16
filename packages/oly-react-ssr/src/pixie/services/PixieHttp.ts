@@ -69,7 +69,7 @@ export class PixieHttp {
    *
    * @param options   HttpClient request options
    */
-  public request<T>(options: IHttpRequest): Promise<T> {
+  public request<T = any>(options: IHttpRequest): Promise<T> {
 
     options.method = options.method || "GET";
     options.url = options.url || "/";
@@ -97,7 +97,7 @@ export class PixieHttp {
    * @param url       Complete url
    * @param options   Request options
    */
-  public get<T>(url: string, options: IHttpRequest = {}): Promise<T> {
+  public get<T = any>(url: string, options: IHttpRequest = {}): Promise<T> {
 
     options.url = url;
 
@@ -112,7 +112,7 @@ export class PixieHttp {
    * @param data      Request body
    * @param options   Request options
    */
-  public post<T>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<T> {
+  public post<T = any>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<T> {
 
     options.method = "POST";
     options.url = url;
@@ -129,7 +129,7 @@ export class PixieHttp {
    * @param data      Request body
    * @param options   Request options
    */
-  public put<T>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<T> {
+  public put<T = any>(url: string, data: any = {}, options: IHttpRequest = {}): Promise<T> {
 
     options.method = "PUT";
     options.url = url;
@@ -145,7 +145,7 @@ export class PixieHttp {
    * @param url       Complete url
    * @param options   Request options
    */
-  public del<T>(url: string, options: IHttpRequest = {}): Promise<T> {
+  public del<T = any>(url: string, options: IHttpRequest = {}): Promise<T> {
 
     options.method = "DELETE";
     options.url = url;

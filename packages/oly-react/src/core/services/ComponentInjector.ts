@@ -10,14 +10,14 @@ import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty }
  * The injection system is not enough because React does not give access to its Factory.
  * We process an instance on the #componentWillMount() via @attach.
  * Processing allowed all features:
- * - @on, @inject, @node, @env
+ * - @on, @inject, @state, @env
  *
  * However, as we don't know WHEN component is created (by React), we can't create a real dependency tree.
- * This is why, you can't declare providers inside a React Component. (Unless if you make a implicit declaration.)
+ * > This is why, you can't declare providers inside a React Component. (Unless if you make a implicit declaration.)
  *
- * Finally, we enhance @node and create a new feature: @action.
+ * Finally, we enhance @state and create a new feature: @action.
  *
- * Decorator @node decorator will create also a refreshHandler with @on to re-render on each mutation.
+ * Decorator @state will create also a refreshHandler with @on to re-render on each mutation.
  * Decorator @action wraps a method and allows logging/global try-catch/autobind.
  */
 export class ComponentInjector {
@@ -33,17 +33,27 @@ export class ComponentInjector {
    * @param options
    */
   public inject(definition: Class, instance: Component, options: IAttachOptions = {}) {
+    const self = this;
 
     // pre-process states (before the real kernel#processStates())
-    this.processStates(definition, instance);
     this.processActions(definition, instance);
 
-    if (Array.isArray(options.watch)) {
-      for (const name of options.watch) {
-        Meta
-          .of({key: olyCoreKeys.events, target: definition.prototype, propertyKey: "forceUpdate"})
-          .set({name});
-      }
+    const states = options.watch || this.getStates(definition);
+
+    if (states.length > 0) {
+
+      instance["auto$$refresh"] = function refreshHandler(this: any, event: IStateMutateEvent) {
+        for (const name of states) {
+          if (self.kernel["started"] && event.key === Global.keyify(name)) {
+            instance.forceUpdate();
+            return;
+          }
+        }
+      };
+
+      Meta.of({key: olyCoreKeys.events, target: definition.prototype, propertyKey: "auto$$refresh"}).set({
+        name: olyCoreEvents.STATE_MUTATE,
+      });
     }
 
     // just make a processing, skip registration and instantiation
@@ -52,39 +62,38 @@ export class ComponentInjector {
   }
 
   /**
-   * Add an @on("node:mutate") to re-renderer the component on mutation.
+   * Get states linked to a component.
    *
    * @param target      React component
-   * @param instance    Instance
    */
-  public processStates(target: Class, instance: object) {
+  public getStates(target: Class): string[] {
+
+    const states: string[] = [];
 
     const statesMetadata = Meta.of({key: olyCoreKeys.states, target}).get();
-    if (!statesMetadata) {
-      return;
-    }
-
-    const keys = Object.keys(statesMetadata.properties);
-    for (const propertyKey of keys) {
-      const state = statesMetadata.properties[propertyKey];
-      if (state.readonly) {
-        continue;
-      }
-
-      const eventPropertyKey = propertyKey + "$$refresh";
-      instance[eventPropertyKey] = function refreshHandler(this: any, event: IStateMutateEvent) {
-        if (
-          typeof event.oldValue !== "undefined" // skip initialization
-          && event.key === Global.keyify(state.name || Global.identity(target, propertyKey))
-        ) {
-          this.setState({[event.key]: event.newValue});
+    if (statesMetadata) {
+      const keys = Object.keys(statesMetadata.properties);
+      for (const propertyKey of keys) {
+        const state = statesMetadata.properties[propertyKey];
+        if (state.readonly) {
+          continue;
         }
-      };
-
-      Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey: eventPropertyKey}).set({
-        name: olyCoreEvents.STATE_MUTATE,
-      });
+        states.push(state.name || Global.identity(target, propertyKey));
+      }
     }
+
+    const injectionsMetadata = Meta.of({key: olyCoreKeys.injections, target}).get();
+    if (injectionsMetadata) {
+      const keys2 = Object.keys(injectionsMetadata.properties);
+      for (const propertyKey of keys2) {
+        const injection = injectionsMetadata.properties[propertyKey];
+        if (injection.type) {
+          states.push(...this.getStates(injection.type));
+        }
+      }
+    }
+
+    return states;
   }
 
   /**

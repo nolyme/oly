@@ -9,7 +9,7 @@ export class DatabaseProvider implements IProvider {
    * Mongodb URI.
    */
   @env("DATABASE_URL")
-  public readonly url: string = "mongodb://localhost";
+  public readonly url: string = "mongodb://localhost/test";
 
   @state
   public db: Db;

@@ -2,6 +2,7 @@ import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger
 import { IChunks } from "../";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
+import { olyReactRouterStates } from "../constants/states";
 import {
   IHrefQuery,
   ILayer,
@@ -20,7 +21,10 @@ import { ReactRouterResolver } from "../services/ReactRouterResolver";
 export class ReactRouterProvider implements IProvider {
 
   /**
-   *
+   * Prefix your react app. It's like API_PREFIX.
+   * It's universal:
+   * - Browser will use it like a <base href
+   * - Server will use koa-mount(prefix).
    */
   @env("REACT_ROUTER_PREFIX")
   public readonly prefix: string = "/";
@@ -29,19 +33,32 @@ export class ReactRouterProvider implements IProvider {
    * This is the current stack.
    * All resolved components are stored here.
    * On each page update, layers is erased, there is no cache.
+   *
+   * Idk why layers isn't in the store with match.
    */
   public layers: ILayer[] = [];
 
+  /**
+   * Match = "Current Route".
+   * Null on the startup.
+   * This state is really really important:
+   * - EACH component which depends on Router or ReactRouterProvider will watch this state.
+   */
+  @state(olyReactRouterStates.REACT_ROUTER_PROVIDER_MATCH)
   public match?: IMatch;
+
+  /**
+   * Routes are cached in the store. Useful with SSR.
+   * Like Database Connection or Http Server, routes are defined only once on the #onStart.
+   */
+  @state
+  protected routes: IRoute[];
 
   @inject
   protected kernel: Kernel;
 
   @inject
   protected logger: Logger;
-
-  @state
-  protected routes: IRoute[];
 
   @inject
   protected matcher: ReactRouterMatcher;

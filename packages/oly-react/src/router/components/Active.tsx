@@ -1,9 +1,8 @@
-import { inject, on } from "oly-core";
+import { inject } from "oly-core";
 import * as React from "react";
 import { Children, Component } from "react";
 import { IHrefQuery } from "../";
 import { attach } from "../../core/decorators/attach";
-import { olyReactRouterEvents } from "../constants/events";
 import { Router } from "../services/Router";
 
 /**
@@ -20,19 +19,9 @@ export interface IActiveProps {
    * Compare exact path.
    */
   strict?: boolean;
-
-  /**
-   * Always re-render on route change.
-   */
-  always?: boolean;
 }
 
 export interface IActiveState {
-
-  /**
-   *
-   */
-  active: boolean;
 }
 
 /**
@@ -41,18 +30,11 @@ export interface IActiveState {
 @attach
 export class Active extends Component<IActiveProps, IActiveState> {
 
-  @inject(Router)
+  @inject
   private router: Router;
 
-  /**
-   *
-   */
-  @on(olyReactRouterEvents.TRANSITION_END)
-  public onTransitionEnd(): void {
-    const active = this.router.isActive(this.props.href, this.props.strict);
-    if (this.state.active !== active || this.props.always) {
-      this.setState({active});
-    }
+  public get isActive() {
+    return this.router.isActive(this.props.href, this.props.strict);
   }
 
   /**
@@ -68,7 +50,7 @@ export class Active extends Component<IActiveProps, IActiveState> {
    *
    */
   public render(): JSX.Element | null {
-    if (!this.state.active || !this.props.children) {
+    if (!this.isActive || !this.props.children) {
       return null;
     }
     if (Array.isArray(this.props.children)) {

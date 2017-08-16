@@ -21,19 +21,23 @@ export class Cookies {
     throw new Exception("There is no cookies provider for node env");
   }
 
-  public set(cookieName: string, cookieValue: any): void {
+  public set(cookieName: string, cookieValue?: any, options: any = {}): void {
 
     if (Global.isBrowser()) {
-      JsCookies.set(cookieName, cookieValue);
+      if (typeof cookieValue === "undefined") {
+        JsCookies.remove(cookieName);
+      } else {
+        JsCookies.set(cookieName, cookieValue, options);
+      }
       return;
     }
 
     const ctx: IKoaContext = this.kernel.state("Koa.context");
     if (ctx) {
-      ctx.cookies.set(cookieName, cookieValue);
+      ctx.cookies.set(cookieName, cookieValue, options);
       return;
     }
 
-    throw new Exception("There is no cookies provider for node env");
+    throw new Exception("There is no cookies provider for the current node env");
   }
 }

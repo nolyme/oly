@@ -12,6 +12,7 @@ export interface IAutoRequest {
 
 /**
  * Use Api to create Http clients.
+ * This is not a good idea...
  */
 export class AutoPixieHttpProvider {
 

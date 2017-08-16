@@ -9,6 +9,11 @@ export const autoAttach = () => {
     if (target && target.contextTypes && target.contextTypes.kernel) {
       return;
     }
+
+    if (!target || !target.prototype || !target.prototype.render) {
+      return;
+    }
+
     attach()(target);
   };
 

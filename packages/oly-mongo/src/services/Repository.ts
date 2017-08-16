@@ -2,6 +2,7 @@ import { ObjectID } from "bson";
 import { Collection, MongoError } from "mongodb";
 import { Class, inject, Logger } from "oly-core";
 import { Json } from "oly-json";
+import { MongoException } from "../exceptions/MongoException";
 import { IDocument, IObjectDocument } from "../interfaces";
 import { DatabaseProvider } from "../providers/DatabaseProvider";
 
@@ -86,9 +87,17 @@ export abstract class Repository<T extends IDocument> {
     }
   }
 
-  public async findOne(query: object = {}): Promise<T> {
+  public async findOne(query: object = {}): Promise<T | undefined> {
     this.logger.info(`find one`, query);
-    return this.out(await this.collection.findOne(query));
+    const match = await this.collection.findOne(query);
+    if (!match) {
+      return;
+    }
+    return this.out(match);
+  }
+
+  public async findById(id: string): Promise<T | undefined> {
+    return this.findOne({_id: this.castId(id)});
   }
 
   public async find(query: object = {}): Promise<T[]> {
@@ -100,22 +109,26 @@ export abstract class Repository<T extends IDocument> {
     return new ObjectID(id);
   }
 
-  public in(items: IObjectDocument | IDocument): T {
-    if (items._id && items._id instanceof ObjectID) {
-      items._id = items._id.toString();
+  public in(document: IObjectDocument | IDocument): T {
+    if (document._id && document._id instanceof ObjectID) {
+      document._id = document._id.toString();
     }
-    const obj: any = this.json.build(this.type, items);
-    if (obj._id && typeof obj._id === "string") {
-      obj._id = this.castId(obj._id);
+    try {
+      const obj: any = this.json.build(this.type, document);
+      if (obj._id && typeof obj._id === "string") {
+        obj._id = this.castId(obj._id);
+      }
+      return obj;
+    } catch (e) {
+      throw new MongoException(e, `Document has been rejected`);
     }
-    return obj;
   }
 
-  public out(items: Partial<T>): T {
-    if (items._id && items._id instanceof ObjectID) {
-      items._id = items._id.toString();
+  public out(document: Partial<T>): T {
+    if (document._id && document._id instanceof ObjectID) {
+      document._id = document._id.toString();
     }
-    return this.json.map(this.type, items);
+    return this.json.map(this.type, JSON.parse(JSON.stringify(document)));
   }
 
   public async beforeInsert(document: Partial<T>): Promise<void> {

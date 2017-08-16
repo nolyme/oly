@@ -1,9 +1,8 @@
-import { inject, on } from "oly-core";
+import { inject } from "oly-core";
 import * as React from "react";
 import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
 import { action } from "../../core/decorators/action";
 import { attach } from "../../core/decorators/attach";
-import { olyReactRouterEvents } from "../constants/events";
 import { Router } from "../services/Router";
 
 /**
@@ -38,7 +37,6 @@ export interface IGoProps extends HTMLAttributes<HTMLAnchorElement> {
 }
 
 export interface IGoState {
-  active: boolean;
 }
 
 /**
@@ -49,6 +47,10 @@ export class Go extends Component<IGoProps, IGoState> {
 
   @inject
   private router: Router;
+
+  public get isActive() {
+    return this.router.isActive(this.props, this.props.strict);
+  }
 
   /**
    *
@@ -80,18 +82,6 @@ export class Go extends Component<IGoProps, IGoState> {
   /**
    *
    */
-  @on(olyReactRouterEvents.TRANSITION_END)
-  public onTransitionEnd() {
-    const {to, params, query} = this.props;
-    const active = this.router.isActive({to, params, query}, this.props.strict);
-    if (this.state.active !== active) {
-      this.setState({active});
-    }
-  }
-
-  /**
-   *
-   */
   public componentWillMount() {
     const {to, params, query} = this.props;
     this.state = {
@@ -105,7 +95,7 @@ export class Go extends Component<IGoProps, IGoState> {
   public render(): JSX.Element {
     const {to, params, query, strict, active, ...rest} = this.props;
     return createElement("a" as any, {
-      className: this.state.active ? "active" : undefined,
+      className: this.isActive ? "active" : undefined,
       ...rest,
       href: this.router.href({to, params, query}),
       onClick: this.onClick,
