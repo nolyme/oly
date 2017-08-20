@@ -31,7 +31,7 @@ describe("AmqpProvider", () => {
     await client.purge("Tasks.abc");
     await client.publish("Tasks.abc", "Hello");
     await client.publish("Tasks.abc", "Hello");
-    await _.timeout(50);
+    await _.timeout(500);
     expect(Tasks.stack.length).toBe(1);
     expect(Tasks.stack[0].properties.correlationId).toBe(kernel.id);
     expect(Tasks.stack[0].content.toString("UTF-8")).toBe("Hello");
