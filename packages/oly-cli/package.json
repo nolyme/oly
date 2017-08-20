@@ -4,7 +4,7 @@
   },
   "name": "oly-cli",
   "description": "oly-cli",
-  "version": "0.12.14",
+  "version": "0.12.15",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/shelljs": "0.7.2",
-    "oly-core": "^0.12.14",
+    "oly-core": "^0.12.15",
     "shelljs": "0.7.8"
   },
   "repository": {

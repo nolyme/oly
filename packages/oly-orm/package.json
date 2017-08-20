@@ -1,7 +1,7 @@
 {
   "name": "oly-orm",
   "description": "oly-orm",
-  "version": "0.12.14",
+  "version": "0.12.15",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -13,15 +13,15 @@
     "typeorm"
   ],
   "dependencies": {
-    "oly-json": "^0.12.14",
+    "oly-json": "^0.12.15",
     "sqlite3": "3.1.8",
     "typeorm": "0.1.0-alpha.26"
   },
   "devDependencies": {
-    "oly-core": "^0.12.14"
+    "oly-core": "^0.12.15"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.14"
+    "oly-core": "^0.12.15"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
