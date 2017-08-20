@@ -155,9 +155,8 @@ export class ComponentInjector {
         }
       };
 
-      Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey}).set({
-        name: action.name,
-      });
+      // TODO: should be an option ?
+      // Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey}).set({name: action.name});
     }
   }
 

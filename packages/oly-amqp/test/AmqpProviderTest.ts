@@ -1,5 +1,6 @@
 import { _, Exception, Kernel } from "oly-core";
 import { task } from "../src";
+import { content } from "../src/decorators/content";
 import { IMessage } from "../src/interfaces";
 import { AmqpProvider } from "../src/providers/AmqpProvider";
 import { WorkerProvider } from "../src/providers/WorkerProvider";
@@ -9,9 +10,11 @@ describe("AmqpProvider", () => {
 
   class Tasks {
     static stack: IMessage[] = [];
+    static stack2: string[] = [];
 
     @task
-    abc(message: IMessage) {
+    abc(@content test: string, message: IMessage) {
+      Tasks.stack2.push(test);
       if (Tasks.stack.length === 1) {
         throw new Exception("boom");
       }
@@ -32,5 +35,7 @@ describe("AmqpProvider", () => {
     expect(Tasks.stack.length).toBe(1);
     expect(Tasks.stack[0].properties.correlationId).toBe(kernel.id);
     expect(Tasks.stack[0].content.toString("UTF-8")).toBe("Hello");
+    expect(Tasks.stack2[0]).toBe("Hello");
+    expect(Tasks.stack2[1]).toBe("Hello");
   });
 });

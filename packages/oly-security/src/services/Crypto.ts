@@ -8,7 +8,7 @@ import { _, env } from "oly-core";
 export class Crypto {
 
   @env("SECURITY_SECRET")
-  public readonly secret: string = _.shortid(18);
+  public readonly secret: string = "insert a secret key here";
 
   @env("SECURITY_SALT_ROUND")
   public readonly saltRound: number | string = 8;

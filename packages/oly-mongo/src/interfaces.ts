@@ -1,5 +1,6 @@
 import { ObjectID } from "bson";
 import { IMetadata } from "oly-core";
+import { Cursor } from "mongodb";
 
 export interface IDocument {
   _id?: string;
@@ -20,3 +21,5 @@ export interface IIndexesMetadata extends IMetadata {
     [key: string]: IIndexProperty;
   };
 }
+
+export type CursorTransform = (cursor: Cursor) => Cursor;

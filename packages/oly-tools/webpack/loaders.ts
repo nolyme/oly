@@ -15,6 +15,9 @@ export function typescriptLoaderFactory(): Rule {
       options: {
         silent: true,
         transpileOnly: true,
+        compilerOptions: {
+          module: "es2015",
+        },
       },
     }],
   };

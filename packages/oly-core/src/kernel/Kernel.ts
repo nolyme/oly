@@ -657,7 +657,6 @@ export class Kernel {
         .keys(injectionsMetadata.properties)
         .map((k) => injectionsMetadata.properties[k]) : [],
       definition: target.provide,
-      started: false,
       singleton,
       use,
     };

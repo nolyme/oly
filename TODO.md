@@ -2,11 +2,12 @@
 
 ### BUG
 
-- 
+- why PIXIE_SESSION_TOKEN in PIXI ?
+- <Go/> -> no active!
 
 ### SOON
 
-- 
+- (oly-amqp|mongo): @task batch persistence
 
 ### MAYBE ONE DAY
 

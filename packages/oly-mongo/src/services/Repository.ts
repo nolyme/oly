@@ -3,7 +3,7 @@ import { Collection, MongoError } from "mongodb";
 import { Class, inject, Logger } from "oly-core";
 import { Json } from "oly-json";
 import { MongoException } from "../exceptions/MongoException";
-import { IDocument, IObjectDocument } from "../interfaces";
+import { CursorTransform, IDocument, IObjectDocument } from "../interfaces";
 import { DatabaseProvider } from "../providers/DatabaseProvider";
 
 export abstract class Repository<T extends IDocument> {
@@ -53,7 +53,7 @@ export abstract class Repository<T extends IDocument> {
       const id: any = raw._id;
       const v: any = raw._v;
 
-      this.logger.info(`update`, raw);
+      this.logger.debug(`update`, raw);
 
       await this.beforeUpdate(raw);
 
@@ -75,7 +75,7 @@ export abstract class Repository<T extends IDocument> {
 
     } else {
 
-      this.logger.info(`insert`, raw);
+      this.logger.debug(`insert`, raw);
 
       await this.beforeInsert(raw);
 
@@ -83,12 +83,12 @@ export abstract class Repository<T extends IDocument> {
 
       await this.collection.insertOne(data);
 
-      return data;
+      return this.out(data);
     }
   }
 
   public async findOne(query: object = {}): Promise<T | undefined> {
-    this.logger.info(`find one`, query);
+    this.logger.debug(`find one`, query);
     const match = await this.collection.findOne(query);
     if (!match) {
       return;
@@ -100,9 +100,10 @@ export abstract class Repository<T extends IDocument> {
     return this.findOne({_id: this.castId(id)});
   }
 
-  public async find(query: object = {}): Promise<T[]> {
-    this.logger.info(`find`, query);
-    return (await this.collection.find(query).toArray()).map((i) => this.out(i));
+  public async find(query: object = {}, cursorTransformer: CursorTransform = (c) => c): Promise<T[]> {
+    this.logger.debug(`find`, query);
+    const cursor = cursorTransformer(this.collection.find(query));
+    return (await cursor.toArray()).map((i: any) => this.out(i));
   }
 
   public castId(id: string | number | ObjectID): ObjectID {
@@ -125,10 +126,10 @@ export abstract class Repository<T extends IDocument> {
   }
 
   public out(document: Partial<T>): T {
-    if (document._id && document._id instanceof ObjectID) {
+    if (document._id) {
       document._id = document._id.toString();
     }
-    return this.json.map(this.type, JSON.parse(JSON.stringify(document)));
+    return this.json.map(this.type, document);
   }
 
   public async beforeInsert(document: Partial<T>): Promise<void> {

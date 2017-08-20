@@ -45,6 +45,18 @@ export class Router {
   }
 
   /**
+   * Like Router#go, with type=REPLACE.
+   *
+   * @param {string | IHrefQuery} query
+   * @returns {Promise<ITransition>}
+   */
+  public redirect(query: string | IHrefQuery): Promise<ITransition | undefined> {
+    const to = typeof query === "string" ? {to: query} : query;
+    to.type = "REPLACE";
+    return this.routerProvider.transition(to);
+  }
+
+  /**
    * Remove layers and go to the current path as REPLACE.
    *
    * ```ts

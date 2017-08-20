@@ -12,7 +12,7 @@ export interface IDeclaration<T = any> {
   // cached instance
   instance?: T;
   // is started ?
-  started: boolean;
+  started?: boolean;
   // how to create our instance
   use: Class<T> | IFactory<T>;
   // who rely on it
