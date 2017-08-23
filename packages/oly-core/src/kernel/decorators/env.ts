@@ -42,4 +42,4 @@ export class EnvDecorator implements IDecorator {
  * Kernel.create({B: "c"}).get(A).b; // c
  * ```
  */
-export const env = Meta.decorator<string>(EnvDecorator);
+export const env = Meta.decoratorWithOptions<string>(EnvDecorator);
