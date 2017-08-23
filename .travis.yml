@@ -15,14 +15,9 @@ before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.1
   - export PATH="$HOME/.yarn/bin:$PATH"
 
-install:
- - yarn
- - yarn bootstrap
+install: yarn && yarn bootstrap
 
-script:
- - yarn build
- - yarn test:ci
- - yarn docs
+script: yarn build && yarn test:ci && yarn docs
 
 deploy:
   provider: pages
@@ -32,6 +27,4 @@ deploy:
   on:
     branch: master
 
-after_script:
-  - yarn add codecov
-  - yarn codecov
+after_script: yarn add codecov && yarn codecov

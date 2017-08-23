@@ -7,7 +7,10 @@
 
 ### SOON
 
+- (oly-react-ssr): rm PixieHttp, just use HttpClient
+- (oly-react): canForward/canBack
 - (oly-amqp|mongo): @task batch persistence
+- HttpClient#get|post -> .data (not #request)
 
 ### MAYBE ONE DAY
 

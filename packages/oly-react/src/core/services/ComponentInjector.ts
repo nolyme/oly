@@ -104,6 +104,7 @@ export class ComponentInjector {
    */
   public processActions(target: Class, instance: Component) {
 
+    const self = this;
     const logger = this.kernel.inject(Logger).as("Actions");
     const actionsMetadata = Meta.of({key: olyReactKeys.actions, target}).get<IActionsMetadata>();
     if (!actionsMetadata) {
@@ -142,6 +143,9 @@ export class ComponentInjector {
         }
 
         try {
+          self.kernel.emit(olyReactEvents.ACTIONS_BEGIN, {
+            action: action.name,
+          });
           logger.trace(`run ${action.name}`);
 
           const data = instance[propertyKey + "$$copy"].apply(instance, arguments);

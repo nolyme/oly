@@ -330,11 +330,10 @@ export class Kernel {
   }
 
   /**
-   * @deprecated Use Kernel#inject()
-   * @internal
+   *
    */
-  public get<T>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
-    return this.inject(definition, options);
+  public get <T>(definition: Class<T> | IDefinition<T>): T {
+    return this.inject(definition);
   }
 
   /**

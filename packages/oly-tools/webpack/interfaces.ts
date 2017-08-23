@@ -26,13 +26,13 @@ export interface IToolsOptions {
    * Webpack devtool.
    * Default if production: false, otherwise: 'source-maps'
    */
-  sourceMaps: Options.Devtool;
+  sourceMaps?: Options.Devtool;
 
   /**
    * Set hash to all filenames.
    * Default is isProduction.
    */
-  hash: boolean;
+  hash?: boolean;
 
   /**
    * Enable prod mode.

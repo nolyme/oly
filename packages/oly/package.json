@@ -16,12 +16,10 @@
     "oly-core": "^0.12.15",
     "oly-http": "^0.12.15",
     "oly-json": "^0.12.15",
-    "oly-orm": "^0.12.15",
     "oly-react": "^0.12.15",
     "oly-react-ssr": "^0.12.15",
     "oly-retry": "^0.12.15",
     "oly-security": "^0.12.15",
-    "oly-socket": "^0.12.15",
     "oly-swagger": "^0.12.15",
     "react": "15.6.1"
   },
