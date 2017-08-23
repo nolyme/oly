@@ -35,8 +35,8 @@ describe("ReactProxyTest", () => {
   });
 
   it("should use proxy", async () => {
-    const $ = cheerio.load((await http.get<string>("/")).data);
+    const $ = cheerio.load((await http.get<string>("/")));
     expect($("#app").text()).toBe("OK");
-    expect((await http.get<string>("/app.css")).data).toBe("fake-binary-data");
+    expect((await http.get<string>("/app.css"))).toBe("fake-binary-data");
   });
 });

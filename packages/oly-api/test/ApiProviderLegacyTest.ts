@@ -169,7 +169,7 @@ describe("ApiProviderLegacy", () => {
       validateStatus: () => true,
     });
     const fetch = async (pathname: string, o: IHttpRequest = {}) =>
-      (await client.get<any>("/" + pathname, o)).data;
+      (await client.get<any>("/" + pathname, o));
 
     it("should extract query as string", async () => {
       expect(await fetch("1?b=A")).toEqual({b: "A"});

@@ -23,7 +23,7 @@ describe("BodyTest", () => {
   const kernel = Kernel.create({HTTP_SERVER_PORT: 19221}).with(A);
   const server = kernel.inject(ApiProvider);
   const client = kernel.inject(HttpClient).with({baseURL: server.hostname});
-  const extract = ({data}: any) => data.data;
+  const extract = ({data}: any) => data;
 
   it("should parse string", async () => {
     expect(await client.post("/string", {a: "b"}).then(extract)).toBe("{\"a\":\"b\"}");

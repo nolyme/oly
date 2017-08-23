@@ -38,7 +38,7 @@ describe("SwaggerProvider", () => {
 
   describe("#onStart()", () => {
     it("should provide spec", async () => {
-      const {data} = await client.get<ISwaggerSpec>("/swagger.json");
+      const data = await client.get<ISwaggerSpec>("/swagger.json");
       expect(data.swagger).toBe("2.0");
       expect(data.securityDefinitions.Bearer.in).toBe("header");
       expect(data.paths["/"].get.description).toBe("Toto");
@@ -46,7 +46,7 @@ describe("SwaggerProvider", () => {
       expect(data.definitions.Data.properties.tata.type).toBe("string");
     });
     it("should provide ui", async () => {
-      const {data} = await client.get<any>("/swagger/ui");
+      const data = await client.get<any>("/swagger/ui");
       expect(typeof data).toBe("string");
       expect(data.indexOf("html")).not.toBe(-1);
     });

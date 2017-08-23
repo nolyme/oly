@@ -73,7 +73,7 @@ describe("SecurityMiddlewares", () => {
   });
 
   it("should allow auth requests", async () => {
-    const {data} = await client.get("/", {
+    const data = await client.get("/", {
       headers: {
         Authorization: `Bearer ${jwt.createToken({id: "<id>", roles: ["ADMIN"]})}`,
       },

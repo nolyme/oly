@@ -11,7 +11,7 @@ describe("Cookies", () => {
   const http = kernel.inject(HttpClient).with({
     baseURL: kernel.inject(HttpServerProvider).hostname,
   });
-  const request = (url: string) => http.get<string>(url).then(({data}) => cheerio
+  const request = (url: string) => http.get<string>(url).then((data) => cheerio
     .load(data)("body").text().trim());
 
   it("should be ok with server", async () => {

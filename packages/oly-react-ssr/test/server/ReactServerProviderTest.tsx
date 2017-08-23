@@ -36,7 +36,7 @@ describe("ReactServerProvider", () => {
     return {
       kernel,
       open: async (url: string) => {
-        const {data} = await client.get<string>(url);
+        const data = await client.get<string>(url);
         return {
           $: cheerio.load(data),
           html: data,

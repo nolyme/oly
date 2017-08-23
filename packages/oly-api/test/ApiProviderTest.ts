@@ -14,7 +14,7 @@ describe("ApiProvider", () => {
     validateStatus: () => true,
   });
   const fetch = async (path: string, method: string = "get", data = {}) =>
-    (await client[method](path, data)).data;
+    (await client[method](path, data));
 
   it("@get", async () => {
     expect(await fetch("/")).toBe("OK");

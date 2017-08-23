@@ -38,7 +38,7 @@ describe("HelmetServiceProvider", () => {
     const client = kernel.inject(HttpClient).with({
       baseURL: kernel.inject(ReactServerProvider).hostname,
     });
-    const {data} = await client.get<string>("/");
+    const data = await client.get<string>("/");
     const $ = cheerio.load(data);
 
     expect($("title").text()).toBe("Hello");

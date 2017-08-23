@@ -33,7 +33,7 @@ describe("PixieServerProvider", () => {
   });
 
   it("should keep state", async () => {
-    const {data: html} = await client.get<string>("/");
+    const html = await client.get<string>("/");
     const $ = cheerio.load(html);
     expect($("#index").text()).toBe("Hello World");
 

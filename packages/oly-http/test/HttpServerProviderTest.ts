@@ -41,9 +41,9 @@ describe("HttpServerProvider", () => {
     .with({baseURL: server.hostname});
 
   it("should be fetched", async () => {
-    expect((await client.get("/")).data).toBe("OK");
-    expect((await client.post("/")).data).toBe("OK");
-    expect((await client.put("/")).data).toBe("OK");
+    expect((await client.get("/"))).toBe("OK");
+    expect((await client.post("/"))).toBe("OK");
+    expect((await client.put("/"))).toBe("OK");
     try {
       await client.del("/");
       throw new Error("");
