@@ -1,7 +1,7 @@
 {
   "name": "oly",
   "description": "oly",
-  "version": "0.12.15",
+  "version": "0.13.0",
   "license": "MIT",
   "main": "core/index.js",
   "types": "core/index.d.ts",
@@ -12,15 +12,15 @@
   ],
   "dependencies": {
     "@types/react": "*",
-    "oly-api": "^0.12.15",
-    "oly-core": "^0.12.15",
-    "oly-http": "^0.12.15",
-    "oly-json": "^0.12.15",
-    "oly-react": "^0.12.15",
-    "oly-react-ssr": "^0.12.15",
-    "oly-retry": "^0.12.15",
-    "oly-security": "^0.12.15",
-    "oly-swagger": "^0.12.15",
+    "oly-api": "^0.13.0",
+    "oly-core": "^0.13.0",
+    "oly-http": "^0.13.0",
+    "oly-json": "^0.13.0",
+    "oly-react": "^0.13.0",
+    "oly-react-ssr": "^0.13.0",
+    "oly-retry": "^0.13.0",
+    "oly-security": "^0.13.0",
+    "oly-swagger": "^0.13.0",
     "react": "15.6.1"
   },
   "scripts": {

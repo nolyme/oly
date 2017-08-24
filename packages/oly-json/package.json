@@ -1,7 +1,7 @@
 {
   "name": "oly-json",
   "description": "oly-json",
-  "version": "0.12.15",
+  "version": "0.13.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.js",
@@ -18,10 +18,10 @@
   },
   "devDependencies": {
     "ajv-i18n": "2.1.0",
-    "oly-core": "^0.12.15"
+    "oly-core": "^0.13.0"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.15"
+    "oly-core": "^0.13.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

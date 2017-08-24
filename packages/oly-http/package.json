@@ -1,7 +1,7 @@
 {
   "name": "oly-http",
   "description": "oly-http",
-  "version": "0.12.15",
+  "version": "0.13.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -25,10 +25,10 @@
     "koa-static": "3.0.0"
   },
   "devDependencies": {
-    "oly-core": "^0.12.15"
+    "oly-core": "^0.13.0"
   },
   "peerDependencies": {
-    "oly-core": "^0.12.15"
+    "oly-core": "^0.13.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
