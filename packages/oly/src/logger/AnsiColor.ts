@@ -6,7 +6,7 @@ export class AnsiColor {
 
   public static html: any = require("ansi-html");
 
-  public static chalk = chalk;
+  public static chalk: any = chalk;
 
   public static toBrowser(text: string): string[] {
     return this.htmlToStyles(this.html(text));
