@@ -4,7 +4,7 @@ module.exports = (env) => {
 
   const config = createConfiguration({
     entry: [
-      "./node_modules/oly/polyfill/index.js",
+      "oly/polyfill",
       "./src/client/main.browser.ts",
       "./src/client/styles/main.scss"
     ],

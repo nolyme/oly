@@ -2,11 +2,9 @@
 .vscode
 /node_modules
 /packages/*/node_modules
-/packages/*/esm
 /packages/*/lib
 /packages/*/out
 /packages/*/www
-/packages/*/data
 /packages/*/coverage
 /.idea
 *.log
@@ -17,9 +15,6 @@
 /packages/oly-tools/**/*.js
 /packages/oly-tools/**/*.js.map
 /packages/oly-tools/**/*.d.ts
-/packages/oly/**/*.js
-/packages/oly/**/*.js.map
-/packages/oly/**/*.d.ts
 /docs
 /lib
 /coverage

@@ -15,7 +15,7 @@
     "reset": "rm -rf node_modules yarn.lock packages/**/yarn.lock && yarn && yarn all",
     "docs": "packages/oly-docs/bin/oly-docs",
     "docs:dev": "HTML=false OUT=packages/oly-docs/src/client/assets yarn docs -- --verbose",
-    "all": "lerna run clean && lerna bootstrap && lerna run build && lerna run test && yarn docs",
+    "all": "lerna run clean && lerna bootstrap --hoist && lerna run build && lerna run test && yarn docs",
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
     "watch": "lerna exec --parallel -- npm run watch",
