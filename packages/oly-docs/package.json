@@ -5,10 +5,6 @@
   "bin": "bin/oly-docs",
   "version": "0.13.0",
   "license": "MIT",
-  "main": "lib/index.js",
-  "browser": "lib/index.browser.js",
-  "types": "lib/index.d.ts",
-  "typings": "lib/index.d.ts",
   "dependencies": {
     "@blueprintjs/core": "1.26.0",
     "@types/prismjs": "*",
