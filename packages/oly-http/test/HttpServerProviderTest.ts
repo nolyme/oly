@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { IKoaContext } from "../src";
 import { olyHttpErrors } from "../src/constants/errors";
 import { HttpClientException } from "../src/exceptions/HttpClientException";

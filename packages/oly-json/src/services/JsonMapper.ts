@@ -1,4 +1,4 @@
-import { Class, inject, Kernel, Meta, TypeParser } from "oly-core";
+import { Class, inject, Kernel, Meta, TypeParser } from "oly";
 import { olyMapperKeys } from "../constants/keys";
 import { IField, IFieldsMetadata } from "../interfaces";
 import { TypeUtil } from "../utils/TypeUtil";

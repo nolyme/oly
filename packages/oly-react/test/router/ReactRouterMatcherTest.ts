@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { INode, IRoute } from "../../src/router/interfaces";
 import { ReactRouterMatcher } from "../../src/router/services/ReactRouterMatcher";
 

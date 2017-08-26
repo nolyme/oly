@@ -12,7 +12,7 @@ module.exports = (env) => {
 
   const config = createConfiguration({
     entry: [
-      "oly-core/polyfill",
+      "oly/polyfill",
       "./src/main.browser.ts"
     ],
     assets: "./src/web/assets",

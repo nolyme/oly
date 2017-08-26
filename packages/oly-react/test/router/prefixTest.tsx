@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import * as React from "react";
 import { renderToString } from "react-dom/server";
 import { AppContext } from "../../src/core/components/AppContext";

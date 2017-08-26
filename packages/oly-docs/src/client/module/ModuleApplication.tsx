@@ -1,4 +1,4 @@
-import { state } from "oly-core";
+import { state } from "oly";
 import { layout, page, param } from "oly-react";
 import * as React from "react";
 import { IDocs, IModuleContent } from "../../shared/interfaces";

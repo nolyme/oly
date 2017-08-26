@@ -1,6 +1,5 @@
-import { use } from "oly-api";
-import { Meta } from "oly-core";
-import { olyRouterKeys } from "oly-router";
+import { Meta } from "oly";
+import { olyApiKeys, use } from "oly-api";
 import { hasRole } from "../middlewares/hasRole";
 
 /**
@@ -9,7 +8,7 @@ import { hasRole } from "../middlewares/hasRole";
  */
 export const auth = (...roles: string[]) => (target: object, propertyKey: string) => {
   use(hasRole(...roles))(target, propertyKey);
-  Meta.of({key: olyRouterKeys.router, target, propertyKey}).set({
+  Meta.of({key: olyApiKeys.router, target, propertyKey}).set({
     roles,
   });
 };

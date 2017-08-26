@@ -1,5 +1,5 @@
 import { History } from "history";
-import { _, inject, Logger } from "oly-core";
+import { _, inject, Logger } from "oly";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 

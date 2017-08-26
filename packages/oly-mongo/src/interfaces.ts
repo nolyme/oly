@@ -1,5 +1,5 @@
 import { ObjectID } from "bson";
-import { IMetadata } from "oly-core";
+import { IMetadata } from "oly";
 import { Cursor } from "mongodb";
 
 export interface IDocument {

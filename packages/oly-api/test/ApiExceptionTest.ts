@@ -1,7 +1,7 @@
 import { HttpServerException } from "oly-http";
-import { olyApiErrors } from "../src/constants/errors";
-import { BadRequestException } from "../src/exceptions/BadRequestException";
-import { NotFoundException } from "../src/exceptions/NotFoundException";
+import { olyApiErrors } from "../src/core/constants/errors";
+import { BadRequestException } from "../src/core/exceptions/BadRequestException";
+import { NotFoundException } from "../src/core/exceptions/NotFoundException";
 
 describe("HttpServerException", () => {
 

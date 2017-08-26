@@ -1,4 +1,4 @@
-import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly";
 import { IChunks } from "../";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
@@ -16,7 +16,6 @@ import {
 } from "../interfaces";
 import { DefaultErrorHandler } from "../services/DefaultErrorHandler";
 import { ReactRouterMatcher } from "../services/ReactRouterMatcher";
-import { ReactRouterResolver } from "../services/ReactRouterResolver";
 
 export class ReactRouterProvider implements IProvider {
 
@@ -62,9 +61,6 @@ export class ReactRouterProvider implements IProvider {
 
   @inject
   protected matcher: ReactRouterMatcher;
-
-  @inject
-  protected resolver: ReactRouterResolver;
 
   /**
    * Get the href of routeName/routeQuery/templateUrl.
@@ -158,7 +154,7 @@ export class ReactRouterProvider implements IProvider {
 
           //
           // start resolve for one layer
-          const result = await this.resolver.resolve(transition, i);
+          const result = await this.matcher.resolve(transition, i);
           if (result) {
 
             // check if redirection
@@ -243,7 +239,7 @@ export class ReactRouterProvider implements IProvider {
         error,
       };
 
-      const result = await this.resolver.resolve(errorTransition, 0);
+      const result = await this.matcher.resolve(errorTransition, 0);
       if (result) {
 
         const redirection = result as ITransition;

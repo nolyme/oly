@@ -1,4 +1,4 @@
-import { Class } from "oly-core";
+import { Class } from "oly";
 import { IJsonSchema } from "oly-json";
 import { Form } from "./Form";
 

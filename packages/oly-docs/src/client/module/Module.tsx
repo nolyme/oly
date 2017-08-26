@@ -1,11 +1,9 @@
-import { attach, styles, View } from "oly-react";
+import { attach, View } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
 import { IModuleContent } from "../../shared/interfaces";
 import { ModuleMenu } from "./ModuleMenu";
 
-@attach
-@styles(() => require("./Module.scss"))
 export class Module extends Component<{ module: IModuleContent }, {}> {
 
   div: HTMLElement | null;

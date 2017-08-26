@@ -1,6 +1,6 @@
 export const olyHttpEvents = {
 
-  HTTP_CLIENT_BEFORE: "oly:http-client:before",
+  HTTP_CLIENT_BEGIN: "oly:http-client:begin",
 
   HTTP_CLIENT_SUCCESS: "oly:http-client:success",
 

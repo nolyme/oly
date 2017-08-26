@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { JsonMapper } from "../src/services/JsonMapper";
 import { Address, Person, Status } from "./fixtures";
 

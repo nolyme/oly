@@ -1,8 +1,8 @@
 /**
  * @jest-environment jsdom
  */
-import { Kernel } from "oly-core";
-import { olyReactRouterEvents } from "../../src";
+import { Kernel } from "oly";
+import { olyReactRouterEvents } from "../../src/router/constants/events";
 import { ReactBrowserProvider } from "../../src/router/providers/ReactBrowserProvider";
 import { ReactRouterProvider } from "../../src/router/providers/ReactRouterProvider";
 import { Browser } from "../../src/router/services/Browser";

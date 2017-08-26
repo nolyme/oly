@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { JsonSanitizer } from "../src/services/JsonSanitizer";
 import { Person } from "./fixtures";
 

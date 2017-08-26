@@ -13,8 +13,8 @@ The set is based on known projects, such as [Koa](https://github.com/koajs/koa) 
 
 ### Getting started
 
-|                                            |                                        |
-|-------------------------------------------:|----------------------------------------|
-| [CORE](https://noly.me/oly/#/m/oly-core)   | The foundations.                       | 
-| [API](https://noly.me/oly/#/m/oly-api)     | REST api with Koa.                     | 
-| [REACT](https://noly.me/oly/#/m/oly-react) | React, SSR and routing.                | 
+|                                                     |                                        |
+|----------------------------------------------------:|----------------------------------------|
+| [CORE](https://nolyme.github.io/oly/#/m/oly)        | The foundations.                       | 
+| [API](https://nolyme.github.io/oly/#/m/oly-api)     | REST api with Koa.                     | 
+| [REACT](https://nolyme.github.io/oly/#/m/oly-react) | React, SSR and routing.                | 

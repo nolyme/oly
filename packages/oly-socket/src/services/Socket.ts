@@ -1,4 +1,4 @@
-import { inject, Logger, state } from "oly-core";
+import { inject, Logger, state } from "oly";
 import { ISocket } from "../interfaces";
 
 export class Socket {

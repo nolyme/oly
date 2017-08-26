@@ -13,15 +13,15 @@
     "typeorm"
   ],
   "dependencies": {
-    "oly-json": "^0.13.0",
-    "sqlite3": "3.1.8",
+    "oly-json": "0.13.0",
+    "sqlite3": "3.1.9",
     "typeorm": "0.1.0-alpha.26"
   },
   "devDependencies": {
-    "oly-core": "^0.13.0"
+    "oly": "0.13.0"
   },
   "peerDependencies": {
-    "oly-core": "^0.13.0"
+    "oly": "0.13.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

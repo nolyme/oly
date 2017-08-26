@@ -1,4 +1,4 @@
-import { env, inject, Kernel, Logger, state } from "oly-core";
+import { env, inject, Kernel, Logger, state } from "oly";
 import * as io from "socket.io-client";
 import { ISocketClient } from "../interfaces";
 

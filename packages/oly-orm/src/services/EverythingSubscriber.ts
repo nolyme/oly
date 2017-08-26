@@ -1,4 +1,4 @@
-import { Class, inject, Kernel, Meta } from "oly-core";
+import { Class, inject, Kernel, Meta } from "oly";
 import { IFieldsMetadata, Json, olyMapperKeys } from "oly-json";
 import { EntitySubscriberInterface, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
 
@@ -37,7 +37,6 @@ export class EverythingSubscriber implements EntitySubscriberInterface<any> {
   }
 
   public async afterLoad(entity: any) {
-    // this.build(entity);
     await this.trigger("onAfterLoad", entity);
   }
 

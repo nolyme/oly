@@ -1,4 +1,4 @@
-import { inject, Kernel, Logger, state } from "oly-core";
+import { inject, Kernel, Logger, state } from "oly";
 import { HttpServerProvider } from "oly-http";
 import * as io from "socket.io";
 import { ISocket, ISocketServer } from "../interfaces";

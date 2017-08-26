@@ -1,5 +1,5 @@
 import { ApiProvider, get, olyApiErrors } from "oly-api";
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { HttpClient, HttpClientException } from "oly-http";
 import { olySecurityErrors } from "../src/constants/errors";
 import { auth } from "../src/decorators/auth";

@@ -1,16 +1,16 @@
 import { equal } from "assert";
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { HttpClient, HttpServerException, IHttpRequest } from "oly-http";
 import { build, field } from "oly-json";
-import { olyApiErrors } from "../src/constants/errors";
-import { body } from "../src/decorators/body";
-import { del } from "../src/decorators/del";
-import { get } from "../src/decorators/get";
-import { param } from "../src/decorators/param";
-import { post } from "../src/decorators/post";
-import { query } from "../src/decorators/query";
-import { router } from "../src/decorators/router";
-import { ApiProvider } from "../src/providers/ApiProvider";
+import { olyApiErrors } from "../src/core/constants/errors";
+import { body } from "../src/core/decorators/body";
+import { del } from "../src/core/decorators/del";
+import { get } from "../src/core/decorators/get";
+import { param } from "../src/core/decorators/param";
+import { post } from "../src/core/decorators/post";
+import { query } from "../src/core/decorators/query";
+import { router } from "../src/core/decorators/router";
+import { ApiProvider } from "../src/core/providers/ApiProvider";
 
 describe("ApiProviderLegacy", () => {
 

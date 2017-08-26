@@ -1,8 +1,8 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { HttpClient } from "oly-http";
-import { body } from "../src/decorators/body";
-import { post } from "../src/decorators/post";
-import { ApiProvider } from "../src/providers/ApiProvider";
+import { body } from "../src/core/decorators/body";
+import { post } from "../src/core/decorators/post";
+import { ApiProvider } from "../src/core/providers/ApiProvider";
 
 describe("BodyTest", () => {
 

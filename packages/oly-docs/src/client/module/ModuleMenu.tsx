@@ -1,11 +1,9 @@
 import { Collapse } from "@blueprintjs/core";
-import { inject, on } from "oly-core";
-import { attach, Go, olyReactRouterEvents, Router, styles } from "oly-react";
+import { inject, on } from "oly";
+import { attach, Go, olyReactRouterEvents, Router } from "oly-react";
 import * as React from "react";
 import { IModuleContent } from "../../shared/interfaces";
 
-@attach
-@styles(() => require("./ModuleMenu.scss"))
 export class ModuleMenu extends React.Component<{ module: IModuleContent }, {}> {
 
   public state = {

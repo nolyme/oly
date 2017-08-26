@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { compress, helmet } from "./middlewares";
 import { HttpServerProvider } from "./providers/HttpServerProvider";
 

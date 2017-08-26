@@ -1,6 +1,6 @@
 import { Popover, Position } from "@blueprintjs/core";
-import { inject } from "oly-core";
-import { action, attach, Go, Router, styles } from "oly-react";
+import { inject } from "oly";
+import { action, attach, Go, Router } from "oly-react";
 import * as React from "react";
 import { ChangeEvent, KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
 import { IDocs } from "../../shared/interfaces";
@@ -12,8 +12,6 @@ export interface IState {
   focus: number;
 }
 
-@attach
-@styles(() => require("./Search.scss"))
 export class Search extends React.Component<{ docs: IDocs }, IState> {
 
   public state: IState = {

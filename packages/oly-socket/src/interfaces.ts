@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 
 export interface ISocket extends SocketIO.Socket {
   kernel: Kernel;

@@ -1,4 +1,4 @@
-import { Global, IDecorator, Meta } from "oly-core";
+import { Global, IDecorator, Meta } from "oly";
 import { olyReactKeys } from "../constants/keys";
 
 export interface IActionOptions {

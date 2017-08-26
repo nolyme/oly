@@ -1,4 +1,4 @@
-import { state } from "oly-core";
+import { state } from "oly";
 import { attach } from "oly-react";
 import * as React from "react";
 import { IDocs } from "../../shared/interfaces";

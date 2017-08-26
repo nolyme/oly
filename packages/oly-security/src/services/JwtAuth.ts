@@ -1,7 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import { SignOptions, VerifyOptions } from "jsonwebtoken";
+import { env, Global, inject, Logger } from "oly";
 import { UnauthorizedException } from "oly-api";
-import { env, Global, inject, Logger } from "oly-core";
 import { olySecurityErrors } from "../constants/errors";
 import { JsonWebTokenException } from "../exceptions/JsonWebTokenException";
 import { TokenExpiredException } from "../exceptions/TokenExpiredException";
@@ -58,7 +58,7 @@ export class JwtAuth {
     token = token.replace("Bearer ", "");
 
     try {
-      const payload = jwt.verify(token, this.cryptoService.secret, options);
+      const payload = jwt.verify(token, this.cryptoService.secret, options) as any;
       this.token = payload.data as IToken;
       return payload;
     } catch (e) {

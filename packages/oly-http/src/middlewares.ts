@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { ICompressOptions, ICorsOptions, IKoaContext, IKoaMiddleware, IServeOptions } from "./interfaces";
 
 // --

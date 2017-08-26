@@ -1,10 +1,8 @@
-import { inject, on } from "oly-core";
-import { attach, Go, olyReactRouterEvents, Router, styles } from "oly-react";
-import { Helmet } from "oly-react-ssr";
+import { inject, on } from "oly";
+import { attach, Go, olyReactRouterEvents, Router } from "oly-react";
+import { Helmet } from "oly-react";
 import * as React from "react";
 
-@attach
-@styles(() => require("./Breadcrumbs.scss"))
 export class Breadcrumbs extends React.Component<{}, {}> {
 
   @inject private router: Router;

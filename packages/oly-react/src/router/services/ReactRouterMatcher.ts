@@ -1,14 +1,19 @@
-import { Global, inject, Logger } from "oly-core";
+import { Global, inject, Kernel, Logger } from "oly";
 import * as pathToRegexp from "path-to-regexp";
 import { compile } from "path-to-regexp";
 import * as qs from "qs";
+import { createElement } from "react";
+import { Layer } from "../components/Layer";
 import { MatcherException } from "../exceptions/MatcherException";
-import { IHrefQuery, IMatch, INode, IRoute } from "../interfaces";
+import { IChunks, IHrefQuery, IMatch, INode, IRoute, ITransition } from "../interfaces";
 
 export class ReactRouterMatcher {
 
   @inject
   protected logger: Logger;
+
+  @inject
+  protected kernel: Kernel;
 
   /**
    * Create a URL based on routes and a query.
@@ -224,5 +229,58 @@ export class ReactRouterMatcher {
       }
       return url;
     }
+  }
+
+  /**
+   * Invoke a function and try to map the result in chunks.
+   *
+   * @param transition    Current transition to parse
+   * @param index         Level in the stack of the resolve
+   */
+  public async resolve(transition: ITransition, index: number): Promise<IChunks | ITransition | undefined> {
+
+    const target = transition.to.route.stack[index].target;
+    const propertyKey = transition.to.route.stack[index].propertyKey;
+
+    this.logger.trace("resolve " + Global.identity(target, propertyKey));
+
+    let raw = await this.kernel.invoke(target, propertyKey, [transition, index]);
+
+    this.logger.trace("resolve " + Global.identity(target, propertyKey) + " OK");
+
+    // nothing is allowed, this will block the transition
+    if (!raw) {
+      this.logger.debug("resolve is aborted: nothing was returned");
+      return;
+    }
+
+    // also, if you return another transition (redirection is this case) we stop this one
+    if (typeof raw === "object" && typeof raw.to === "object" && typeof raw.to.path === "string") {
+      this.logger.debug("resolve is aborted: redirection", {raw});
+      return raw;
+    }
+
+    // try to create chunks (map of string - jsx.element)
+    if (typeof raw === "function") {
+      raw = {main: createElement(raw)};
+    } else if (typeof raw === "object") {
+      if (raw["$$typeof"]) { // tslint:disable-line
+        raw = {main: raw};
+      } else {
+        for (const key of Object.keys(raw)) {
+          raw[key] = typeof raw[key] === "function"
+            ? createElement(raw[key])
+            : raw[key];
+        }
+      }
+    } else {
+      raw = {main: createElement("div", {}, raw)};
+    }
+
+    for (const key of Object.keys(raw)) {
+      raw[key] = createElement(Layer, {id: index + 1}, raw[key]);
+    }
+
+    return raw;
   }
 }

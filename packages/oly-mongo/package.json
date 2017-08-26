@@ -13,16 +13,16 @@
     "mongodb"
   ],
   "dependencies": {
-    "@types/mongodb": "2.2.9",
+    "@types/mongodb": "2.2.10",
     "mongodb": "2.2.31"
   },
   "devDependencies": {
-    "oly-core": "^0.13.0",
-    "oly-json": "^0.13.0"
+    "oly": "0.13.0",
+    "oly-json": "0.13.0"
   },
   "peerDependencies": {
-    "oly-core": "^0.13.0",
-    "oly-json": "^0.13.0"
+    "oly": "0.13.0",
+    "oly-json": "0.13.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

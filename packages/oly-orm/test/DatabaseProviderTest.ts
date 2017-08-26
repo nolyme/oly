@@ -1,4 +1,4 @@
-import { Exception, Kernel } from "oly-core";
+import { Exception, Kernel } from "oly";
 import { field, ValidationException } from "oly-json";
 import { Repository } from "../src/services/Repository";
 

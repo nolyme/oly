@@ -1,4 +1,4 @@
-import { Class, Global, inject, IStateMutateEvent, Kernel, Logger, Meta, olyCoreEvents, olyCoreKeys } from "oly-core";
+import { Class, Global, inject, IStateMutateEvent, Kernel, Logger, Meta, olyCoreEvents, olyCoreKeys } from "oly";
 import { Component } from "react";
 import { olyReactEvents } from "../constants/events";
 import { olyReactKeys } from "../constants/keys";

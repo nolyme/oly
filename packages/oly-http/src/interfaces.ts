@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import * as Koa from "koa";
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { ZlibOptions } from "zlib";
 import { HttpClientException } from "./exceptions/HttpClientException";
 

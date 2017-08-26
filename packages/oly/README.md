@@ -1,24 +1,10 @@
 # o*l*y
 
-Bundle.
+o*l*y core is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
-- oly-core
-- oly-json
-- oly-http
-- oly-api
-  - oly-security
-  - oly-swagger
-- oly-react
-  - react
-  - oly-react-ssr
-- oly-socket
-- oly-retry
-- oly-orm
-
-[o*l*y project](https://noly.me/oly).
-
-## Install
+### Installation
 
 ```bash
-$ npm i -D typescript && npm i oly
+$ npm install oly
 ```
+

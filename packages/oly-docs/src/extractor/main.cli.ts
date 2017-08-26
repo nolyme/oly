@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { DocProvider } from "./providers/DocProvider";
 
 new Kernel({

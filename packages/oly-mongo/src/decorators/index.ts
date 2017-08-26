@@ -1,4 +1,4 @@
-import { IDecorator, Meta } from "oly-core";
+import { IDecorator, Meta } from "oly";
 import { olyMongoKeys } from "../constants/keys";
 import { IIndexProperty } from "../interfaces";
 

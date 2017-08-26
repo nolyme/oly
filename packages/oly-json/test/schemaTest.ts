@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { choice } from "../src/decorators/choice";
 import { field } from "../src/decorators/field";
 import { schema } from "../src/decorators/schema";

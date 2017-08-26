@@ -1,4 +1,4 @@
-import { IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly-core";
+import { IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly";
 import { ITransition } from "../interfaces";
 
 export interface IParamOptions {

@@ -1,4 +1,4 @@
-import { Kernel, TypeParser } from "oly-core";
+import { Kernel, TypeParser } from "oly";
 import { IField } from "../src/interfaces";
 import { JsonValidator } from "../src/services/JsonValidator";
 

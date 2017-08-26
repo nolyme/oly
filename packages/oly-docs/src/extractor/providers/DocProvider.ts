@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
-import { env, inject, Logger } from "oly-core";
+import { env, inject, Logger } from "oly";
 import { Json } from "oly-json";
 import { resolve } from "path";
 import { Application } from "typedoc";

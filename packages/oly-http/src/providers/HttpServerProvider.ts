@@ -1,6 +1,6 @@
 import { createServer, Server } from "http";
 import * as Koa from "koa";
-import { env, inject, IProvider, Kernel, Logger, state } from "oly-core";
+import { env, inject, IProvider, Kernel, Logger, state } from "oly";
 import { IKoaMiddleware } from "../interfaces";
 import { context } from "../middlewares";
 

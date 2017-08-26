@@ -14,20 +14,21 @@
     "koa"
   ],
   "dependencies": {
-    "@types/bcryptjs": "2.4.0",
-    "@types/jsonwebtoken": "7.2.0",
+    "@types/bcryptjs": "2.4.1",
+    "@types/jsonwebtoken": "7.2.3",
     "bcryptjs": "2.4.3",
-    "jsonwebtoken": "^7.4.2",
-    "oly-http": "^0.13.0",
-    "oly-router": "^0.13.0"
+    "js-cookie": "2.1.4",
+    "jsonwebtoken": "7.4.3",
+    "oly-http": "0.13.0"
   },
   "devDependencies": {
-    "oly-api": "^0.13.0",
-    "oly-core": "^0.13.0"
+    "@types/js-cookie": "*",
+    "oly": "0.13.0",
+    "oly-api": "0.13.0"
   },
   "peerDependencies": {
-    "oly-api": "^0.13.0",
-    "oly-core": "^0.13.0"
+    "oly": "0.13.0",
+    "oly-api": "0.13.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

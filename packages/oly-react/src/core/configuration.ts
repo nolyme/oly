@@ -1,7 +1,10 @@
-import { env, IDecorator, inject, on, state } from "oly-core";
+import { env, IDecorator, inject, on, state } from "oly";
 import { action } from "./decorators/action";
 import { attach } from "./decorators/attach";
 
+/**
+ * use @inject/on/state/env on React.Component will also set @attach.
+ */
 export const autoAttach = () => {
 
   const setAttach = (instance: any) => {

@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children } from "react";

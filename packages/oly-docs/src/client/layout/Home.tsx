@@ -1,12 +1,10 @@
-import { state } from "oly-core";
-import { attach, styles } from "oly-react";
+import { state } from "oly";
 import * as React from "react";
+import { Component } from "react";
 import { IDocs } from "../../shared/interfaces";
 import { Prism } from "./Prism";
 
-@attach
-@styles(() => require("./Home.scss"))
-export class Home extends React.Component<{}, {}> {
+export class Home extends Component {
 
   @state("DOCS") docs: IDocs;
 

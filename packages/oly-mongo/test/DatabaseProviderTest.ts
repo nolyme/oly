@@ -1,5 +1,5 @@
 import { MongoError } from "mongodb";
-import { inject, Kernel, Time } from "oly-core";
+import { inject, Kernel, Time } from "oly";
 import { date, field } from "oly-json";
 import { index } from "../src/decorators";
 import { DatabaseProvider } from "../src/providers/DatabaseProvider";

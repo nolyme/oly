@@ -1,4 +1,4 @@
-import { Class, inject } from "oly-core";
+import { Class, inject } from "oly";
 import { IJsonSchema } from "../interfaces";
 import { JsonMapper } from "./JsonMapper";
 import { JsonSanitizer } from "./JsonSanitizer";

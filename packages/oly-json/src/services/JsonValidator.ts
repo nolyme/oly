@@ -1,6 +1,6 @@
- import * as Ajv from "ajv";
+import * as Ajv from "ajv";
 import { ValidateFunction } from "ajv";
-import { env, inject, state } from "oly-core";
+import { env, inject, state } from "oly";
 import { ValidationException } from "../exceptions/ValidationException";
 import { IField } from "../interfaces";
 import { JsonSchemaReader } from "./JsonSchemaReader";
@@ -14,7 +14,7 @@ export class JsonValidator {
   protected cache: Array<[Function, ValidateFunction]> = [];
 
   @env("JSON_VALIDATOR_ALL_ERRORS")
-  protected readonly allErrors: boolean = false;
+  protected readonly allErrors: boolean = true;
 
   @inject
   protected readonly schemaReader: JsonSchemaReader;

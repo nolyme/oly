@@ -1,4 +1,4 @@
-import { Meta } from "oly-core";
+import { Meta } from "oly";
 import { IMetaArray } from "../interfaces";
 import { FieldDecorator } from "./field";
 

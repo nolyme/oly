@@ -1,5 +1,5 @@
 import { Db, MongoClient } from "mongodb";
-import { Class, env, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { Class, env, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly";
 import { olyMongoKeys } from "../constants/keys";
 import { IIndexesMetadata } from "../interfaces";
 

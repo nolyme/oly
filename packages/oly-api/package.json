@@ -14,20 +14,20 @@
     "koa"
   ],
   "dependencies": {
-    "@types/koa-router": "7.0.22",
     "koa-bodyparser": "3.2.0",
-    "koa-multer": "^1.0.2",
+    "koa-multer": "1.0.2",
     "koa-router": "7.2.1",
-    "oly-http": "^0.13.0",
-    "oly-json": "^0.13.0",
-    "oly-router": "^0.13.0"
+    "oly-http": "0.13.0",
+    "oly-json": "0.13.0",
+    "swagger-ui-dist": "3.1.7"
   },
   "devDependencies": {
     "@types/koa-bodyparser": "3.0.23",
-    "oly-core": "^0.13.0"
+    "@types/koa-router": "7.0.23",
+    "oly": "0.13.0"
   },
   "peerDependencies": {
-    "oly-core": "^0.13.0"
+    "oly": "0.13.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

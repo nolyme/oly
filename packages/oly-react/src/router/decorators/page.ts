@@ -1,4 +1,4 @@
-import { IDecorator, inject, Meta } from "oly-core";
+import { IDecorator, inject, Meta } from "oly";
 import { olyReactRouterKeys } from "../constants/keys";
 
 /**

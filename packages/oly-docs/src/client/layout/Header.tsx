@@ -1,13 +1,11 @@
 import { Tab2, Tabs2 } from "@blueprintjs/core";
-import { inject, on, state } from "oly-core";
-import { action, attach, Go, ITransition, olyReactRouterEvents, Router, styles } from "oly-react";
+import { inject, on, state } from "oly";
+import { action, attach, Go, ITransition, olyReactRouterEvents, Router } from "oly-react";
 import * as React from "react";
 import { IDocs, IModuleContent } from "../../shared/interfaces";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Search } from "./Search";
 
-@attach
-@styles(() => require("./Header.scss"))
 export class Header extends React.Component<{}, {}> {
 
   @inject private router: Router;

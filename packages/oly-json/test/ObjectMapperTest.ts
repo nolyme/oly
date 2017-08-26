@@ -1,4 +1,4 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { array } from "../src";
 import { field } from "../src/decorators/field";
 import { ValidationException } from "../src/exceptions/ValidationException";

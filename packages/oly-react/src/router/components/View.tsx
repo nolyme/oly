@@ -1,4 +1,4 @@
-import { inject, Logger, on } from "oly-core";
+import { inject, Logger, on } from "oly";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children, Component } from "react";

@@ -1,4 +1,4 @@
-import { _ } from "oly-core";
+import { Global } from "oly";
 import { IPayload } from "../interfaces";
 
 /**
@@ -13,7 +13,7 @@ export class Jwt {
    * @return          IPayload
    */
   public static parse(token: string): IPayload {
-    return JSON.parse(_.atob(token.split(".")[1]));
+    return JSON.parse(Global.atob(token.split(".")[1]));
   }
 
   /**

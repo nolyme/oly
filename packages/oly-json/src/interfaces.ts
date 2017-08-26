@@ -1,4 +1,4 @@
-import { IMetadata } from "oly-core";
+import { IMetadata } from "oly";
 
 /**
  * @alias

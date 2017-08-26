@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import * as marked from "marked";
-import { inject, Logger } from "oly-core";
+import { inject, Logger } from "oly";
 import { basename, resolve } from "path";
 import * as Prism from "prismjs";
 import "prismjs/components/prism-bash.js";

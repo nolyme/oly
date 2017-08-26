@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { _, env, Exception, inject, Kernel, on, state } from "oly-core";
+import { _, env, Exception, inject, Kernel, on, state } from "oly";
 import * as React from "react";
 import { Component } from "react";
 import { render } from "react-dom";
@@ -10,7 +10,6 @@ import { AppContext } from "../../src/core";
 import { olyReactEvents } from "../../src/core/constants/events";
 import { action } from "../../src/core/decorators/action";
 import { attach } from "../../src/core/decorators/attach";
-import { styles } from "../../src/core/decorators/styles";
 import { IActionResult, IActionResultError } from "../../src/core/interfaces";
 
 describe("AppContext", () => {
@@ -39,8 +38,6 @@ describe("AppContext", () => {
     }
   }
 
-  @attach
-  @styles(() => null)
   class B extends Component<any, any> {
 
     @env("DEFAULT_NAME") defaultName: string;

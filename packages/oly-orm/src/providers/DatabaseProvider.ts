@@ -1,4 +1,4 @@
-import { Class, env, IDeclaration, inject, IProvider, Kernel, Logger, Meta, state } from "oly-core";
+import { Class, env, IDeclaration, inject, IProvider, Kernel, Logger, Meta, state } from "oly";
 import { IFieldsMetadata, olyMapperKeys } from "oly-json";
 import {
   Column,

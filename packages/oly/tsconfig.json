@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "skipLibCheck": true
+    "outDir": "lib"
   },
   "include": [
-    "*/index.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ]
 }

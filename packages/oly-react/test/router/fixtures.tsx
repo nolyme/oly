@@ -1,4 +1,4 @@
-import { _ } from "oly-core";
+import { _ } from "oly";
 import * as React from "react";
 import { Go } from "../../src/router/components/Go";
 import { View } from "../../src/router/components/View";

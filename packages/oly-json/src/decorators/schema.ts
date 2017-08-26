@@ -1,4 +1,4 @@
-import { IDecorator, Meta } from "oly-core";
+import { IDecorator, Meta } from "oly";
 import { olyMapperKeys } from "../constants/keys";
 import { IJsonSchema, ISchemaMetadata } from "../interfaces";
 

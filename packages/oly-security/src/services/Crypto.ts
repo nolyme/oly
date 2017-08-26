@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import { createCipher, createDecipher } from "crypto";
-import { _, env } from "oly-core";
+import { env } from "oly";
 
 /**
  * Bcrypt and Node cypher.

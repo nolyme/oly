@@ -1,5 +1,5 @@
 import { ErrorObject } from "ajv";
-import { Exception } from "oly-core";
+import { Exception } from "oly";
 
 /**
  *

@@ -1,4 +1,3 @@
-export * from "./decorators";
 export * from "./providers/DatabaseProvider";
 export * from "./services/Repository";
 

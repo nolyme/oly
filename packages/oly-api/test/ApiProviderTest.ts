@@ -1,7 +1,7 @@
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { HttpClient } from "oly-http";
-import { olyApiErrors } from "../src/constants/errors";
-import { ApiProvider } from "../src/providers/ApiProvider";
+import { olyApiErrors } from "../src/core/constants/errors";
+import { ApiProvider } from "../src/core/providers/ApiProvider";
 import { A1, A2, A3, A4 } from "./fixtures";
 
 describe("ApiProvider", () => {

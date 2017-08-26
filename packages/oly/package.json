@@ -1,33 +1,33 @@
 {
   "name": "oly",
-  "description": "oly",
+  "description": "oly core",
   "version": "0.13.0",
   "license": "MIT",
-  "main": "core/index.js",
-  "types": "core/index.d.ts",
-  "typings": "core/index.d.ts",
+  "main": "lib/index.js",
+  "browser": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
   "keywords": [
     "oly",
-    "typescript"
+    "typescript",
+    "di",
+    "logger"
   ],
   "dependencies": {
-    "@types/react": "*",
-    "oly-api": "^0.13.0",
-    "oly-core": "^0.13.0",
-    "oly-http": "^0.13.0",
-    "oly-json": "^0.13.0",
-    "oly-react": "^0.13.0",
-    "oly-react-ssr": "^0.13.0",
-    "oly-retry": "^0.13.0",
-    "oly-security": "^0.13.0",
-    "oly-swagger": "^0.13.0",
-    "react": "15.6.1"
+    "@types/chalk": "0.4.31",
+    "@types/deepmerge": "1.3.1",
+    "ansi-html": "0.0.7",
+    "chalk": "1.1.3",
+    "core-js": "2.5.0",
+    "deepmerge": "1.5.1",
+    "reflect-metadata": "0.1.10",
+    "tslib": "1.7.1"
   },
   "scripts": {
-    "clean": "rimraf node_modules coverage lib **/*.js **/*.js.map **/*.d.ts",
+    "clean": "rimraf node_modules coverage lib",
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "echo"
+    "test": "jest"
   },
   "jest": {
     "preset": "../../jest.json"

@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosRequestConfig, default as axiosInstance } from "axios";
-import { inject, Kernel, Logger, state } from "oly-core";
+import { inject, Kernel, Logger, state } from "oly";
 import { olyHttpEvents } from "../constants/events";
 import { HttpClientException } from "../exceptions/HttpClientException";
 import {
@@ -51,7 +51,7 @@ export class HttpClient {
 
     this.logger.debug(`fetch ${request.method} ${request.url}`, {request});
 
-    await this.kernel.emit(olyHttpEvents.HTTP_CLIENT_BEFORE, {request} as IHttpClientBeforeEvent);
+    await this.kernel.emit(olyHttpEvents.HTTP_CLIENT_BEGIN, {request} as IHttpClientBeforeEvent);
 
     try {
       const response = await this.axios.request(request);

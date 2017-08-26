@@ -25,10 +25,10 @@
     "koa-static": "3.0.0"
   },
   "devDependencies": {
-    "oly-core": "^0.13.0"
+    "oly": "0.13.0"
   },
   "peerDependencies": {
-    "oly-core": "^0.13.0"
+    "oly": "0.13.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

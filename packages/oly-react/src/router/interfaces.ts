@@ -1,4 +1,4 @@
-import { Class, IMetadata } from "oly-core";
+import { Class, IMetadata } from "oly";
 import { PathRegExp } from "path-to-regexp";
 import { ComponentClass } from "react";
 

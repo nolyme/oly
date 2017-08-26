@@ -1,4 +1,4 @@
-import { Global, IDecorator, Kernel, Meta } from "oly-core";
+import { Global, IDecorator, Kernel, Meta } from "oly";
 import * as PropTypes from "prop-types";
 import * as React from "react";
 import { ComponentInjector } from "../services/ComponentInjector";

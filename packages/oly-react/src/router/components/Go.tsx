@@ -1,4 +1,4 @@
-import { inject } from "oly-core";
+import { inject } from "oly";
 import * as React from "react";
 import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
 import { action } from "../../core/decorators/action";

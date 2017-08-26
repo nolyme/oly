@@ -1,4 +1,4 @@
-import { Class, IDecorator, Kernel, Meta, olyCoreKeys } from "oly-core";
+import { Class, IDecorator, Kernel, Meta, olyCoreKeys } from "oly";
 import { IFieldsMetadata } from "../";
 import { olyMapperKeys } from "../constants/keys";
 import { Json } from "../services/Json";

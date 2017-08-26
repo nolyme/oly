@@ -1,4 +1,4 @@
-import { Class, inject } from "oly-core";
+import { Class, inject } from "oly";
 import { Json } from "oly-json";
 import { Form } from "./Form";
 import { IFormBuilderCreateOptions, IFormError } from "./interfaces";

@@ -1,6 +1,6 @@
-import { state } from "oly-core";
+import { state } from "oly";
 import { attach, View } from "oly-react";
-import { Helmet } from "oly-react-ssr";
+import { Helmet } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
 import { IDocs } from "../../shared/interfaces";

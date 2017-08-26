@@ -1,4 +1,4 @@
-import { Exception, inject, Kernel } from "oly-core";
+import { Exception, inject, Kernel } from "oly";
 import { IHrefQuery, IMatch, ITransition } from "../interfaces";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
 import { Browser } from "./Browser";

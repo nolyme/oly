@@ -1,4 +1,4 @@
-import { Class, Meta } from "oly-core";
+import { Class, Meta } from "oly";
 import { olyMapperKeys } from "../constants/keys";
 import { IField, IFieldsMetadata, IMetaNumber, IMetaString } from "../interfaces";
 import { TypeUtil } from "../utils/TypeUtil";

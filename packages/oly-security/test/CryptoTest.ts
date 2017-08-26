@@ -1,5 +1,5 @@
 import { equal, notEqual } from "assert";
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { Crypto } from "../src/services/Crypto";
 
 describe("Crypto", () => {

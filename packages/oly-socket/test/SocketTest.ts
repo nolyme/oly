@@ -1,4 +1,4 @@
-import { inject, Kernel, on } from "oly-core";
+import { inject, Kernel, on } from "oly";
 import { HttpServerProvider } from "oly-http";
 import { SocketClientProvider } from "../src/providers/SocketClientProvider";
 import { SocketServerProvider } from "../src/providers/SocketServerProvider";

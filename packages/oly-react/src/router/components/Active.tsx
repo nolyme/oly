@@ -1,4 +1,4 @@
-import { inject } from "oly-core";
+import { inject } from "oly";
 import * as React from "react";
 import { Children, Component } from "react";
 import { IHrefQuery } from "../";

@@ -1,4 +1,4 @@
-import { Class } from "oly-core";
+import { Class } from "oly";
 
 export interface IRepository<T = any> {
 

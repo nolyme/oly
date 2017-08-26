@@ -1,11 +1,11 @@
 # o*l*y react
 
-o*l*y react is a module of the [o*l*y project](https://noly.me/oly).
+o*l*y react is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
 ### Installation
 
 ```bash
-$ npm install oly-core oly-react react @types/react
+$ npm install oly oly-react react @types/react
 ```
 
 ### Why
@@ -15,7 +15,7 @@ $ npm install oly-core oly-react react @types/react
 - make SSR easier.
 
 ```ts
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { page, layout, View, ReactBrowserProvider } from "oly-react";
 
 export class Application {

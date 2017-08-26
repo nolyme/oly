@@ -1,4 +1,4 @@
-import { Exception } from "oly-core";
+import { Exception } from "oly";
 
 export class MatcherException extends Exception {
 }

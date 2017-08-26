@@ -1,4 +1,4 @@
-import { Kernel, Meta, olyCoreKeys } from "oly-core";
+import { Kernel, Meta, olyCoreKeys } from "oly";
 import { array } from "../src/decorators/array";
 import { build } from "../src/decorators/build";
 import { field } from "../src/decorators/field";

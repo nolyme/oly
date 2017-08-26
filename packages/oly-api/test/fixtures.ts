@@ -1,16 +1,16 @@
 import { IKoaMiddleware } from "oly-http";
 import { array, build, field } from "oly-json";
-import { body } from "../src/decorators/body";
-import { del } from "../src/decorators/del";
-import { get } from "../src/decorators/get";
-import { header } from "../src/decorators/header";
-import { param } from "../src/decorators/param";
-import { post } from "../src/decorators/post";
-import { put } from "../src/decorators/put";
-import { query } from "../src/decorators/query";
-import { router } from "../src/decorators/router";
-import { use } from "../src/decorators/use";
-import { IUploadedFile } from "../src/interfaces";
+import { body } from "../src/core/decorators/body";
+import { del } from "../src/core/decorators/del";
+import { get } from "../src/core/decorators/get";
+import { header } from "../src/core/decorators/header";
+import { param } from "../src/core/decorators/param";
+import { post } from "../src/core/decorators/post";
+import { put } from "../src/core/decorators/put";
+import { query } from "../src/core/decorators/query";
+import { router } from "../src/core/decorators/router";
+import { use } from "../src/core/decorators/use";
+import { IUploadedFile } from "../src/core/interfaces";
 
 export const dummyMiddleware: IKoaMiddleware = async (ctx, next) => {
   ctx.kernel.state("counter", ctx.kernel.state("counter") + 1);

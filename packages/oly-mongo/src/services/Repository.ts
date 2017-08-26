@@ -1,6 +1,6 @@
 import { ObjectID } from "bson";
 import { Collection, MongoError } from "mongodb";
-import { Class, inject, Logger } from "oly-core";
+import { Class, inject, Logger } from "oly";
 import { Json } from "oly-json";
 import { MongoException } from "../exceptions/MongoException";
 import { CursorTransform, IDocument, IObjectDocument } from "../interfaces";

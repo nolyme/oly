@@ -1,4 +1,10 @@
 @import "variables";
 @import "~@blueprintjs/core/src/blueprint";
+@import "../module/Module";
+@import "../module/ModuleMenu";
+@import "../layout/Breadcrumbs";
+@import "../layout/Header";
+@import "../layout/Home";
+@import "../layout/Search";
 @import "prism";
 @import "global";

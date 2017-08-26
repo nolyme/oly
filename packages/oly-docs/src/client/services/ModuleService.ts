@@ -1,4 +1,4 @@
-import { env, inject } from "oly-core";
+import { env, inject } from "oly";
 import { IHrefQuery, Router } from "oly-react";
 import { IDocs } from "../../shared/interfaces";
 

@@ -2,7 +2,7 @@
   "name": "oly",
   "modules": [
     {
-      "name": "oly-core",
+      "name": "oly",
       "icon": "sim-card",
       "manuals": [
         "docs/Glossary.md",
@@ -70,42 +70,31 @@
         "router/services/Router.ts",
         "router/services/Browser.ts",
         "router/providers/ReactRouterProvider.ts",
-        "router/providers/ReactBrowserProvider.ts"
-      ]
-    },
-    {
-      "name": "oly-react-ssr",
-      "icon": "applications",
-      "manuals": [
-        "docs/Example.md"
-      ],
-      "services": [
-        "server/providers/ReactServerProvider.ts",
-        "pixie/providers/PixieBrowserProvider.ts",
-        "pixie/providers/PixieServerProvider.ts",
-        "pixie/services/PixieHttp.ts",
-        "pixie/services/Pixie.ts",
-        "pixie/services/PixieSession.ts"
+        "router/providers/ReactBrowserProvider.ts",
+        "server/providers/ReactServerProvider.ts"
       ]
     },
     {
       "name": "oly-api",
       "icon": "satellite",
       "decorators": [
-        "decorators/get.ts",
-        "decorators/post.ts",
-        "decorators/put.ts",
-        "decorators/del.ts",
-        "decorators/body.ts",
-        "decorators/param.ts",
-        "decorators/header.ts",
-        "decorators/query.ts",
-        "decorators/router.ts",
-        "decorators/use.ts"
+        "core/decorators/route.ts",
+        "core/decorators/get.ts",
+        "core/decorators/post.ts",
+        "core/decorators/put.ts",
+        "core/decorators/del.ts",
+        "core/decorators/body.ts",
+        "core/decorators/param.ts",
+        "core/decorators/header.ts",
+        "core/decorators/query.ts",
+        "core/decorators/router.ts",
+        "core/decorators/use.ts",
+        "swagger/decorators/api.ts"
       ],
       "services": [
-        "providers/ApiProvider.ts",
-        "services/ApiMiddlewares.ts"
+        "core/providers/ApiProvider.ts",
+        "core/services/ApiMiddlewares.ts",
+        "swagger/providers/SwaggerProvider.ts"
       ]
     },
     {
@@ -121,28 +110,6 @@
       "services": [
         "services/Crypto.ts",
         "services/JwtAuth.ts"
-      ]
-    },
-    {
-      "name": "oly-swagger",
-      "icon": "manual",
-      "decorators": [
-        "decorators/api.ts"
-      ],
-      "services": [
-        "providers/SwaggerProvider.ts"
-      ]
-    },
-    {
-      "name": "oly-amqp",
-      "icon": "stacked-chart",
-      "decorators": [
-        "decorators/task.ts"
-      ],
-      "services": [
-        "providers/AmqpProvider.ts",
-        "providers/WorkerProvider.ts",
-        "services/AmqpClient.ts"
       ]
     },
     {

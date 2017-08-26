@@ -1,4 +1,4 @@
-import { Meta } from "oly-core";
+import { Meta } from "oly";
 import { IPageOptions, PageDecorator } from "./page";
 
 export class LayoutDecorator extends PageDecorator {

@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { Kernel } from "oly-core";
+import { Kernel } from "oly";
 import { renderToString } from "react-dom/server";
 import { IHrefQuery, ILayer } from "../../src/router";
 import { page } from "../../src/router/decorators/page";

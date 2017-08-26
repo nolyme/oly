@@ -1,4 +1,4 @@
-import { inject, state } from "oly-core";
+import { inject, state } from "oly";
 import { attach, Router } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
