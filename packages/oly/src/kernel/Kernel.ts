@@ -674,20 +674,25 @@ export class Kernel {
    *
    */
   private removeDependency(declaration: IDeclaration<IListener>): void {
+
     const index = this.declarations.indexOf(declaration);
     if (index > -1) {
       this.declarations.splice(index, 1);
     }
+
     if (declaration.instance && typeof declaration.instance.__free__ === "function") {
       declaration.instance.__free__();
     }
+
     declaration.children
-      .map((c) => this.declarations.filter((d) => d.definition === c.type)[0])
-      .forEach((c) => {
-        if (c) {
-          this.removeDependency(c);
-        }
-      });
+      .map((child) => this.declarations.filter((decl) => decl.definition === child.type)[0])
+      .filter((target) =>
+        !!target &&
+        this.declarations.filter((decl) =>
+          !!decl.children.filter((child) => child.type === target.definition)[0],
+        ).length <= 1,
+      )
+      .forEach((target) => this.removeDependency(target));
   }
 
   /**
