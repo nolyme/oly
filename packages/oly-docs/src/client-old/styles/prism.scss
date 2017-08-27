@@ -1,6 +1,6 @@
-@import "~bulma/sass/utilities/variables";
 @import "~prismjs/themes/prism.css";
 @import "~prismjs/plugins/line-numbers/prism-line-numbers.css";
+@import "variables";
 
 #app {
 
@@ -43,14 +43,13 @@
     color: #660e7a;
   }
 
-  .content a, .links a {
+  a.link {
     color: inherit;
     text-decoration: none !important;
-    transition: all 300ms ease;
-    box-shadow: inset 0 -3px rgba($turquoise, 0.4);
+    box-shadow: 0 2px 0 0px rgba($pt-intent-primary, 0.2);
     &:hover {
       color: inherit;
-      box-shadow: inset 0 -3px rgba($turquoise, 0.8);
+      box-shadow: 0 2px 0 0px rgba($pt-intent-primary, 0.6);
     }
   }
 }

@@ -6,13 +6,14 @@ module.exports = (env) => {
     entry: [
       "oly/polyfill",
       "./src/client/main.browser.ts",
-      "./src/client/styles/main.scss"
+      "./src/client/main.scss",
     ],
     hash: false,
     assets: "./src/client/assets",
     template: "./src/client/index.html",
-    styleLoader: loaders.sassLoaderFactory(),
     env,
+    styleLoader: loaders.sassLoaderFactory(),
+    sourceMaps: "source-map",
   });
 
   return config;

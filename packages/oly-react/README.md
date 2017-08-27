@@ -4,26 +4,19 @@ o*l*y react is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
 ```ts
 import { Kernel } from "oly";
-import { Go, page, ReactServerProvider } from "oly-react";
+import { page, ReactServerProvider } from "oly-react";
 import * as React from "react";
 
 class ReactApp {
 
   @page
-  hey() {
-    return <Go to="/ho">Hey!</Go>
-  }
-
-  @page("/ho")
-  ho() {
-    return <h1>Ho!</h1>
+  index() {
+    return <h1>Hello World</h1>
   }
 }
 
 Kernel
-  .create({
-    HTTP_SERVER_PORT: 5000,
-  })
+  .create({HTTP_SERVER_PORT: 5000})
   .with(ReactApp, ReactServerProvider)
   .start()
   .catch(console.error);

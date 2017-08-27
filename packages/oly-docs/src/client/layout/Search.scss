@@ -1,14 +1,26 @@
-@import "../styles/variables";
+@import "~bulma/sass/utilities/variables";
 
-.search {
+#app .search {
+  display: inline-block;
+  margin-right: 20px;
+
+  .search-popover {
+    width: 300px;
+    right: 100px;
+    padding: 5px;
+    position: fixed;
+    background: $white;
+    box-shadow: 0 4px 8px rgba($black, .2);
+  }
   .search-item {
-    .pt-tag {
+    text-align: left;
+    .tag {
       margin-right: 10px;
-      border: 1px solid $pt-intent-primary;
-      color: $pt-intent-primary;
+      border: 1px solid $primary;
+      color: $primary;
       width: 52px;
       font-size: 10px;
-      padding: 0px 0px 2px;
+      padding: 0 0 2px;
       background-color: transparent;
       text-align: center;
     }
@@ -24,23 +36,21 @@
       color: $black;
       &.focus {
         opacity: 1;
-        color: $white;
-        background-color: rgba($pt-intent-primary, .8);
-        .pt-tag {
-          border-color: $white;
-          color: $white;
-        }
+        background-color: rgba($black, .1);
       }
     }
+  }
+  .search-tag {
+    background-color: $turquoise;
+    display: inline-block;
+    width: 40px;
+    border-radius: 4px;
+    color: white;
+    text-align: center;
+    margin-right: 10px;
   }
   .search-empty {
     padding: 10px;
     text-align: center;
-  }
-  &.pt-popover.pt-popover-content-sizing .pt-popover-content {
-    padding: 5px 0;
-    width: 285px;
-    margin-left: -10px;
-    border: 1px solid rgba($pt-intent-primary, 0.4);
   }
 }

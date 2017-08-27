@@ -25,12 +25,12 @@ export class ReactRouterMatcher {
    */
   public href(routes: IRoute[], go: IHrefQuery | string, context?: IMatch): string | undefined {
 
-    const options: IHrefQuery = typeof go === "object" ? go : {to: go};
+    const options: IHrefQuery = typeof go === "object" ? {...go} : {to: go};
     let url;
 
-    // ignore #
+    // ignore (#.*)/
     if (options.to[0] === "#") {
-      options.to = options.to.slice(1);
+      options.to = options.to.slice(options.to.indexOf("/"));
     }
 
     if (options.to[0] === "/") { // do not process query nor param here

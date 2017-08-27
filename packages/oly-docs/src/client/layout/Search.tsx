@@ -1,10 +1,8 @@
-import { Popover, Position } from "@blueprintjs/core";
 import { inject } from "oly";
-import { action, attach, Go, Router } from "oly-react";
+import { action, Go, Router } from "oly-react";
 import * as React from "react";
 import { ChangeEvent, KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
-import { IDocs } from "../../shared/interfaces";
-import { ISearchItem, ModuleService } from "../services/ModuleService";
+import { Docs, ISearchItem } from "../services/Docs";
 
 export interface IState {
   query: string;
@@ -12,7 +10,7 @@ export interface IState {
   focus: number;
 }
 
-export class Search extends React.Component<{ docs: IDocs }, IState> {
+export class Search extends React.Component<{}, IState> {
 
   public state: IState = {
     query: "",
@@ -20,7 +18,7 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
     focus: -1,
   };
 
-  @inject private ms: ModuleService;
+  @inject private ms: Docs;
   @inject private router: Router;
 
   @action
@@ -98,54 +96,36 @@ export class Search extends React.Component<{ docs: IDocs }, IState> {
         className="search"
         onKeyDown={this.onKeyDown}
       >
-        <Popover
-          content={(
-            <div>
-              {Array.isArray(this.state.results) && this.state.results.length > 0
-                ? this.state.results.map((result: any, index) => (
-                  <div
-                    key={result.href}
-                    className="search-item"
-                    onKeyDown={this.onKeyDown}
-                  >
-                    <Go
-                      onClick={this.resetState}
-                      to={result.href}
-                      onMouseOver={this.onMouseOver(index)}
-                      className={this.state.focus === index ? "focus" : ""}
-                    >
-                      <small className="pt-tag pt-round">{result.module.replace("oly-", "")}</small>
-                      <span>{result.name}</span>
-                    </Go>
-                  </div>))
-                : <div className="search-empty">👌 No result for "{this.state.query}".</div>}
-            </div>
-          )}
-          onInteraction={this.handlePopoverInteraction}
-          autoFocus={false}
-          enforceFocus={false}
-          isOpen={!!this.state.results}
-          inline={false}
-          popoverClassName="pt-popover-content-sizing pt-minimal search"
-          position={Position.BOTTOM}
-        >
-          <form
-            className="pt-input-group"
-            onSubmit={this.onSubmit}
-          >
-            <span className="pt-icon pt-icon-search"/>
-            <input
-              autoFocus={true}
-              maxLength={30}
-              style={{width: "235px"}}
-              type="search"
-              placeholder="Search..."
-              onChange={this.handleSearchChange}
-              value={this.state.query}
-              className="pt-input"
-            />
-          </form>
-        </Popover>
+        <form onSubmit={this.onSubmit}>
+          <input
+            style={{width: "300px"}}
+            className="input"
+            type="search"
+            placeholder="Search..."
+            onChange={this.handleSearchChange}
+            value={this.state.query}
+          />
+        </form>
+        {!!this.state.results && <div className="search-popover">
+          {Array.isArray(this.state.results) && this.state.results.length > 0
+            ? this.state.results.map((result: any, index) => (
+              <div
+                key={result.href}
+                className="search-item"
+                onKeyDown={this.onKeyDown}
+              >
+                <Go
+                  onClick={this.resetState}
+                  to={result.href}
+                  onMouseOver={this.onMouseOver(index)}
+                  className={this.state.focus === index ? "focus" : ""}
+                >
+                  <span className="search-tag">{result.module.replace("oly-", "")}</span>
+                  <span>{result.name}</span>
+                </Go>
+              </div>))
+            : <div className="search-empty">👌 No result for "{this.state.query}".</div>}
+        </div>}
       </div>
     );
   }

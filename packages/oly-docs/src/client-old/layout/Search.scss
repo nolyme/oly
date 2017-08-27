@@ -1,0 +1,46 @@
+@import "../styles/variables";
+
+.search {
+  .search-item {
+    .pt-tag {
+      margin-right: 10px;
+      border: 1px solid $pt-intent-primary;
+      color: $pt-intent-primary;
+      width: 52px;
+      font-size: 10px;
+      padding: 0px 0px 2px;
+      background-color: transparent;
+      text-align: center;
+    }
+    a {
+      opacity: .8;
+      display: block;
+      height: 100%;
+      padding: 5px 5px;
+      margin: 0 4px;
+      text-decoration: none !important;
+      font-size: 12px;
+      border-radius: 2px;
+      color: $black;
+      &.focus {
+        opacity: 1;
+        color: $white;
+        background-color: rgba($pt-intent-primary, .8);
+        .pt-tag {
+          border-color: $white;
+          color: $white;
+        }
+      }
+    }
+  }
+  .search-empty {
+    padding: 10px;
+    text-align: center;
+  }
+  &.pt-popover.pt-popover-content-sizing .pt-popover-content {
+    padding: 5px 0;
+    width: 285px;
+    margin-left: -10px;
+    border: 1px solid rgba($pt-intent-primary, 0.4);
+  }
+}

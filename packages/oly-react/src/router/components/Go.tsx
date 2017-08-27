@@ -2,7 +2,6 @@ import { inject } from "oly";
 import * as React from "react";
 import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
 import { action } from "../../core/decorators/action";
-import { attach } from "../../core/decorators/attach";
 import { Router } from "../services/Router";
 
 /**
@@ -42,7 +41,6 @@ export interface IGoState {
 /**
  * Wrapper of Anchor element with some specs of Router.
  */
-@attach
 export class Go extends Component<IGoProps, IGoState> {
 
   @inject
@@ -95,8 +93,8 @@ export class Go extends Component<IGoProps, IGoState> {
   public render(): JSX.Element {
     const {to, params, query, strict, active, ...rest} = this.props;
     return createElement("a" as any, {
-      className: this.isActive ? "active" : undefined,
       ...rest,
+      className: (this.props.className || "") + " " + ((this.isActive) ? (this.props.active || "is-active") : ""),
       href: this.router.href({to, params, query}),
       onClick: this.onClick,
     }, this.props.children);

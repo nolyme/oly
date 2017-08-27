@@ -16,7 +16,7 @@ const json = kernel.get(Json);
 json.schema(Data);                 // {properties: [{name: ...
 
 json.build(Data, {name: "John"});  // Data { name: "John" }
-json.build(Data, {fake: "John"});  // throw ValidationException (data should have required property 'name')
+json.build(Data, {fake: "John"});  // throw ValidationException
 ```
 
 ### Installation
