@@ -1,5 +1,5 @@
 import { env, Global, inject, Kernel } from "oly";
-import { HttpClient, IHttpRequest } from "oly-http";
+import { HttpClient, IHttpRequest, IHttpResponse } from "oly-http";
 import { Pixie } from "./Pixie";
 
 /**
@@ -51,18 +51,32 @@ export class PixieHttp extends HttpClient {
    *
    * @param options   HttpClient request options
    */
-  public request<T = any>(options: IHttpRequest): Promise<T> {
+  public request<T = any>(options: IHttpRequest): Promise<IHttpResponse<T>> {
 
     options.method = options.method || "GET";
     options.url = options.url || "/";
     options.headers = options.headers || {};
 
-    const cacheKey = `${options.method}_${options.url}`;
-
     if (options.url.indexOf("http") !== 0) {
       options.url = this.root + options.url;
     }
 
-    return this.pixie.fly<T>(cacheKey, () => super.request<T>(options).then(({data}) => data));
+    return super.request<T>(options);
+  }
+
+  public get<T>(url: string, options?: IHttpRequest): Promise<T> {
+    return this.pixie.fly<T>(`GET_${url}`, () => super.get<T>(url, options));
+  }
+
+  public post<T>(url: string, body?: any, options?: IHttpRequest): Promise<T> {
+    return this.pixie.fly<T>(`POST_${url}`, () => super.post<T>(url, body, options));
+  }
+
+  public put<T>(url: string, body?: any, options?: IHttpRequest): Promise<T> {
+    return this.pixie.fly<T>(`PUT_${url}`, () => super.put<T>(url, body, options));
+  }
+
+  public del<T>(url: string, options?: IHttpRequest): Promise<T> {
+    return this.pixie.fly<T>(`DEL_${url}`, () => super.del<T>(url, options));
   }
 }

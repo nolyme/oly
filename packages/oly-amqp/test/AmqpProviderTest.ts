@@ -1,7 +1,7 @@
 import { _, Exception, Kernel } from "oly";
-import { IMessage } from "../src/core";
 import { content } from "../src/core/decorators/content";
 import { task } from "../src/core/decorators/task";
+import { IMessage } from "../src/core/interfaces";
 import { AmqpProvider } from "../src/core/providers/AmqpProvider";
 import { WorkerProvider } from "../src/core/providers/WorkerProvider";
 import { AmqpClient } from "../src/core/services/AmqpClient";

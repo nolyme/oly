@@ -1,8 +1,10 @@
 import { createBrowserHistory, createHashHistory } from "history";
 import { env, inject, IProvider, Kernel, Logger, on } from "oly";
+import { HttpClient } from "oly-http";
 import { createElement } from "react";
 import { AppContext } from "../../core/components/AppContext";
 import { Pixie } from "../../pixie/services/Pixie";
+import { PixieHttp } from "../../pixie/services/PixieHttp";
 import { View } from "../components/View";
 import { olyReactRouterEvents } from "../constants/events";
 import { ITransitionRenderEvent, ITransitionType } from "../interfaces";
@@ -42,6 +44,8 @@ export class ReactBrowserProvider implements IProvider {
    * Hook - start
    */
   public onStart(): Promise<void> {
+
+    this.kernel.with({provide: HttpClient, use: PixieHttp});
 
     const data = this.browser.window[Pixie.stateName];
     if (!!data) {

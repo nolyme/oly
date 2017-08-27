@@ -58,9 +58,9 @@ export class Logger {
    *
    */
   public constructor(@parent
-                     protected parent?: Class) {
-    if (this.parent && this.parent.name) {
-      this.as(this.parent.name);
+                     protected owner?: Class) {
+    if (this.owner && this.owner.name) {
+      this.as(this.owner.name);
     }
   }
 

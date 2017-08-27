@@ -19,4 +19,5 @@ export * from "./core/exceptions/ForbiddenException";
 export * from "./core/exceptions/MethodNotAllowedException";
 export * from "./core/exceptions/UnauthorizedException";
 export * from "./core/exceptions/ConflictException";
+
 export * from "./swagger/decorators/api";

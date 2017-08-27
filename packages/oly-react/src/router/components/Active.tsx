@@ -1,8 +1,7 @@
 import { inject } from "oly";
 import * as React from "react";
 import { Children, Component } from "react";
-import { IHrefQuery } from "../";
-import { attach } from "../../core/decorators/attach";
+import { IHrefQuery } from "../interfaces";
 import { Router } from "../services/Router";
 
 /**
@@ -27,7 +26,6 @@ export interface IActiveState {
 /**
  *
  */
-@attach
 export class Active extends Component<IActiveProps, IActiveState> {
 
   @inject

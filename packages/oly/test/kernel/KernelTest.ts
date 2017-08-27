@@ -8,6 +8,8 @@ import { on } from "../../src/kernel/decorators/on";
 import { state } from "../../src/kernel/decorators/state";
 import { KernelException } from "../../src/kernel/exceptions/KernelException";
 import { Kernel } from "../../src/kernel/Kernel";
+import { Logger } from "../../src/logger/Logger";
+import { ServerLogger } from "../../src/logger/ServerLogger";
 
 const createKernel = (o: any = {}): Kernel => {
   return Kernel.create({LOGGER_LEVEL: "ERROR", ...o});
@@ -605,6 +607,13 @@ describe("Kernel", () => {
       expect(a.b).toBe(a2.b);
       expect(kernel.state(_.identity(A, "b"))).toBe(a.b);
       expect(child.state(_.identity(A, "b"))).toBe(a.b);
+    });
+
+    it("should keep :use", () => {
+      const k = createKernel();
+      expect(k.get(Logger).constructor).toBe(ServerLogger);
+      const k2 = k.fork();
+      expect(k2.get(Logger).constructor).toBe(ServerLogger);
     });
   });
 

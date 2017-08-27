@@ -1,9 +1,9 @@
 import { Class, env, Exception, IDeclarations, inject, IProvider, Kernel, Logger, Meta, state } from "oly";
-import { IChunks } from "../";
 import { olyReactRouterEvents } from "../constants/events";
 import { olyReactRouterKeys } from "../constants/keys";
 import { olyReactRouterStates } from "../constants/states";
 import {
+  IChunks,
   IHrefQuery,
   ILayer,
   IMatch,
