@@ -3,9 +3,9 @@ import { Class, inject, Kernel } from "oly";
 import { HttpClient } from "oly-http";
 import * as React from "react";
 import { attach } from "../../src/core/decorators/attach";
-import { ITransitionError } from "../../src/router";
 import { View } from "../../src/router/components/View";
 import { page } from "../../src/router/decorators/page";
+import { ITransitionError } from "../../src/router/interfaces";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 interface IAppTest {

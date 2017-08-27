@@ -1,9 +1,9 @@
 import * as cheerio from "cheerio";
 import { Kernel } from "oly";
 import { renderToString } from "react-dom/server";
-import { IHrefQuery, ILayer } from "../../src/router";
 import { page } from "../../src/router/decorators/page";
 import { query } from "../../src/router/decorators/query";
+import { IHrefQuery, ILayer } from "../../src/router/interfaces";
 import { ReactRouterProvider } from "../../src/router/providers/ReactRouterProvider";
 import { Router } from "../../src/router/services/Router";
 

@@ -6,13 +6,16 @@ import { _, env, Exception, inject, Kernel, on, state } from "oly";
 import * as React from "react";
 import { Component } from "react";
 import { render } from "react-dom";
-import { AppContext } from "../../src/core";
+import { AppContext } from "../../src/core/components/AppContext";
+import { autoAttach } from "../../src/core/configuration";
 import { olyReactEvents } from "../../src/core/constants/events";
 import { action } from "../../src/core/decorators/action";
 import { attach } from "../../src/core/decorators/attach";
 import { IActionResult, IActionResultError } from "../../src/core/interfaces";
 
 describe("AppContext", () => {
+
+  autoAttach();
 
   class PersonService {
     createPerson() {

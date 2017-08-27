@@ -3,6 +3,9 @@ import * as React from "react";
 import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
 import { action } from "../../core/decorators/action";
 import { Router } from "../services/Router";
+import { autoAttach } from "../../core/configuration";
+
+autoAttach();
 
 /**
  *

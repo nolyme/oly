@@ -14,6 +14,7 @@
     "marked": "0.3.6",
     "node-sass": "^4.5.3",
     "oly": "0.13.0",
+    "oly-json": "^0.13.0",
     "oly-react": "0.13.0",
     "prismjs": "1.6.0",
     "react": "15.6.1",

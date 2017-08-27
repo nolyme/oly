@@ -1,6 +1,6 @@
-import { env, inject } from "oly";
+import { inject, state } from "oly";
 import { IHrefQuery, Router } from "oly-react";
-import { IDocs } from "../../shared/interfaces";
+import { IDocs, IModuleContent } from "../../shared/interfaces";
 
 export interface ISearchItem {
   href: string;
@@ -14,14 +14,18 @@ export interface ISearchItemOptions {
   name: string;
 }
 
-export class ModuleService {
+export class Docs {
+  @state data: IDocs;
+  @inject router: Router;
 
-  @env("DOCS") docs: IDocs;
+  get modules(): IModuleContent[] {
+    return this.data.modules;
+  }
 
-  @inject private router: Router;
+  public get services(): ISearchItem[] {
 
-  public getServices(): ISearchItem[] {
     const results: ISearchItem[] = [];
+
     const push = (result: ISearchItemOptions) => {
       const href = this.router.href(result.href);
       if (!href) {
@@ -34,7 +38,8 @@ export class ModuleService {
         });
       }
     };
-    for (const m of this.docs.modules) {
+
+    for (const m of this.data.modules) {
       for (const s of m.services) {
         push({
           href: {
@@ -49,6 +54,7 @@ export class ModuleService {
         });
       }
     }
+
     return results;
   }
 
@@ -68,7 +74,7 @@ export class ModuleService {
       }
       return results.length > 8;
     };
-    for (const m of this.docs.modules) {
+    for (const m of this.data.modules) {
       for (const d of m.decorators) {
         const dId = d.name.toUpperCase();
         const dId2 = "@" + dId;
