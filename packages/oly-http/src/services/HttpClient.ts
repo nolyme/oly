@@ -44,7 +44,7 @@ export class HttpClient {
    *
    * @param request   Http Request Options
    */
-  public async request<T>(request: IHttpRequest): Promise<IHttpResponse<T>> {
+  public async request<T = any>(request: IHttpRequest): Promise<IHttpResponse<T>> {
 
     request.method = request.method || "GET";
     request.url = request.url || "/";
@@ -79,7 +79,7 @@ export class HttpClient {
    * @param url       Complete url
    * @param options   Request options
    */
-  public get<T>(url: string, options: IHttpRequest = {}): Promise<T> {
+  public get<T = any>(url: string, options: IHttpRequest = {}): Promise<T> {
 
     options.url = url;
 
@@ -94,7 +94,7 @@ export class HttpClient {
    * @param body      Request body
    * @param options   Request options
    */
-  public post<T>(url: string, body: any = {}, options: IHttpRequest = {}): Promise<T> {
+  public post<T = any>(url: string, body: any = {}, options: IHttpRequest = {}): Promise<T> {
 
     options.method = "POST";
     options.url = url;
@@ -111,7 +111,7 @@ export class HttpClient {
    * @param body      Request body
    * @param options   Request options
    */
-  public put<T>(url: string, body: any = {}, options: IHttpRequest = {}): Promise<T> {
+  public put<T = any>(url: string, body: any = {}, options: IHttpRequest = {}): Promise<T> {
 
     options.method = "PUT";
     options.url = url;
@@ -127,7 +127,7 @@ export class HttpClient {
    * @param url       Complete url
    * @param options   Request options
    */
-  public del<T>(url: string, options: IHttpRequest = {}): Promise<T> {
+  public del<T = any>(url: string, options: IHttpRequest = {}): Promise<T> {
 
     options.method = "DELETE";
     options.url = url;

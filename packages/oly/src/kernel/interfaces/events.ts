@@ -1,4 +1,5 @@
 import { IMetadata } from "../../metadata/interfaces";
+import { Kernel } from "../Kernel";
 import { Class } from "./injections";
 
 /**
@@ -29,6 +30,7 @@ export interface IEventListener {
  *
  */
 export interface IObserver {
+  kernel: Kernel;
   free: () => void;
   wait: () => Promise<any>;
 }

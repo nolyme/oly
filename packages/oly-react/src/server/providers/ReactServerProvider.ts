@@ -30,6 +30,7 @@ export class ReactServerProvider implements IProvider {
   public points: string[] | string = [
     "www",
     "http://localhost:8080",
+    "default",
   ];
 
   @state

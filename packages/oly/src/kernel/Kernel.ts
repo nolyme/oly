@@ -509,6 +509,7 @@ export class Kernel {
     const event: IEventListener = {key, action, unique};
     this.events.push(event);
     return {
+      kernel: this,
       free: () => {
         event.disabled = true;
         this.events.splice(this.events.indexOf(event), 1);

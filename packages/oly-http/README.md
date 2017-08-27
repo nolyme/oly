@@ -1,9 +1,31 @@
 # o*l*y http
 
+o*l*y http is a module of the [o*l*y project](https://nolyme.github.io/oly).
+
 ```ts
-import { HttpClient } from "oly-http";
+import { Kernel } from "oly";
+import { HttpClient, HttpServerProvider } from "oly-http";
 
-const http = kernel.get(HttpClient);
+const kernel = Kernel.create({HTTP_SERVER_PORT: 4040});
+const server = kernel.get(HttpServerProvider);     // koa
+const client = kernel.get(HttpClient);             // axios
 
-http.get("/"); // ...
+kernel
+  .configure(() =>
+    server.use(ctx => ctx.body = "Hello World"))   // koa middleware
+  .start()
+  .then(() =>
+    client.get(server.hostname))                   // axios#get
+  .then(console.log);
 ```
+
+### Installation
+
+```bash
+$ npm install oly oly-http
+```
+
+### Why
+
+- it's a shared package used by "oly-http" and "oly-react"
+- don't use HttpServerProvider directly, there is ApiProvider (oly-api) and ReactServerProvider (oly-react)

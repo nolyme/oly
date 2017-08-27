@@ -3,14 +3,15 @@ import { HttpClient, IHttpRequest, IHttpResponse } from "oly-http";
 import { Pixie } from "./Pixie";
 
 /**
- * It use HttpClient.
+ * HttpClient with Pixie.
  *
- * All requests are wrapped with Pixie#fly().
- *
- * A token is sent on each request if PixieSession exists.
+ * All get|post|... requests are wrapped with Pixie#fly().
  */
 export class PixieHttp extends HttpClient {
 
+  /**
+   * Force ApiRoot.
+   */
   @env("PIXIE_HTTP_ROOT")
   public apiRoot: string = "";
 
