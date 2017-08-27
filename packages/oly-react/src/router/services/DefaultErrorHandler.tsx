@@ -1,6 +1,6 @@
 import * as React from "react";
 import { page } from "../decorators/page";
-import { ITransitionError } from "../interfaces";
+import { ITransition, ITransitionError } from "../interfaces";
 
 /**
  * This is a controller with only an error handler.
@@ -20,6 +20,16 @@ export class DefaultErrorHandler {
       <div>
         <pre>{e.error.stack}</pre>
       </div>
+    );
+  }
+
+  /**
+   * Default 404, this is required to avoid matching-exceptions during the transition.
+   */
+  @page("/*")
+  public notFound(e: ITransition): JSX.Element {
+    return (
+      <pre>Page Not Found</pre>
     );
   }
 }
