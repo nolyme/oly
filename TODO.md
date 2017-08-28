@@ -2,6 +2,9 @@
 
 ### BUG
 
+- (oly): Meta.get -> Meta.deep everything
+- (oly): @env toto = "default" when inheritance is broken (defaultValue isn't here)
+
 ### SOON
 
 - (oly-react): canForward/canBack

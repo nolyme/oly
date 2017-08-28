@@ -5,6 +5,7 @@ import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
 import { olyApiKeys } from "../constants/keys";
 import { MethodNotAllowedException } from "../exceptions/MethodNotAllowedException";
 import { NotImplementedException } from "../exceptions/NotImplementedException";
+import { IRouterMetadata } from "../interfaces";
 import { ApiMiddlewares } from "../services/ApiMiddlewares";
 
 /**
@@ -144,7 +145,7 @@ export class ApiProvider implements IProvider {
    */
   protected createFromDefinition(definition: Class): any {
 
-    const routerMetadata = Meta.of({key: olyApiKeys.router, target: definition}).get();
+    const routerMetadata = Meta.of({key: olyApiKeys.router, target: definition}).deep();
     if (!routerMetadata) {
       throw new Error("There is no meta router in this class");
     }

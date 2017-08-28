@@ -4,7 +4,7 @@ import { serve } from "oly-http";
 
 export class ReactStaticService {
 
-  @inject(Kernel)
+  @inject
   protected kernel: Kernel;
 
   /**

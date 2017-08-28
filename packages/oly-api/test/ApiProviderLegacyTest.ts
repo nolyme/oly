@@ -16,15 +16,20 @@ describe("ApiProviderLegacy", () => {
 
   describe("@get()", () => {
 
-    @router("/hello")
-    class MyController {
-
+    class MyAbstract {
       @get("/") index = () => "Hello World";
+    }
 
+    @router("/bug")
+    class MySecondAbstract extends MyAbstract {
       @get("/:name")
       byName(@param("name") name: string) {
         return `Hello ${name}`;
       }
+    }
+
+    @router("/hello")
+    class MyController extends MySecondAbstract {
     }
 
     const kernel = Kernel.create({HTTP_SERVER_PORT: 19220}).with(MyController);
