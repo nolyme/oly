@@ -12,7 +12,20 @@ import { Browser } from "../services/Browser";
 import { Router } from "../services/Router";
 
 /**
+ * Mount an AppContext to a rootElement with id=`REACT_ID`.
  *
+ * ```ts
+ * class App {
+ *   @page index = () => <p>Hello World</p>
+ * }
+ *
+ * Kernel
+ *  .create({REACT_ID: "app"})
+ *  .with(App, ReactBrowserProvider)
+ *  .start();
+ * ```
+ *
+ * ReactBrowserProvider depends on ReactRouterProvider.
  */
 export class ReactBrowserProvider implements IProvider {
 

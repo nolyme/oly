@@ -3,6 +3,28 @@ import { IHrefQuery, IMatch, ITransition } from "../interfaces";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
 import { Browser } from "./Browser";
 
+/**
+ * Public API of ReactRouterProvider.
+ *
+ * ```ts
+ * class MyComponent extends React.Component {
+ *   @inject router: Router
+ *
+ *   @action
+ *   onClickSomewhere() { this.router.go("/") }
+ *
+ *   // ...
+ * }
+ * ```
+ *
+ * When a component injects Router, #forceUpdate is called after each transition. **This is normal.**
+ *
+ * ```ts
+ * &shy;@attach({watch: []}) // override implicit watchers
+ * class MyComponent extends React.Component {
+ * }
+ * ```
+ */
 export class Router {
 
   @inject
@@ -25,20 +47,29 @@ export class Router {
   }
 
   /**
-   * Go to a named node.
+   * Go to a named node/route/path/query.
    *
    * ```ts
    * // path is allowed
    * router.go("/");
+   *
    * // or node name
    * router.go("index");
+   *
    * // or route name
    * router.go("root.home");
+   *
    * // use object to pass params/query
    * router.go({to: "root.users.byId", params: {userId: "1"}});
+   *
    * // path is also allowed here
    * router.go({to: "/", query: {a: "b"}});
    * ```
+   *
+   * Router#go:
+   * - returns a promise of transition if everything is ok.
+   * - returns a promise of nothing if transition has been aborted
+   * - throws an exception if transition has failed
    */
   public go(query: string | IHrefQuery): Promise<ITransition | undefined> {
     return this.routerProvider.transition(typeof query === "string" ? {to: query} : query);

@@ -1,5 +1,4 @@
 import * as koaBodyParser from "koa-bodyparser";
-import * as KoaRouter from "koa-router";
 import { Class, env, IDeclarations, inject, IProvider, Logger, Meta } from "oly";
 import { HttpServerProvider, IKoaMiddleware, mount } from "oly-http";
 import { olyApiKeys } from "../constants/keys";
@@ -150,18 +149,13 @@ export class ApiProvider implements IProvider {
       throw new Error("There is no meta router in this class");
     }
 
-    const prefix = (routerMetadata.target.prefix && routerMetadata.target.prefix !== "/")
-      ? routerMetadata.target.prefix
-      : "";
-    const koaRouter = new KoaRouter({prefix});
-
-    const keys = Object.keys(routerMetadata.properties);
-    for (const propertyKey of keys) {
+    const koaRouter = this.createKoaRouter(routerMetadata);
+    const propertyKeys = Object.keys(routerMetadata.properties);
+    for (const propertyKey of propertyKeys) {
 
       const route = routerMetadata.properties[propertyKey];
       const mountFunction = koaRouter[route.method.toLowerCase()];
       const middlewares = route.middlewares.concat([]);
-
       if (routerMetadata.args[propertyKey]) {
         const isMultipart = routerMetadata.args[propertyKey].filter((arg) => arg.kind === "file")[0];
         if (isMultipart) {
@@ -175,10 +169,23 @@ export class ApiProvider implements IProvider {
         this.apiMiddlewares.invoke(definition, propertyKey),
       ]);
 
-      // hack used for logging only (@see ApiProvider)
-      (koaRouter.stack[koaRouter.stack.length - 1] as any).propertyKey = propertyKey;
+      koaRouter
+        .stack[koaRouter.stack.length - 1]
+        .propertyKey = propertyKey;
     }
 
     return koaRouter;
+  }
+
+  /**
+   * Create a new koa-router instance.
+   *
+   * @param {IRouterMetadata} routerMetadata
+   * @returns {Router}
+   */
+  protected createKoaRouter(routerMetadata: IRouterMetadata) {
+    const target = routerMetadata.target;
+    const prefix = (!!target.prefix && target.prefix !== "/") ? target.prefix : "";
+    return new (require("koa-router"))({prefix});
   }
 }

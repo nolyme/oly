@@ -6,7 +6,7 @@
 /packages/*/out
 /packages/*/www
 /packages/*/coverage
-/.idea
+.idea
 *.log
 *.iml
 *.cache

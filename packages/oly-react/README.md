@@ -22,21 +22,15 @@ Kernel
   .catch(console.error);
 ```
 
-### Installation
+## Installation
 
 ```bash
 $ npm install oly oly-react react @types/react
 ```
 
-### Why
+## Features
 
-- use Kernel and @inject/@env/@on in React components
-- embedded router (using history + path-to-regex)
-- server side rendering
-- cache between server/browser
-
-
-#### Kernel in React
+#### @inject/@env/@on with React
 
 ```ts
 import { inject, Kernel } from "oly";
@@ -56,6 +50,31 @@ const kernel = Kernel.create();
 render(
   <AppContext kernel={kernel}><App/></AppContext>,
   document.getElementById("app"));
+```
+
+#### Embedded router
+
+```ts
+import { layout, View, page, Go } from "oly-react";
+
+class App {
+  @layout root() {
+    return <div>
+      <Go to="/"/>Home</Go>
+      <Go to="about"/>About</Go>
+      <View/>
+    </div>
+  }
+  
+  @page("/") index() {
+    return <h1>Home!</h1>
+  }
+  
+  @page("/a") about() {
+    return <h1>About!</h1>
+  }
+}
+
 ```
 
 #### Server Side Rendering

@@ -4,9 +4,6 @@
     {
       "name": "oly",
       "icon": "sim-card",
-      "manuals": [
-        "docs/Glossary.md"
-      ],
       "decorators": [
         "kernel/decorators/inject.ts",
         "kernel/decorators/injectable.ts",
@@ -29,7 +26,6 @@
         "decorators/field.ts",
         "decorators/array.ts",
         "decorators/date.ts",
-        "decorators/build.ts",
         "decorators/schema.ts"
       ],
       "services": [

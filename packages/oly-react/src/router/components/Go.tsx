@@ -1,9 +1,9 @@
 import { inject } from "oly";
 import * as React from "react";
 import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
+import { autoAttach } from "../../core/configuration";
 import { action } from "../../core/decorators/action";
 import { Router } from "../services/Router";
-import { autoAttach } from "../../core/configuration";
 
 autoAttach();
 
@@ -42,7 +42,20 @@ export interface IGoState {
 }
 
 /**
- * Wrapper of Anchor element with some specs of Router.
+ * Anchor element + Router#go().
+ *
+ * ```ts
+ * <Go to="/">Home</Go>
+ * <Go to="users.detail" params={{userId: "1"}}>...</Go>
+ * ```
+ *
+ * Go has a className "is-active" is Router#isActive(props.to) is `true`.
+ *
+ * ```ts
+ * <Go to="/" active="my-active-class" strict={true}>...</Go>
+ * ```
+ *
+ * Go#onClick is an @action.
  */
 export class Go extends Component<IGoProps, IGoState> {
 

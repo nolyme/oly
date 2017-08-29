@@ -56,12 +56,26 @@ export interface IViewProps {
 }
 
 /**
- * Display a JSX ReactRouterProvider layer.
+ * Display the result of a @page.
  *
- * This is useful if you have nested routes.
+ * ```ts
+ * class App {
+ *   @layout root = () =>
+ *    <div>
+ *      <Go to="/">page1</Go>
+ *      <Go to="page2">page2</Go>
+ *      <View/>
+ *    </div>;
+ *
+ *   @page("/")  page1     = () => <p>1</p>;
+ *   @page("/2") page2     = () => <p>2</p>;
+ *   @page("/*") notFound  = () => <p>notFound</p>;
+ *   @page       error     = () => <p>Boom</p>;
+ * }
+ * ```
  */
 @attach({
-  watch: [], // View does not need auto-watch
+  watch: [], // View does not need an auto-watch
 })
 export class View extends Component<IViewProps, { content: any }> {
 

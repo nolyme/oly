@@ -32,43 +32,26 @@ import {
 import { IStateMutateEvent, IStatesMetadata, IStore } from "./interfaces/states";
 
 /**
- * Kernel is a master class.
- *
- * There are 3 registries:
- * - Dependencies
- * - Events
- * - Store
- *
- * There are three things: Dependencies, States and Events.
- * - Dependencies are classes declarations with relations.
- * - States are a group of data stored in a map<key,value> called 'store'.
- * - Events are functions triggered on a specific moment.
- *
- * Kernel#with(...definitions) will register new definition(s) and create instances.
- * A definition is just a class or a rule (e.g {provide: Class, use: Class2})
- *
- * The tree dependency is here for describe how your kernel works.
- *
- * Instances can be orchestrated with Kernel#start() and Kernel#stop() where
- * each instance#onStart() will be called.
- * If you define #onStart() or #onStop on a class, the kernel will tag him as Provider.
- * Kernel#start() will also lock your kernel by rejecting new providers.
- * Vice versa, Kernel#stop() unlock the kernel.
- *
- * The kernel can be forked to create multi child-context with Kernel#fork().
- * The child keep all the declarations but without any data (instances, store, ...).
- * No #start() nor #stop() are triggered. We assume that's already done by the parent.
- *
  * ```ts
- * const kernel = new Kernel(store).with(...definitions);
- * await kernel.start();
+ * Kernel
+ *   .create(store)
+ *   .with(...definitions);
+ *   .start()
+ *   .then(console.log)
+ *   .catch(console.error)
  * ```
+ *
+ * Decorators:
+ * - @inject -> Kernel#inject
+ * - @state -> Kernel#state
+ * - @env -> Kernel#env
+ * - @on -> Kernel#on
  */
 export class Kernel {
 
   /**
-   * This is a simple kernel factory.
-   * Useful if you don't want see any 'new' keyword in your app.
+   * Factory.
+   * This is recommended.
    *
    * ```ts
    * Kernel
@@ -78,8 +61,7 @@ export class Kernel {
    *   .catch(console.error);
    * ```
    *
-   * @param store         Map of key-value.
-   * @internal
+   * @param store         Store, map of key-value. (env, conf, states, ...)
    */
   public static create(store: IStore = {}) {
 
@@ -100,11 +82,8 @@ export class Kernel {
   }
 
   /**
-   * Immutable context identifier.
-   * Each kernel instance have an id. (12 random chars)
-   * On every fork, we create a new id based on the parent id. (parentId + '.' + 12 random chars)
-   *
-   * This is your only way to identify a context.
+   * Identifier.  (12 random chars)
+   * Every fork, new id is based on parent id. (parentId + '.' + 12 random chars)
    */
   public readonly id: string;
 
@@ -120,39 +99,23 @@ export class Kernel {
 
   /**
    * States registry.
-   *
-   * "Global" data of the kernel.
-   * This is a map (key - value).
-   * Once a key is created, you can't delete it.
-   * Value is R/W by default. W is optional.
-   * Kernel children can access to the parent store.
-   * Use store only for data provider, like HttpServer, DatabaseConnection.
    */
   private store: IStore;
 
   /**
-   * Is your kernel locked ?
-   * True after #start(), false by default.
-   * True for a child of started parent.
-   * When started=true, registration isn't allowed for providers.
+   * Is Kernel#start called ?
    */
   private started: boolean;
 
   /**
-   * Ref to parent when #fork().
-   * Useful for keep an eye on the parent's store. ;)
+   * Ref to parent when Kernel#fork().
    */
   private parent?: Kernel;
 
-  /**
-   * Lazy logger ref.
-   */
   private logger: Logger;
 
   /**
-   * Create a new kernel.
-   * First argument is a initial store, for configuration.
-   * Then, there is the 'parent' argument which create a fork.
+   * Create a new kernel. Use Kernel.create instead.
    *
    * @param store  Set env with some data.
    * @param parent When you fork kernel.
@@ -194,12 +157,10 @@ export class Kernel {
 
   /**
    * Create a new kernel with the same definitions.
-   * - declarations are cloned
-   * - instances are cleared
-   * - store is cleared
-   * - new events are isolated
+   * - declarations are cloned without instances
+   * - store and events are cleared
    *
-   * Parent's store is stiff accessible.
+   * Parent's store is accessible.
    *
    * ```ts
    * const k = new Kernel({ A: "B", C: "D" });
@@ -219,12 +180,12 @@ export class Kernel {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Fluent inline configuration.
-   * Examples are available on 'configurations.ts' files.
+   * Fluent configuration.
    *
    * ```ts
-   * new Kernel()
-   *  .configure(k => k.inject(Service).andDoSomething(''))
+   * Kernel
+   *  .create()
+   *  .configure(k => k.get(Service).andDoSomething(''))
    *  .start()
    * ```
    *
@@ -242,11 +203,14 @@ export class Kernel {
 
   /**
    * Trigger onStart of each provider.
-   * Lock your kernel against new provider registrations.
    *
    * All onStart() are sorted by link declarations.
    * All onStart() have a access to "this.declarations".
-   * All onStart() are asynchronous, promise based.
+   * All onStart() are asynchronous.
+   *
+   * ```
+   * Kernel.create().with(P).start().catch(console.error);
+   * ```
    */
   public async start(): Promise<Kernel> {
 
@@ -283,7 +247,7 @@ export class Kernel {
   }
 
   /**
-   * Unlock the kernel. Trigger #onStop on each provider.
+   * Trigger onStop of each provider.
    */
   public async stop(): Promise<Kernel> {
 
@@ -311,8 +275,11 @@ export class Kernel {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Chain declarations here.
-   * This is just a fluent version of {@see Kernel#get()} .
+   * Chain declarations.
+   *
+   * ```ts
+   * Kernel.create().with(A, B, C, D).with(E, F, G, H).start();
+   * ```
    *
    * @param definitions   List of definitions.
    * @return              Kernel instance.
@@ -330,21 +297,21 @@ export class Kernel {
   }
 
   /**
-   *
+   * @alias of Kernel#inject
    */
   public get<T>(definition: Class<T> | IDefinition<T>): T {
     return this.inject(definition);
   }
 
   /**
-   * Get a service based on a definition.
+   * Inject a service/provider.
    *
    * ```ts
    * class A { b = "c" }
    * kernel.inject(A).b; // "c"
    * ```
    *
-   * @param definition          IDefinition or IDefinition
+   * @param definition          Class or {provide: Class, use: Class}
    * @param options             Injection options
    */
   public inject<T>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
@@ -408,16 +375,15 @@ export class Kernel {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Getter/Setter for store and parent's store.
+   * Getter/Setter of Kernel#store.
    *
-   * If key doesn't exists on this kernel, we will check on the parent.
+   * If key doesn't exist on this kernel, we will check on the parent.
    *
-   * References can be updated. This is the power of @state, everybody has the same value at the same time.
    * An event is fired on each mutation: "state:mutate" {@see IStateMutateEvent}.
    *
    * @param key           Identifier as string who defined the value
    * @param newValue      Optional new value (setter mode)
-   * @param callback      Optional callback triggered after the mutation
+   * @param callback      Optional callback triggered after the mutation (setter mode)
    */
   public state(key: string, newValue?: any, callback: () => any = () => null): any {
 
@@ -436,7 +402,7 @@ export class Kernel {
       const parentValue = this.parent.state(identifier);
       if (typeof parentValue !== "undefined") {
 
-        // TODO: disabled by default (and allowed with something like @state({inherit: true}))
+        // TODO: disabled by default (and allowed with something like @state({allowCrazyMutateFromBehind: true}))
         if (typeof newValue !== "undefined") {
           return this.parent.state(identifier, newValue);
         }
@@ -456,13 +422,9 @@ export class Kernel {
   }
 
   /**
-   * Same as state, but "readonly".
-   * This is fake "readonly" if you set objects!!!
-   * You have to use only primitives (string, number, ...) as "env" to have true "readonly".
-   * This is the under-the-hood of `@env()`.
+   * Read-only Kernel#state().
+   * Value can be casted with TypeParser.
    *
-   * String numeric value are parsed to Number.
-   * String boolean are parsed to Boolean.
    * ```ts
    * kernel = Kernel.create({a: "true"});
    * kernel.env("a"); // true
@@ -493,10 +455,23 @@ export class Kernel {
 
   /**
    * Register an event with a key (identifier) and an action.
-   * This is the under-the-hood of `@on()`.
    *
    * ```ts
    * kernel.on("wat", () => console.log("Hi!"));
+   * ```
+   *
+   * Event can be unique.
+   *
+   * ```ts
+   * kernel.on("watwat", () => console.log("once"), {unique: true});
+   * ```
+   *
+   * A object "Observer" is returned.
+   *
+   * ```ts
+   * const obs = kernel.on("toto");
+   * obs.wait() // wait event as promise
+   * obs.free() // unsubscribe
    * ```
    *
    * @param key             Event name
@@ -524,6 +499,16 @@ export class Kernel {
 
   /**
    * Fire an event.
+   *
+   * ```ts
+   * kernel.emit("my:event", {some: "data"});
+   * ```
+   *
+   * This is asynchronous.
+   *
+   * ```ts
+   * await kernel.emit("event"); // wait the end of each callback
+   * ```
    *
    * @param key               Event name
    * @param data              Event data (parameters)
@@ -578,11 +563,25 @@ export class Kernel {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Call a method.
+   * Invoke a function/method of a Class.
+   *
+   * ```ts
+   * class A { b(...args) { console.log(args) } }
+   *
+   * kernel.invoke(A, "b", ["hello", "world"]);
+   * ```
+   *
+   * Some handlers are executed before the call.
+   *
+   * ```ts
+   * class A { b(@state("X") msg) { console.log(msg) } }
+   *
+   * Kernel.create({X: "Hi!"}).invoke(A, "b"); // Hi!
+   * ```
    *
    * @param definition            Class or Instance, class will be instantiate.
    * @param propertyKey           Name of the method.
-   * @param additionalArguments
+   * @param additionalArguments   Add more arguments.
    */
   public invoke<T>(definition: Class<T> | T, propertyKey: keyof T, additionalArguments: any[] = []): any {
 
@@ -670,8 +669,9 @@ export class Kernel {
   /**
    * Remove a dependency from kernel.
    *
-   * - This will removed all unused children and free() events.
-   * - However state is kept.
+   * This will:
+   * - remove all unused children and free() events.
+   * - free() events.
    *
    */
   private removeDependency(declaration: IDeclaration<IListener>): void {
@@ -697,8 +697,7 @@ export class Kernel {
   }
 
   /**
-   * Use #inject() on a dependency.
-   * Take care of factory if needed.
+   * Process metadata of a Class or a Factory.
    *
    * @param dependency  Kernel dependency
    * @param parent      Instance who requires this instance
@@ -723,11 +722,9 @@ export class Kernel {
   }
 
   /**
-   * Internal function of @inject.
+   * Process instance metadata.
    * - create instance with definition if no instance is provided
-   * - process env/state then link injection
-   *
-   * There is not a registration.
+   * - process env/state/on and use injections
    *
    * @param definition    IDefinition (e.g description of the instance)
    * @param instance      Instance to use, optional
@@ -891,7 +888,7 @@ export class Kernel {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Process injectable:provide.
+   * Process injectable({provide: Class}).
    *
    * @param definition    Definition
    */
@@ -903,13 +900,13 @@ export class Kernel {
     if (injectableMetadata && injectableMetadata.target.provide) {
       definition.use = definition.use || definition.provide;
       definition.provide = injectableMetadata.target.provide;
-      this.forceProvideDecorator(definition);
+      this.forceProvideDecorator(definition); // recursive yo
     }
   }
 
   /**
    * Bubble sort declarations by requirement.
-   * Used by #start() and #stop().
+   * Performance disaster.
    */
   private sortDeclarations(declarations: IDeclarations): IDeclarations {
     return _.bubble(declarations, (list, index) => {

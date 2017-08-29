@@ -2,7 +2,7 @@
 
 o*l*y is a set of libraries to create well-written [TypeScript](https://github.com/Microsoft/TypeScript) applications with [Node.js®](https://nodejs.org/en/) and browsers.
 
-This set is based on robust projects, such as [Koa](https://github.com/koajs/koa) and [React](https://github.com/facebook/react).
+This set is based on popular projects, such as [Koa](https://github.com/koajs/koa) and [React](https://github.com/facebook/react).
 
 ### Getting started
 

@@ -2,15 +2,15 @@
 
 o*l*y is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
-### Installation
+## Installation
 
 ```bash
 $ npm install oly
 ```
 
-### Why
+## Features
 
-#### Pseudo DI
+#### Injections
 
 ```ts
 import { inject, Kernel } from "oly";
@@ -25,7 +25,22 @@ Kernel
   .get(C).a.text // B
 ```
 
-#### Store
+#### Events
+
+```ts
+import { Kernel, on } from "oly";
+
+class App {
+  @on say = msg => console.log(msg)
+}
+
+Kernel
+  .create()
+  .with(App)
+  .emit("App.say", "hello"); // hello
+```
+
+#### States
 
 ```ts
 import { Kernel } from "oly";
@@ -42,7 +57,7 @@ Kernel
 ```ts
 import { env, inject, Kernel, state } from "oly";
 
-class Db {
+class DbProvider {
   @env("DB_URL") url: string;
   @state conn: any;
 
@@ -52,7 +67,7 @@ class Db {
 }
 
 class Repo {
-  @inject db: Db;
+  @inject db: DbProvider;
 }
 
 Kernel
@@ -60,29 +75,4 @@ Kernel
   .with(Repo)
   .start()
   .then(k => console.log(k.state("Db.conn")));
-```
-
-#### Context
-
-```ts
-import { Kernel, state } from "oly";
-
-class A {
-  @state shared = "S";
-  isolated = "I";
-}
-
-const root = Kernel.create();
-console.log(root.id);               // taohu1sasyk2
-console.log(root.get(A).shared);    // "S"
-console.log(root.get(A).isolated);  // "I"
-
-const child = root.fork();
-console.log(child.id);              // taohu1sasyk2.rlmhlpqe87dm
-
-child.get(A).shared = "S2";
-child.get(A).isolated = "I2";
-
-console.log(root.get(A).shared);    // "S2"
-console.log(root.get(A).isolated);  // "I"
 ```

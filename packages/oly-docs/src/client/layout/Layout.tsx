@@ -18,10 +18,10 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
     return (
       <div className="main-layout">
         <div className="navbar-brand">
-          <Go className="navbar-item" to="/">
+          <Go className="navbar-item brand" to="/">
             <strong>o<em>l</em>y project</strong>
           </Go>
-          {this.docs.modules.map(m =>
+          {this.docs.modules.map((m) =>
             <Go
               to="module"
               params={{module: m.name}}
@@ -31,7 +31,10 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
               {m.name.replace("oly-", "")}
             </Go>,
           )}
-          <div style={{padding: "8px", textAlign: "right", width: "100%"}}>
+          <div
+            className="is-hidden-mobile"
+            style={{padding: "8px", textAlign: "right", width: "100%"}}
+          >
             <Search/>
             <a
               target="_blank"
@@ -42,22 +45,6 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
           </div>
         </div>
         <View onChange={() => document.body.scrollTop = 0}/>
-        <br/>
-        <br/>
-        <br/>
-        <footer className="footer">
-          <div className="container">
-            <div className="content has-text-centered">
-              <p>
-                Built with
-                {" "}
-                <a href="https://facebook.github.io/react/" target="_blank">React</a>
-                {" & "}
-                <a href="http://bulma.io/" target="_blank">Bulma</a>.
-              </p>
-            </div>
-          </div>
-        </footer>
       </div>
     );
   }

@@ -17,6 +17,13 @@ import {
 import { DefaultErrorHandler } from "../services/DefaultErrorHandler";
 import { ReactRouterMatcher } from "../services/ReactRouterMatcher";
 
+/**
+ * Transform all @page to routes.
+ *
+ * Public API is available on Router.
+ *
+ * > Don't use it directly useless you know what you are doing.
+ */
 export class ReactRouterProvider implements IProvider {
 
   /**

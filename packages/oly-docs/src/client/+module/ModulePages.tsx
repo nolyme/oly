@@ -7,6 +7,16 @@ import { Mark } from "../shared/Mark";
 import { Configuration } from "./Configuration";
 import { Module } from "./Module";
 
+export const GithubPath = (props: { module: string, path: string }) =>
+  <h2 className="subtitle">
+    <a
+      style={{marginTop: "-20px"}}
+      target="_blank"
+      href={`https://github.com/nolyme/oly/blob/master/packages/${props.module}/src${props.path}`}>
+      {props.path}
+    </a>
+  </h2>;
+
 export class ModulePages {
   @inject docs: Docs;
   @state content: IModuleContent;
@@ -47,7 +57,7 @@ export class ModulePages {
     }
     return <div>
       <h2 className="title">{e.name}</h2>
-      <h2 className="subtitle">{e.path}</h2>
+      <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
       <Mark html={e.description}/>
     </div>;
@@ -61,7 +71,7 @@ export class ModulePages {
     }
     return <div>
       <h2 className="title">{e.name}</h2>
-      <h2 className="subtitle">{e.path}</h2>
+      <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
       <Mark html={e.description}/>
     </div>;
@@ -75,7 +85,7 @@ export class ModulePages {
     }
     return <div>
       <h2 className="title">{e.name}</h2>
-      <h2 className="subtitle">{e.path}</h2>
+      <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
       <Mark html={e.description}/>
     </div>;
@@ -117,7 +127,7 @@ export class ModulePages {
     }
     return <div>
       <h2 className="title">{e.name}</h2>
-      <h2 className="subtitle">{e.path}</h2>
+      <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
       <Mark html={e.description}/>
     </div>;

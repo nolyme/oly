@@ -1,17 +1,21 @@
 import { Global } from "../kernel/Global";
 
 /**
- * It's an enhancement of Error with toJSON and cause.
- * There is also a hack that allow instanceof with es5.
+ * Enhancement of Error.
+ * It's support ES5 and ES6.
  *
- * Exception has a real #toJSON(). It can be stringify.
- * It's useful when http, debug and message.
+ * Features:
+ * - #toJSON()
+ * - reason/cause
+ * - defaultMessage
+ * - safe instanceof
  *
+ * toJSON.
  * ```ts
- * console.log(JSON.stringify(new Exception("A")));
+ * console.log(JSON.stringify(new Exception("A"))); // {message: "A", name: "Exception"}
  * ```
  *
- * Exception can have a cause (reason).
+ * Reason.
  * ```ts
  * try {
  *   try {
@@ -24,21 +28,21 @@ import { Global } from "../kernel/Global";
  * }
  * ```
  *
- * You can define a default message without pain.
+ * Default Message.
  * ```ts
  * class MyException extends Exception {
  *    message = "My default message";
  * }
  * ```
  *
- * This is designed to be overridden.
+ * Extend.
  * ```ts
  * class MyException extends Exception {
  * }
  * new MyException().name // "MyException"
  * ```
  *
- * You can use `instanceof` without fear.
+ * Instance of.
  * ```ts
  * try {
  *  throw new Exception();
@@ -111,21 +115,22 @@ export class Exception extends Error {
     // this breaks sourcemaps on browsers
 
     if (!Global.isBrowser()) {
-      // [DISABLED] perf reason : 200ms, this is not acceptable
+      // [DISABLED] performance [DISABLED]
       // Object.defineProperty(this, "stack", {get: () => this.getLongStackTrace()});
     }
   }
 
   /**
-   *
+   * Extract message.
    */
   public get message(): string {
     return this.source.message;
   }
 
   /**
+   * Set message.
    *
-   * @param m
+   * @param m Message
    */
   public set message(m: string) {
     if (this.source.isMutable) {
@@ -135,6 +140,15 @@ export class Exception extends Error {
 
   /**
    * Get the long stack trace.
+   *
+   * ```ts
+   * try {
+   * } catch(e) {
+   *   if (e instanceof Exception) {
+   *     console.log(e.getLongStackTrace());
+   *   }
+   * }
+   * ```
    */
   public getLongStackTrace(): string {
 
@@ -177,8 +191,7 @@ export class Exception extends Error {
   }
 
   /**
-   * Return error as object without shitty data.
-   * Designed to be overridden.
+   * Return error as a json object.
    *
    * ```ts
    * class A extends Exception {

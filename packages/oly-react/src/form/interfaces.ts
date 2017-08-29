@@ -61,7 +61,7 @@ export interface IFormState<T extends object> extends IFormOptions<T> {
   /**
    * Check if value !== initial.
    */
-  nasty: boolean;
+  dirty: boolean;
 
   /**
    * Flatten list of all errors.

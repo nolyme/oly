@@ -37,9 +37,7 @@ export class InjectableDecorator implements IDecorator {
 }
 
 /**
- * Configure an injection and auto inject constructor.
- *
- * > Don't use it by default. This is for special cases only.
+ * Configure a service and enable constructor auto-injection.
  *
  * ```ts
  * &shy;@injectable({
@@ -49,7 +47,7 @@ export class InjectableDecorator implements IDecorator {
  * }
  * ```
  *
- * Auto inject constructor.
+ * Auto inject constructor. This is not recommended.
  *
  * ```ts
  * &shy;@injectable

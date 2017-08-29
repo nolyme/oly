@@ -18,7 +18,7 @@ export class Form<T extends object = any> {
       ...options,
       value: options.initial,
       initial: JSON.parse(JSON.stringify(options.initial)),
-      nasty: false,
+      dirty: false,
       errors: options.validate(options.initial),
     };
   }
@@ -54,8 +54,8 @@ export class Form<T extends object = any> {
   /**
    * Get if current value is not the initial value. Comparison is based on values, not refs.
    */
-  public get nasty(): boolean {
-    return this.state.nasty;
+  public get dirty(): boolean {
+    return this.state.dirty;
   }
 
   /**
@@ -245,7 +245,7 @@ export class Form<T extends object = any> {
     this.state = {
       ...this.state,
       value: newValue,
-      nasty: JSON.stringify(this.state.initial) !== JSON.stringify(newValue),
+      dirty: JSON.stringify(this.state.initial) !== JSON.stringify(newValue),
       errors: this.state.validate(newValue),
     };
 

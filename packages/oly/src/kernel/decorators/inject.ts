@@ -51,7 +51,7 @@ export class InjectDecorator implements IDecorator {
  * Kernel.create().get(A).b.c // "d"
  * ```
  *
- * You can force the Type.
+ * Type can be passed by argument.
  * ```ts
  * class A {
  *   @inject(B) b;
@@ -59,7 +59,7 @@ export class InjectDecorator implements IDecorator {
  * }
  * ```
  *
- * It works also on constructor with Kernel#invoke().
+ * It works also on constructor with Kernel#invoke(), but it's not recommended.
  *
  * ```ts
  * class B {}
@@ -68,7 +68,7 @@ export class InjectDecorator implements IDecorator {
  * }
  * ```
  *
- * > You don't have to set @inject if your service has @injectable.
+ * > @inject on constructor is't required if service has @injectable.
  *
  */
 export const inject = Meta.decorator<IInjectOptions>(InjectDecorator);

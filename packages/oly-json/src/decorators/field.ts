@@ -21,7 +21,7 @@ export class FieldDecorator implements IDecorator {
 }
 
 /**
- * Attach a TypeScript property to a JsonSchema property.
+ * Bind a TypeScript/JavaScript attribute to JSON Schema property.
  *
  * ```ts
  * class A {
@@ -33,12 +33,15 @@ export class FieldDecorator implements IDecorator {
  * }
  * ```
  *
- * Mapping requires a "type", most of the time TypeScript type is enough.
+ * Mapping requires a "Type" but most of the time TypeScript type annotations are enough.
+ *
  * Exceptions:
  * - array (see @array)
  * - native type (see @date)
  *
- * Like a Typescript property, @field property is required by default.
+ * #### Required by default
+ *
+ * Like a Typescript property, **a @field property is required by default**.
  *
  * ```ts
  * class A {

@@ -11,7 +11,19 @@ export interface IAppContextProps {
 }
 
 /**
- * Simply wrapper to inject Kernel into React Context.
+ * Add an oly Kernel to `childContext`.
+ *
+ * ```ts
+ * Kernel
+ *  .create(store)
+ *  .with(...deps)
+ *  .start()
+ *  .then(kernel =>
+ *    render(<AppContext kernel={kernel}><MyApp/></AppContext>, rootElement)
+ *  );
+ * ```
+ *
+ * This is not recommended. (see ReactBrowserProvider)
  */
 export class AppContext extends React.Component<IAppContextProps, {}> {
 
