@@ -1,7 +1,7 @@
 {
   "name": "oly-react",
   "description": "oly-react",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -18,7 +18,7 @@
     "@types/react-helmet": "5.0.3",
     "cheerio": "0.22.0",
     "history": "4.7.2",
-    "oly-http": "0.13.0",
+    "oly-http": "^0.14.0",
     "path-to-regexp": "1.7.0",
     "prop-types": "15.5.10",
     "qs": "6.5.0",
@@ -32,12 +32,12 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "cheerio": "0.22.0",
-    "oly": "0.13.0",
-    "oly-json": "0.13.0",
+    "oly": "^0.14.0",
+    "oly-json": "^0.14.0",
     "react": "15.6.1"
   },
   "peerDependencies": {
-    "oly": "0.13.0",
+    "oly": "^0.14.0",
     "react": "15.6.1"
   },
   "scripts": {
