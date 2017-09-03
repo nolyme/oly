@@ -42,6 +42,12 @@ export class A2 {
     return {a};
   }
 
+  @get("/query/list")
+  queryList(@query a: string[], ctx) {
+    console.log(a, ctx.query);
+    return {a};
+  }
+
   @get("/query/number")
   queryNumber(@query a: number) {
     return {a};

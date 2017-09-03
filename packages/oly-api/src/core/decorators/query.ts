@@ -1,5 +1,6 @@
 import { IDecorator, Kernel, Meta, olyCoreKeys, TypeParser } from "oly";
 import { IKoaContext } from "oly-http";
+import { build, olyMapperKeys } from "oly-json";
 import { olyApiErrors } from "../constants/errors";
 import { olyApiKeys } from "../constants/keys";
 import { BadRequestException } from "../exceptions/BadRequestException";
@@ -53,6 +54,11 @@ export class QueryDecorator implements IDecorator {
         }
       },
     });
+
+    // auto @build with @body, remove this line if feature is useless
+    if (Meta.of({key: olyMapperKeys.fields, target: type})) {
+      build(target, propertyKey, index);
+    }
   }
 }
 

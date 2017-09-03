@@ -30,5 +30,7 @@ export * from "./router/providers/ReactBrowserProvider";
 
 export * from "./pixie/services/Pixie";
 export * from "./pixie/services/PixieHttp";
+export * from "./pixie/services/PixieSession";
+export * from "./pixie/services/Cookies";
 
 export const Helmet = _Helmet;

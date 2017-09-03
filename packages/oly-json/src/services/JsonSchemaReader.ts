@@ -45,7 +45,6 @@ export class JsonSchemaReader {
       const keys = Object.keys(fieldsMetadata.properties);
       for (const propertyKey of keys) {
         const field = fieldsMetadata.properties[propertyKey];
-        const key = field.name;
 
         jsonSchema.properties[field.name] = this.extractProperty(field);
         if (field.required) {
@@ -91,7 +90,9 @@ export class JsonSchemaReader {
     if (jsonSchema.type === "array") {
       const array = field as IMetaArray;
       const item: IField = typeof array.of === "function" ? {type: array.of, name: ""} : array.of;
-      jsonSchema.items = this.extractProperty(item);
+      if (item) {
+        jsonSchema.items = this.extractProperty(item);
+      }
     }
 
     return jsonSchema;

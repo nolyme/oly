@@ -32,6 +32,9 @@ describe("ApiProvider", () => {
   it("@query", async () => {
     expect(await fetch("/query?a=1")).toEqual({a: "1"});
     expect(await fetch("/query")).toEqual({a: "default"});
+    expect(await fetch("/query/list", "get", {params: {a: ["1", "2"]}})).toEqual({a: ["1", "2"]});
+    expect(await fetch("/query/list", "get", {params: {a: ["1"]}})).toEqual({a: ["1"]});
+    expect(await fetch("/query/list", "get", {params: {a: []}})).toEqual({a: []});
   });
   it("@query-required", async () => {
     expect((await fetch("/query/required")).message)

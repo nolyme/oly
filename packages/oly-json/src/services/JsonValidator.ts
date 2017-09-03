@@ -1,6 +1,6 @@
 import * as Ajv from "ajv";
 import { ValidateFunction } from "ajv";
-import { env, inject, state } from "oly";
+import { inject, state } from "oly";
 import { ValidationException } from "../exceptions/ValidationException";
 import { IField } from "../interfaces";
 import { JsonSchemaReader } from "./JsonSchemaReader";
@@ -8,13 +8,12 @@ import { JsonSchemaReader } from "./JsonSchemaReader";
 export class JsonValidator {
 
   @state
-  public ajv: Ajv.Ajv = this.createAjv();
+  public ajv: Ajv.Ajv = new Ajv({
+    useDefaults: true,
+  });
 
   @state
   protected cache: Array<[Function, ValidateFunction]> = [];
-
-  @env("JSON_VALIDATOR_ALL_ERRORS")
-  protected readonly allErrors: boolean = true;
 
   @inject
   protected readonly schemaReader: JsonSchemaReader;
@@ -75,15 +74,5 @@ export class JsonValidator {
     this.cache.push([definition, validate]);
 
     return validate;
-  }
-
-  /**
-   * Ajv factory.
-   */
-  protected createAjv(): Ajv.Ajv {
-    return new Ajv({
-      useDefaults: true,
-      allErrors: this.allErrors,
-    });
   }
 }

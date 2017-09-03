@@ -70,12 +70,13 @@ export class DocParser {
     });
   }
 
-  public generateComponents(app: Application, path: string, m: ModuleConfiguration): IDocComponent[] {
+  public generateComponents(app: Application, path: string, m: ModuleConfiguration,
+                            reflection: ProjectReflection): IDocComponent[] {
     this.logger.debug("check components");
     const results = m.components || [];
     results.map((r) => this.check(resolve(path, r)));
 
-    const components = this.generateDeclarations(app, path, results);
+    const components = this.generateDeclarations(app, reflection, path, results);
     return components.map((file) => {
       const clazz = file.children.filter((p) => p.kindString === "Class")[0];
       const props = file.children.filter((p) => p.kindString === "Interface" && p.name.indexOf("Props") > -1)[0];
@@ -104,11 +105,14 @@ export class DocParser {
     });
   }
 
-  public generateDecorator(app: Application, path: string, m: ModuleConfiguration): IDocDecorator[] {
+  public generateDecorator(app: Application,
+                           path: string,
+                           m: ModuleConfiguration,
+                           reflection: ProjectReflection): IDocDecorator[] {
     this.logger.debug("check decorators");
     const results = m.decorators || [];
     results.map((r) => this.check(resolve(path, r)));
-    const declarations = this.generateDeclarations(app, path, results);
+    const declarations = this.generateDeclarations(app, reflection, path, results);
 
     return declarations.map((file) => {
       const decorator = file.children[file.children.length - 1];
@@ -123,11 +127,14 @@ export class DocParser {
     });
   }
 
-  public generateService(app: Application, path: string, m: ModuleConfiguration): IDocService[] {
+  public generateService(app: Application,
+                         path: string,
+                         m: ModuleConfiguration,
+                         reflection: ProjectReflection): IDocService[] {
     this.logger.debug("check services");
     const results = m.services || [];
     results.map((r) => this.check(resolve(path, r)));
-    const declarations = this.generateDeclarations(app, path, results);
+    const declarations = this.generateDeclarations(app, reflection, path, results);
 
     return declarations.map((file) => {
       const service = file.children[file.children.length - 1];
@@ -142,11 +149,14 @@ export class DocParser {
     });
   }
 
-  public generateException(app: Application, path: string, m: ModuleConfiguration): IDocException[] {
+  public generateException(app: Application,
+                           path: string,
+                           m: ModuleConfiguration,
+                           reflection: ProjectReflection): IDocException[] {
     this.logger.debug("check exceptions");
     const results = m.exceptions || [];
     results.map((r) => this.check(resolve(path, r)));
-    const declarations = this.generateDeclarations(app, path, results);
+    const declarations = this.generateDeclarations(app, reflection, path, results);
     return declarations.map((file) => {
       const exception = file.children.filter((c) => c.kind = ReflectionKind.Class)[0];
       this.logger.info(`push ${exception.name}`);
@@ -159,10 +169,13 @@ export class DocParser {
     });
   }
 
-  public generateEnv(app: Application, path: string, results: string[] = []): IDocEnv[] {
+  public generateEnv(app: Application,
+                     path: string,
+                     results: string[] = [],
+                     reflection: ProjectReflection): IDocEnv[] {
     this.logger.debug("check env");
     results.map((r) => this.check(resolve(path, r)));
-    const declarations = this.generateDeclarations(app, path, results);
+    const declarations = this.generateDeclarations(app, reflection, path, results);
 
     const envResults: IDocEnv[] = declarations.reduce<IDocEnv[]>((env, d) => env
       .concat(d.children[0].children
@@ -193,10 +206,12 @@ export class DocParser {
     return final;
   }
 
-  public generateDeclarations(app: Application, path: string, results: string[] = []): DeclarationReflection[] {
+  public generateDeclarations(app: Application,
+                              reflection: ProjectReflection,
+                              path: string,
+                              results: string[] = []): DeclarationReflection[] {
 
     const files = results.map((i) => path + "/" + i.replace(/\.tsx?/mgi, ""));
-    const reflection: ProjectReflection = app.convert(files);
 
     if (!reflection) {
       return [];

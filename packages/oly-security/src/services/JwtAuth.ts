@@ -9,7 +9,7 @@ import { IPayload, IToken } from "../interfaces";
 import { Crypto } from "./Crypto";
 
 /**
- * Use JWT.
+ * Authentication with JSON Web Token
  */
 export class JwtAuth {
 
@@ -22,7 +22,7 @@ export class JwtAuth {
   protected logger: Logger;
 
   @inject
-  protected cryptoService: Crypto;
+  protected crypto: Crypto;
 
   /**
    *
@@ -39,7 +39,7 @@ export class JwtAuth {
       config.expiresIn = this.tokenExpiration;
     }
 
-    return jwt.sign({data}, this.cryptoService.secret, Global.merge(config, options));
+    return jwt.sign({data}, this.crypto.secret, Global.merge(config, options));
   }
 
   /**
@@ -58,7 +58,7 @@ export class JwtAuth {
     token = token.replace("Bearer ", "");
 
     try {
-      const payload = jwt.verify(token, this.cryptoService.secret, options) as any;
+      const payload = jwt.verify(token, this.crypto.secret, options) as any;
       this.token = payload.data as IToken;
       return payload;
     } catch (e) {

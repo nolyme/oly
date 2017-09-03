@@ -71,8 +71,8 @@ export class Router {
    * - returns a promise of nothing if transition has been aborted
    * - throws an exception if transition has failed
    */
-  public go(query: string | IHrefQuery): Promise<ITransition | undefined> {
-    return this.routerProvider.transition(typeof query === "string" ? {to: query} : query);
+  public go(hrefQuery: string | IHrefQuery): Promise<ITransition | undefined> {
+    return this.routerProvider.transition(typeof hrefQuery === "string" ? {to: hrefQuery} : hrefQuery);
   }
 
   /**

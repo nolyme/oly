@@ -18,7 +18,7 @@ export class DefaultErrorHandler {
   public error(e: ITransitionError): JSX.Element {
     return (
       <div>
-        <pre>{e.error.stack}</pre>
+        <pre>Error: {e.error.message || String(e.error)}</pre>
       </div>
     );
   }

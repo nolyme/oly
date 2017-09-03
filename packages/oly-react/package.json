@@ -18,26 +18,28 @@
     "@types/react-helmet": "5.0.3",
     "cheerio": "0.22.0",
     "history": "4.7.2",
-    "oly-http": "^0.14.0",
+    "js-cookie": "2.1.4",
+    "oly-http": "0.14.0",
     "path-to-regexp": "1.7.0",
     "prop-types": "15.5.10",
     "qs": "6.5.0",
     "react-dom": "15.6.1",
-    "react-helmet": "5.1.3"
+    "react-helmet": "5.2.0"
   },
   "devDependencies": {
     "@types/cheerio": "*",
+    "@types/js-cookie": "*",
     "@types/prop-types": "15.5.1",
     "@types/qs": "6.5.0",
     "@types/react": "*",
     "@types/react-dom": "*",
     "cheerio": "0.22.0",
-    "oly": "^0.14.0",
-    "oly-json": "^0.14.0",
+    "oly": "0.14.0",
+    "oly-json": "0.14.0",
     "react": "15.6.1"
   },
   "peerDependencies": {
-    "oly": "^0.14.0",
+    "oly": "0.14.0",
     "react": "15.6.1"
   },
   "scripts": {

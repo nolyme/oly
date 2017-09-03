@@ -52,8 +52,11 @@
       ],
       "decorators": [
         "core/decorators/attach.ts",
+        "core/decorators/action.ts",
         "router/decorators/page.ts",
-        "router/decorators/layout.ts"
+        "router/decorators/layout.ts",
+        "router/decorators/query.ts",
+        "router/decorators/param.ts"
       ],
       "components": [
         "router/components/Go.tsx",
@@ -63,7 +66,6 @@
       "services": [
         "router/services/Router.ts",
         "router/services/Browser.ts",
-        "router/providers/ReactRouterProvider.ts",
         "router/providers/ReactBrowserProvider.ts",
         "server/providers/ReactServerProvider.ts"
       ]
@@ -72,32 +74,24 @@
       "name": "oly-api",
       "icon": "satellite",
       "decorators": [
-        "core/decorators/route.ts",
         "core/decorators/get.ts",
         "core/decorators/post.ts",
         "core/decorators/put.ts",
         "core/decorators/del.ts",
         "core/decorators/body.ts",
         "core/decorators/param.ts",
-        "core/decorators/header.ts",
         "core/decorators/query.ts",
         "core/decorators/router.ts",
-        "core/decorators/use.ts",
-        "swagger/decorators/api.ts"
+        "core/decorators/use.ts"
       ],
       "services": [
         "core/providers/ApiProvider.ts",
-        "core/services/ApiMiddlewares.ts",
         "swagger/providers/SwaggerProvider.ts"
       ]
     },
     {
       "name": "oly-security",
       "icon": "id-number",
-      "exceptions": [
-        "exceptions/JsonWebTokenException.ts",
-        "exceptions/TokenExpiredException.ts"
-      ],
       "decorators": [
         "decorators/auth.ts"
       ],

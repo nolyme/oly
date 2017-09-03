@@ -53,7 +53,7 @@ export class InjectableDecorator implements IDecorator {
  * &shy;@injectable
  * class A {
  *   constructor(
- *    private b: B
+ *     private b: B
  *   ) {}
  * }
  * ```

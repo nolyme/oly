@@ -8,7 +8,16 @@ import { IRouterMetadata } from "../interfaces";
 import { ApiMiddlewares } from "../services/ApiMiddlewares";
 
 /**
+ * ```ts
  *
+ * class App {
+ *   @get("/") root(ctx: IKoaContext) {
+ *     return "body";
+ *   }
+ * }
+ *
+ * Kernel.create().with(ApiProvider, App).start();
+ * ```
  */
 export class ApiProvider implements IProvider {
 

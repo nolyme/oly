@@ -13,9 +13,9 @@
     "highlight.js": "9.12.0",
     "marked": "0.3.6",
     "node-sass": "4.5.3",
-    "oly": "^0.14.0",
-    "oly-json": "^0.14.0",
-    "oly-react": "^0.14.0",
+    "oly": "0.14.0",
+    "oly-json": "0.14.0",
+    "oly-react": "0.14.0",
     "prismjs": "1.6.0",
     "react": "15.6.1",
     "sass-loader": "6.0.6",
@@ -23,7 +23,7 @@
     "typedoc": "0.8.0"
   },
   "devDependencies": {
-    "oly-tools": "^0.14.0",
+    "oly-tools": "0.14.0",
     "ts-node": "3.3.0",
     "webpack": "3.5.5",
     "webpack-dev-server": "2.7.1"

@@ -1,4 +1,5 @@
 import { Global } from "oly";
+import { JsonWebTokenException } from "../exceptions/JsonWebTokenException";
 import { IPayload } from "../interfaces";
 
 /**
@@ -12,8 +13,17 @@ export class Jwt {
    * @param token     Json Web IToken
    * @return          IPayload
    */
-  public static parse(token: string): IPayload {
-    return JSON.parse(Global.atob(token.split(".")[1]));
+  public static payload(token: string): IPayload {
+
+    if (!this.cache[token]) {
+      try {
+        this.cache[token] = JSON.parse(Global.atob(token.split(".")[1]));
+      } catch (e) {
+        throw new JsonWebTokenException(e, "Invalid token");
+      }
+    }
+
+    return this.cache[token];
   }
 
   /**
@@ -22,9 +32,38 @@ export class Jwt {
    * @param token       Json Web IToken
    * @return            Ttl
    */
-  public static getLifeTime(token: string): number {
-    const payload = Jwt.parse(token);
+  public static lifeTime(token: string): number {
+    const payload = Jwt.payload(token);
     return Number(payload.exp) - Number(payload.iat);
+  }
+
+  /**
+   * Check if token is valid + payload.data.roles includes <ROLES>
+   * @param {string} token
+   * @param {string} role
+   * @returns {boolean}
+   */
+  public static hasRole(token: string, role: string): boolean {
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const payload = Jwt.payload(token);
+
+      if (payload.exp <= (new Date().getTime() / 1000)) {
+        return false;
+      }
+
+      if (!payload.data.roles) {
+        return false;
+      }
+
+      return payload.data.roles.indexOf(role) > -1;
+    } catch (e) {
+      return false;
+    }
   }
 
   /**
@@ -34,10 +73,18 @@ export class Jwt {
    * @return            True if everything is ok
    */
   public static isValid(token: string | null | undefined): boolean {
+
     if (!token) {
       return false;
     }
-    const payload = Jwt.parse(token);
-    return payload.exp > (new Date().getTime() / 1000);
+
+    try {
+      const payload = Jwt.payload(token);
+      return payload.exp > (new Date().getTime() / 1000);
+    } catch (e) {
+      return false;
+    }
   }
+
+  private static cache: { [key: string]: IPayload } = {};
 }

@@ -8,9 +8,29 @@ import { ApiProvider } from "../../core/providers/ApiProvider";
 import { ISwaggerApi } from "../interfaces";
 
 /**
- * Auto-generate SwaggerSpec based on @route.
+ * The `SwaggerProvider` reads @get/@post/@field/... and creates a [Swagger JSON + Swagger UI](https://swagger.io/).
  *
- * @experimental
+ * - JSON: <API_PREFIX>/swagger.json
+ * - UI: <API_PREFIX>/swagger/ui
+ *
+ * Currently supported:
+ *
+ * - Definitions
+ * - Paths
+ *
+ * ```ts
+ * class Data {
+ *   @field name: string;
+ * }
+ *
+ * class App {
+ *   @post("/")
+ *   createDate(@body data: Data) {
+ *   }
+ * }
+ *
+ * Kernel.create().with(SwaggerProvider, App).start();
+ * ```
  */
 export class SwaggerProvider {
 
@@ -56,7 +76,7 @@ export class SwaggerProvider {
     };
 
     for (const dep of declarations) {
-      const meta = Meta.of({key: olyApiKeys.router, target: dep.definition}).get();
+      const meta = Meta.of({key: olyApiKeys.router, target: dep.definition}).deep();
       if (meta) {
 
         this.swagger.tags.push({

@@ -3,8 +3,10 @@ import { env, inject, IProvider, Kernel, Logger, on } from "oly";
 import { HttpClient } from "oly-http";
 import { createElement } from "react";
 import { AppContext } from "../../core/components/AppContext";
+import { Cookies } from "../../pixie/services/Cookies";
 import { Pixie } from "../../pixie/services/Pixie";
 import { PixieHttp } from "../../pixie/services/PixieHttp";
+import { PixieSession } from "../../pixie/services/PixieSession";
 import { View } from "../components/View";
 import { olyReactRouterEvents } from "../constants/events";
 import { ITransitionRenderEvent, ITransitionType } from "../interfaces";
@@ -51,6 +53,12 @@ export class ReactBrowserProvider implements IProvider {
   protected browser: Browser;
 
   @inject
+  protected session: PixieSession;
+
+  @inject
+  protected cookies: Cookies;
+
+  @inject
   protected router: Router;
 
   /**
@@ -66,6 +74,11 @@ export class ReactBrowserProvider implements IProvider {
       this.kernel.state("Pixie.data", data);
     }
 
+    const identifier = this.cookies.get(this.session.name);
+    if (identifier) {
+      this.session.use(identifier);
+    }
+
     this.createHistory();
 
     this.browser.history.block(((location: any, action: ITransitionType) => {
@@ -78,7 +91,8 @@ export class ReactBrowserProvider implements IProvider {
       to: this.browser.history.location.pathname + this.browser.history.location.search,
       type: "NONE",
     }).then(() => {
-      this.logger.info("render react view");
+      this.mount();
+    }).catch(() => {
       this.mount();
     });
   }

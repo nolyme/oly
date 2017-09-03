@@ -5,8 +5,10 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { AppContext } from "../../core/components/AppContext";
+import { Cookies } from "../../pixie/services/Cookies";
 import { Pixie } from "../../pixie/services/Pixie";
 import { PixieHttp } from "../../pixie/services/PixieHttp";
+import { PixieSession } from "../../pixie/services/PixieSession";
 import { View } from "../../router/components/View";
 import { ReactRouterProvider } from "../../router/providers/ReactRouterProvider";
 import { ReactProxyService } from "../services/ReactProxyService";
@@ -167,6 +169,12 @@ export class ReactServerProvider implements IProvider {
 
     this.use((ctx, next) => {
       Global.noop(ctx.kernel.get(PixieHttp).root);
+      const session = ctx.kernel.get(PixieSession);
+      const cookies = ctx.kernel.get(Cookies);
+      const identifier = cookies.get(session.name);
+      if (identifier) {
+        session["identifier"] = identifier;
+      }
       return next();
     });
 

@@ -31,6 +31,7 @@ export class HttpClient {
    * > Use it for test only.
    *
    * @param options   Axios configuration
+   * @internal
    */
   public with(options: AxiosRequestConfig): this {
 

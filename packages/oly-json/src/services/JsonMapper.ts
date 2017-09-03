@@ -76,7 +76,7 @@ export class JsonMapper {
       const item = typeof field.of === "function" ? {type: field.of, name: ""} : field.of;
       return value.map((v) => this.mapField(item, v));
     }
-    return [this.mapField(field, value)];
+    return TypeParser.parseArray(value);
   }
 
   /**

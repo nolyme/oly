@@ -9,7 +9,7 @@ export const parseToken = (): IKoaMiddleware => {
   return async function parseTokenMiddleware(ctx: IKoaContext, next: Function) {
 
     const authorization = ctx.request.header.authorization;
-    const cookieName = ctx.kernel.env("PIXIE_COOKIE");
+    const cookieName = ctx.kernel.env("PIXIE_SESSION_NAME");
     const logger = ctx.kernel.inject(Logger).as("parseToken");
 
     if (typeof authorization === "string") {

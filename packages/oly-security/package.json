@@ -17,18 +17,16 @@
     "@types/bcryptjs": "2.4.1",
     "@types/jsonwebtoken": "7.2.3",
     "bcryptjs": "2.4.3",
-    "js-cookie": "2.1.4",
     "jsonwebtoken": "7.4.3",
-    "oly-http": "^0.14.0"
+    "oly-http": "0.14.0"
   },
   "devDependencies": {
-    "@types/js-cookie": "*",
-    "oly": "^0.14.0",
-    "oly-api": "^0.14.0"
+    "oly": "0.14.0",
+    "oly-api": "0.14.0"
   },
   "peerDependencies": {
-    "oly": "^0.14.0",
-    "oly-api": "^0.14.0"
+    "oly": "0.14.0",
+    "oly-api": "0.14.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

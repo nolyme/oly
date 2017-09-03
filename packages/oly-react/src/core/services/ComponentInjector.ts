@@ -44,7 +44,7 @@ export class ComponentInjector {
 
       instance["auto$$refresh"] = function refreshHandler(this: any, event: IStateMutateEvent) {
         for (const name of states) {
-          if (self.kernel["started"] && event.key === Global.keyify(name)) {
+          if (self.kernel["started"] && event.key === Global.keyify(name) && Global.isBrowser()) {
             instance.forceUpdate();
             return;
           }

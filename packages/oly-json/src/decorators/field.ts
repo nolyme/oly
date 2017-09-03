@@ -11,10 +11,13 @@ export class FieldDecorator implements IDecorator {
   }
 
   public asProperty(target: object, propertyKey: string): void {
+
+    const type = this.options.type || Meta.designType(target, propertyKey);
+
     Meta.of({key: olyMapperKeys.fields, target, propertyKey}).set({
       name: this.options.name || propertyKey,
       required: this.options.required !== false,
-      type: this.options.type || Meta.designType(target, propertyKey),
+      type,
       ...this.options,
     });
   }

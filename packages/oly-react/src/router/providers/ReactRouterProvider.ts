@@ -123,7 +123,7 @@ export class ReactRouterProvider implements IProvider {
     };
 
     // now, we are safe, TRANSITION CAN BEGIN!
-    this.logger.info(`begin transition -> ${transition.type} ${match.route.node.name}`);
+    this.logger.info(`begin 'to:${match.route.name}' (${transition.type})`);
     await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
 
     try {
@@ -168,7 +168,8 @@ export class ReactRouterProvider implements IProvider {
             const redirection = result as ITransition;
             const chunks = result as IChunks;
             if (redirection.to && redirection.to.path) {
-              this.logger.info(`transition is replaced by another one, layer ${i} has created a redirection`);
+              this.logger.info(
+                `transition 'to:${match.route.name}' is replaced by another one -> layer ${i} created a redirection`);
               await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
               return redirection;
             } else {
@@ -184,7 +185,8 @@ export class ReactRouterProvider implements IProvider {
             }
           } else {
             // if nothing was returned
-            this.logger.info(`transition is aborted, layer ${i} has return no chunks`);
+            this.logger.info(
+              `transition 'to:${match.route.name}' is aborted -> layer ${i} did not return chunk`);
             await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
             return;
           }
@@ -192,7 +194,7 @@ export class ReactRouterProvider implements IProvider {
       }
 
       if (newLevel === -1) {
-        this.logger.info(`transition is aborted, nothing to update`);
+        this.logger.info(`transition 'to:${match.route.name}' is aborted -> nothing to update`);
         await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
         return;
       }
@@ -226,13 +228,13 @@ export class ReactRouterProvider implements IProvider {
 
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
 
-      this.logger.info(`transition is done`);
+      this.logger.info(`transition 'to:${match.route.name}' is done`);
 
       return transition;
 
     } catch (error) {
 
-      this.logger.warn(`transition to '${options.to}' has failed`);
+      this.logger.warn(`transition 'to:${match.route.name}' has failed`);
 
       const errorHandler = this.routes.filter((r) => r.name === "error")[0] as IRoute;
 
@@ -273,7 +275,6 @@ export class ReactRouterProvider implements IProvider {
    * @param declarations
    */
   public scan(declarations: IDeclarations): void {
-    this.logger.info("scan dependencies");
 
     const nodes: INode[] = [];
     const pageDeclarations = declarations.filter((declaration) =>

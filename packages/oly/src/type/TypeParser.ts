@@ -42,6 +42,8 @@ export class TypeParser {
           return this.parseNumber(something);
         case Array:
           return this.parseArray(something);
+        case Date:
+          return new Date(something);
         default:
           return this.parseObject(something);
       }
@@ -134,10 +136,18 @@ export class TypeParser {
     if (Array.isArray(value)) {
       return value;
     }
-    const result = this.parseObject(value);
-    if (Array.isArray(result)) {
-      return result;
+    if (value === null || value === undefined) {
+      return [];
     }
-    return [result];
+    if (typeof value === "string") {
+      if (value.charAt(0) === "[" && value.charAt(value.length - 1) === "]") {
+        try {
+          return JSON.parse(value);
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+    return [value];
   }
 }

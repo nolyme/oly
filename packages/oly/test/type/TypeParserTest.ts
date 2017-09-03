@@ -63,6 +63,7 @@ describe("TypeParser", () => {
   });
 
   it("should parse as object", () => {
+    const now = new Date();
     expect(TypeParser.parse(Object, undefined)).toBe(undefined);
     expect(TypeParser.parse(Object, null)).toBe(undefined);
     expect(TypeParser.parse(Object, "true")).toEqual({});
@@ -82,5 +83,6 @@ describe("TypeParser", () => {
     expect(TypeParser.parse(Object, [])).toEqual([]);
     expect(TypeParser.parse(Object, [1, 2, 3])).toEqual([1, 2, 3]);
     expect(TypeParser.parse(Object, "[1,2,3]")).toEqual([1, 2, 3]);
+    expect(TypeParser.parse(Date, now.toISOString())).toEqual(now);
   });
 });
