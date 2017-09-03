@@ -182,7 +182,7 @@ export class Docs {
             if (meId.indexOf(ultraQueryCleaned) > -1) {
               if (push({
                   href: {
-                    to: "serviceMethod",
+                    to: "method",
                     params: {
                       module: m.name,
                       service: s.name,

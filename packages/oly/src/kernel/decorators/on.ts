@@ -30,15 +30,13 @@ export class OnDecorator implements IDecorator {
  * Kernel.create().with(A).emit("A.b");
  * ```
  *
- * #### Free
+ * ## Free
  *
  * You don't need to free() events on services. Like events, services are stored in the kernel.
- * When the kernel dies, services die and events are erased.
+ * When the kernel dies, services die so events are erased too.
  *
- * This is not the case for React components, which are mount / unmount on the way.
- * To handle this case, ANY class which use @on will implement IListener.
+ * It's not the case for React components, which are create / destroy on the fly.
+ * To handle this case, any class which use @on will automatically implements IListener.
  * This interface gives you the __free__() method, useful to remove events.
- *
- * > @attach will __free__() components for you.
  */
 export const on = Meta.decorator<string>(OnDecorator);

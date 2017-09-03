@@ -49,13 +49,14 @@ export interface IGoState {
  * <Go to="users.detail" params={{userId: "1"}}>...</Go>
  * ```
  *
- * Go has a className "is-active" is Router#isActive(props.to) is `true`.
+ * Go has a className "is-active" if Router#isActive() is `true`.
  *
  * ```ts
  * <Go to="/" active="my-active-class" strict={true}>...</Go>
  * ```
  *
- * Go#onClick is an @action.
+ * > **Note:**<br/>
+ * > Go#onClick is an @action.
  */
 export class Go extends Component<IGoProps, IGoState> {
 

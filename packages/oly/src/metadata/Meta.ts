@@ -11,7 +11,7 @@ import {
 } from "./interfaces";
 
 /**
- *
+ * Metadata manager.
  */
 export class Meta {
 
@@ -29,6 +29,7 @@ export class Meta {
   }
 
   /**
+   * Create a new meta manager.
    *
    * @param identifier
    */
@@ -38,7 +39,7 @@ export class Meta {
 
   /**
    *
-   * @param Decorator
+   * @param Decorator  class Decorator
    * @param data1
    * @param data2
    * @param data3
@@ -64,7 +65,7 @@ export class Meta {
 
   /**
    *
-   * @param Decorator
+   * @param Decorator   class Decorator
    */
   public static decoratorWithOptions<T>(Decorator: IDecoratorConstructor): IGenericDecoratorFactory<T> {
     const decorator = (data1: T, data2: any, data3: any) => {
@@ -86,7 +87,7 @@ export class Meta {
 
   /**
    *
-   * @param Decorator
+   * @param Decorator   class Decorator
    * @param data1
    * @param data2
    * @param data3
@@ -133,6 +134,7 @@ export class Meta {
   }
 
   /**
+   * Get Type of one attribute.
    *
    * @param target
    * @param propertyKey
@@ -148,6 +150,7 @@ export class Meta {
   }
 
   /**
+   * Get Type of one function parameter.
    *
    * @param target
    * @param propertyKey
@@ -163,7 +166,7 @@ export class Meta {
   }
 
   /**
-   *
+   * @alias to Reflect polyfill.
    */
   private static Reflect: any;
 
@@ -205,6 +208,10 @@ export class Meta {
 
     return false;
   }
+
+  // ---------------------------------------
+
+  // ---------------------------------------
 
   /**
    *

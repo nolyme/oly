@@ -1,4 +1,4 @@
-@import "~bulma/sass/utilities/variables";
+@import "../variables";
 @import "~prismjs/themes/prism.css";
 @import "~prismjs/plugins/line-numbers/prism-line-numbers.css";
 
@@ -13,8 +13,10 @@
 
   pre.language-ts, pre.language-bash {
     background-color: #f9f9f9;
-    border: 20px solid white;
     margin-bottom: 30px;
+
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px #e8e8e8;
   }
 
   .naked {
@@ -47,10 +49,10 @@
     color: inherit;
     text-decoration: none !important;
     transition: all 300ms ease;
-    box-shadow: inset 0 -3px rgba($turquoise, 0.4);
+    box-shadow: inset 0 -3px rgba($secondary, 0.4);
     &:hover {
       color: inherit;
-      box-shadow: inset 0 -3px rgba($turquoise, 0.8);
+      box-shadow: inset 0 -3px rgba($secondary, 0.8);
     }
   }
 }

@@ -1,4 +1,5 @@
 import { inject } from "oly";
+import { Go } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
 import { Docs } from "../services/Docs";

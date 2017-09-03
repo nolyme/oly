@@ -24,22 +24,55 @@ export class EnvDecorator implements IDecorator {
 }
 
 /**
+ * Get a value from the store.
  *
- * Replace the given property by a virtual getter of [Kernel#env()](#/m/oly/s/Kernel/env).
- * <br/>
+ * > **(?)** This is based on Kernel#env().
  *
- * > This is based on [@state](#/m/oly/@/state), but it's always **readonly**.
- * An error will be thrown if no value was found.
- *
- * <br/>
  * ```ts
  * class A {
- *
- *   @env("B")
- *   b: string = "defaultValue"
+ *   @env("MY_ENV_KEY") readonly b: string = "defaultValue"
  * }
  *
- * Kernel.create({B: "c"}).get(A).b; // c
+ * Kernel
+ *   .create(process.env)
+ *   .get(A).b;
+ * ```
+ *
+ * This is **readonly**.
+ *
+ * ```ts
+ * class A {
+ *   @env("B") b: string
+ * }
+ *
+ * Kernel.create({B: "c").with(A).b = "d" // boom
+ * ```
+ *
+ * An error will be thrown if no value was found.
+ *
+ * ```ts
+ * class A {
+ *   @env("B") b: string
+ * }
+ *
+ * Kernel.create().with(A) // boom
+ * ```
+ *
+ * ### Syntactic sugar
+ *
+ * ```ts
+ * // with @decorator
+ * class A {
+ *   @env("B") b: string;
+ * }
+ *
+ * // without @decorator
+ * class A {
+ *   constructor(private kernel: Kernel) {}
+ *   get b() {
+ *     return this.kernel.env("B", String);
+ *   }
+ * }
  * ```
  */
 export const env = Meta.decoratorWithOptions<string>(EnvDecorator);

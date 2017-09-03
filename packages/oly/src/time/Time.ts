@@ -30,8 +30,6 @@ export interface ITimer {
  * Idea:
  *
  * Do not rely on Date.now and setTimeout on your app.
- * This is hard to test.
- *
  * If this is class is used EVERYWHERE is the app, it will be fun.
  */
 export class Time {

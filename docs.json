@@ -6,7 +6,6 @@
       "icon": "sim-card",
       "decorators": [
         "kernel/decorators/inject.ts",
-        "kernel/decorators/injectable.ts",
         "kernel/decorators/state.ts",
         "kernel/decorators/env.ts",
         "kernel/decorators/on.ts"
@@ -65,9 +64,9 @@
       ],
       "services": [
         "router/services/Router.ts",
-        "router/services/Browser.ts",
         "router/providers/ReactBrowserProvider.ts",
-        "server/providers/ReactServerProvider.ts"
+        "server/providers/ReactServerProvider.ts",
+        "router/providers/ReactRouterProvider.ts"
       ]
     },
     {

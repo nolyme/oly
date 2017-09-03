@@ -59,6 +59,10 @@ export class ModulePages {
       <h2 className="title">{e.name}</h2>
       <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
+
+      <div className="content">
+        <h2>Description</h2>
+      </div>
       <Mark html={e.description}/>
     </div>;
   }
@@ -70,9 +74,13 @@ export class ModulePages {
       return <pre>Decorator Not Found</pre>;
     }
     return <div>
-      <h2 className="title">{e.name}</h2>
+      <h2 className="title">@{e.name}</h2>
       <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
+
+      <div className="content">
+        <h2>Description</h2>
+      </div>
       <Mark html={e.description}/>
     </div>;
   }
@@ -87,6 +95,10 @@ export class ModulePages {
       <h2 className="title">{e.name}</h2>
       <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
+
+      <div className="content">
+        <h2>Description</h2>
+      </div>
       <Mark html={e.description}/>
     </div>;
   }
@@ -115,6 +127,10 @@ export class ModulePages {
         )
         {": " + m.returnType}
       </h2>
+
+      <div className="content">
+        <h2>Description</h2>
+      </div>
       <Mark html={m.description}/>
     </div>;
   }
@@ -126,9 +142,13 @@ export class ModulePages {
       return <pre>Component Not Found</pre>;
     }
     return <div>
-      <h2 className="title">{e.name}</h2>
+      <h2 className="title">{"<" + e.name + "/>"}</h2>
       <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
+
+      <div className="content">
+        <h2>Description</h2>
+      </div>
       <Mark html={e.description}/>
     </div>;
   }

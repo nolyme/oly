@@ -45,18 +45,33 @@ export class ActionDecorator implements IDecorator {
  *
  *   render() {
  *     return (
- *       <button onClick={this.onClick}>ok</button>;
+ *       <button onClick={this.onClick}>ok</button>
  *     );
  *   }
  * }
  * ```
  *
- * Action is "autobind".
- * There is an error handler.
- * The global event `ACTIONS_ERROR` is emitted on each error.
+ * Method of @action is "autobind".
  *
- * #### prevent
+ * ### Event
  *
- * use @action({prevent: true}) to stop propagation. Useful with onSubmit={}.
+ * The global event `oly:actions:begin` is emitted before each action. <br/>
+ * The global event `oly:actions:error` is emitted on each error.      <br/>
+ * The global event `oly:actions:success` is emitted on each success.
+ *
+ * > **ProTips:**<br/>
+ * > Tools like [Protrator](https://github.com/angular/protractor) or [Spectron](https://github.com/electron/spectron)
+ * > can use this events as "next-tick".
+ *
+ * ### Prevent
+ *
+ * ```ts
+ * class A {
+ *
+ *   @action({prevent: true}) // will call ev.stopPropagation() & ev.preventDefault()
+ *   onSubmit() {
+ *   }
+ * }
+ * ```
  */
 export const action = Meta.decorator<IActionOptions>(ActionDecorator);

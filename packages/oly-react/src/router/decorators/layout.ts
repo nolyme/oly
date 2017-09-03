@@ -10,20 +10,16 @@ export class LayoutDecorator extends PageDecorator {
 }
 
 /**
- * It's like @page but with:
- * - abstract = true
- * - layout = true
+ * It's @page with `{abstract: true, layout: true}`.
  *
+ * > Only one @layout by class.
  *
- * All other pages of the class will become "child" of this method.
+ * All other pages of the class will become a "child" of this method.<br/>
  * Use &lt;View/&gt; to display the child layer.
- *
- *
- * > You can define only once @layout by class.
- *
  *
  * ```ts
  * class A {
+ *
  *   @layout
  *   root() { return <View/>; }
  *

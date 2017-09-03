@@ -27,6 +27,59 @@ export class StateDecorator implements IDecorator {
 }
 
 /**
- * Store accessor decorator.
+ * Get'n'Set a value from the store.
+ *
+ * > **(?)** This is based on Kernel#state().
+ *
+ * ```ts
+ * class A {
+ *   @state data: string; // state name is optional, default = `${Class.name}.${propertyKey}`
+ * }
+ *
+ * Kernel.create({"A.data", "Hello"}).get(A).data;
+ * ```
+ *
+ * ### Event
+ *
+ * Each "mutation" will emit `oly:state:mutate`.
+ *
+ * ```ts
+ * class Engine {
+ *   @state started = false;
+ *
+ *   active() {
+ *     this.started = true;
+ *   }
+ * }
+ *
+ * Kernel
+ *   .create()
+ *   .on("oly:state:mutate", (ev) => {
+ *     console.log(ev.key, ev.oldValue, ev.newValue);
+ *   })
+ *   .kernel
+ *   .get(Engine)
+ *   .active();
+ * ```
+ *
+ * ### Syntactic sugar
+ *
+ * ```ts
+ * // with @decorator
+ * class A {
+ *   @state("B") b: string;
+ * }
+ *
+ * // without @decorator
+ * class A {
+ *   constructor(private kernel: Kernel) {}
+ *   get b() {
+ *     return this.kernel.state("B");
+ *   }
+ *   set b(val) {
+ *     this.kernel.state("B", val);
+ *   }
+ * }
+ * ```
  */
 export const state = Meta.decorator<string>(StateDecorator);

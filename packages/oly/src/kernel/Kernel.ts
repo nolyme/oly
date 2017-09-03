@@ -42,10 +42,10 @@ import { IStateMutateEvent, IStatesMetadata, IStore } from "./interfaces/states"
  * ```
  *
  * Decorators:
- * - @inject -> Kernel#inject
- * - @state -> Kernel#state
- * - @env -> Kernel#env
- * - @on -> Kernel#on
+ * - @inject -> Kernel#inject()
+ * - @state -> Kernel#state()
+ * - @env -> Kernel#env()
+ * - @on -> Kernel#on()
  */
 export class Kernel {
 
@@ -59,6 +59,23 @@ export class Kernel {
    *   .with()
    *   .start()
    *   .catch(console.error);
+   * ```
+   *
+   * ### Jasmine, Jest, Protractor, ...
+   *
+   * if `process.env.NODE_ENV === "test"`,
+   * beforeAll(() => kernel.start()) and  afterAll(() => kernel.stop()) are defined.
+   *
+   * ```ts
+   * describe("something", () => {
+   *
+   *   const kernel = Kernel.create({DB_URL: "memory"});
+   *   const ctrl = kernel.get(MyController);
+   *
+   *   it("should be ok", async() => {
+   *     expect(await ctrl.find()).toBe(...);
+   *   });
+   * });
    * ```
    *
    * @param store         Store, map of key-value. (env, conf, states, ...)
@@ -206,10 +223,20 @@ export class Kernel {
    *
    * All onStart() are sorted by link declarations.
    * All onStart() have a access to "this.declarations".
-   * All onStart() are asynchronous.
+   * All onStart() are **asynchronous**.
    *
-   * ```
-   * Kernel.create().with(P).start().catch(console.error);
+   * ```ts
+   * class Provider {
+   *   onStart(declarations?: IDeclarations) {
+   *     throw new Exception("nooo")
+   *   }
+   * }
+   *
+   * Kernel
+   *   .create()
+   *   .with(P)
+   *   .start()
+   *   .catch(console.error); // Exception nooo
    * ```
    */
   public async start(): Promise<Kernel> {

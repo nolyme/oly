@@ -47,7 +47,7 @@ export class Router {
   }
 
   /**
-   * Go to a named node/route/path/query.
+   * Go to a named node/route/path.
    *
    * ```ts
    * // path is allowed
@@ -60,16 +60,16 @@ export class Router {
    * router.go("root.home");
    *
    * // use object to pass params/query
-   * router.go({to: "root.users.byId", params: {userId: "1"}});
+   * router.go({to: "root.users.byId", params: {userId: "1"}, query: {clone: true}});
    *
    * // path is also allowed here
    * router.go({to: "/", query: {a: "b"}});
    * ```
    *
-   * Router#go:
-   * - returns a promise of transition if everything is ok.
-   * - returns a promise of nothing if transition has been aborted
-   * - throws an exception if transition has failed
+   * This method:
+   * - returns a promise of `ITransition` if everything is ok.
+   * - returns a promise of `undefined` if transition has been aborted.
+   * - throws an exception if transition has failed.
    */
   public go(hrefQuery: string | IHrefQuery): Promise<ITransition | undefined> {
     return this.routerProvider.transition(typeof hrefQuery === "string" ? {to: hrefQuery} : hrefQuery);
@@ -100,14 +100,14 @@ export class Router {
   }
 
   /**
-   * Use history forward.
+   * Call browser-history goForward.
    */
   public forward(): void {
     this.browser.history.goForward();
   }
 
   /**
-   * Use history back.
+   * Call browser-history goBack.
    */
   public back(): void {
     this.browser.history.goBack();

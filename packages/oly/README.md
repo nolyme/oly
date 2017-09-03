@@ -55,11 +55,11 @@ Kernel
 #### Providers
 
 ```ts
-import { env, inject, Kernel, state } from "oly";
+import { env, inject, IProvider, Kernel, state } from "oly";
 
-class DbProvider {
+class DbProvider implements IProvider {
   @env("DB_URL") url: string;
-  @state conn: any;
+  @state conn;
 
   async onStart() {
     this.conn = await Promise.resolve(`Connection(${this.url})`);

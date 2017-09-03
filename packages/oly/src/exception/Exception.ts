@@ -1,21 +1,17 @@
 import { Global } from "../kernel/Global";
 
 /**
- * Enhancement of Error.
- * It's support ES5 and ES6.
+ * Enhancement of Error with support ES5 and ES6.
  *
- * Features:
- * - #toJSON()
- * - reason/cause
- * - defaultMessage
- * - safe instanceof
  *
- * toJSON.
+ * #### Exception#toJSON
+ *
  * ```ts
  * console.log(JSON.stringify(new Exception("A"))); // {message: "A", name: "Exception"}
  * ```
  *
- * Reason.
+ *  #### Reason/Cause
+ *
  * ```ts
  * try {
  *   try {
@@ -24,33 +20,40 @@ import { Global } from "../kernel/Global";
  *     throw new Exception(e, "B");
  *   }
  * } catch (e) {
- *  throw new Exception(e, "C");
+ *   throw new Exception(e, "C");
  * }
  * ```
  *
- * Default Message.
+ * #### Default Message
+ *
  * ```ts
  * class MyException extends Exception {
  *    message = "My default message";
  * }
+ *
+ * new MyException()
+ * new MyException("override default message")
  * ```
  *
- * Extend.
+ * #### Inheritance
+ *
  * ```ts
  * class MyException extends Exception {
  * }
+ *
  * new MyException().name // "MyException"
  * ```
  *
- * Instance of.
+ *  #### Instance of
+ *
  * ```ts
  * try {
- *  throw new Exception();
+ *   throw new Exception();
  * } catch (e) {
- *  console.log(e instanceof Object); // true
- *  console.log(e instanceof Error); // true
- *  console.log(e instanceof Exception); // true
- *  console.log(e instanceof Number); // false
+ *   console.log(e instanceof Object);    // true
+ *   console.log(e instanceof Error);     // true
+ *   console.log(e instanceof Exception); // true
+ *   console.log(e instanceof Number);    // false
  * }
  * ```
  */

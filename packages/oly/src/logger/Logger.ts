@@ -6,7 +6,51 @@ import { Class } from "../kernel/interfaces/injections";
 import { ILogLevel, LogLevels } from "./LogLevels";
 
 /**
- * Simple logger.
+ * Default logger. This class acts like an interface.
+ *
+ * ### Levels
+ *
+ * **TRACE** < **DEBUG** < **INFO** *(default)* < **WARN** < **ERROR**.
+ *
+ * ```ts
+ * Kernel
+ *   .create({LOGGER_LEVEL: "TRACE"})
+ *   .get(Logger)
+ *   .as("Test")
+ *   .trace("Hello!");
+ * ```
+ *
+ * ### Override
+ *
+ * ```ts
+ * class MyLogger extends Logger {
+ *   // #log(type, text)
+ *   // #format(type, text)
+ *   // #appender(type, text)
+ * }
+ *
+ * Kernel.create().with({provide: Logger, use: MyLogger});
+ * ```
+ *
+ * ### Implementations
+ *
+ * There are some "built-in" loggers.
+ *
+ *
+ * `ServerLogger`, with AnsiColor *(default on NodeJS)*
+ * ```
+ * [2017-9-3 19:09:52] INFO App(xx57yrab0z1) Kernel: "kernel has been successfully started"
+ * ```
+ *
+ * `BrowserLogger`, with AnsiColor + CSS converter *(default on browsers)*
+ * ```
+ * [19:10:13] INFO Kernel: "kernel has been successfully started"
+ * ```
+ *
+ * `JsonLogger`
+ * ```
+ * {"now":"2017-09-03T17:12:17.121Z","lvl":"INFO","app":"App","ctx":"xx57yrab0z1","dep":"Kernel","msg":"."}
+ * ```
  */
 @injectable({
   singleton: false,

@@ -17,8 +17,8 @@ export class ParentDecorator implements IDecorator {
 
   public asParameter(t: object, p: string, i: number): void {
     Meta.of({key: olyCoreKeys.arguments, target: t, propertyKey: p, index: i}).set({
-      handler: (k: Kernel, [parent]: [Class]) => {
-        return parent;
+      handler: (k: Kernel, [parent2]: [Class]) => {
+        return parent2;
       },
     });
   }
