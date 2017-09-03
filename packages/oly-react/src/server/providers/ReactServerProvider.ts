@@ -87,6 +87,7 @@ export class ReactServerProvider implements IProvider {
    */
   public render(ctx: IKoaContext, template: string, mountId: string): string {
 
+    const pixie: Pixie = ctx.kernel.inject(Pixie);
     const markup = renderToString(this.rootElement(ctx.kernel));
     const helmet = Helmet.renderStatic();
 
@@ -104,7 +105,7 @@ export class ReactServerProvider implements IProvider {
       .replace(
         /<body(.*?)>/, `<body $1 ${helmet.bodyAttributes.toString()}>`);
 
-    template = template.replace(/<body(.*)>/, `<body$1>${ctx.kernel.inject(Pixie).toHTML()}`);
+    template = template.replace(/<body(.*)>/, `<body$1>${pixie.toHTML()}`);
 
     return template;
   }

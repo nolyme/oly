@@ -1,4 +1,4 @@
-import { env, IDecorator, inject, on, state } from "oly";
+import { env, inject, on, state } from "oly";
 import { action } from "./decorators/action";
 import { attach } from "./decorators/attach";
 
@@ -20,11 +20,11 @@ export const autoAttach = () => {
     attach()(target);
   };
 
-  [inject, on, state, env].forEach((decorator: IDecorator) => {
+  [inject, on, state, env].forEach((decorator: any) => {
     decorator["hooks"].beforeAsProperty.push(setAttach);
   });
 
-  [action].forEach((decorator: IDecorator) => {
+  [action].forEach((decorator: any) => {
     decorator["hooks"].beforeAsMethod.push(setAttach);
   });
 };
