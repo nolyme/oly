@@ -43,8 +43,7 @@ export class A2 {
   }
 
   @get("/query/list")
-  queryList(@query a: string[], ctx) {
-    console.log(a, ctx.query);
+  queryList(@query a: string[]) {
     return {a};
   }
 

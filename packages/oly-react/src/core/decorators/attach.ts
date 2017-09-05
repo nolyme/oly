@@ -36,7 +36,7 @@ export class AttachDecorator implements IDecorator {
       target.prototype.componentWillMount$$ = target.prototype.componentWillMount || Global.noop;
       target.prototype.componentWillMount = function componentWillMount(this: InjectableComponent) {
         if (!this.injected$$ && this.context.kernel) { // you can call #componentWillMount more than once now
-          this.context.kernel.inject(ComponentInjector).inject(target, this, self.options);
+          this.context.kernel.inject(ComponentInjector).inject(this.constructor, this, self.options);
           this.injected$$ = true;
         }
         return target.prototype.componentWillMount$$.apply(this, arguments);

@@ -9,9 +9,6 @@ export const autoAttach = () => {
 
   const setAttach = (instance: any) => {
     const target = instance.constructor;
-    if (target && target.contextTypes && target.contextTypes.kernel) {
-      return;
-    }
 
     if (!target || !target.prototype || !target.prototype.render) {
       return;
