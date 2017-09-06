@@ -119,7 +119,7 @@ export class Module extends Component<IModuleProps, IModuleState> {
 
           </aside>
           <div style={{padding: "50px 100px"}}>
-            <View onChange={() => document.body.scrollTop = 0}/>
+            <View onChange={() => document.documentElement.scrollTop = 0}/>
           </div>
         </div>
       </div>

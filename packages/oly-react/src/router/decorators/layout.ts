@@ -30,5 +30,18 @@ export class LayoutDecorator extends PageDecorator {
  *   about() { return <div>about</div>; }
  * }
  * ```
+ *
+ * With modules.
+ *
+ * ```ts
+ * class ModuleA {
+ *   @layout("/a") a     = () => <View/>
+ *   @page("/")    index = () => <h1>A:Index</h1>
+ * }
+ *
+ * class MainModule {
+ *   @layout({children: [ModuleA]}) root = () => <View/>
+ * }
+ * ```
  */
 export const layout = Meta.decorator<string | IPageOptions>(LayoutDecorator);

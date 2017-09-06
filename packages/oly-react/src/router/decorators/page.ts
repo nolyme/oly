@@ -80,5 +80,16 @@ export class PageDecorator implements IDecorator {
  *    }
  *  }
  * ```
+ *
+ * Add modules.
+ *
+ * ```ts
+ * class ModuleA {
+ *   @page("/") index = () => <h1>A:Index</h1>
+ * }
+ * class MainModule {
+ *   @page({path: "/modA", children: [ModuleA]}) a = () => <View/>;
+ * }
+ * ```
  */
 export const page = Meta.decorator<string | IPageOptions>(PageDecorator);

@@ -30,7 +30,7 @@ export class EnvDecorator implements IDecorator {
  *
  * ```ts
  * class A {
- *   @env("MY_ENV_KEY") readonly b: string = "defaultValue"
+ *   @env("MY_ENV_KEY") b: string = "defaultValue";
  * }
  *
  * Kernel
@@ -42,20 +42,20 @@ export class EnvDecorator implements IDecorator {
  *
  * ```ts
  * class A {
- *   @env("B") b: string
+ *   @env("B") b: string;
  * }
  *
- * Kernel.create({B: "c").with(A).b = "d" // boom
+ * Kernel.create({B: "c").with(A).b = "d"; // boom
  * ```
  *
  * An error will be thrown if no value was found.
  *
  * ```ts
  * class A {
- *   @env("B") b: string
+ *   @env("B") b: string;
  * }
  *
- * Kernel.create().with(A) // boom
+ * Kernel.create().with(A); // boom
  * ```
  *
  * ### Syntactic sugar

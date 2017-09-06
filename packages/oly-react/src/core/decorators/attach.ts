@@ -57,7 +57,7 @@ export class AttachDecorator implements IDecorator {
 /**
  * Connect a component to an oly Kernel of the React context.
  *
- * > Since 0.13, it's not required.
+ * > **(?)** @attach is automatically added when needed.
  *
  * This decorator adds some features:
  *
@@ -66,18 +66,18 @@ export class AttachDecorator implements IDecorator {
  * - process @state/@env
  * - process @on
  *
- * Before `componentWillUnmount`, kernel will `__free__` all events of the component.
+ * Before `componentWillUnmount`, kernel will `__free__` all events of the component (see @on).
  *
  * ```ts
  * &shy;@attach
  * class Home extends Component<any, any> {
- *   @inject a: B; // this is allowed
+ *   @inject a: B;
  *
  *   render() { }
  * }
  * ```
  *
- * > Use @attach only if you really need a connection between oly and react.
+ * All decorators will force @attach
  *
  * ### Watchers
  *
@@ -92,6 +92,6 @@ export class AttachDecorator implements IDecorator {
  * }
  * ```
  *
- * use @attach({watch: [ ...list of oly-stateNames ]} to override the watch list.
+ * > **(?)** use @attach({watch: [ ...list of stateNames ]} to override the watch list.
  */
 export const attach = Meta.decorator<IAttachOptions>(AttachDecorator);

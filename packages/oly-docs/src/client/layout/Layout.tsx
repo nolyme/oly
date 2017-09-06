@@ -44,7 +44,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
             </a>
           </div>
         </div>
-        <View onChange={() => document.body.scrollTop = 0}/>
+        <View onChange={() => document.documentElement.scrollTop = 0}/>
       </div>
     );
   }

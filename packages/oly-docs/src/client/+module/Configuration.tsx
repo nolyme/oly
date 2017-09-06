@@ -19,9 +19,7 @@ export class Configuration extends Component<IConfigurationProps, IConfiguration
         <thead>
         <tr>
           <th>Name</th>
-          <th>Type</th>
-          <th>Target</th>
-          <th>Default</th>
+          <th>Provider</th>
           <th>Description</th>
         </tr>
         </thead>
@@ -29,16 +27,19 @@ export class Configuration extends Component<IConfigurationProps, IConfiguration
         {this.props.module.env.map((env) => (
           <tr key={env.name}>
             <td><strong>{env.name}</strong></td>
-            <td><code>{env.type}</code></td>
-            <td><Go
-              to="service"
-              params={{service: env.target}}
-            >
-              {env.target}
-            </Go>
+            <td>
+              <Go to="service" params={{service: env.target}}>
+                {env.target}
+              </Go>
             </td>
-            <td>{env.default}</td>
-            <td><Mark html={env.description}/></td>
+            <td>
+              <p>
+                <code>{env.type}</code>
+                {" = "}
+                <em>{env.default}</em>
+              </p>
+              <Mark html={env.description}/>
+            </td>
           </tr>
         ))}
         </tbody>

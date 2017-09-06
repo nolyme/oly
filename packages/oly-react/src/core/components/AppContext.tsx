@@ -22,8 +22,6 @@ export interface IAppContextProps {
  *    render(<AppContext kernel={kernel}><MyApp/></AppContext>, rootElement)
  *  );
  * ```
- *
- * This is not recommended. (see ReactBrowserProvider)
  */
 export class AppContext extends React.Component<IAppContextProps, {}> {
 
