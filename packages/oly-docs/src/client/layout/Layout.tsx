@@ -18,7 +18,7 @@ export class Layout extends Component<ILayoutProps, ILayoutState> {
     return (
       <div className="main-layout">
         <div className="navbar-brand">
-          <Go className="navbar-item brand" to="/">
+          <Go className="navbar-item brand" to="/" strict={true}>
             <strong>o<em>l</em>y project</strong>
           </Go>
           {this.docs.modules.map((m) =>

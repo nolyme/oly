@@ -8,9 +8,6 @@ Public API is handle by:
 Most of the logic is handle by:
 - ReactRouterProvider
 
-The main state is:
-- REACT_ROUTER_PROVIDER_MATCH
-
 #### Page, Node, Route and Path.
 
 In this example:
@@ -24,7 +21,9 @@ class MyController {
   }
 
   @page("/")
-  index() {
+  index(tr: ITransition) {
+    console.log(tr.from);
+    console.log(tr.to);
     return <MyComponent/>;
   }
 }
@@ -35,7 +34,6 @@ This node is defined by a **@page**.
 
 After Kernel#start(), this node will be mounted as **route** with path **"/"**.
 
-So, you can make a **transition** to this page with:
 ```ts
 router.go("/"); // by path
 router.go("index"); // by node (not recommended)

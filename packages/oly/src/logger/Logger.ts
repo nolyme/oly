@@ -8,6 +8,23 @@ import { ILogLevel, LogLevels } from "./LogLevels";
 /**
  * Default logger. This class acts like an interface.
  *
+ * ### Interface
+ *
+ * **There are two arguments, no more.**
+ *
+ * 1. *message* as `string`
+ * 2. *[data]* as `object`
+ *
+ * ```ts
+ * const logger = Kernel.create().get(Logger);
+ *
+ * const value = 1;
+ * const moreData = {a: {b: "c"}};
+ *
+ * logger.info(`this is my value: ${value} !`, moreData);
+ * logger.error(`oh snap !`, new Error("boom"));
+ * ```
+ *
  * ### Levels
  *
  * **TRACE** < **DEBUG** < **INFO** *(default)* < **WARN** < **ERROR**.

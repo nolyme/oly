@@ -4,22 +4,27 @@ import { olyApiErrors } from "../constants/errors";
 import { NotFoundException } from "../exceptions/NotFoundException";
 
 /**
- * Collection of internal middlewares.
+ * Collection of internal middlewares.<br/>
+ *
  * There are not designed to be used outside oly-api,
  * however, you can replace one of them by your own stuff.
  *
  * ```ts
  * class MyApiMiddlewares extends ApiMiddlewares {
+ *
+ *   // override errorHandler
  *   errorHandler() {
  *     return async(ctx, next) => {
  *       await next();
  *     }
  *   }
+ *
  *   // or even better
  *   log = () => yourLoggerMiddleware;
  * }
- * // and in the root file:
- * new Kernel()
+ *
+ * Kernel
+ *   .create()
  *   .with({provide: ApiMiddlewares, use: MyApiMiddlewares});
  * ```
  */

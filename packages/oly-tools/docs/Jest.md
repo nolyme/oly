@@ -1,9 +1,19 @@
-### Example with Jest
+### Jest
+
+```bash
+$ npm install -D jest @types/jest ts-jest
+```
+
+### Config
+
+https://github.com/kulshekhar/ts-jest 
+
+### Files
 
 ```ts
 describe("A", () => {
 
-  // if NODE_ENV=test, Kernel.create() will:
+  // Kernel.create() will:
   // - run Kernel#start() during beforeAll()
   // - run Kernel#stop() during afterAll()
   // - set logger level to ERROR by default

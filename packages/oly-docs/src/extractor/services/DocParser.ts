@@ -4,6 +4,8 @@ import { inject, Logger } from "oly";
 import { basename, resolve } from "path";
 import * as Prism from "prismjs";
 import "prismjs/components/prism-bash.js";
+import "prismjs/components/prism-docker.js";
+import "prismjs/components/prism-json.js";
 import { Application, ProjectReflection } from "typedoc";
 import {
   DeclarationReflection,

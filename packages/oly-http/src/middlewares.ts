@@ -11,7 +11,6 @@ const koaCors = require("kcors");               // tslint:disable-line
 /**
  * https://github.com/koajs/static
  *
- * @middleware
  * @param root - absolute/relative path to folder
  * @param options - Koa Static options
  */
@@ -20,7 +19,6 @@ export const serve = (root: string, options?: IServeOptions): IKoaMiddleware => 
 /**
  * https://github.com/koajs/compress
  *
- * @middleware
  * @param options     Koa Compress options
  */
 export const compress = (options?: ICompressOptions): IKoaMiddleware => koaCompress(options);
@@ -28,7 +26,19 @@ export const compress = (options?: ICompressOptions): IKoaMiddleware => koaCompr
 /**
  * https://github.com/koajs/cors
  *
- * @middleware
+ * ```ts
+ * import { Kernel } from "oly";
+ * import { HttpServerProvider, cors } from "oly-http";
+ *
+ * Kernel
+ *   .create()
+ *   .configure(k => k
+ *     .get(HttpServerProvider)
+ *     .use(cors()))
+ *   .start()
+ *   .catch(console.error);
+ * ```
+ *
  * @param options     Koa Cors Options
  */
 export const cors = (options?: ICorsOptions): IKoaMiddleware => koaCors(options);
@@ -36,7 +46,19 @@ export const cors = (options?: ICorsOptions): IKoaMiddleware => koaCors(options)
 /**
  * https://github.com/koajs/mount
  *
- * @middleware
+ * ```ts
+ * import { Kernel } from "oly";
+ * import { HttpServerProvider, mount } from "oly-http";
+ *
+ * Kernel
+ *   .create()
+ *   .configure(k => k
+ *     .get(HttpServerProvider)
+ *     .use(mount("/hi", ctx => ctx.body = "Hi!")))
+ *   .start()
+ *   .catch(console.error);
+ * ```
+ *
  * @param path        url path ('/', or '/api', ...)
  * @param middleware  Middleware to mount
  */
@@ -54,7 +76,6 @@ export const helmet = (opt: object = {}): IKoaMiddleware => koaHelmet(opt || {no
  * Attach a fresh kernel fork to the current koa context.
  *
  * @param kernel    Kernel to fork
- * @middleware
  */
 export const context = (kernel: Kernel) => (ctx: IKoaContext, next: Function) => {
   ctx.kernel = kernel.fork();

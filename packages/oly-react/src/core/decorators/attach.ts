@@ -77,7 +77,7 @@ export class AttachDecorator implements IDecorator {
  * }
  * ```
  *
- * All decorators will force @attach
+ * > **(?)** This is not required, @inject will work without @attach.
  *
  * ### Watchers
  *

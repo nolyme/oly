@@ -72,6 +72,10 @@
     {
       "name": "oly-api",
       "icon": "satellite",
+      "manuals": [
+        "docs/Koa.md",
+        "docs/Context.md"
+      ],
       "decorators": [
         "core/decorators/get.ts",
         "core/decorators/post.ts",
@@ -85,6 +89,7 @@
       ],
       "services": [
         "core/providers/ApiProvider.ts",
+        "core/services/ApiMiddlewares.ts",
         "swagger/providers/SwaggerProvider.ts"
       ]
     },
@@ -105,7 +110,8 @@
       "manuals": [
         "docs/TypeScript.md",
         "docs/Webpack.md",
-        "docs/Test.md"
+        "docs/Jest.md",
+        "docs/Docker.md"
       ]
     }
   ]

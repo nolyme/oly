@@ -324,9 +324,13 @@ export class Kernel {
   }
 
   /**
-   * @alias of Kernel#inject
+   * Alias of Kernel#inject().
+   *
+   * ```ts
+   * const s = Kernel.create().get(Service);
+   * ```
    */
-  public get<T>(definition: Class<T> | IDefinition<T>): T {
+  public get<T>(definition: Class<T>): T {
     return this.inject(definition);
   }
 
@@ -336,6 +340,21 @@ export class Kernel {
    * ```ts
    * class A { b = "c" }
    * kernel.inject(A).b; // "c"
+   * ```
+   *
+   * ### Parent
+   *
+   * ```ts
+   * Kernel.create().inject(Logger, {parent: B});
+   * ```
+   *
+   * ### Skip registration
+   *
+   * ```ts
+   * const k = Kernel.create();
+   *
+   * k.inject(A, {register: false}); // just create and process
+   * k.inject(A, {instance: a});     // re-use an instance (and skip registration)
    * ```
    *
    * @param definition          Class or {provide: Class, use: Class}
@@ -404,9 +423,36 @@ export class Kernel {
   /**
    * Getter/Setter of Kernel#store.
    *
+   * ```ts
+   * kernel.state("A"); // Getter
+   * kernel.state("A", "B"); // Setter
+   * ```
+   *
    * If key doesn't exist on this kernel, we will check on the parent.
    *
-   * An event is fired on each mutation: "state:mutate" {@see IStateMutateEvent}.
+   * ```ts
+   * const parent = Kernel.create({A: "B"});
+   * const child = parent.fork();
+   * child.state("A"); // B
+   * ```
+   *
+   * An event is fired on each mutation: `oly:state:mutate`.
+   *
+   * ```ts
+   * Kernel.create().state("A", "B", () => "when IStateMutateEvent is done");
+   * ```
+   *
+   * ### Keyify
+   *
+   * A key is always converted to an uppercase-only \w+ "word character".
+   * - "a" -> A
+   * - "A.b" -> A_B
+   * - "hello-world" -> HELLO_WORLD
+   *
+   * ```ts
+   * const k = Kernel.create({"A.b": "B"})
+   * k.state("A_B") === k.state("A.b")
+   * ```
    *
    * @param key           Identifier as string who defined the value
    * @param newValue      Optional new value (setter mode)
@@ -450,16 +496,25 @@ export class Kernel {
 
   /**
    * Read-only Kernel#state().
-   * Value can be casted with TypeParser.
+   *
+   * Value can be converted.
    *
    * ```ts
-   * kernel = Kernel.create({a: "true"});
-   * kernel.env("a"); // true
-   * kernel.state("a"); // "true"
+   * kernel = Kernel.create({a: "true", b: "[1, 2, 3]"});
+   * kernel.env("a", Boolean); // true
+   * kernel.env("b", Array); // [1, 2, 3]
+   * ```
+   *
+   * ### Template
+   *
+   * ```ts
+   * Kernel
+   *   .create({a: "${A}.${B}", b: "B", c: "c"})
+   *   .env("a"); // B.c
    * ```
    *
    * @param key         Identifier as string who defined the value
-   * @param forceType   Convert string on given type (number or boolean only) when it's possible
+   * @param forceType   Convert result on given type when it's possible
    */
   public env(key: string, forceType?: Function): any {
 
@@ -528,14 +583,27 @@ export class Kernel {
    * Fire an event.
    *
    * ```ts
+   * kernel.on("my:event", console.log);
    * kernel.emit("my:event", {some: "data"});
    * ```
    *
    * This is asynchronous.
    *
    * ```ts
+   * kernel.on("event", () => sleep(1000));
+   * kernel.on("event", () => sleep(1000));
    * await kernel.emit("event"); // wait the end of each callback
    * ```
+   *
+   * Callback results/errors.
+   *
+   *```ts
+   * kernel.on("test", () => "OK");
+   * kernel.on("test", () => { throw new Error("NOK") });
+   * const results = await kernel.emit("test");
+   * results[0] // "OK" || Error { OK }
+   * results[1] // "OK" || Error { OK }
+   *```
    *
    * @param key               Event name
    * @param data              Event data (parameters)
@@ -764,6 +832,8 @@ export class Kernel {
     const args: any[] = meta && meta.args.$constructor
       ? meta.args.$constructor.map((data) => data && data.handler(this, [parent]))
       : [];
+
+    args.push(this);
 
     const newInstance = instance || new definition(...args);
     return this.processStates(definition,

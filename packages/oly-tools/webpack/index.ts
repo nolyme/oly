@@ -139,6 +139,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   config.output = {
     filename: options.hash ? "[name].[hash].js" : "[name].js",
     path: options.dist,
+    publicPath: "/",
   };
 
   if (options.exclude) {
