@@ -14,8 +14,9 @@
     "router"
   ],
   "dependencies": {
-    "@types/history": "4.6.0",
-    "@types/react-helmet": "5.0.3",
+    "@types/history": "*",
+    "@types/react-helmet": "*",
+    "@types/prop-types": "*",
     "cheerio": "0.22.0",
     "history": "4.7.2",
     "js-cookie": "2.1.4",
@@ -29,7 +30,6 @@
   "devDependencies": {
     "@types/cheerio": "*",
     "@types/js-cookie": "*",
-    "@types/prop-types": "15.5.1",
     "@types/qs": "6.5.0",
     "@types/react": "*",
     "@types/react-dom": "*",

@@ -1,5 +1,6 @@
 import { Class, inject } from "oly";
 import { EntityManager, QueryRunner, Repository as TypeRepository } from "typeorm";
+import { DeepPartial } from "typeorm/common/DeepPartial";
 import { EntityMetadata } from "typeorm/metadata/EntityMetadata";
 import { IRepository } from "../interfaces";
 import { DatabaseProvider } from "../providers/DatabaseProvider";
@@ -22,16 +23,20 @@ export abstract class Repository<T> extends TypeRepository<T> implements IReposi
 
   // ~ TypeORM dependencies ~
 
-  protected get manager(): EntityManager {
+  get manager(): EntityManager {
     return this.databaseProvider.connection.getRepository(this.entityType)["manager"];
   }
 
-  protected get metadata(): EntityMetadata {
+  get metadata(): EntityMetadata {
     return this.databaseProvider.connection.getRepository(this.entityType)["metadata"];
   }
 
-  protected get queryRunner(): QueryRunner | undefined {
+  get queryRunner(): QueryRunner | undefined {
     return this.databaseProvider.connection.getRepository(this.entityType)["queryRunner"];
+  }
+
+  get target() {
+    return this.databaseProvider.connection.getRepository(this.entityType)["target"];
   }
 
   //
@@ -69,65 +74,9 @@ export abstract class Repository<T> extends TypeRepository<T> implements IReposi
    *
    * @param data    Json data
    */
-  public insert(data: object[]): Promise<T[]>;
-  public insert(data: object): Promise<T>;
+  public insert(data: Array<DeepPartial<T>>): Promise<T[]>;
+  public insert(data: DeepPartial<T>): Promise<T>;
   public insert(data: any): Promise<any> {
     return this.persist(this.create(data));
-  }
-
-  /**
-   *
-   * @param entity
-   */
-  public onBeforeInsert(entity: T) {
-    //
-  }
-
-  /**
-   *
-   * @param entity
-   */
-  public onBeforeUpdate(entity: T) {
-    //
-  }
-
-  /**
-   *
-   * @param entity
-   */
-  public onBeforeRemove(entity: T) {
-    //
-  }
-
-  /**
-   *
-   * @param entity
-   */
-  public onAfterInsert(entity: T) {
-    //
-  }
-
-  /**
-   *
-   * @param entity
-   */
-  public onAfterUpdate(entity: T) {
-    //
-  }
-
-  /**
-   *
-   * @param entity
-   */
-  public onAfterRemove(entity: T) {
-    //
-  }
-
-  /**
-   *
-   * @param entity
-   */
-  public onAfterLoad(entity: T) {
-    //
   }
 }

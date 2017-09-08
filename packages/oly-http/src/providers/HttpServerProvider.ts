@@ -1,6 +1,7 @@
 import { createServer, Server } from "http";
 import * as Koa from "koa";
 import { env, inject, IProvider, Kernel, Logger, state } from "oly";
+import { helmet } from "../";
 import { IKoaMiddleware } from "../interfaces";
 import { context } from "../middlewares";
 
@@ -60,7 +61,7 @@ export class HttpServerProvider implements IProvider {
    *
    * @param middleware
    */
-  public use(middleware: IKoaMiddleware) {
+  public use(middleware: IKoaMiddleware): HttpServerProvider {
     this.app.use(middleware);
     return this;
   }
@@ -72,7 +73,9 @@ export class HttpServerProvider implements IProvider {
   public onStart(): Promise<void> {
     // override koa context with our forked kernel
     // we fork kernel to protect the main layer
-    this.app.use(context(this.kernel));
+    this
+      .useHelmet()
+      .use(context(this.kernel));
 
     // start server
     return new Promise<void>((resolve, reject) => {
@@ -99,6 +102,10 @@ export class HttpServerProvider implements IProvider {
         err ? reject(err) : resolve();
       }),
     );
+  }
+
+  protected useHelmet(): HttpServerProvider {
+    return this.use(helmet());
   }
 
   /**

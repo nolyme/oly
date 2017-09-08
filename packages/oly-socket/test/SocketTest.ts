@@ -38,7 +38,7 @@ describe("Socket", () => {
 
   it("should be ok", async () => {
 
-    const server = kernelServer.inject(SocketServerProvider);
+    const server: SocketServerProvider = kernelServer.get(SocketServerProvider);
     expect(server.sockets.length).toBe(1);
 
     const client = kernelClient.inject(Socket);
@@ -55,7 +55,7 @@ describe("Socket", () => {
   it("should works with @on", async () => {
 
     const client = kernelClient.inject(Socket);
-    const server = kernelServer.inject(SocketServerProvider);
+    const server: SocketServerProvider = kernelServer.inject(SocketServerProvider);
     const serverAsClient = server.sockets[0].kernel.inject(Socket);
 
     expect(MyService.stack).toBe(0);

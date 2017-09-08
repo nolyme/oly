@@ -1,25 +1,8 @@
-import { Class, env, IDeclaration, inject, IProvider, Kernel, Logger, Meta, state } from "oly";
-import { IFieldsMetadata, olyMapperKeys } from "oly-json";
-import {
-  Column,
-  ColumnOptions,
-  Connection,
-  createConnection,
-  Entity,
-  EventSubscriber,
-  getMetadataArgsStorage,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Class, env, IDeclaration, inject, IProvider, Kernel, Logger, state } from "oly";
+import { Connection, createConnection, Entity, getMetadataArgsStorage } from "typeorm";
 import { TableMetadataArgs } from "typeorm/metadata-args/TableMetadataArgs";
 import { parse } from "url";
 import { IRepository } from "../interfaces";
-import { EverythingSubscriber } from "../services/EverythingSubscriber";
-
-declare module "oly-json/lib/interfaces" {
-  interface IField {
-    column: ColumnOptions;
-  }
-}
 
 /**
  * TypeORM connection provider.
@@ -56,9 +39,6 @@ export class DatabaseProvider implements IProvider {
 
   @inject
   protected logger: Logger;
-
-  @inject
-  protected subscriber: EverythingSubscriber;
 
   /**
    * Hook - start
@@ -157,25 +137,6 @@ export class DatabaseProvider implements IProvider {
       Entity()(entity);
     }
 
-    const meta = Meta.of({key: olyMapperKeys.fields, target: entity}).get<IFieldsMetadata>();
-    if (meta) {
-      const keys = Object.keys(meta.properties);
-      for (const propertyKey of keys) {
-        const prop = meta.properties[propertyKey];
-        const metaType = Meta.of({key: olyMapperKeys.fields, target: prop.type}).get<IFieldsMetadata>();
-        if (metaType) {
-          const options = prop.column || {type: "json", nullable: !prop.required};
-          Column(options)(entity.prototype, propertyKey);
-        } else if (propertyKey === "id") {
-          meta.properties[propertyKey].required = false;
-          PrimaryGeneratedColumn(prop.column || {})(entity.prototype, propertyKey);
-        } else {
-          const options = prop.column || {type: "json", nullable: !prop.required};
-          Column(options)(entity.prototype, propertyKey);
-        }
-      }
-    }
-
     return entity;
   }
 
@@ -186,11 +147,9 @@ export class DatabaseProvider implements IProvider {
    */
   protected createConnection(entities: Function[]): Promise<Connection> {
     const driver = this.getDriver(this.url);
-    const subscriber = this.createSubscriber();
     return createConnection({
       autoSchemaSync: this.autoSync,
       ...driver,
-      subscribers: [subscriber],
       entities,
       logging: {
         logQueries: true,
@@ -199,17 +158,5 @@ export class DatabaseProvider implements IProvider {
         },
       },
     });
-  }
-
-  protected createSubscriber() {
-    const subscriber = this.subscriber;
-
-    function Wrapper() {
-      return subscriber;
-    }
-
-    EventSubscriber()(Wrapper);
-
-    return Wrapper as any;
   }
 }

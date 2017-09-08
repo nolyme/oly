@@ -150,6 +150,38 @@ export class ModulePages {
         <h2>Description</h2>
       </div>
       <Mark html={e.description}/>
+
+      <div className="content">
+        <h2>Props</h2>
+      </div>
+      <table className="table is-striped links" style={{width: "100%"}}>
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        {e.props.sort((a) => a.optional ? 1 : -1).map((p) => (
+          <tr key={p.name}>
+            <td>
+              <strong>{p.name}</strong>
+              {" "}
+              {!p.optional && (
+               <em>{"(required)"}</em>
+              )}
+            </td>
+            <td>
+              <code>{p.type.replace("undefined | ", "")}</code>
+            </td>
+            <td>
+              <Mark html={p.description}/>
+            </td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
     </div>;
   }
 }

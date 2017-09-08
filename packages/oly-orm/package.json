@@ -13,9 +13,8 @@
     "typeorm"
   ],
   "dependencies": {
-    "oly-json": "^0.14.1",
     "sqlite3": "3.1.9",
-    "typeorm": "0.1.0-alpha.26"
+    "typeorm": "0.1.0-alpha.37"
   },
   "devDependencies": {
     "oly": "^0.14.1"

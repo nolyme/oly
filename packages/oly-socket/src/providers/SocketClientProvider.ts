@@ -15,6 +15,9 @@ export class SocketClientProvider {
   @inject
   protected logger: Logger;
 
+  /**
+   * Will use SocketClientProvider#connect() in #onStart.
+   */
   @env("SOCKET_AUTO_CONNECT")
   protected readonly auto: boolean = false;
 
