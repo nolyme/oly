@@ -27,7 +27,7 @@ export const createNodeConfiguration = (options: IToolsOptions) => {
   env.NODE_ENV = isProduction ? "production" : "development";
 
   options.entry = options.entry || "./src/index.ts";
-  options.dist = options.dist || resolve(root, "www");
+  options.dist = options.dist || resolve(root, "out");
   options.typescriptLoader = options.typescriptLoader || typescriptLoaderFactory();
 
   // define the format of the source-map
@@ -77,20 +77,27 @@ export const createNodeConfiguration = (options: IToolsOptions) => {
     ],
   };
 
+  config.externals = [
+    (context, request, callback: any) => {
+      if (/\.(css|less|scss)$/.test(request)) {
+        const chunks = request.split("/");
+        return callback(null, `{${chunks[chunks.length - 1]}: ""};`);
+      }
+      callback();
+    },
+  ];
+
   // Plugins
 
   config.plugins = [
-    new webpack.IgnorePlugin(/\.(css|less|scss)$/),
     // remove outdir
     new CleanWebpackPlugin([options.dist], {
       root,
       verbose: false,
     }),
-    new CopyPlugin([{
-      from: root + "/package.json", to: "./",
-    }].concat(options.assets ? [{
+    new CopyPlugin(options.assets ? [{
       from: options.assets, to: "./",
-    }] : [])),
+    }] : []),
   ];
 
   if (isProduction) {
@@ -107,6 +114,8 @@ export const createNodeConfiguration = (options: IToolsOptions) => {
 
   config.node = {
     Buffer: false,
+    __dirname: true,
+    __filename: true,
   };
 
   config.target = "node";

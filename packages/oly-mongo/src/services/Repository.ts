@@ -106,6 +106,16 @@ export abstract class Repository<T extends IDocument> {
     return (await cursor.toArray()).map((i: any) => this.out(i));
   }
 
+  /**
+   * Count number of matching documents in the db to a query.
+   *
+   * @param {Object} mongoQuery
+   * @returns {Promise<number>}
+   */
+  public count(mongoQuery: object = {}): Promise<number> {
+    return this.collection.count(mongoQuery);
+  }
+
   public castId(id: string | number | ObjectID): ObjectID {
     return new ObjectID(id);
   }

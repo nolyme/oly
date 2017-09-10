@@ -28,7 +28,6 @@ WORKDIR /app
 # DEPENDENCIES
 COPY package.json yarn.lock /app/
 RUN yarn --prod
-RUN yarn clean
 
 # SOURCES
 COPY lib /app/lib/

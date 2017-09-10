@@ -34,6 +34,9 @@ export class TypeParser {
   public static parse(as: Function, something: any): any {
     if (typeof as === "function") {
       switch (as) {
+        case undefined:
+        case null:
+          return something;
         case Boolean:
           return this.parseBoolean(something);
         case String:

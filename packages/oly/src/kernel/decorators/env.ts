@@ -9,10 +9,12 @@ export class EnvDecorator implements IDecorator {
   }
 
   public asProperty(t: object, p: string): void {
+    const type = Meta.designType(t, p);
     Meta.of({key: olyCoreKeys.states, target: t, propertyKey: p}).set({
       readonly: true,
       name: this.name,
-      type: Meta.designType(t, p),
+      // TODO: 'Object' should not be the default designType
+      type: type === Object ? undefined : type,
     });
   }
 
