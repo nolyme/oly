@@ -13,8 +13,7 @@ export class EnvDecorator implements IDecorator {
     Meta.of({key: olyCoreKeys.states, target: t, propertyKey: p}).set({
       readonly: true,
       name: this.name,
-      // TODO: 'Object' should not be the default designType
-      type: type === Object ? undefined : type,
+      type,
     });
   }
 

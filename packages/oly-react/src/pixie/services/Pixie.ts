@@ -1,4 +1,4 @@
-import { Global, inject, Kernel, Logger, state } from "oly";
+import { Global, inject, Kernel, Logger } from "oly";
 import { IPixieSetOptions } from "../interfaces";
 
 /**
@@ -22,7 +22,6 @@ export class Pixie {
   /**
    * Volatile data
    */
-  @state
   protected data: any;
 
   /**

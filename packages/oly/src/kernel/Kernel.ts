@@ -597,13 +597,13 @@ export class Kernel {
    *
    * Callback results/errors.
    *
-   *```ts
+   * ```ts
    * kernel.on("test", () => "OK");
    * kernel.on("test", () => { throw new Error("NOK") });
    * const results = await kernel.emit("test");
    * results[0] // "OK" || Error { OK }
    * results[1] // "OK" || Error { OK }
-   *```
+   * ```
    *
    * @param key               Event name
    * @param data              Event data (parameters)

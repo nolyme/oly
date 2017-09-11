@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { env, Global, IDeclarations, inject, IProvider, Kernel, Logger, state } from "oly";
-import { HttpClient, HttpServerProvider, IKoaContext, IKoaMiddleware, mount } from "oly-http";
+import { HttpServerProvider, IKoaContext, IKoaMiddleware, mount } from "oly-http";
 import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
@@ -163,8 +163,6 @@ export class ReactServerProvider implements IProvider {
    * @param deps  Kernel dependencies
    */
   public async onStart(deps: IDeclarations): Promise<void> {
-
-    this.kernel.with({provide: HttpClient, use: PixieHttp});
 
     await this.createTemplate();
 

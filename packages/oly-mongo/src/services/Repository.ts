@@ -116,6 +116,16 @@ export abstract class Repository<T extends IDocument> {
     return this.collection.count(mongoQuery);
   }
 
+  public async removeById(id: string) {
+    await this.collection.findOneAndDelete({
+      _id: this.castId(id),
+    });
+  }
+
+  public async clear() {
+    await this.collection.deleteMany({});
+  }
+
   public castId(id: string | number | ObjectID): ObjectID {
     return new ObjectID(id);
   }

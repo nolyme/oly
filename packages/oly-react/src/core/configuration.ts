@@ -17,11 +17,11 @@ export const autoAttach = () => {
     attach()(target);
   };
 
-  [inject, on, state, env].forEach((decorator: any) => {
+  [inject, state, env].forEach((decorator: any) => {
     decorator["hooks"].beforeAsProperty.push(setAttach);
   });
 
-  [action].forEach((decorator: any) => {
+  [action, on].forEach((decorator: any) => {
     decorator["hooks"].beforeAsMethod.push(setAttach);
   });
 };

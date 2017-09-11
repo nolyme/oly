@@ -13,18 +13,16 @@ describe("PixieBrowserProvider", () => {
   };
 
   class FakeApp {
-    @page
-    home() {
-      return "";
-    }
+    @page home = () => "";
   }
 
-  const kernel = Kernel.create()
+  const kernel = Kernel
+    .create()
     .with(FakeApp, ReactBrowserProvider);
 
   const pixie = kernel.inject(Pixie);
 
-  it("should", () => {
+  it("should be ok", () => {
     expect(pixie.get("a")).toBe("b");
   });
 });

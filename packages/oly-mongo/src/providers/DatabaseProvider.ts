@@ -47,7 +47,15 @@ export class DatabaseProvider implements IProvider {
     }
     const keys = Object.keys(meta.properties);
     for (const key of keys) {
-      await this.db.collection(collectionName).createIndex(key, meta.properties[key]);
+      if (meta.properties[key].text) {
+        await this.db.collection(collectionName).createIndex({[key]: "text"}, {
+          unique: meta.properties[key].unique,
+        });
+      } else {
+        await this.db.collection(collectionName).createIndex(key, {
+          unique: meta.properties[key].unique,
+        });
+      }
     }
   }
 }

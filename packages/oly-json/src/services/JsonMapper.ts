@@ -99,7 +99,7 @@ export class JsonMapper {
         if (typeof r !== "object") {
           throw new Error(
             `You can't map '${field.name}' into an object, `
-            + `it's a ${typeof value} and we have no information about this field.\n       `
+            + `it is not a ${typeof value} and we have no information about this field.\n       `
             + `Set @field({type: <Class>}) for a real auto-cast like Date or use @field({map: a => b})`);
         }
       } else {
@@ -109,6 +109,7 @@ export class JsonMapper {
       return value;
     }
 
-    throw new Error(`Can't cast '${field.name}' into object. Value is't an object and field is '${typeof field.type}'`);
+    throw new Error(
+      `Can't cast '${field.name}' into object. Value is not an object and field is '${typeof field.type}'`);
   }
 }

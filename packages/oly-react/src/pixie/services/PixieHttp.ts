@@ -67,7 +67,7 @@ export class PixieHttp extends HttpClient {
     }
 
     if (this.session.tk) {
-
+      options.headers["Authorization"] = `Bearer ${this.session.tk}`;
     }
 
     return super.request<T>(options);

@@ -1,11 +1,9 @@
 import { createBrowserHistory, createHashHistory } from "history";
 import { env, inject, IProvider, Kernel, Logger, on } from "oly";
-import { HttpClient } from "oly-http";
 import { createElement } from "react";
 import { AppContext } from "../../core/components/AppContext";
 import { Cookies } from "../../pixie/services/Cookies";
 import { Pixie } from "../../pixie/services/Pixie";
-import { PixieHttp } from "../../pixie/services/PixieHttp";
 import { PixieSession } from "../../pixie/services/PixieSession";
 import { View } from "../components/View";
 import { olyReactRouterEvents } from "../constants/events";
@@ -61,22 +59,18 @@ export class ReactBrowserProvider implements IProvider {
   @inject
   protected router: Router;
 
+  @inject
+  protected pixie: Pixie;
+
   /**
    * Hook - start
    */
   public onStart(): Promise<void> {
 
-    this.kernel.with({provide: HttpClient, use: PixieHttp});
-
     const data = this.browser.window[Pixie.stateName];
     if (!!data) {
       this.logger.debug("feed a pixie with", data);
-      this.kernel.state("Pixie.data", data);
-    }
-
-    const identifier = this.cookies.get(this.session.name);
-    if (identifier) {
-      this.session.use(identifier);
+      this.pixie["data"] = data;
     }
 
     this.createHistory();

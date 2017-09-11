@@ -41,7 +41,8 @@ export class Router {
    */
   public get current(): IMatch {
     if (!this.routerProvider.match) {
-      throw new Exception(`There is no current route yet. You can't use Router#current in resolvers for now`);
+      throw new Exception(
+        `Using Router#current (or isActive) inside the first resolver is not allowed. Use the ITransition instead`);
     }
     return this.routerProvider.match;
   }

@@ -1,3 +1,4 @@
+import { CookieAttr } from "cookies";
 import { env, inject, Logger, state } from "oly";
 import { Cookies } from "./Cookies";
 
@@ -16,13 +17,15 @@ export class PixieSession {
   private logger: Logger;
 
   public get tk(): string | undefined {
-    if (!!this.identifier && !this.cookies.get(this.name)) {
+    if (!this.identifier && !!this.cookies.get(this.name)) {
+      this.identifier = this.cookies.get(this.name);
+    } else if (!!this.identifier && !this.cookies.get(this.name)) {
       this.del();
     }
     return this.identifier;
   }
 
-  public use(identifier: string, cookieOptions = {}) {
+  public put(identifier: string, cookieOptions: CookieAttr = {}) {
     this.logger.debug("use new pixie cookie");
     this.cookies.set(this.name, identifier, cookieOptions);
     this.identifier = identifier;

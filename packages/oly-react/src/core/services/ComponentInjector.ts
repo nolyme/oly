@@ -7,23 +7,32 @@ import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty }
 
 /**
  * It is an extension of the Kernel.
- * The injection system is not enough because React does not give access to its Factory.
- * We process an instance on the #componentWillMount() via @attach.
- * Processing allowed all features:
- * - @on, @inject, @state, @env
+ * The olykernel injection system is not enough because React does not give access to its Factory.
  *
- * However, as we don't know WHEN component is created (by React), we can't create a real dependency tree.
+ *
+ * ComponentInjector updates an instance on the #componentWillMount(), thanks to @attach.
+ * This operation allows all features:
+ * - @on, @inject, @state, @env, ..
+ *
+ *
+ * However, as we don't know WHEN component is created (by React), **we can't create a real dependency tree.**
  * > This is why, you can't declare providers inside a React Component. (Unless if you make a implicit declaration.)
  *
- * Finally, we enhance @state and create a new feature: @action.
+ *
+ * Finally, we enhance @state/@inject and create a new feature: @action.
  *
  * Decorator @state will create also a refreshHandler with @on to re-render on each mutation.
- * Decorator @action wraps a method and allows logging/global try-catch/autobind.
+ * With this feature, every @attached components will "watch" state mutation.
+ *
+ * Decorator @action is @on + wraps a method + allows logging/global try-catch/autobind.
  */
 export class ComponentInjector {
 
   @inject
   protected kernel: Kernel;
+
+  @inject
+  protected logger: Logger;
 
   /**
    * Enhance kernel.inject behavior.
@@ -45,8 +54,8 @@ export class ComponentInjector {
       instance["auto$$refresh"] = function refreshHandler(this: any, event: IStateMutateEvent) {
         for (const name of states) {
           if (self.kernel["started"] && event.key === Global.keyify(name) && Global.isBrowser()) {
-            instance.forceUpdate();
-            return;
+            self.logger.trace(`forceUpdate <${this.constructor.name}/> (${event.key})`);
+            return new Promise((resolve) => instance.forceUpdate(resolve));
           }
         }
       };
@@ -97,7 +106,7 @@ export class ComponentInjector {
   }
 
   /**
-   * Wrap a method.
+   * Create @actions.
    *
    * @param target        React component
    * @param instance      Instance
@@ -130,6 +139,8 @@ export class ComponentInjector {
           }
         }
 
+        self.kernel.emit(olyReactEvents.ACTIONS_BEGIN, {action: action.name});
+
         if (action.loading === true) {
           instance.setState({loading: true});
         } else if (typeof action.loading === "string") {
@@ -143,9 +154,6 @@ export class ComponentInjector {
         }
 
         try {
-          self.kernel.emit(olyReactEvents.ACTIONS_BEGIN, {
-            action: action.name,
-          });
           logger.trace(`run ${action.name}`);
 
           const data = instance[propertyKey + "$$copy"].apply(instance, arguments);
@@ -160,27 +168,30 @@ export class ComponentInjector {
       };
 
       // TODO: should be an option ?
-      // Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey}).set({name: action.name});
+      Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey}).set({name: action.name});
     }
   }
 
   /**
    * Experimental, "free" component.
-   * Useful if component had events.
+   *
+   * Useful if component had events / actions.
    */
   public free(instance: any) {
     if (typeof instance.__free__ === "function") {
+      this.logger.trace(`__free__() <${instance.constructor.name}/>`);
       instance.__free__();
+      delete instance.__free__;
     }
   }
 
   /**
+   * Callback called after a successful action.
    *
    * @param logger
    * @param definition
    * @param action
    * @param instance
-   * @return {(data:any)=>any}
    */
   protected actionResolveFactory(logger: Logger, definition: Function, action: IActionsProperty, instance: Component) {
     return (data: any) => {
@@ -193,16 +204,19 @@ export class ComponentInjector {
         data,
       };
 
-      if (action.loading === true) {
-        instance.setState({loading: false});
-      } else if (typeof action.loading === "string") {
-        instance.setState({[action.loading]: false});
-      }
+      if (!!instance["__free__"]) {
 
-      if (typeof action.after === "object") {
-        instance.setState(action.after);
-      } else if (typeof action.after === "function") {
-        action.after();
+        if (action.loading === true) {
+          instance.setState({loading: false});
+        } else if (typeof action.loading === "string") {
+          instance.setState({[action.loading]: false});
+        }
+
+        if (typeof action.after === "object") {
+          instance.setState(action.after);
+        } else if (typeof action.after === "function") {
+          action.after();
+        }
       }
 
       this.kernel.emit(olyReactEvents.ACTIONS_SUCCESS, actionResult);
@@ -214,12 +228,12 @@ export class ComponentInjector {
   }
 
   /**
+   * Callback called after an action error.
    *
    * @param logger
    * @param definition
    * @param action
    * @param instance
-   * @return {(e:Error)=>undefined}
    */
   protected actionRejectFactory(logger: Logger, definition: Function, action: IActionsProperty, instance: Component) {
     return (e: Error) => {
@@ -232,16 +246,19 @@ export class ComponentInjector {
         error: e,
       };
 
-      if (action.loading === true) {
-        instance.setState({loading: false});
-      } else if (typeof action.loading === "string") {
-        instance.setState({[action.loading]: false});
-      }
+      if (!!instance["__free__"]) {
 
-      if (typeof action.after === "object") {
-        instance.setState(action.after);
-      } else if (typeof action.after === "function") {
-        action.after();
+        if (action.loading === true) {
+          instance.setState({loading: false});
+        } else if (typeof action.loading === "string") {
+          instance.setState({[action.loading]: false});
+        }
+
+        if (typeof action.after === "object") {
+          instance.setState(action.after);
+        } else if (typeof action.after === "function") {
+          action.after();
+        }
       }
 
       this.kernel.emit(olyReactEvents.ACTIONS_ERROR, actionResult);

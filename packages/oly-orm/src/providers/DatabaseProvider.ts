@@ -151,12 +151,7 @@ export class DatabaseProvider implements IProvider {
       autoSchemaSync: this.autoSync,
       ...driver,
       entities,
-      logging: {
-        logQueries: true,
-        logger: (level: string, message: string) => {
-          this.logger.trace(`(${level}) ${message}`);
-        },
-      },
+      // TODO: logger
     });
   }
 }

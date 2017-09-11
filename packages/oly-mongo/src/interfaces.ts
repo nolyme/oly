@@ -14,6 +14,7 @@ export interface IObjectDocument {
 
 export interface IIndexProperty {
   unique: boolean;
+  text?: boolean;
 }
 
 export interface IIndexesMetadata extends IMetadata {
