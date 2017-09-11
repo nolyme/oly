@@ -16,7 +16,6 @@
   "dependencies": {
     "@types/history": "*",
     "@types/react-helmet": "*",
-    "@types/js-cookie": "*",
     "@types/prop-types": "*",
     "cheerio": "0.22.0",
     "history": "4.7.2",
@@ -33,6 +32,7 @@
     "@types/qs": "6.5.0",
     "@types/react": "*",
     "@types/react-dom": "*",
+    "@types/js-cookie": "*",
     "cheerio": "0.22.0",
     "oly": "^0.14.1",
     "oly-json": "^0.14.1",

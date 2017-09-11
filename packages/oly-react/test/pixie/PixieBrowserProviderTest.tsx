@@ -20,7 +20,7 @@ describe("PixieBrowserProvider", () => {
     .create()
     .with(FakeApp, ReactBrowserProvider);
 
-  const pixie = kernel.inject(Pixie);
+  const pixie: Pixie = kernel.inject(Pixie);
 
   it("should be ok", () => {
     expect(pixie.get("a")).toBe("b");
