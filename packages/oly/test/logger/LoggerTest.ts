@@ -107,12 +107,4 @@ describe("Logger", () => {
 
     deepEqual(stack, ["DEBUG1", "INFO2", "WARN3", "ERROR4"]);
   });
-
-  it("should format", () => {
-    const kernel = Kernel.create();
-    const bl = kernel.get(BrowserLogger);
-
-    expect(bl["format"]("INFO", "Hello")).toBe("[15:12:00] [32mINFO[39m [1mComponent:[22m \"Hello");
-
-  });
 });
