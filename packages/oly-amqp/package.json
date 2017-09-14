@@ -4,7 +4,6 @@
   "version": "0.14.1",
   "license": "MIT",
   "main": "lib/index.js",
-  "browser": "lib/index.browser.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
   "keywords": [

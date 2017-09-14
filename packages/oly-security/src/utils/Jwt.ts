@@ -52,7 +52,7 @@ export class Jwt {
     try {
       const payload = Jwt.payload(token);
 
-      if (payload.exp <= (new Date().getTime() / 1000)) {
+      if (payload.exp <= (Date.now() / 1000)) {
         return false;
       }
 
@@ -80,7 +80,7 @@ export class Jwt {
 
     try {
       const payload = Jwt.payload(token);
-      return payload.exp > (new Date().getTime() / 1000);
+      return payload.exp > (Date.now() / 1000);
     } catch (e) {
       return false;
     }

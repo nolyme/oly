@@ -97,8 +97,9 @@ export class Time {
   /**
    * Pause fake time.
    */
-  public pause(): void {
+  public pause(): number {
     this.cursor = Time.now();
+    return this.cursor;
   }
 
   /**

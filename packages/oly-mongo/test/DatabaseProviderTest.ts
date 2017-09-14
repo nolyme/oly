@@ -1,7 +1,7 @@
 import { MongoError } from "mongodb";
 import { inject, Kernel, Time } from "oly";
 import { date, field } from "oly-json";
-import { index } from "../src/decorators";
+import { index } from "../src";
 import { DatabaseProvider } from "../src/providers/DatabaseProvider";
 import { Document } from "../src/services/Document";
 import { Repository } from "../src/services/Repository";

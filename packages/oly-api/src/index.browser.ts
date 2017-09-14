@@ -21,3 +21,4 @@ export * from "./core/exceptions/UnauthorizedException";
 export * from "./core/exceptions/ConflictException";
 
 export * from "./swagger/decorators/api";
+export * from "./swagger/interfaces";

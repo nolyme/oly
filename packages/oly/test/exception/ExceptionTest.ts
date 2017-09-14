@@ -100,4 +100,20 @@ describe("Exception", () => {
       expect(e).not.toBeInstanceOf(TheLastException);
     }
   });
+
+  it("should #toJSON with cause", () => {
+    const ex = new Exception(new Error("Bad"), "Halt!");
+
+    expect(JSON.parse(JSON.stringify(ex)))
+      .toHaveProperty("cause.message", "Bad");
+  });
+
+  it("should display longTrace", () => {
+    class TotoException extends Exception {
+    }
+
+    const ex = new TotoException(new Error("Bad"), "Halt!");
+    const stack = ex.getLongStackTrace();
+    expect(stack).toMatch(/Caused by: Error: Bad/);
+  });
 });

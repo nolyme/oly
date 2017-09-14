@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import { Kernel } from "oly";
 import { HttpClient, HttpServerProvider } from "oly-http";
 import * as React from "react";
-import { page } from "../../src/router/decorators/page";
+import { page } from "../../src";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 /**

@@ -1,6 +1,6 @@
 import { equal, notEqual } from "assert";
 import { Kernel } from "oly";
-import { Crypto } from "../src/services/Crypto";
+import { Crypto } from "../src";
 
 describe("Crypto", () => {
   describe("#hash()", () => {

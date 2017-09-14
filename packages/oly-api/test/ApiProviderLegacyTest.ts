@@ -2,7 +2,7 @@ import { equal } from "assert";
 import { Kernel } from "oly";
 import { HttpClient, HttpServerException, IHttpRequest } from "oly-http";
 import { build, field } from "oly-json";
-import { olyApiErrors } from "../src/core/constants/errors";
+import { olyApiErrors } from "../src";
 import { body } from "../src/core/decorators/body";
 import { del } from "../src/core/decorators/del";
 import { get } from "../src/core/decorators/get";

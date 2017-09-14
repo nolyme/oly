@@ -2,7 +2,7 @@ import { inject, Kernel, on } from "oly";
 import { HttpServerProvider } from "oly-http";
 import { SocketClientProvider } from "../src/providers/SocketClientProvider";
 import { SocketServerProvider } from "../src/providers/SocketServerProvider";
-import { Socket } from "../src/services/Socket";
+import { Socket } from "../src";
 
 describe("Socket", () => {
 

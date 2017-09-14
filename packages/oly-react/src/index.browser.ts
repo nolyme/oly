@@ -28,6 +28,7 @@ export * from "./router/services/Browser";
 export * from "./router/providers/ReactRouterProvider";
 export * from "./router/providers/ReactBrowserProvider";
 
+export * from "./pixie/interfaces";
 export * from "./pixie/services/Pixie";
 export * from "./pixie/services/PixieHttp";
 export * from "./pixie/services/PixieSession";

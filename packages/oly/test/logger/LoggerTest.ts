@@ -3,6 +3,7 @@ import { olyCoreKeys } from "../../src/kernel/constants/keys";
 import { inject } from "../../src/kernel/decorators/inject";
 import { IInjectableMetadata } from "../../src/kernel/interfaces/injections";
 import { Kernel } from "../../src/kernel/Kernel";
+import { BrowserLogger } from "../../src/logger/BrowserLogger";
 import { Logger } from "../../src/logger/Logger";
 import { Meta } from "../../src/metadata/Meta";
 
@@ -105,5 +106,13 @@ describe("Logger", () => {
     expect(metaExtended!.target.singleton).toBeFalsy();
 
     deepEqual(stack, ["DEBUG1", "INFO2", "WARN3", "ERROR4"]);
+  });
+
+  it("should format", () => {
+    const kernel = Kernel.create();
+    const bl = kernel.get(BrowserLogger);
+
+    expect(bl["format"]("INFO", "Hello")).toBe("[15:12:00] [32mINFO[39m [1mComponent:[22m \"Hello");
+
   });
 });
