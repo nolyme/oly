@@ -1,7 +1,7 @@
 {
   "name": "oly-orm",
   "description": "oly-orm",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,10 +16,10 @@
     "typeorm": "0.1.0-alpha.37"
   },
   "devDependencies": {
-    "oly": "^0.14.1"
+    "oly": "^0.14.2"
   },
   "peerDependencies": {
-    "oly": "^0.14.1"
+    "oly": "^0.14.2"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
