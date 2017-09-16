@@ -2,17 +2,13 @@
 
 The embedded router is based on [history](https://www.npmjs.com/package/history) and [path-to-regex](https://www.npmjs.com/package/path-to-regexp).
 
-Public API is handle by:
-- Router
-
-Most of the logic is handle by:
-- ReactRouterProvider
-
 #### Page, Node, Route and Path.
 
 In this example:
 
 ```ts
+import { layout, View, ITransition, page } from "oly-react";
+
 class MyController {
 
   @layout
@@ -22,15 +18,15 @@ class MyController {
 
   @page("/")
   index(tr: ITransition) {
-    console.log(tr.from);
-    console.log(tr.to);
+    console.log(tr.from);   // old route
+    console.log(tr.to);     // new route
     return <MyComponent/>;
   }
 }
 ```
 
 MyController has a **node** called *index*.
-This node is defined by a **@page**.
+This node is defined by a **@page** decorator.
 
 After Kernel#start(), this node will be mounted as **route** with path **"/"**.
 
@@ -42,17 +38,15 @@ router.go("root.index"); // by route
 
 #### Resolves and Actions
 
-All pages can be asynchronous. 
-
-Most of the time, you fetch some data and THEN you create the component.
+All resolves are asynchronous. 
 
 ```ts
 class MyController {
 
   @page("/")
   async index() {
-    // this is a resolve
     const data = await fetch("/something"); 
+    const MyComponent = await import("./MyComponent");
     return <MyComponent data={data}/>;
   }
 }
@@ -60,8 +54,7 @@ class MyController {
 
 #### Redirection
 
-You can use a "REPLACE" inside a resolve. 
-This act like a real redirection.
+When a resolve returns a promise of Transition(type=REPLACE), oly creates a redirection.
 
 ```ts
 class MyController {
@@ -72,3 +65,6 @@ class MyController {
   }
 }
 ```
+
+#### Error
+

@@ -1,10 +1,14 @@
 import { ObjectID } from "bson";
-import { IMetadata } from "oly";
 import { Cursor } from "mongodb";
+import { IMetadata } from "oly";
 
 export interface IDocument {
   _id?: string;
   _v?: number;
+
+  beforeInsert?(): Promise<void> | void;
+
+  beforeUpdate?(): Promise<void> | void;
 }
 
 export interface IObjectDocument {

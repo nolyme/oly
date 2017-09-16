@@ -14,15 +14,43 @@ export type IRawChunk = JSX.Element | ComponentClass<any> | IChunks;
 
 export type ITransitionType = "PUSH" | "POP" | "REPLACE" | "NONE";
 
+/**
+ * @page index
+ */
+
 export interface ITransition {
   from?: IMatch;
   to: IMatch;
   type: ITransitionType;
 }
 
+/**
+ * @page error
+ */
+
 export interface ITransitionError extends ITransition {
   error: Error;
 }
+
+/**
+ * @on("oly:transition:begin")
+ */
+
+export interface ITransitionBeginEvent {
+  transition: ITransition;
+}
+
+/**
+ * @on("oly:transition:end")
+ */
+
+export interface ITransitionEndEvent {
+  transition: ITransition | ITransitionError;
+}
+
+/**
+ * @on("oly:transition:render")
+ */
 
 export interface ITransitionRenderEvent {
   transition: ITransition;

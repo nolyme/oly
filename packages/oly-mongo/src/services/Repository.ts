@@ -55,6 +55,11 @@ export abstract class Repository<T extends IDocument> {
 
       this.logger.debug(`update`, raw);
 
+      raw = this.json.map(this.type, raw);
+      if (typeof raw.beforeUpdate === "function") {
+        await raw.beforeUpdate();
+      }
+
       await this.beforeUpdate(raw);
 
       const data = this.in(Object.assign({}, raw, {
@@ -76,6 +81,11 @@ export abstract class Repository<T extends IDocument> {
     } else {
 
       this.logger.debug(`insert`, raw);
+
+      raw = this.json.map(this.type, raw);
+      if (typeof raw.beforeInsert === "function") {
+        await raw.beforeInsert();
+      }
 
       await this.beforeInsert(raw);
 

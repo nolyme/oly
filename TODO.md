@@ -4,10 +4,13 @@
 
 - (oly): @env toto = "default" when inheritance is broken (defaultValue isn't here)
 - (oly-react): @env in components (crash on #get) if not defined
+- (oly-tools): weird css sourcemap
 
 ### SOON
 
+- (oly-*): better prod/dev logs
 - (oly-react): USE_STORAGE("stateName")
+- (oly-*): no @types exports
 
 ### MAYBE ONE DAY
 

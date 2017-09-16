@@ -12,7 +12,10 @@ import {
   IPagesProperty,
   IRoute,
   ITransition,
+  ITransitionBeginEvent,
+  ITransitionEndEvent,
   ITransitionError,
+  ITransitionRenderEvent,
 } from "../interfaces";
 import { DefaultErrorHandler } from "../services/DefaultErrorHandler";
 import { ReactRouterMatcher } from "../services/ReactRouterMatcher";
@@ -124,7 +127,9 @@ export class ReactRouterProvider implements IProvider {
 
     // now, we are safe, TRANSITION CAN BEGIN!
     this.logger.info(`begin 'to:${match.route.name}' (${transition.type})`);
-    await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN);
+
+    // TODO: #abort()
+    await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN, {transition} as ITransitionBeginEvent);
 
     try {
 
@@ -170,7 +175,7 @@ export class ReactRouterProvider implements IProvider {
             if (redirection.to && redirection.to.path) {
               this.logger.info(
                 `transition 'to:${match.route.name}' is replaced by another one -> layer ${i} created a redirection`);
-              await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+              await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
               return redirection;
             } else {
 
@@ -187,7 +192,7 @@ export class ReactRouterProvider implements IProvider {
             // if nothing was returned
             this.logger.info(
               `transition 'to:${match.route.name}' is aborted -> layer ${i} did not return chunk`);
-            await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+            await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
             return;
           }
         }
@@ -195,7 +200,7 @@ export class ReactRouterProvider implements IProvider {
 
       if (newLevel === -1) {
         this.logger.info(`transition 'to:${match.route.name}' is aborted -> nothing to update`);
-        await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+        await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
         return;
       }
 
@@ -211,7 +216,7 @@ export class ReactRouterProvider implements IProvider {
       const errors = await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
         transition,
         level: newLevel,
-      });
+      } as ITransitionRenderEvent);
 
       for (const error of errors) {
         if (error) {
@@ -226,7 +231,7 @@ export class ReactRouterProvider implements IProvider {
        * Epilogue
        */
 
-      await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, transition);
+      await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
 
       this.logger.info(`transition 'to:${match.route.name}' is done`);
 
@@ -236,8 +241,10 @@ export class ReactRouterProvider implements IProvider {
 
       this.logger.warn(`transition 'to:${match.route.name}' has failed`);
 
+      // find an error handler
       const errorHandler = this.routes.filter((r) => r.name === "error")[0] as IRoute;
 
+      // create transition error
       const errorTransition: ITransitionError = {
         ...transition,
         to: {
@@ -248,25 +255,33 @@ export class ReactRouterProvider implements IProvider {
         error,
       };
 
-      const result = await this.matcher.resolve(errorTransition, 0);
+      const result = await this.matcher.resolve(errorTransition, 0); // don't catch error !
       if (result) {
 
         const redirection = result as ITransition;
         const chunks = result as IChunks;
 
+        // catch a redirection
         if (redirection.to && redirection.to.path) {
-          await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, errorTransition);
+
+          await this.kernel.emit(
+            olyReactRouterEvents.TRANSITION_END,
+            {transition: errorTransition} as ITransitionEndEvent);
+
           return redirection;
-        } else {
-          this.layers = [{node: errorHandler.node, chunks}];
-          await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
-            transition: errorTransition,
-            level: 0,
-          });
         }
+
+        // else
+
+        this.layers = [{node: errorHandler.node, chunks}];
+
+        await this.kernel.emit(olyReactRouterEvents.TRANSITION_RENDER, {
+          transition: errorTransition,
+          level: 0,
+        });
       }
 
-      await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, errorTransition);
+      await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition: errorTransition} as ITransitionEndEvent);
     }
   }
 

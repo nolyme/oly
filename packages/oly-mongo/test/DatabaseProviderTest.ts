@@ -9,6 +9,7 @@ import { Repository } from "../src/services/Repository";
 describe("DatabaseProvider", () => {
 
   class Person extends Document {
+    @inject time: Time;
 
     @index({unique: true})
     @field
@@ -19,6 +20,17 @@ describe("DatabaseProvider", () => {
 
     @date
     createdAt: Date;
+
+    @date
+    updatedAt: Date;
+
+    beforeInsert() {
+      this.updatedAt = new Date(this.time.now());
+    }
+
+    beforeUpdate() {
+      this.updatedAt = new Date(this.time.now());
+    }
 
     get name() {
       return `${this.firstname} ${this.lastname}`;
@@ -36,7 +48,7 @@ describe("DatabaseProvider", () => {
   }
 
   const kernel = Kernel.create();
-  const time = kernel.inject(Time);
+  const time: Time = kernel.inject(Time);
   const databaseProvider = kernel.inject(DatabaseProvider);
   const personRepository = kernel.inject(PersonRepository);
 
@@ -65,6 +77,7 @@ describe("DatabaseProvider", () => {
     await personRepository.save({firstname: "Time", lastname: "Test"});
     const result = await personRepository.findOne({firstname: "Time"});
     expect(result!.createdAt).toEqual(new Date(time.now()));
+    expect(result!.updatedAt).toEqual(new Date(time.now()));
   });
 
   it("should check update version", async () => {
