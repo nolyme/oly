@@ -7,7 +7,7 @@ import { Kernel } from "oly";
 import { id, column, Repository } from "oly-orm";
 
 class Article {
-  @id() id: number;
+  @id() id?: number;
   @column() title: string;
 }
 

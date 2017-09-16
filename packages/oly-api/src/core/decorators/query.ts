@@ -35,6 +35,7 @@ export class QueryDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
+
           const value: string = ctx.query[name] == null
             ? ctx.query[name + "[]"]
             : ctx.query[name];

@@ -9,7 +9,6 @@ import {
   Column,
   CreateDateColumn,
   DiscriminatorColumn,
-  EmbeddableEntity,
   Embedded,
   Entity,
   EventSubscriber,
@@ -30,6 +29,7 @@ import {
 
 export const id = PrimaryGeneratedColumn;
 export const column = Column;
+export const entity = Entity;
 export const createDateColumn = CreateDateColumn;
 export const discriminatorColumn = DiscriminatorColumn;
 export const primaryGeneratedColumn = PrimaryGeneratedColumn;

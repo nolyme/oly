@@ -6,8 +6,8 @@ export class ArrayDecorator extends FieldDecorator {
 
   public constructor(options: IMetaArray) {
     super({
-      ...options,
       type: Array,
+      ...options,
     });
   }
 }

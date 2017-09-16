@@ -10,6 +10,24 @@ import {
   IMetaIdentifier,
 } from "./interfaces";
 
+const COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+const DEFAULT_PARAMS = /=[^,]+/mg;
+const FAT_ARROWS = /=>.*$/mg;
+
+function getParameterNames(fn: Function) {
+  const code = fn.toString()
+    .replace(COMMENTS, "")
+    .replace(FAT_ARROWS, "")
+    .replace(DEFAULT_PARAMS, "");
+
+  const result = code.slice(code.indexOf("(") + 1, code.indexOf(")"))
+    .match(/([^\s,]+)/g);
+
+  return result === null
+    ? []
+    : result;
+}
+
 /**
  * Metadata manager.
  */
@@ -125,12 +143,7 @@ export class Meta {
    * @param func    Cool function
    */
   public static getParamNames(func: (...args: any[]) => any): string[] {
-    const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-    const ARGUMENT_NAMES = /([^\s,]+)/g;
-    const fnStr = func.toString().replace(STRIP_COMMENTS, "");
-    return fnStr
-      .slice(fnStr.indexOf("(") + 1, fnStr.indexOf(")"))
-      .match(ARGUMENT_NAMES) || [];
+    return getParameterNames(func);
   }
 
   /**

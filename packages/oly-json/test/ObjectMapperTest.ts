@@ -16,12 +16,14 @@ describe("ObjectMapper", () => {
       }
     }
 
+    type A = "a" | "b";
+
     class Data {
       @array({of: String}) arr1: string[];
       @array({of: SubData}) arr2: SubData[];
       @field() bo: boolean;
       @field() num: number;
-      @field str: string;
+      @field str: A;
       @field sub: SubData;
 
       get msg() {

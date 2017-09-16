@@ -85,12 +85,22 @@ export class HttpClientException<T = any> extends Exception {
     };
   }
 
-  public isHttpServerException(): boolean {
-    return !!this.cause
-      && !!this.cause.response
-      && !!this.cause.response.data
-      && !!this.cause.response.data.status
-      && !!this.cause.response.data.name
-      && !!this.cause.response.data.message;
+  public isHttpServerException(withName?: string): boolean {
+
+    if (!(
+        !!this.cause
+        && !!this.cause.response
+        && !!this.cause.response.data
+        && !!this.cause.response.data.status
+        && !!this.cause.response.data.name
+        && !!this.cause.response.data.message)) {
+      return false;
+    }
+
+    if (!withName) {
+      return true;
+    }
+
+    return this.cause.response.data.name === withName;
   }
 }

@@ -50,6 +50,8 @@ describe("HttpServerProvider", () => {
     } catch (b) {
       const e: HttpClientException<HttpServerException> = b;
       expect(e).toBeInstanceOf(HttpClientException);
+      expect(e.isHttpServerException()).toBe(true);
+      expect(e.isHttpServerException("BoomException")).toBe(true);
       expect(e.status).toBe(409);
       expect(e.message).toBe(olyHttpErrors.requestHasFailedWithMessage(
         e.cause.config.method,

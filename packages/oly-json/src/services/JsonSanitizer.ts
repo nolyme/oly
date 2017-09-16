@@ -33,7 +33,7 @@ export class JsonSanitizer {
   public sanitizeField(field: IField, value: any): any {
     const type = TypeUtil.getFieldType(field.type);
     if (type === "array" && !!field.of && Array.isArray(value)) {
-      const item = typeof field.of === "function" ? {type: field.of, name: ""} : field.of;
+      const item = typeof field.of === "function" ? {type: field.of, name: ""} : {name: "", type: Object, ...field.of};
       return value.map((v) => this.sanitizeField(item, v));
     } else if (type === "object" && typeof field.type === "function") {
       const definition = field.type as Class;

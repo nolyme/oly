@@ -5,6 +5,14 @@ import { IMetadata } from "oly";
  */
 export type IType = Function;
 
+export const Type = {
+  OBJECT: Object,
+  STRING: String,
+  NUMBER: Number,
+  BOOLEAN: Boolean,
+  ARRAY: Array,
+};
+
 /**
  * Json schema list of type.
  */
@@ -50,7 +58,7 @@ export interface IMetaArray extends IMetaBase {
    * field inside the array
    * It's like JsonSchema `items`
    */
-  of: IField | IType;
+  of: Partial<IField> | IType;
   /**
    * JsonSchema `minItems`
    */

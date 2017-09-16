@@ -11,6 +11,7 @@
 
 ### MAYBE ONE DAY
 
+- @on("a", "b")
 - @decorator + @Decorator?
 - (oly-*) better coverage, especially react-router ... :)
 - (oly-docs): show env & exception in services/components

@@ -3,6 +3,7 @@ export * from "./decorators/array";
 export * from "./decorators/field";
 export * from "./decorators/build";
 export * from "./decorators/choice";
+export * from "./decorators/optional";
 export * from "./decorators/schema";
 export * from "./decorators/date";
 export * from "./interfaces";

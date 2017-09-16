@@ -22,7 +22,12 @@ export class DatabaseProvider implements IProvider {
 
   public async onStart(deps: IDeclarations) {
 
-    this.db = await MongoClient.connect(this.url);
+    const url =
+      this.url.indexOf("mongodb://") === 0
+        ? this.url
+        : "mongodb://" + this.url;
+
+    this.db = await MongoClient.connect(url);
 
     this.logger.info(`Connected to ${this.url}`);
 

@@ -1,4 +1,5 @@
-import { Exception, inject, Kernel } from "oly";
+import { Exception, inject, Kernel, TypeParser } from "oly";
+import * as qs from "qs";
 import { IHrefQuery, IMatch, ITransition } from "../interfaces";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
 import { Browser } from "./Browser";
@@ -72,20 +73,20 @@ export class Router {
    * - returns a promise of `undefined` if transition has been aborted.
    * - throws an exception if transition has failed.
    */
-  public go(hrefQuery: string | IHrefQuery): Promise<ITransition | undefined> {
-    return this.routerProvider.transition(typeof hrefQuery === "string" ? {to: hrefQuery} : hrefQuery);
+  public go(to: string | IHrefQuery): Promise<ITransition | undefined> {
+    return this.routerProvider.transition(typeof to === "string" ? {to} : to);
   }
 
   /**
    * Like Router#go, with type=REPLACE.
    *
-   * @param {string | IHrefQuery} query
+   * @param {string | IHrefQuery} to
    * @returns {Promise<ITransition>}
    */
-  public redirect(query: string | IHrefQuery): Promise<ITransition | undefined> {
-    const to = typeof query === "string" ? {to: query} : query;
-    to.type = "REPLACE";
-    return this.routerProvider.transition(to);
+  public redirect(to: string | IHrefQuery): Promise<ITransition | undefined> {
+    const query = typeof to === "string" ? {to} : to;
+    query.type = "REPLACE";
+    return this.routerProvider.transition(query);
   }
 
   /**
@@ -98,6 +99,30 @@ export class Router {
   public reload(): Promise<ITransition | undefined> {
     this.routerProvider.layers = [];
     return this.go({to: this.current.path, type: "REPLACE"});
+  }
+
+  /**
+   * Getter/Setter query param.
+   *
+   * @param {string} key
+   * @param {string} value
+   * @returns {string}
+   */
+  public search(key: string, value: any): string | undefined {
+    const query = this.current.query;
+
+    if (arguments.length === 1) {
+      return query[key];
+    } else {
+      const newValue = TypeParser.parseString(value);
+      if (newValue) {
+        query[key] = newValue;
+        this.browser.history.replace({
+          ...this.browser.history.location,
+          search: qs.stringify(query),
+        });
+      }
+    }
   }
 
   /**

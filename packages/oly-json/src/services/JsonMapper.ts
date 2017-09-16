@@ -73,7 +73,13 @@ export class JsonMapper {
    */
   public mapArray(field: IField, value: any): any[] {
     if (Array.isArray(value) && !!field.of) {
-      const item = typeof field.of === "function" ? {type: field.of, name: ""} : field.of;
+      const item = typeof field.of === "function"
+        ? {type: field.of, name: ""}
+        : {
+          name: "",
+          type: Object,
+          ...field.of,
+        };
       return value.map((v) => this.mapField(item, v));
     }
     return TypeParser.parseArray(value);
@@ -98,9 +104,9 @@ export class JsonMapper {
         const r = TypeParser.parseObject(value);
         if (typeof r !== "object") {
           throw new Error(
-            `You can't map '${field.name}' into an object, `
+            `Can't map '${field.name}' into an object, `
             + `it is not a ${typeof value} and we have no information about this field.\n       `
-            + `Set @field({type: <Class>}) for a real auto-cast like Date or use @field({map: a => b})`);
+            + `Use @field({type: <Class>}) for a real auto-cast like Date or use @field({map: a => b})`);
         }
       } else {
         return new definition(value);
