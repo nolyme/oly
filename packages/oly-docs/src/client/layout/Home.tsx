@@ -23,7 +23,6 @@ export class Home extends Component<IHomeProps, IHomeState> {
               <div className="oly">
                 o<em>l</em>y
               </div>
-              <h2>死马当活马医</h2>
             </div>
           </div>
         </section>

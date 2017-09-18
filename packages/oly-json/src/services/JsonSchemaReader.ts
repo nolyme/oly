@@ -29,11 +29,13 @@ export class JsonSchemaReader {
    * Extract JsonSchema from class definition.
    *
    * @param definition    Class definition
+   * @param rootSchema
    * @return              JsonSchema
    */
-  public extractSchema(definition: Function): IJsonSchema {
+  public extractSchema(definition: Function, rootSchema: Partial<IJsonSchema> = {}): IJsonSchema {
 
     let jsonSchema: IJsonSchema = {
+      ...rootSchema,
       name: definition.name,
       type: "object",
     };
@@ -80,7 +82,7 @@ export class JsonSchemaReader {
 
     if (jsonSchema.type === "object") {
       if (Meta.of({key: olyMapperKeys.fields, target: field.type}).has()) {
-        return this.extractSchema(field.type as Function);
+        return this.extractSchema(field.type as Function, jsonSchema);
       } else if (!!field.type.prototype.toJSON) {
         // object -> string (for Object.toJSON() like Date)
         jsonSchema.type = "string";
@@ -105,7 +107,7 @@ export class JsonSchemaReader {
    *
    * @param data
    */
-  protected extractJsonSchemaKeywords(data: object): object {
+  protected extractJsonSchemaKeywords(data: object): Partial<IJsonSchema> {
     return Object.keys(data).reduce((result, key) => {
       if (JsonSchemaReader.keywords.indexOf(key) > -1) {
         result[key] = data[key];

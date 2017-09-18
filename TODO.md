@@ -11,6 +11,10 @@
 - (oly-*): better prod/dev logs
 - (oly-react): USE_STORAGE("stateName")
 - (oly-*): no @types exports
+- (oly-mongo): aggregate
+- (oly-react): auto @inject providers
+- (oly-react): @action debou/thro, lock, retry
+- (oly-amqp): priority
 
 ### MAYBE ONE DAY
 
