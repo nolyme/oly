@@ -17,7 +17,7 @@
     "@types/bcryptjs": "2.4.1",
     "@types/jsonwebtoken": "7.2.3",
     "bcryptjs": "2.4.3",
-    "jsonwebtoken": "7.4.3",
+    "jsonwebtoken": "8.0.1",
     "oly-http": "^0.14.3"
   },
   "devDependencies": {

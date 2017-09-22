@@ -36,7 +36,7 @@ describe("PixieServerProvider", () => {
     expect($("#index").text()).toBe("Hello World");
 
     const pixie = JSON.parse($("script")
-      .text()
+      .html()
       .replace("window.__pixie__=", ""));
     expect(pixie.dataKey.name).toBe("World");
   });

@@ -17,7 +17,7 @@
     "ajv": "5.2.2"
   },
   "devDependencies": {
-    "ajv-i18n": "2.1.0",
+    "ajv-i18n": "2.1.1",
     "oly": "^0.14.3"
   },
   "peerDependencies": {

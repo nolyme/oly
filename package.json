@@ -1,12 +1,11 @@
 {
   "private": true,
   "devDependencies": {
-    "@types/jest": "20.0.8",
-    "@types/node": "8.0.26",
-    "jest": "20.0.4",
-    "lerna": "2.1.2",
-    "rimraf": "2.6.1",
-    "ts-jest": "20.0.14",
+    "@types/jest": "21.1.0",
+    "@types/node": "8.0.29",
+    "jest": "21.1.0",
+    "lerna": "2.2.0",
+    "ts-jest": "21.0.1",
     "ts-node": "3.3.0",
     "tslint": "5.7.0",
     "typescript": "2.5.2"
@@ -38,7 +37,6 @@
       "!packages/oly-docs/**/*.{ts,tsx}",
       "!packages/oly-tools/**/*.{ts,tsx}"
     ],
-    "setupTestFrameworkScriptFile": "./jest.env.js",
     "globals": {
       "ts-jest": {
         "tsConfigFile": "packages/oly/test/tsconfig.json"
