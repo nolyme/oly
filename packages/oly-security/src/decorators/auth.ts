@@ -4,7 +4,7 @@ import { hasRole } from "../middlewares/hasRole";
 
 export class AuthDecorator implements IDecorator {
 
-  public constructor(private roles: string | string[]) {
+  public constructor(private roles: string | string[] = []) {
   }
 
   public asMethod(target: object, propertyKey: string, i: TypedPropertyDescriptor<any>) {
