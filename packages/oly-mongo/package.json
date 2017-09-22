@@ -1,7 +1,7 @@
 {
   "name": "oly-mongo",
   "description": "oly-mongo",
-  "version": "0.14.3",
+  "version": "0.14.4",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,12 +16,12 @@
     "mongodb": "2.2.31"
   },
   "devDependencies": {
-    "oly": "^0.14.3",
-    "oly-json": "^0.14.3"
+    "oly": "^0.14.4",
+    "oly-json": "^0.14.4"
   },
   "peerDependencies": {
-    "oly": "^0.14.3",
-    "oly-json": "^0.14.3"
+    "oly": "^0.14.4",
+    "oly-json": "^0.14.4"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
