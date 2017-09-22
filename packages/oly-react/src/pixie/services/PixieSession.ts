@@ -13,7 +13,7 @@ import { Cookies } from "./Cookies";
  * Store public MMI user preferences only.
  *
  * Identity is a string.
- * Store a token/sessionId.
+ * Store a token/sessionId. httpOnly is recommended when possible.
  */
 export class PixieSession {
 

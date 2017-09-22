@@ -18,11 +18,12 @@ composer.lock
 *.sublime-workspace
 *.swp
 *.swo
-oly-queue.iml
+*.iml
 
 # Project Specific
 node_modules
 *.log
+*.lock
 tmp
 test
 coverage

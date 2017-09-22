@@ -48,6 +48,11 @@ export class Cookies {
       if (typeof cookieValue === "undefined") {
         JsCookies.remove(cookieName);
       } else {
+
+        if (typeof options.secure === "undefined") {
+          options.secure = location.protocol === "https:";
+        }
+
         JsCookies.set(cookieName, cookieValue, options);
       }
 

@@ -10,7 +10,6 @@
 *.log
 *.iml
 *.cache
-*.lock
 /manuals
 /packages/oly-tools/**/*.js
 /packages/oly-tools/**/*.js.map
