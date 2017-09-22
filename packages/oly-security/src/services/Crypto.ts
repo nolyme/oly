@@ -7,12 +7,21 @@ import { env } from "oly";
  */
 export class Crypto {
 
+  /**
+   * App secret key.
+   */
   @env("SECURITY_SECRET")
   public readonly secret: string = "insert a secret key here";
 
+  /**
+   * Bcrypt salt round.
+   */
   @env("SECURITY_SALT_ROUND")
   public readonly saltRound: number | string = 8;
 
+  /**
+   * Decipher algorithm.
+   */
   @env("SECURITY_ALGO")
   public readonly algorithm: string = "aes-256-ctr";
 

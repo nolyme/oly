@@ -1,12 +1,12 @@
 import { env, Global, inject, Kernel } from "oly";
 import { HttpClient, IHttpRequest, IHttpResponse } from "oly-http";
-import { Pixie } from "./Pixie";
 import { PixieSession } from "./PixieSession";
+import { PixieStore } from "./PixieStore";
 
 /**
- * HttpClient with Pixie.
+ * HttpClient with PixieStore.
  *
- * All get|post|... requests are wrapped with Pixie#fly().
+ * All get|post|... requests are wrapped with PixieStore#fly().
  */
 export class PixieHttp extends HttpClient {
 
@@ -20,7 +20,7 @@ export class PixieHttp extends HttpClient {
   protected kernel: Kernel;
 
   @inject
-  protected pixie: Pixie;
+  protected pixieStore: PixieStore;
 
   @inject
   protected session: PixieSession;
@@ -31,7 +31,7 @@ export class PixieHttp extends HttpClient {
   public get root(): string {
     if (Global.isBrowser()) {
 
-      return this.apiRoot || this.pixie.get<string>("API_PREFIX") || "/api";
+      return this.apiRoot || this.pixieStore.get<string>("API_PREFIX") || "/api";
 
     } else {
 
@@ -41,7 +41,7 @@ export class PixieHttp extends HttpClient {
       const prefix = this.kernel.state("API_PREFIX") || "";
 
       if (prefix) {
-        this.pixie.set("API_PREFIX", prefix);
+        this.pixieStore.set("API_PREFIX", prefix);
       }
 
       return `http://${host}:${port}${prefix}`;
@@ -51,7 +51,7 @@ export class PixieHttp extends HttpClient {
   /**
    * Create a new http request.
    * It's like HttpClient#request(), except that result
-   * are stored into pixie data.
+   * are stored into pixieStore data.
    * This data is reused browser-side after a server-side rendering.
    *
    * @param options   HttpClient request options
@@ -66,26 +66,27 @@ export class PixieHttp extends HttpClient {
       options.url = this.root + options.url;
     }
 
-    if (this.session.tk) {
-      options.headers["Authorization"] = `Bearer ${this.session.tk}`;
+    const identity = this.session.getIdentity();
+    if (!!identity) {
+      options.headers["Authorization"] = `Bearer ${identity}`;
     }
 
     return super.request<T>(options);
   }
 
   public get<T = any>(url: string, options?: IHttpRequest): Promise<T> {
-    return this.pixie.fly<T>(`GET_${url}`, () => super.get<T>(url, options));
+    return this.pixieStore.fly<T>(`GET_${url}`, () => super.get<T>(url, options));
   }
 
   public post<T = any>(url: string, body?: any, options?: IHttpRequest): Promise<T> {
-    return this.pixie.fly<T>(`POST_${url}`, () => super.post<T>(url, body, options));
+    return this.pixieStore.fly<T>(`POST_${url}`, () => super.post<T>(url, body, options));
   }
 
   public put<T = any>(url: string, body?: any, options?: IHttpRequest): Promise<T> {
-    return this.pixie.fly<T>(`PUT_${url}`, () => super.put<T>(url, body, options));
+    return this.pixieStore.fly<T>(`PUT_${url}`, () => super.put<T>(url, body, options));
   }
 
   public del<T = any>(url: string, options?: IHttpRequest): Promise<T> {
-    return this.pixie.fly<T>(`DEL_${url}`, () => super.del<T>(url, options));
+    return this.pixieStore.fly<T>(`DEL_${url}`, () => super.del<T>(url, options));
   }
 }

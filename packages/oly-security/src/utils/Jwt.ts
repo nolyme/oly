@@ -17,7 +17,7 @@ export class Jwt {
 
     if (!this.cache[token]) {
       try {
-        this.cache[token] = JSON.parse(Global.atob(token.split(".")[1]));
+        this.cache[token] = JSON.parse(Global.decodeBase64(token.split(".")[1]));
       } catch (e) {
         throw new JsonWebTokenException(e, "Invalid token");
       }
@@ -35,6 +35,17 @@ export class Jwt {
   public static lifeTime(token: string): number {
     const payload = Jwt.payload(token);
     return Number(payload.exp) - Number(payload.iat);
+  }
+
+  /**
+   * Get expiry date.
+   *
+   * @param token       Json Web IToken
+   * @return            Ttl
+   */
+  public static expiryDate(token: string): Date {
+    const ttl = this.lifeTime(token);
+    return new Date(Date.now() + ttl * 1000);
   }
 
   /**

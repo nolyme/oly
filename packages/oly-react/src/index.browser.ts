@@ -30,6 +30,7 @@ export * from "./router/providers/ReactBrowserProvider";
 
 export * from "./pixie/interfaces";
 export * from "./pixie/services/Pixie";
+export * from "./pixie/services/PixieStore";
 export * from "./pixie/services/PixieHttp";
 export * from "./pixie/services/PixieSession";
 export * from "./pixie/services/Cookies";

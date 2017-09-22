@@ -5,10 +5,7 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { AppContext } from "../../core/components/AppContext";
-import { Cookies } from "../../pixie/services/Cookies";
 import { Pixie } from "../../pixie/services/Pixie";
-import { PixieHttp } from "../../pixie/services/PixieHttp";
-import { PixieSession } from "../../pixie/services/PixieSession";
 import { View } from "../../router/components/View";
 import { ReactRouterProvider } from "../../router/providers/ReactRouterProvider";
 import { ReactProxyService } from "../services/ReactProxyService";
@@ -105,7 +102,7 @@ export class ReactServerProvider implements IProvider {
       .replace(
         /<body(.*?)>/, `<body $1 ${helmet.bodyAttributes.toString()}>`);
 
-    template = template.replace(/<body(.*)>/, `<body$1>${pixie.toHTML()}`);
+    template = template.replace(/<body(.*)>/, `<body$1>${pixie.store.toHTML()}`);
 
     return template;
   }
@@ -167,13 +164,9 @@ export class ReactServerProvider implements IProvider {
     await this.createTemplate();
 
     this.use((ctx, next) => {
-      Global.noop(ctx.kernel.get(PixieHttp).root);
-      const session = ctx.kernel.get(PixieSession);
-      const cookies = ctx.kernel.get(Cookies);
-      const identifier = cookies.get(session.name);
-      if (identifier) {
-        session["identifier"] = identifier;
-      }
+
+      ctx.kernel.get(Pixie).init();
+
       return next();
     });
 

@@ -15,6 +15,8 @@
 - (oly-react): auto @inject providers
 - (oly-react): @action debou/thro, lock, retry
 - (oly-amqp): priority
+- (oly-redis): !
+- (oly-security): use oly-redis and create RedisSession
 
 ### MAYBE ONE DAY
 

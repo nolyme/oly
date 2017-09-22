@@ -1,5 +1,5 @@
-import { ApiProvider, get, olyApiErrors } from "oly-api";
 import { Kernel } from "oly";
+import { ApiProvider, get, olyApiErrors } from "oly-api";
 import { HttpClient, HttpClientException } from "oly-http";
 import { olySecurityErrors } from "../src/constants/errors";
 import { auth } from "../src/decorators/auth";
@@ -17,9 +17,12 @@ class App {
 
 describe("SecurityMiddlewares", () => {
 
-  const kernel = Kernel.create({
-    HTTP_SERVER_PORT: 6049,
-  }).with(App);
+  const kernel = Kernel
+    .create({
+      HTTP_SERVER_PORT: 6049,
+    })
+    .with(App);
+
   const server = kernel.inject(ApiProvider);
   const jwt = kernel.inject(JwtAuth);
   const client = kernel.inject(HttpClient).with({
@@ -61,7 +64,7 @@ describe("SecurityMiddlewares", () => {
     try {
       await client.get("/", {
         headers: {
-          Authorization: `Bearer ${jwt.createToken({id: "<id>"})}`,
+          Authorization: `Bearer ${await jwt.createToken({id: "<id>"})}`,
         },
       });
       throw new Error("That's not the expected error");
@@ -75,7 +78,7 @@ describe("SecurityMiddlewares", () => {
   it("should allow auth requests", async () => {
     const data = await client.get("/", {
       headers: {
-        Authorization: `Bearer ${jwt.createToken({id: "<id>", roles: ["ADMIN"]})}`,
+        Authorization: `Bearer ${await jwt.createToken({id: "<id>", roles: ["ADMIN"]})}`,
       },
     });
     expect(data).toBe("OK");
@@ -83,7 +86,7 @@ describe("SecurityMiddlewares", () => {
 
   it("should reject expired token", async () => {
     kernel.state("SECURITY_TOKEN_EXPIRATION", 0);
-    const token = jwt.createToken({id: "<id>", roles: []});
+    const token = await jwt.createToken({id: "<id>", roles: []});
     expect(Jwt.isValid(token)).toBeFalsy();
     try {
       await client.get("/", {

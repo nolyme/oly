@@ -24,4 +24,3 @@ Kernel
 | [CORE](https://nolyme.github.io/oly/#/m/oly)        | Foundations.                           | 
 | [API](https://nolyme.github.io/oly/#/m/oly-api)     | REST API, Koa.                         | 
 | [REACT](https://nolyme.github.io/oly/#/m/oly-react) | React, SSR and routing.                | 
-| [TOOLS](https://nolyme.github.io/oly/#/m/oly-tools) | Webpack, TypeScript.                   | 

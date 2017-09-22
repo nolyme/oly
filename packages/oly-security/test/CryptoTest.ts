@@ -3,6 +3,7 @@ import { Kernel } from "oly";
 import { Crypto } from "../src";
 
 describe("Crypto", () => {
+
   describe("#hash()", () => {
     it("should destroy my text", async () => {
       const crypto = Kernel.create().inject(Crypto);
@@ -12,6 +13,7 @@ describe("Crypto", () => {
       equal(await crypto.compare(password, hash), true);
     });
   });
+
   describe("#encrypt()", () => {
     it("should eat my text", async () => {
       const crypto = Kernel.create().inject(Crypto);

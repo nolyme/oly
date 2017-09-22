@@ -1,6 +1,6 @@
 import { ForbiddenException } from "oly-api";
 import { IKoaContext, IKoaMiddleware } from "oly-http";
-import { JwtAuth } from "../services/JwtAuth";
+import { Auth } from "../services/Auth";
 import { isAuth } from "./isAuth";
 
 /**
@@ -12,12 +12,12 @@ export const hasRole = (...roles: string[]): IKoaMiddleware => {
 
     await isAuth()(ctx, () => Promise.resolve());
 
-    const authenticationService = ctx.kernel.inject(JwtAuth);
+    const auth = ctx.kernel.inject(Auth);
 
     for (const role of roles) {
       if (
-        !Array.isArray(authenticationService.token.roles)
-        || authenticationService.token.roles.indexOf(role) === -1) {
+        !Array.isArray(auth.token.roles)
+        || auth.token.roles.indexOf(role) === -1) {
         throw new ForbiddenException();
       }
     }

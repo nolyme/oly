@@ -1,14 +1,34 @@
-import { Meta } from "oly";
+import { IDecorator, Meta } from "oly";
 import { olyApiKeys, use } from "oly-api";
 import { hasRole } from "../middlewares/hasRole";
 
+export class AuthDecorator implements IDecorator {
+
+  public constructor(private roles: string | string[]) {
+  }
+
+  public asMethod(target: object, propertyKey: string, i: TypedPropertyDescriptor<any>) {
+    const roles = typeof this.roles === "string" ? [this.roles] : this.roles;
+    use(hasRole(...roles))(target, propertyKey);
+    Meta.of({key: olyApiKeys.router, target, propertyKey}).set({
+      roles,
+    });
+  }
+}
+
 /**
+ * ```ts
  *
- * @param roles
+ * class Api {
+ *
+ *   @auth
+ *   @get("/")
+ *   authOnly() {}
+ *
+ *   @auth("ADMIN")
+ *   @get("/admin")
+ *   adminOnly() {}
+ * }
+ * ```
  */
-export const auth = (...roles: string[]) => (target: object, propertyKey: string) => {
-  use(hasRole(...roles))(target, propertyKey);
-  Meta.of({key: olyApiKeys.router, target, propertyKey}).set({
-    roles,
-  });
-};
+export const auth = Meta.decorator<string | string[]>(AuthDecorator);

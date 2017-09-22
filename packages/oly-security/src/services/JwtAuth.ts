@@ -1,25 +1,25 @@
 import * as jwt from "jsonwebtoken";
 import { SignOptions, VerifyOptions } from "jsonwebtoken";
-import { env, Global, inject, Logger } from "oly";
-import { UnauthorizedException } from "oly-api";
+import { env, Global, inject, injectable } from "oly";
 import { olySecurityErrors } from "../constants/errors";
 import { JsonWebTokenException } from "../exceptions/JsonWebTokenException";
 import { TokenExpiredException } from "../exceptions/TokenExpiredException";
-import { IPayload, IToken } from "../interfaces";
+import { IToken } from "../interfaces";
+import { Auth } from "./Auth";
 import { Crypto } from "./Crypto";
 
 /**
  * Authentication with JSON Web Token
  */
-export class JwtAuth {
+@injectable({
+  provide: Auth,
+})
+export class JwtAuth extends Auth {
 
   @env("SECURITY_TOKEN_EXPIRATION")
   public readonly tokenExpiration: number = 60 * 60 * 3;
 
   public token: IToken;
-
-  @inject
-  protected logger: Logger;
 
   @inject
   protected crypto: Crypto;
@@ -29,7 +29,7 @@ export class JwtAuth {
    * @param data
    * @param options
    */
-  public createToken(data: IToken, options: SignOptions = {}): string {
+  public createToken(data: IToken, options: SignOptions = {}): Promise<string> {
 
     this.logger.trace("create token", {data});
 
@@ -39,7 +39,7 @@ export class JwtAuth {
       config.expiresIn = this.tokenExpiration;
     }
 
-    return jwt.sign({data}, this.crypto.secret, Global.merge(config, options));
+    return Promise.resolve(jwt.sign({data}, this.crypto.secret, Global.merge(config, options)));
   }
 
   /**
@@ -47,12 +47,12 @@ export class JwtAuth {
    * @param token
    * @param options
    */
-  public checkToken(token: string, options: VerifyOptions = {}): IPayload {
+  public async checkToken(token: string, options: VerifyOptions = {}): Promise<void> {
 
     this.logger.trace("check token", {token});
 
     if (!token || typeof token !== "string") {
-      throw new UnauthorizedException("Invalid token");
+      throw new JsonWebTokenException("Invalid token");
     }
 
     token = token.replace("Bearer ", "");
@@ -60,7 +60,6 @@ export class JwtAuth {
     try {
       const payload = jwt.verify(token, this.crypto.secret, options) as any;
       this.token = payload.data as IToken;
-      return payload;
     } catch (e) {
       if (e.name === "TokenExpiredError") {
         throw new TokenExpiredException();

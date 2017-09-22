@@ -189,7 +189,7 @@ export class Kernel {
    *
    * @param store     Map of key value
    */
-  public fork(store?: any): Kernel {
+  public fork(store?: IStore): Kernel {
     return new Kernel(store, this);
   }
 

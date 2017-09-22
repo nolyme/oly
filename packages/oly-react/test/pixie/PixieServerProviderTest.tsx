@@ -12,7 +12,7 @@ class App {
 
   @page("/")
   async index() {
-    const data = await this.pixie.fly("dataKey", () => {
+    const data = await this.pixie.store.fly("dataKey", () => {
       return {name: "World"};
     });
     return <div id="index">Hello {data.name}</div>;

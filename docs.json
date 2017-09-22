@@ -64,6 +64,9 @@
       ],
       "services": [
         "router/services/Router.ts",
+        "pixie/services/PixieStore.ts",
+        "pixie/services/PixieHttp.ts",
+        "pixie/services/PixieSession.ts",
         "router/providers/ReactBrowserProvider.ts",
         "server/providers/ReactServerProvider.ts",
         "router/providers/ReactRouterProvider.ts"

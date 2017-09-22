@@ -9,11 +9,6 @@ export interface IToken {
   id: string;
 
   /**
-   * Define a realm/domain.
-   */
-  domain?: string;
-
-  /**
    * Define zero-to-many roles/relations/grants.
    */
   roles?: string[];

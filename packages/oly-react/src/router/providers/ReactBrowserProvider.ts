@@ -5,6 +5,7 @@ import { AppContext } from "../../core/components/AppContext";
 import { Cookies } from "../../pixie/services/Cookies";
 import { Pixie } from "../../pixie/services/Pixie";
 import { PixieSession } from "../../pixie/services/PixieSession";
+import { PixieStore } from "../../pixie/services/PixieStore";
 import { View } from "../components/View";
 import { olyReactRouterEvents } from "../constants/events";
 import { ITransitionRenderEvent, ITransitionType } from "../interfaces";
@@ -67,11 +68,7 @@ export class ReactBrowserProvider implements IProvider {
    */
   public onStart(): Promise<void> {
 
-    const data = this.browser.window[Pixie.stateName];
-    if (!!data) {
-      this.logger.debug("feed a pixie with", data);
-      this.pixie["data"] = data;
-    }
+    this.pixie.init(this.browser.window[PixieStore.stateName]);
 
     this.createHistory();
 

@@ -60,12 +60,26 @@ export class Global {
    * @param raw   Raw BASE64 string
    * @return      Decoded string
    */
-  public static atob(raw: string): string {
+  public static decodeBase64(raw: string): string {
     if (typeof window === "object") {
       return window.atob(raw);
     }
     const b = "Buffer";
     return global[b].from(raw, "base64").toString("ascii");
+  }
+
+  /**
+   * Universal btoa. Base64 -> Ascii.
+   *
+   * @param raw   Raw string
+   * @return      Base64 string
+   */
+  public static encodeBase64(raw: string): string {
+    if (typeof window === "object") {
+      return window.btoa(raw);
+    }
+    const b = "Buffer";
+    return global[b].from(raw, "utf-8").toString("base64");
   }
 
   /**

@@ -6,14 +6,14 @@ describe("Jwt", () => {
 
   const kernel = Kernel.create({SECURITY_TOKEN_EXPIRATION: 1});
   const time: Time = kernel.get(Time);
-  const jwtAuth = kernel.get(JwtAuth);
+  const auth = kernel.get(JwtAuth);
 
   time.global();
 
   beforeEach(() => time.reset());
 
-  it("should check token validity", () => {
-    const tk = jwtAuth.createToken({id: "1"});
+  it("should check token validity", async () => {
+    const tk = await auth.createToken({id: "1"});
     expect(Jwt.lifeTime(tk)).toBe(1);
     expect(Jwt.isValid("")).toBeFalsy();
     expect(Jwt.isValid("zpidjaiodioazhdiazhdioaz")).toBeFalsy();
@@ -24,9 +24,9 @@ describe("Jwt", () => {
     expect(Jwt.isValid(tk)).toBeFalsy();
   });
 
-  it("should check roles", () => {
-    const tk = jwtAuth.createToken({id: "1", roles: ["ADMIN"]});
-    const tk2 = jwtAuth.createToken({id: ":)"});
+  it("should check roles", async () => {
+    const tk = await auth.createToken({id: "1", roles: ["ADMIN"]});
+    const tk2 = await auth.createToken({id: ":)"});
     time.pause();
     expect(Jwt.hasRole(tk, "ADMIN")).toBeTruthy();
     expect(Jwt.hasRole(tk, "USER")).toBeFalsy();
