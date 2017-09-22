@@ -17,8 +17,8 @@ export class RetryDecorator implements IDecorator {
     i.value = function oly$retry(this: any) {
       const args = arguments;
       const kernel = this.__kernel__;
-      const retry_ = kernel.inject(Retry);
-      return retry_.operation(() => action.apply(this, args), self.options);
+      const r = kernel.inject(Retry);
+      return r.operation(() => action.apply(this, args), self.options);
     };
   }
 }

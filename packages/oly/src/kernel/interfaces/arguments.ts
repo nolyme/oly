@@ -33,3 +33,7 @@ export interface IArgumentsMetadata extends IMetadata {
     [key: string]: IArgumentArg[];
   };
 }
+
+export interface IEnv {
+
+}

@@ -1,10 +1,10 @@
 import { _, Exception, Kernel } from "oly";
 import { content } from "../src";
-import { task } from "../src/core/decorators/task";
-import { IMessage } from "../src/core/interfaces";
-import { AmqpProvider } from "../src/core/providers/AmqpProvider";
-import { WorkerProvider } from "../src/core/providers/WorkerProvider";
-import { AmqpClient } from "../src/core/services/AmqpClient";
+import { task } from "../src/decorators/task";
+import { IMessage } from "../src/interfaces";
+import { AmqpProvider } from "../src/providers/AmqpProvider";
+import { WorkerProvider } from "../src/providers/WorkerProvider";
+import { AmqpClient } from "../src/services/AmqpClient";
 
 describe("AmqpProvider", () => {
 

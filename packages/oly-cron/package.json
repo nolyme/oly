@@ -1,6 +1,6 @@
 {
-  "name": "oly-amqp",
-  "description": "oly-amqp",
+  "name": "oly-cron",
+  "description": "oly-cron",
   "version": "0.14.2",
   "license": "MIT",
   "main": "lib/index.js",
@@ -9,12 +9,11 @@
   "keywords": [
     "oly",
     "typescript",
-    "amqp"
+    "cron"
   ],
   "dependencies": {
-    "@types/amqplib": "0.5.4",
-    "amqplib": "0.5.1",
-    "oly-json": "^0.14.2"
+    "@types/cron": "1.2.1",
+    "cron": "1.2.1"
   },
   "devDependencies": {
     "oly": "^0.14.2"

@@ -1,5 +1,5 @@
 import { Options, Replies } from "amqplib";
-import { inject, Kernel, Logger } from "oly";
+import { inject, Kernel, Logger } from "../../../oly/lib/index";
 import { AmqpProvider } from "../providers/AmqpProvider";
 
 export class AmqpClient {

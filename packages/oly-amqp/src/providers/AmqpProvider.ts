@@ -1,5 +1,5 @@
 import { Channel, connect, Connection } from "amqplib";
-import { env, inject, IProvider, Kernel, Logger, state } from "oly";
+import { env, inject, IProvider, Kernel, Logger, state } from "../../../oly/lib/index";
 
 export class AmqpProvider implements IProvider {
 

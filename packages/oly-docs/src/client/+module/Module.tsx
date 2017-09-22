@@ -96,7 +96,9 @@ export class Module extends Component<IModuleProps, IModuleState> {
                     <ul>
                       {e.methods.map((method) => (
                         <li key={method.name}>
-                          <Go to="method" params={{service: e.name, method: method.name}}>#{method.name}()</Go>
+                          <Go to="method" params={{service: e.name, method: method.name}}>
+                            {method.static ? "." : "#"}{method.name}()
+                          </Go>
                         </li>
                       ))}
                     </ul>

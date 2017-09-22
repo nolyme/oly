@@ -1,5 +1,5 @@
 import { Message, Options } from "amqplib";
-import { IMetadata } from "oly";
+import { IMetadata } from "../../oly/lib/index";
 
 export type IMessage = Message;
 

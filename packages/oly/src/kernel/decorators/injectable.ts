@@ -19,7 +19,9 @@ export class InjectableDecorator implements IDecorator {
   }
 
   public asClass(t: Function): void {
+
     Meta.of({key: olyCoreKeys.injectable, target: t}).set(this.options);
+
     const paramTypes = Meta.designParamTypes(t, "$constructor");
     if (paramTypes) {
       for (let i = 0; i < paramTypes.length; i++) {

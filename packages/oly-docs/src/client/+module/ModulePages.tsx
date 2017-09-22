@@ -114,9 +114,9 @@ export class ModulePages {
       return <pre>Method Not Found</pre>;
     }
     return <div>
-      <h2 className="title">{e.name}#{m.name}()</h2>
+      <h2 className="title">{e.name}{m.static ? "." : "#"}{m.name}()</h2>
       <h2 className="subtitle">
-        {e.name}#{m.name}(
+        {e.name}{m.static ? "." : "#"}{m.name}(
         {m.parameters.map((prop, i) => (
           <span key={i}>
               <span>{(i ? ", " : "")}</span>

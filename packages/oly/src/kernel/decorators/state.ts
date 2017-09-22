@@ -28,15 +28,19 @@ export class StateDecorator implements IDecorator {
 
 /**
  * Get'n'Set a value from the store.
- *
- * > **(?)** This is based on Kernel#state().
+ * This is based on Kernel#state().
  *
  * ```ts
  * class A {
  *   @state data: string; // state name is optional, default = `${Class.name}.${propertyKey}`
  * }
  *
- * Kernel.create({"A.data", "Hello"}).get(A).data;
+ * Kernel
+ *   .create({
+ *     "A.data", "Hello" // key,value
+ *   })
+ *   .get(A)
+ *   .data; // "Hello"
  * ```
  *
  * ### Event

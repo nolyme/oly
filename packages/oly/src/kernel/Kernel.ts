@@ -54,8 +54,9 @@ export class Kernel {
    * This is recommended.
    *
    * ```ts
+   * const store = {};
    * Kernel
-   *   .create()
+   *   .create(store)
    *   .with()
    *   .start()
    *   .catch(console.error);
@@ -275,6 +276,18 @@ export class Kernel {
 
   /**
    * Trigger onStop of each provider.
+   *
+   * ```
+   * const kernel = Kernel.create();
+   * kernel.start();
+   * process.on('message', function(msg) {
+   *   if (msg == 'shutdown') {
+   *     console.log('Closing all connections...');
+   *     kernel.stop()
+   *      .then(() => process.exit();
+   *  }
+   * });
+   * ```
    */
   public async stop(): Promise<Kernel> {
 
@@ -305,7 +318,15 @@ export class Kernel {
    * Chain declarations.
    *
    * ```ts
-   * Kernel.create().with(A, B, C, D).with(E, F, G, H).start();
+   * Kernel
+   *   .create()
+   *   .with(A, B, C, D)
+   *   .with(E, F, G, H)
+   *   .with(I)
+   *   .configure(k => process.env.NODE_ENV === production &&
+   *     k.with(J, K)
+   *   )
+   *   .start();
    * ```
    *
    * @param definitions   List of definitions.

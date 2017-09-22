@@ -1,6 +1,6 @@
 import { Exception, Kernel, Time } from "oly";
-import { CronProvider } from "../src/cron/CronProvider";
-import { cron } from "../src/cron/decorators/cron";
+import { CronProvider } from "../src/CronProvider";
+import { cron } from "../src/decorators/cron";
 
 describe("CronProvider", () => {
 

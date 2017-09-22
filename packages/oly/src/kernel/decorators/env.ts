@@ -25,9 +25,7 @@ export class EnvDecorator implements IDecorator {
 }
 
 /**
- * Get a value from the store.
- *
- * > **(?)** This is based on Kernel#env().
+ * Get a value from the store. This is based on Kernel#env().
  *
  * ```ts
  * class A {

@@ -21,6 +21,7 @@ export class JsonLogger extends Logger {
   }
 
   protected format(type: string, message: string, data?: object) {
+
     const log: any = {
       now: new Date().toISOString(),
       lvl: type,
@@ -29,9 +30,11 @@ export class JsonLogger extends Logger {
       dep: this.componentName,
       msg: message,
     };
+
     if (data) {
       log.ext = data;
     }
+
     return JSON.stringify(log);
   }
 }

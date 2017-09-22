@@ -19,11 +19,11 @@ export class OnDecorator implements IDecorator {
 }
 
 /**
- * Event listener decorator.
+ * Event listener decorator.  This is based on Kernel#on().
  *
  * ```ts
  * class A {
- *   @on b() {
+ *   @on b() {                // event name is optional, default = `${Class.name}.${propertyKey}`
  *     console.log("Hey");
  *   }
  * }

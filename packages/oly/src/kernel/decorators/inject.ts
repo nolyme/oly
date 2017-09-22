@@ -37,9 +37,7 @@ export class InjectDecorator implements IDecorator {
 }
 
 /**
- * Create or re-use a service.
- *
- * > **(?)** This is based on Kernel#inject().
+ * Create or re-use a service. This is based on Kernel#inject().
  *
  * ```ts
  * class B {

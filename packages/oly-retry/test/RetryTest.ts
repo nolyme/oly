@@ -1,5 +1,5 @@
 import { Exception, Kernel, state } from "oly";
-import { retry } from "../src/retry/decorators/retry";
+import { retry } from "../src/decorators/retry";
 
 describe("Retry", () => {
 
@@ -92,12 +92,14 @@ describe("Retry", () => {
   });
 
   it("should use regexp for message error", () => {
+
     expect(Kernel.create({
       "CrashTest.stack": [
         new Error("hello"),
         "OK",
       ],
     }).inject(CrashTest).regexp()).toBe("OK");
+
     expect(() => Kernel.create({
       "CrashTest.stack": [
         new Error("hello"),
@@ -106,12 +108,14 @@ describe("Retry", () => {
         "OK",
       ],
     }).inject(CrashTest).regexp()).toThrow("hello");
+
     expect(() => Kernel.create({
       "CrashTest.stack": [
         new Error("snap"),
         "OK",
       ],
     }).inject(CrashTest).regexp()).toThrow("snap");
+
     expect(() => Kernel.create({
       "CrashTest.stack": [
         new Error(),
