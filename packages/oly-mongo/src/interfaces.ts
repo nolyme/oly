@@ -1,5 +1,5 @@
 import { ObjectID } from "bson";
-import { Cursor } from "mongodb";
+import { AggregationCursor, Cursor } from "mongodb";
 import { IMetadata } from "oly";
 
 export interface IDocument {
@@ -28,3 +28,4 @@ export interface IIndexesMetadata extends IMetadata {
 }
 
 export type CursorTransform = (cursor: Cursor) => Cursor;
+export type AggregationCursorTransform = (cursor: AggregationCursor) => AggregationCursor;

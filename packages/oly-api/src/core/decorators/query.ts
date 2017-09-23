@@ -64,6 +64,15 @@ export class QueryDecorator implements IDecorator {
 }
 
 /**
+ * Extract QueryParam from KoaContext.
  *
+ * ```ts
+ * class Api {
+ *
+ *   @get("/")
+ *   something(@query("isOk") myIsOk: boolean) {
+ *   }
+ * }
+ * ```
  */
 export const query = Meta.decorator<IQueryOptions | string>(QueryDecorator);

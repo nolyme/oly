@@ -10,7 +10,7 @@ $ npm install oly
 
 ## Features
 
-#### Injections
+### Injections
 
 ```ts
 import { inject, Kernel } from "oly";
@@ -25,7 +25,7 @@ Kernel
   .get(C).a.text // B
 ```
 
-#### Events
+### Events
 
 ```ts
 import { Kernel, on } from "oly";
@@ -40,7 +40,7 @@ Kernel
   .emit("App.say", "hello"); // hello
 ```
 
-#### States
+### States
 
 ```ts
 import { Kernel } from "oly";
@@ -52,7 +52,7 @@ Kernel
   .state("A", "C"); // { key: 'A', newValue: 'C', oldValue: 'B' }
 ```
 
-#### Providers
+### Providers
 
 ```ts
 import { env, inject, IProvider, Kernel, state } from "oly";

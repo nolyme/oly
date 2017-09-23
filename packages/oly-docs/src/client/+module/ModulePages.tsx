@@ -5,17 +5,8 @@ import { IModuleContent } from "../../shared/interfaces";
 import { Docs } from "../services/Docs";
 import { Mark } from "../shared/Mark";
 import { Configuration } from "./Configuration";
+import { GithubPath } from "./GithubPath";
 import { Module } from "./Module";
-
-export const GithubPath = (props: { module: string, path: string }) =>
-  <h2 className="subtitle">
-    <a
-      style={{marginTop: "-20px"}}
-      target="_blank"
-      href={`https://github.com/nolyme/oly/blob/master/packages/${props.module}/src${props.path}`}>
-      {props.path}
-    </a>
-  </h2>;
 
 export class ModulePages {
   @inject docs: Docs;
@@ -30,8 +21,7 @@ export class ModulePages {
     return <Module module={this.content}/>;
   }
 
-  @page
-  index(@param("module") module: string) {
+  @page index(@param("module") module: string) {
     return <Mark html={this.content.home}/>;
   }
 
@@ -59,7 +49,6 @@ export class ModulePages {
       <h2 className="title">{e.name}</h2>
       <GithubPath module={this.content.name} path={e.path}/>
       <Mark html={e.install}/>
-
       <div className="content">
         <h2>Description</h2>
       </div>
@@ -169,7 +158,7 @@ export class ModulePages {
               <strong>{p.name}</strong>
               {" "}
               {!p.optional && (
-               <em>{"(required)"}</em>
+                <em>{"(required)"}</em>
               )}
             </td>
             <td>

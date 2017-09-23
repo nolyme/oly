@@ -1,0 +1,18 @@
+@import "../variables";
+
+.Layout {
+  padding-top: $navbar-height;
+  height: 100%;
+
+  .Layout__content {
+    height: 100%;
+    display: flex;
+  }
+
+  .Layout__overflow {
+    flex: 1;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+  }
+}

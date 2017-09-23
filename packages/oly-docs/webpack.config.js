@@ -16,6 +16,8 @@ module.exports = (env) => {
     sourceMaps: false,
   });
 
+  config.devServer.host = "0.0.0.0";
+
   delete config.output.publicPath;
 
   return config;

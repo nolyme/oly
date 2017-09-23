@@ -1,8 +1,8 @@
-### Router
+# Routing
 
 The embedded router is based on [history](https://www.npmjs.com/package/history) and [path-to-regex](https://www.npmjs.com/package/path-to-regexp).
 
-#### Page, Node, Route and Path.
+## Page, Node, Route and Path.
 
 In this example:
 
@@ -36,7 +36,7 @@ router.go("index"); // by node (not recommended)
 router.go("root.index"); // by route
 ```
 
-#### Resolves and Actions
+## Resolves and Actions
 
 All resolves are asynchronous. 
 
@@ -52,7 +52,7 @@ class MyController {
 }
 ```
 
-#### Redirection
+## Redirection
 
 When a resolve returns a promise of Transition(type=REPLACE), oly creates a redirection.
 
@@ -66,5 +66,23 @@ class MyController {
 }
 ```
 
-#### Error
+## Error, NotFound
+
+```ts
+
+export class MyErrorHandler {
+
+  // define a route named "error" to catch transition errors
+  @page error(e: ITransitionError) {
+    return <div>
+      <pre>Error: {e.error.message || String(e.error)}</pre>
+    </div>
+  }
+
+  // use wildcare to handle "page not found"
+  @page("/*") notFound(e: ITransition) {
+    return <pre>Page Not Found</pre>
+  }
+}
+```
 

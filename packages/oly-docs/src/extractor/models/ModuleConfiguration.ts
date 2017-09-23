@@ -8,6 +8,9 @@ export class ModuleConfiguration {
   @field({required: false})
   public icon?: string;
 
+  @field
+  public type: string;
+
   @array({of: String, default: []})
   public decorators: string[];
 

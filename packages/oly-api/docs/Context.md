@@ -1,6 +1,6 @@
-### Kernel Context
+# Context
 
-> **(?)** Kernel#fork() is called before each request.
+Kernel#fork() is called before each request.
 
 ```ts
 import { inject, Kernel, Logger, state } from "oly";

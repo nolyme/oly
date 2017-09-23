@@ -3,7 +3,7 @@
   "modules": [
     {
       "name": "oly",
-      "icon": "sim-card",
+      "type": "universal",
       "decorators": [
         "kernel/decorators/inject.ts",
         "kernel/decorators/state.ts",
@@ -20,7 +20,7 @@
     },
     {
       "name": "oly-json",
-      "icon": "ninja",
+      "type": "universal",
       "decorators": [
         "decorators/field.ts",
         "decorators/array.ts",
@@ -33,6 +33,7 @@
     },
     {
       "name": "oly-http",
+      "type": "universal",
       "icon": "exchange",
       "services": [
         "providers/HttpServerProvider.ts",
@@ -45,8 +46,9 @@
     },
     {
       "name": "oly-react",
-      "icon": "application",
+      "type": "universal",
       "manuals": [
+        "docs/Example.md",
         "docs/Routing.md"
       ],
       "decorators": [
@@ -74,7 +76,7 @@
     },
     {
       "name": "oly-api",
-      "icon": "satellite",
+      "type": "server",
       "manuals": [
         "docs/Koa.md",
         "docs/Context.md"
@@ -98,7 +100,7 @@
     },
     {
       "name": "oly-security",
-      "icon": "id-number",
+      "type": "server",
       "decorators": [
         "decorators/auth.ts"
       ],
@@ -109,7 +111,7 @@
     },
     {
       "name": "oly-tools",
-      "icon": "wrench",
+      "type": "dev",
       "manuals": [
         "docs/TypeScript.md",
         "docs/Webpack.md",

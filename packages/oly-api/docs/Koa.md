@@ -1,4 +1,4 @@
-### Koa
+# Koa
 
 http://koajs.com/
 
@@ -30,7 +30,7 @@ Kernel.create()
   .catch(console.error);
 ```
 
-### Default middlewares
+## Default middlewares
 
 ApiProvider uses:
 - koa-bodyparser (parse http body) https://github.com/koajs/bodyparser 

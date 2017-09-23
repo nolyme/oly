@@ -98,6 +98,7 @@ export class DocProvider {
 
     return {
       version: pkg.version,
+      type: m.type,
       decorators: this.parser.generateDecorator(app, sources, m, reflection),
       interfaces: [],
       components: this.parser.generateComponents(app, sources, m, reflection),

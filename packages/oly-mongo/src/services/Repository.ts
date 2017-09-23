@@ -3,7 +3,7 @@ import { Collection, MongoError } from "mongodb";
 import { Class, inject, Logger } from "oly";
 import { Json } from "oly-json";
 import { MongoException } from "../exceptions/MongoException";
-import { CursorTransform, IDocument, IObjectDocument } from "../interfaces";
+import { AggregationCursorTransform, CursorTransform, IDocument, IObjectDocument } from "../interfaces";
 import { DatabaseProvider } from "../providers/DatabaseProvider";
 
 export abstract class Repository<T extends IDocument> {
@@ -97,6 +97,11 @@ export abstract class Repository<T extends IDocument> {
     }
   }
 
+  /**
+   *
+   * @param {Object} query
+   * @returns {Promise<T extends IDocument>}
+   */
   public async findOne(query: object = {}): Promise<T | undefined> {
     this.logger.debug(`find one`, query);
     const match = await this.collection.findOne(query);
@@ -106,13 +111,37 @@ export abstract class Repository<T extends IDocument> {
     return this.out(match);
   }
 
+  /**
+   *
+   * @param {string} id
+   * @returns {Promise<T extends IDocument>}
+   */
   public async findById(id: string): Promise<T | undefined> {
     return this.findOne({_id: this.castId(id)});
   }
 
+  /**
+   *
+   * @param {Object} query
+   * @param {CursorTransform} cursorTransformer
+   * @returns {Promise<T[]>}
+   */
   public async find(query: object = {}, cursorTransformer: CursorTransform = (c) => c): Promise<T[]> {
     this.logger.debug(`find`, query);
     const cursor = cursorTransformer(this.collection.find(query));
+    return (await cursor.toArray()).map((i: any) => this.out(i));
+  }
+
+  /**
+   *
+   * @param {Object | Object[]} query
+   * @param {AggregationCursorTransform} cursorTransformer
+   * @returns {Promise<T[]>}
+   */
+  public async aggregate(query: object | object[] = {},
+                         cursorTransformer: AggregationCursorTransform = (c) => c): Promise<T[]> {
+    this.logger.debug(`aggregate`, query);
+    const cursor = cursorTransformer(this.collection.aggregate(Array.isArray(query) ? query : [query]));
     return (await cursor.toArray()).map((i: any) => this.out(i));
   }
 
@@ -126,20 +155,39 @@ export abstract class Repository<T extends IDocument> {
     return this.collection.count(mongoQuery);
   }
 
+  /**
+   *
+   * @param {string} id
+   * @returns {Promise<void>}
+   */
   public async removeById(id: string) {
     await this.collection.findOneAndDelete({
       _id: this.castId(id),
     });
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   public async clear() {
     await this.collection.deleteMany({});
   }
 
+  /**
+   *
+   * @param {string | number | ObjectID} id
+   * @returns {ObjectID}
+   */
   public castId(id: string | number | ObjectID): ObjectID {
     return new ObjectID(id);
   }
 
+  /**
+   *
+   * @param {IObjectDocument | IDocument} document
+   * @returns {T}
+   */
   public in(document: IObjectDocument | IDocument): T {
     if (document._id && document._id instanceof ObjectID) {
       document._id = document._id.toString();
@@ -155,6 +203,11 @@ export abstract class Repository<T extends IDocument> {
     }
   }
 
+  /**
+   *
+   * @param {Partial<T extends IDocument>} document
+   * @returns {T}
+   */
   public out(document: Partial<T>): T {
     if (document._id) {
       document._id = document._id.toString();
@@ -162,10 +215,20 @@ export abstract class Repository<T extends IDocument> {
     return this.json.map(this.type, document);
   }
 
+  /**
+   *
+   * @param {Partial<T extends IDocument>} document
+   * @returns {Promise<void>}
+   */
   public async beforeInsert(document: Partial<T>): Promise<void> {
     //
   }
 
+  /**
+   *
+   * @param {Partial<T extends IDocument>} document
+   * @returns {Promise<void>}
+   */
   public async beforeUpdate(document: Partial<T>): Promise<void> {
     //
   }

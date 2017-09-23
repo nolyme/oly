@@ -71,6 +71,7 @@ export interface IInterface {
 
 export interface IModuleContent {
   name: string;
+  type: string;
   icon?: string;
   home: string;
   version: string;

@@ -1,19 +1,29 @@
 @import "../variables";
 
 #app .search {
-  display: inline-block;
-  margin-right: 20px;
+  width: 100%;
+  position: relative;
+
+  .input {
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.03);
+    box-shadow: 0 0 0 1px $grey-lighter;
+  }
 
   .search-popover {
-    width: 300px;
-    right: 100px;
     padding: 5px;
-    position: fixed;
+    position: absolute;
+    margin: 0 20px;
+    left: 0;
+    right: 0;
     background: $white;
     box-shadow: 0 4px 8px rgba($black, .2);
+    border: 2px solid $grey-lighter;
   }
+
   .search-item {
     text-align: left;
+
     .tag {
       margin-right: 10px;
       border: 1px solid $primary;
@@ -24,6 +34,7 @@
       background-color: transparent;
       text-align: center;
     }
+
     a {
       opacity: .8;
       display: block;
@@ -34,12 +45,14 @@
       font-size: 12px;
       border-radius: 2px;
       color: $black;
+
       &.focus {
         opacity: 1;
         background-color: rgba($black, .1);
       }
     }
   }
+
   .search-tag {
     background-color: $primary;
     display: inline-block;
@@ -49,6 +62,7 @@
     text-align: center;
     margin-right: 10px;
   }
+
   .search-empty {
     padding: 10px;
     text-align: center;

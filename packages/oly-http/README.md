@@ -19,13 +19,8 @@ kernel
   .then(console.log);
 ```
 
-### Installation
+## Installation
 
 ```bash
 $ npm install oly oly-http
 ```
-
-### Why
-
-- it's a shared package used by "oly-http" and "oly-react"
-- don't use HttpServerProvider directly, there is ApiProvider (oly-api) and ReactServerProvider (oly-react)

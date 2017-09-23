@@ -41,6 +41,15 @@ export class ParamDecorator implements IDecorator {
 }
 
 /**
+ * Extract PathParam from KoaContext.
  *
+ * ```ts
+ * class Api {
+ *
+ *   @get("/:id")
+ *   something(@query("id") myId: string) {
+ *   }
+ * }
+ * ```
  */
 export const param = Meta.decorator<IParamOptions | string>(ParamDecorator);

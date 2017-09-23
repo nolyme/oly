@@ -1,4 +1,4 @@
-### Overview
+# Example
 
 We have this react component.
 ```ts
@@ -24,30 +24,27 @@ export class Home extends React.Component<IHomeProps, {}> {
 Maybe, we need to fetch some data before the rendering.
 ```ts
 import { inject } from "oly";
-import { page } from "oly-react";
-import { HttpClient } from "oly-http";
+import { page, PixieHttp } from "oly-react";
 import { Home } from "./Home";
 
-export class App {
-
-  @inject http: HttpClient;
+export class ReactApp {
+  @inject http: PixieHttp;
 
   @page("/")
   async home() {
-    const news = await this.http.get("/news");
+    const news = await this.http.get("/data");
     return <Home news={news} />;
   }
 }
 ```
 
-Now, we need some news.
+Now, we need some data.
 ```ts
 import { get } from "oly-api";
 
 export class Api {
   
-  @get("/news") 
-  news() {
+  @get("/data") data() {
     return ["A", "B", "C"];
   }
 }
@@ -57,11 +54,11 @@ At last, we need our entries: main.browser.ts
 ```ts
 import { Kernel } from "oly";
 import { ReactBrowserProvider } from "oly-react";
-import { App } from "./App";
+import { ReactApp } from "./ReactApp";
 
 Kernel
   .create()
-  .with(App, ReactBrowserProvider)
+  .with(ReactApp, ReactBrowserProvider)
   .start()
   .catch(console.error);
 ```
@@ -71,12 +68,12 @@ And: main.server.ts
 import { Kernel } from "oly";
 import { ApiProvider } from "oly-api";
 import { ReactServerProvider } from "oly-react";
-import { App } from "./App";
+import { ReactApp } from "./ReactApp";
 import { Api } from "./Api";
 
 Kernel
   .create()
-  .with(App, ReactServerProvider)
+  .with(ReactApp, ReactServerProvider)
   .with(Api, ApiProvider)
   .start()
   .catch(console.error);

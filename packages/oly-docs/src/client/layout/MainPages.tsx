@@ -10,14 +10,15 @@ export class MainPages {
   @inject docs: Docs;
 
   @layout({
-    children: [ModulePages],
+    children: [
+      ModulePages,
+    ],
   })
   root() {
     return Layout;
   }
 
-  @page
-  home() {
+  @page("/") home() {
     return Home;
   }
 }

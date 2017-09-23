@@ -96,15 +96,17 @@ export class Search extends React.Component<{}, IState> {
         className="search"
         onKeyDown={this.onKeyDown}
       >
-        <form onSubmit={this.onSubmit}>
+        <form className="control has-icons-left" onSubmit={this.onSubmit}>
           <input
-            style={{width: "300px"}}
             className="input"
             type="search"
             placeholder="Search..."
             onChange={this.handleSearchChange}
             value={this.state.query}
           />
+          <span className="icon is-small is-left">
+            <i className="fa fa-search"/>
+          </span>
         </form>
         {!!this.state.results && <div className="search-popover">
           {Array.isArray(this.state.results) && this.state.results.length > 0
