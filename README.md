@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-o*l*y is a set of libraries to create well-written 
+o<em>l</em>y is a set of libraries to create well-written 
 <a href="https://github.com/Microsoft/TypeScript">TypeScript</a>
 applications with <a href="https://nodejs.org/en/">Node.js®</a> and browsers.
 <br/>
