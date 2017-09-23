@@ -9,8 +9,8 @@ o*l*y is a set of libraries to create well-written [TypeScript](https://github.c
 </p>
 
 <div align="center">
-[![Build Status](https://travis-ci.org/nolyme/oly.svg?branch=v0.12.14)](https://travis-ci.org/nolyme/oly)
-[![codecov](https://codecov.io/gh/nolyme/oly/branch/master/graph/badge.svg)](https://codecov.io/gh/nolyme/oly)
+<a href="https://travis-ci.org/nolyme/oly"><img src="https://travis-ci.org/nolyme/oly.svg?branch=master" alt="travis"/></a>
+<a href="https://codecov.io/gh/nolyme/oly"><img src="https://codecov.io/gh/nolyme/oly/branch/master/graph/badge.svg" alt="codecov"/></a>
 </div>
 
 <hr />

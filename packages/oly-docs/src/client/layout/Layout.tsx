@@ -1,8 +1,7 @@
 import { inject, state } from "oly";
-import { View } from "oly-react";
+import { Helmet, View } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
-import Helmet from "react-helmet";
 import { Docs } from "../services/Docs";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";

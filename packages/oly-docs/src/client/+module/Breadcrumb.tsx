@@ -1,8 +1,7 @@
 import { inject } from "oly";
-import { Browser, Go, Router } from "oly-react";
+import { Browser, Go, Helmet, Router } from "oly-react";
 import * as React from "react";
 import { Component } from "react";
-import Helmet from "react-helmet";
 
 export interface IBreadcrumbProps {
 }
