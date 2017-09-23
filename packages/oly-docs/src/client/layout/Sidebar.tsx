@@ -17,13 +17,8 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
   @inject docs: Docs;
   @inject router: Router;
 
-  div: any;
-
   componentWillMount() {
-
-    const active = this.docs.modules.find((m) =>
-      this.router.isActive({to: "module", params: {module: m.name}}));
-
+    const active = this.docs.modules.find((m) => this.router.isActive({to: "module", params: {module: m.name}}));
     this.state = {
       show: active ? active.name : "",
     };
@@ -32,18 +27,12 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
   @on(olyReactRouterEvents.TRANSITION_END)
   onTransitionEnd() {
 
-    const active = this.docs.modules.find((m) =>
-      this.router.isActive({to: "module", params: {module: m.name}}));
-
+    const active = this.docs.modules.find((m) => this.router.isActive({to: "module", params: {module: m.name}}));
     if (window.innerWidth < 800 && this.isOpen) {
       this.isOpen = false;
     } else {
       this.setState({
         show: active ? active.name : "",
-      }, () => {
-        if (this.div) {
-          this.div.scrollTop = 500;
-        }
       });
     }
   }
@@ -51,7 +40,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
   render() {
     return (
       <div className="Sidebar">
-        <div ref={(el) => this.div = el} className={"Sidebar__content" + (this.isOpen ? " is-open" : "")}>
+        <div className={"Sidebar__content" + (this.isOpen ? " is-open" : "")}>
           <nav className="panel">
             {this.docs.modules.map((m) =>
               [

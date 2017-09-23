@@ -3,9 +3,16 @@
 </h1>
 
 <p align="center">
-o*l*y is a set of libraries to create well-written [TypeScript](https://github.com/Microsoft/TypeScript) applications with [Node.js®](https://nodejs.org/en/) and browsers.
+o*l*y is a set of libraries to create well-written 
+<a href="https://github.com/Microsoft/TypeScript">TypeScript</a>
+applications with <a href="https://nodejs.org/en/">Node.js®</a> and browsers.
 <br/>
-<small>This set is based on popular projects, such as [Koa](https://github.com/koajs/koa) and [React](https://github.com/facebook/react).</small>
+<small>
+This set is based on popular projects, such as
+<a href="https://github.com/koajs/koa">Koa</a> 
+and
+<a href="https://github.com/facebook/react">React</a>.
+</small>
 </p>
 
 <div align="center">
