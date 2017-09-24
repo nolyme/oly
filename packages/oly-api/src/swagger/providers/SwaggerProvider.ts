@@ -8,15 +8,7 @@ import { ApiProvider } from "../../core/providers/ApiProvider";
 import { ISwaggerApi } from "../interfaces";
 
 /**
- * The `SwaggerProvider` reads @get/@post/@field/... and creates a [Swagger JSON + Swagger UI](https://swagger.io/).
- *
- * - JSON: <API_PREFIX>/swagger.json
- * - UI: <API_PREFIX>/swagger/ui
- *
- * Currently supported:
- *
- * - Definitions
- * - Paths
+ * Generate a [Swagger](https://swagger.io/) spec and UI. Experimental.
  *
  * ```ts
  * class Data {
@@ -24,13 +16,26 @@ import { ISwaggerApi } from "../interfaces";
  * }
  *
  * class App {
+ *
  *   @post("/")
- *   createDate(@body data: Data) {
+ *   createData(@body data: Data) {
  *   }
  * }
  *
  * Kernel.create().with(SwaggerProvider, App).start();
  * ```
+ *
+ * ### Paths
+ *
+ * ```bash
+ * # <API_PREFIX>/swagger.json
+ * # <API_PREFIX>/swagger/ui
+ * ```
+ *
+ * ### Supported
+ *
+ * - Definitions
+ * - Paths
  */
 export class SwaggerProvider {
 

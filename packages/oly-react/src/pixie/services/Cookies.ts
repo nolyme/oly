@@ -28,8 +28,6 @@ export class Cookies {
     if (ctx) {
       return ctx.cookies.get(cookieName);
     }
-
-    throw new Exception("There is no cookies provider for node env");
   }
 
   /**

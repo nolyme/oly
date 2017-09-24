@@ -3,7 +3,13 @@ import { Component } from "react";
 import { olyReactEvents } from "../constants/events";
 import { olyReactKeys } from "../constants/keys";
 import { IAttachOptions } from "../decorators/attach";
-import { IActionResult, IActionResultError, IActionsMetadata, IActionsProperty } from "../interfaces";
+import {
+  IActionErrorEvent,
+  IActionsMetadata,
+  IActionsProperty,
+  IActionSuccessEvent,
+  IActiveBeginEvent,
+} from "../interfaces";
 
 /**
  * It is an extension of the Kernel.
@@ -138,7 +144,7 @@ export class ComponentInjector {
           }
         }
 
-        self.kernel.emit(olyReactEvents.ACTIONS_BEGIN, {action: action.name});
+        self.kernel.emit(olyReactEvents.ACTIONS_BEGIN, {action: action.name} as IActiveBeginEvent);
 
         if (action.loading === true) {
           instance.setState({loading: true});
@@ -197,7 +203,7 @@ export class ComponentInjector {
 
       logger.debug(`action ${action.name} is done`);
 
-      const actionResult: IActionResult<any> = {
+      const actionResult: IActionSuccessEvent<any> = {
         action: action.name,
         component: definition,
         data,
@@ -239,7 +245,7 @@ export class ComponentInjector {
 
       logger.warn(`action '${action.name}' has failed`, e);
 
-      const actionResult: IActionResultError = {
+      const actionResult: IActionErrorEvent = {
         action: action.name,
         component: definition,
         error: e,

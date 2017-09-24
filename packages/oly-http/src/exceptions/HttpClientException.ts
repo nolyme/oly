@@ -3,24 +3,45 @@ import { Exception } from "oly";
 import { olyHttpErrors } from "../constants/errors";
 
 /**
- * Exception thrown by a axios (http client).
+ * Exception wrapper of AxiosError. <br/>
  *
- * Default status is -1 (no status).
- * Default body is null.
+ * ### Fields
  *
- * You can "follow" HttpServerException.
+ * | | type | default  | description |
+ * |--|--|--|--|
+ * | status | number | -1 | HTTP status |
+ * | body | any | undefined | HTTP response body |
+ * | cause | AxiosError | N/A | axios error |
  *
  * ```ts
- * try { } catch(e) {
- *   if(e instanceof HttpClientException && e.isHttpServerException()) {
- *     (e as HttpClientException<HttpServerException>)
- *       .body
- *       .message; // ...
+ * try {
+ *   await http.get("/");
+ * } catch(e) {
+ *   if(e instanceof HttpClientException) {
+ *
+ *     if (e.status === 401) {
+ *       // ...
+ *     }
  *   }
  * }
  * ```
  *
- * Axios Error is always available.
+ * ### Follow HttpServerException
+ *
+ * ```ts
+ * try {
+ *   await http.get("/");
+ * } catch(e) {
+ *   if (e instanceof HttpClientException) {
+ *
+ *     if (e.isHttpServerException()) {
+ *        (e as HttpClientException<HttpServerException>)
+ *         .body
+ *         .message; // ...
+ *     }
+ *   }
+ * }
+ * ```
  */
 export class HttpClientException<T = any> extends Exception {
 

@@ -12,4 +12,19 @@ export class OptionalDecorator extends FieldDecorator {
   }
 }
 
+/**
+ * Alias of @field.
+ *
+ * ```ts
+ * class Data {
+ *
+ *   @field({
+ *     required: false,
+ *   })
+ *   firstName: string;
+ *
+ *   @optional lastName: string;
+ * }
+ * ```
+ */
 export const optional = Meta.decorator<Partial<IField>>(OptionalDecorator);

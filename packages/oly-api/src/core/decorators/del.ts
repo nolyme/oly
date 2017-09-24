@@ -1,12 +1,18 @@
 import { route } from "./route";
 
 /**
- * Define a route with the http method DELETE.
+ * Create a DEL route.
  *
  * ```ts
- * class A {
- *   @del("/") remove() {}
+ * class Ctrl {
+ *
+ *   @del("/")
+ *   remove() {
+ *     return {ok: true};
+ *   }
  * }
+ *
+ * Kernel.create().with(Ctrl, ApiProvider).start();
  * ```
  *
  * @param path    Relative path

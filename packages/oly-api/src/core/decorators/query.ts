@@ -64,13 +64,29 @@ export class QueryDecorator implements IDecorator {
 }
 
 /**
- * Extract QueryParam from KoaContext.
+ * Extract `ctx.query[name]` from KoaContext and convert value to the given type.
+ *
+ * ```ts
+ * class Ctrl {
+ *
+ *   @get("/")
+ *   something(@query("name") name: string) {
+ *   }
+ * }
+ *
+ * Kernel.create().with(Ctrl, ApiProvider).start();
+ * ```
+ *
+ * ### Boolean
+ *
+ * Behavior is different from the other.
  *
  * ```ts
  * class Api {
  *
- *   @get("/")
- *   something(@query("isOk") myIsOk: boolean) {
+ *   @get("/bool")
+ *   something(@query("showAll") showAll: boolean) {
+ *     // showAll === true when /bool?showAll
  *   }
  * }
  * ```

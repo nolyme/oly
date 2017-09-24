@@ -13,12 +13,23 @@ export class ArrayDecorator extends FieldDecorator {
 }
 
 /**
- * It's like @field + embedded list of @field.
+ * Alias of @field.
  *
  * ```ts
- * class A {
- *   @array({of: String}) myProp: string[];
- *   @array({of: Data}) myProp2: Data[];
+ * class Data {
+ *
+ *   @field({
+ *     type: Array,
+ *     of: {
+ *       type: User,
+ *     },
+ *   })
+ *   users: User[];
+ *
+ *   @array({
+ *     of: Movie // mandatory
+ *   })
+ *   movies: Movie[];
  * }
  * ```
  */

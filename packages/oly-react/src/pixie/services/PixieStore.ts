@@ -2,12 +2,7 @@ import { Global, inject, Kernel, Logger } from "oly";
 import { IPixieSetOptions } from "../interfaces";
 
 /**
- * Use Pixie for handling ServerClient data use cases.
- *
- * For cache http call: PixieHttp.
- * For cache session: PixieSession.
- *
- * Pixie writes server-data into HTML then browser use this data.
+ * Store some data server side and send them to the browser.
  */
 export class PixieStore {
 
@@ -25,21 +20,29 @@ export class PixieStore {
   protected data: any;
 
   /**
-   * Getter
+   * Get a value from the store.
    *
    * @param key
    * @returns {T}
    */
   public get<T>(key: string): T | undefined {
+
     if (!this.data) {
       return;
     }
+
     return this.data[key];
   }
 
   /**
-   * Set value in pixieStore;
-   * By default, store data only once and only on server env.
+   * Set value to the store. Used by PixieStore#fly().
+   *
+   * ```ts
+   * // server side
+   * store.set("a", "b");
+   * // browser side
+   * store.set("a", "b"); // b is ignored
+   * ```
    *
    * @param key       Key
    * @param value     Value
@@ -68,18 +71,16 @@ export class PixieStore {
   }
 
   /**
-   * Like set, but for functions.
+   * Like set, but for functions. Used by PixieHttp#get().
+   * Function will be called only server-side.
    *
-   * Function will be executed only in Server.
    * ```ts
-   * // SERVER
-   * pixieStore.fly(() => "DATA"); // called + cached
-   * // BROWSER
-   * pixieStore.fly(() => "DATA"); // use cache, remove cache
-   * pixieStore.fly(() => "DATA"); // called
+   * // server-side
+   * await store.fly(() => "data"); // function is called, data are cached
+   * // browser-side
+   * await store.fly(() => "data"); // function is NOT called, data are re-used and removed from the store
+   * await store.fly(() => "data"); // function is called
    * ```
-   *
-   * Async function with Promise is allowed.
    *
    * @param key     Identifier
    * @param func    Function to call which returns a value
@@ -117,6 +118,7 @@ export class PixieStore {
    * Stringify store.
    *
    * @returns {string}
+   * @internal
    */
   public toString(): string {
     this.logger.trace("stringify pixie data");
@@ -127,6 +129,7 @@ export class PixieStore {
    * Wrap data into <script> tags.
    *
    * @returns {string}
+   * @internal
    */
   public toHTML(): string {
 

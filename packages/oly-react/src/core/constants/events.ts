@@ -3,15 +3,30 @@ export const olyReactEvents = {
   /**
    * Before an action.
    */
-  ACTIONS_BEGIN: "oly:actions:begin",
+  ACTION_BEGIN: "oly:action:begin",
+
+  /**
+   * @deprecated
+   */
+  ACTIONS_BEGIN: "oly:action:begin",
 
   /**
    * After an action error.
    */
-  ACTIONS_ERROR: "oly:actions:error",
+  ACTION_ERROR: "oly:action:error",
+
+  /**
+   * @deprecated
+   */
+  ACTIONS_ERROR: "oly:action:error",
 
   /**
    * After an action success.
    */
-  ACTIONS_SUCCESS: "oly:actions:success",
+  ACTION_SUCCESS: "oly:action:success",
+
+  /**
+   * @deprecated
+   */
+  ACTIONS_SUCCESS: "oly:action:success",
 };

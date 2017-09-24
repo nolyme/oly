@@ -2,11 +2,11 @@ import { Exception } from "oly";
 import { olyHttpErrors } from "../constants/errors";
 
 /**
- * Http server exception.
+ * Public API exception. See ApiProvider.
  *
- * It's like a public exception:
- * - there is no source in #toJSON()
- * - however, stacktrace is always available on logging
+ * Note:
+ * - there is no cause in #toJSON() in production. (security)
+ * - stacktrace is always available on logging.
  * - status is added (default to 500)
  *
  * ```ts

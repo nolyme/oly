@@ -1,6 +1,6 @@
 {
   "name": "oly-json",
-  "description": "oly-json",
+  "description": "JSON Schema with decorators to map and validate data.",
   "version": "0.14.4",
   "license": "MIT",
   "main": "lib/index.js",

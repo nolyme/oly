@@ -5,7 +5,7 @@ import { TypeUtil } from "../utils/TypeUtil";
 
 export class JsonSchemaReader {
 
-  public static readonly keywords = [
+  public static keywords = [
     "ignore",
     "description",
     "minimum",
@@ -23,6 +23,9 @@ export class JsonSchemaReader {
     "default",
     "additionalProperties",
     "enum",
+    "$merge",
+    "$data",
+    "$patch",
   ];
 
   /**

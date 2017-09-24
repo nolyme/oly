@@ -34,13 +34,16 @@ export class ActionDecorator implements IDecorator {
 }
 
 /**
- * Define a method as action.
+ * Define a method as action. @action is based on @on.
  *
  * ```ts
- * class A extends Component<any, any> {
+ * class A extends Component {
+ *   @inject http: PixieHttp;
  *
  *   @action
- *   onClick() {
+ *   async onClick() {
+ *     const data = await this.http.get("/");
+ *     this.setState({data});
  *   }
  *
  *   render() {
@@ -49,17 +52,19 @@ export class ActionDecorator implements IDecorator {
  *     );
  *   }
  * }
+ *
+ * // allowed
+ * kernel.emit("A.onClick");
  * ```
  *
  * Method of @action is "autobind".
  *
- * ### Event
+ * ### Events
  *
  * The global event `oly:actions:begin` is emitted before each action. <br/>
  * The global event `oly:actions:error` is emitted on each error.      <br/>
  * The global event `oly:actions:success` is emitted on each success.
  *
- * > **ProTips:**<br/>
  * > Tools like [Protrator](https://github.com/angular/protractor) or [Spectron](https://github.com/electron/spectron)
  * > can use this events as "next-tick".
  *
@@ -68,7 +73,7 @@ export class ActionDecorator implements IDecorator {
  * ```ts
  * class A {
  *
- *   @action({prevent: true}) // will call ev.stopPropagation() & ev.preventDefault()
+ *   @action({prevent: true}) // will call ev.stopPropagation() AND ev.preventDefault()
  *   onSubmit() {
  *   }
  * }

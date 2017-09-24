@@ -41,10 +41,10 @@ export class ParamDecorator implements IDecorator {
 }
 
 /**
- * Extract PathParam from KoaContext.
+ * Extract  `ctx.params[name]` from KoaContext and convert value to the given type..
  *
  * ```ts
- * class Api {
+ * class Ctrl {
  *
  *   @get("/:id")
  *   something(@query("id") myId: string) {

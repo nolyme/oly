@@ -4,27 +4,37 @@ import { Global } from "../kernel/Global";
  * Enhancement of Error with support ES5 and ES6.
  *
  *
- * #### Exception#toJSON
+ * ### Exception#toJSON
  *
  * ```ts
- * console.log(JSON.stringify(new Exception("A"))); // {message: "A", name: "Exception"}
+ * const e = JSON.stringify(new Exception("A"));
+ * console.log(e); // "{\"message\": \"A\", \"name\": "Exception\"}"
  * ```
  *
- *  #### Reason/Cause
+ * ### Cause
  *
  * ```ts
- * try {
+ * const boom = async () => {
  *   try {
- *     throw new Error("A");
+ *     try {
+ *       throw new Error("A");
+ *     } catch (e) {
+ *       throw new Exception(e, "B");
+ *     }
  *   } catch (e) {
- *     throw new Exception(e, "B");
+ *     throw new Exception(e, "C");
  *   }
- * } catch (e) {
- *   throw new Exception(e, "C");
- * }
+ * };
+ *
+ * boom().catch(e => {
+ *   console.log(e) // Exception: C. Caused by: Exception: B. Caused by: Error: A
+ *   console.log(e.cause) // Exception: B. Caused by: Error: A
+ *   console.log(e.cause.cause) // Error: A
+ *   console.log(e.getLongStackTrace()) // ...
+ * });
  * ```
  *
- * #### Default Message
+ * ### Default Message
  *
  * ```ts
  * class MyException extends Exception {
@@ -35,25 +45,22 @@ import { Global } from "../kernel/Global";
  * new MyException("override default message")
  * ```
  *
- * #### Inheritance
+ * ### Inheritance
  *
  * ```ts
  * class MyException extends Exception {
  * }
  *
  * new MyException().name // "MyException"
- * ```
  *
- *  #### Instance of
- *
- * ```ts
  * try {
- *   throw new Exception();
+ *   throw new MyException();
  * } catch (e) {
- *   console.log(e instanceof Object);    // true
- *   console.log(e instanceof Error);     // true
- *   console.log(e instanceof Exception); // true
- *   console.log(e instanceof Number);    // false
+ *   console.log(e instanceof Object);      // true
+ *   console.log(e instanceof Error);       // true
+ *   console.log(e instanceof Exception);   // true
+ *   console.log(e instanceof MyException); // true
+ *   console.log(e instanceof Number);      // false
  * }
  * ```
  */
@@ -91,9 +98,14 @@ export class Exception extends Error {
    * @param message       Optional message if not set as source
    */
   public constructor(cause?: string | Throwable, message?: string) {
+
+    // @begin super-hacky-zone
+
     const trueProto = new.target.prototype;
     super();
     this.__proto__ = trueProto;
+
+    // @end super-hacky-zone
 
     const sourceMessage = (typeof cause === "string"
       ? cause
@@ -114,10 +126,10 @@ export class Exception extends Error {
     // if we have a default message, it will be overridden by children "default message"
     this.source.isMutable = this.source.message === Exception.DEFAULT_MESSAGE;
 
-    // show real stack trace on Node
-    // this breaks sourcemaps on browsers
-
     if (!Global.isBrowser()) {
+      // show real stack trace on Node
+      // this breaks sourcemaps on browsers
+
       // [DISABLED] performance [DISABLED]
       // Object.defineProperty(this, "stack", {get: () => this.getLongStackTrace()});
     }

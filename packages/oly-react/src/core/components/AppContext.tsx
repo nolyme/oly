@@ -12,6 +12,7 @@ export interface IAppContextProps {
 
 /**
  * Add an oly Kernel to `childContext`.
+ * See ReactBrowserProvider and ReactServerProvider.
  *
  * ```ts
  * Kernel

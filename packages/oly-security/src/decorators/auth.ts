@@ -17,15 +17,17 @@ export class AuthDecorator implements IDecorator {
 }
 
 /**
+ * Sugar of @use + hasRole(...roles) middleware.
+ *
  * ```ts
  *
  * class Api {
  *
- *   @auth
+ *   @auth           // check only auth
  *   @get("/")
  *   authOnly() {}
  *
- *   @auth("ADMIN")
+ *   @auth("ADMIN")  // check data.roles[]
  *   @get("/admin")
  *   adminOnly() {}
  * }

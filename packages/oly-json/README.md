@@ -1,5 +1,7 @@
 # o*l*y json
 
+JSON Schema with decorators to map and validate data.
+
 o*l*y json is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
 ```ts
@@ -19,8 +21,14 @@ json.build(Data, {name: "John"});  // Data { name: "John" }
 json.build(Data, {fake: "John"});  // throw ValidationException
 ```
 
-### Installation
+## Installation
 
 ```bash
 $ npm install oly oly-json
 ```
+
+## Dependencies
+
+|  |  |
+|--|--|
+| JSON-Schema Validator | [ajv](https://github.com/epoberezkin/ajv) |

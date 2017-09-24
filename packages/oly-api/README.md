@@ -1,5 +1,7 @@
 # o*l*y api
 
+REST API with koa and decorators.
+
 o*l*y api is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
 ```ts
@@ -30,15 +32,8 @@ Kernel
 // curl http://localhost:6000/api/users -> [1,2,3]
 ```
 
-### Installation
+## Installation
 
 ```bash
 $ npm install oly oly-api
 ```
-
-### Why
-
-- Koa wrapper with ES6 class
-- some @decorator (@get, @query, @body, ...)
-- fork context each request
-

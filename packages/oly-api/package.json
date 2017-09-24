@@ -1,6 +1,6 @@
 {
   "name": "oly-api",
-  "description": "oly-api",
+  "description": "REST API with koa and decorators.",
   "version": "0.14.4",
   "license": "MIT",
   "main": "lib/index.js",

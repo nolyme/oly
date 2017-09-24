@@ -20,4 +20,7 @@ export class ApiDecorator implements IDecorator {
   }
 }
 
+/**
+ * Enhance swagger doc.
+ */
 export const api = Meta.decoratorWithOptions<IApiOptions>(ApiDecorator);

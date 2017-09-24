@@ -1,5 +1,7 @@
 # o*l*y http
 
+HTTP Server and Client.
+
 o*l*y http is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
 ```ts
@@ -24,3 +26,10 @@ kernel
 ```bash
 $ npm install oly oly-http
 ```
+
+## Dependencies
+
+|  |  |
+|--|--|
+| HTTP Client | [axios](https://github.com/mzabriskie/axios) |
+| HTTP Server Framework | [koa](https://github.com/koajs/koa) |

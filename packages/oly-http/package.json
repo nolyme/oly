@@ -1,6 +1,6 @@
 {
   "name": "oly-http",
-  "description": "oly-http",
+  "description": "HTTP Server and Client.",
   "version": "0.14.4",
   "license": "MIT",
   "main": "lib/index.js",

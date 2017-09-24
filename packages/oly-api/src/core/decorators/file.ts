@@ -46,6 +46,20 @@ export class FileDecorator implements IDecorator {
 }
 
 /**
- * File upload.
+ * Extract `ctx.req[file]` from KoaContext with [multer](https://github.com/koa-modules/multer) *(multipart/form-data)*.
+ *
+ * ```ts
+ * import { IUploadedFile } from "oly-api";
+ *
+ * class Ctrl {
+ *
+ *   @post("/")
+ *   something(@file("file") file: IUploadedFile) {
+ *     file.buffer; // ...
+ *   }
+ * }
+ *
+ * Kernel.create().with(Ctrl, ApiProvider).start();
+ * ```
  */
 export const file = Meta.decorator<IFileOptions | string>(FileDecorator);

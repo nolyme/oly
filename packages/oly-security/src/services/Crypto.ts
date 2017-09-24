@@ -28,6 +28,26 @@ export class Crypto {
   /**
    * Compare a string with a hash.
    *
+   * ```ts
+   * class AuthCtrl {
+   *   @inject userRepository: UserRepository;
+   *   @inject crypto: Crypto;
+   *
+   *   @post("/")
+   *   async login(@body data: LoginBody) {
+   *
+   *     const user = this.userRepository.findByEmail(data.email);
+   *     if (!user) throw new UnauthorizedException();
+   *
+   *     const match = await crypto.compare(data.password, user.password);
+   *     if (!match) throw new UnauthorizedException();
+   *
+   *     // ...
+   *   }
+   * }
+   *
+   * ```
+   *
    * @param entry   Raw string
    * @param hash    Hash
    */
@@ -46,6 +66,11 @@ export class Crypto {
 
   /**
    * Hash a string with bcrypt.
+   *
+   * ```ts
+   * const crypto = k.get(Crypto);
+   * const hash = await crypto.hash("password");
+   * ```
    *
    * @param data
    * @param salt

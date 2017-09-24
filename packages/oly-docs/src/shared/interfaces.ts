@@ -5,6 +5,7 @@ export interface IDocMethod {
   returnType: string;
   returnDescription: string;
   static: boolean;
+  accessor: boolean;
 }
 
 export interface IDocService {

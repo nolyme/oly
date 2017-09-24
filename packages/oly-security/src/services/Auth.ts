@@ -13,7 +13,14 @@ export class Auth {
   protected kernel: Kernel;
 
   /**
-   * Find token.
+   * Find token in the current koa context.
+   *
+   * ### Default
+   *
+   * - `ctx.request.header.authorization`: Bearer ${token}
+   * - `ctx.cookies.get(PIXIE_SESSION_IDENTIFIER)` (see PixieSession)
+   *
+   * @internal
    */
   public async parseToken(ctx: IKoaContext) {
 

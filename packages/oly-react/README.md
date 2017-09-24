@@ -1,5 +1,7 @@
 # o*l*y react
 
+Create an app with React and oly.
+
 o*l*y react is a module of the [o*l*y project](https://nolyme.github.io/oly).
 
 ```ts
@@ -30,7 +32,7 @@ $ npm install oly oly-react react @types/react
 
 ## Features
 
-#### @inject/@env/@on with React
+### @inject/@env/@on with React
 
 ```ts
 import { inject, Kernel } from "oly";
@@ -52,7 +54,7 @@ render(
   document.getElementById("app"));
 ```
 
-#### Embedded router
+### Router
 
 ```ts
 import { layout, View, page, Go } from "oly-react";
@@ -77,7 +79,7 @@ class App {
 
 ```
 
-#### Server Side Rendering
+### Server Side Rendering
 
 ```ts
 // app.tsx
@@ -110,3 +112,12 @@ Kernel
   .start()
   .catch(console.error)
 ```
+
+## Dependencies
+
+|  |  |
+|--|--|
+| Routing | [path-to-regexp](https://github.com/pillarjs/path-to-regexp) |
+| History | [history](https://github.com/ReactTraining/history) |
+| Meta | [react-meta](https://github.com/nfl/react-helmet) |
+

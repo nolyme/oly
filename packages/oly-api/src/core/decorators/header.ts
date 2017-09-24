@@ -51,5 +51,15 @@ export class HeaderDecorator implements IDecorator {
 
 /**
  *
+ * Extract `ctx.header[name]` from KoaContext and convert value to the given type.
+ *
+ * ```ts
+ * class Ctrl {
+ *
+ *   @get("/")
+ *   something(@header("name") name: string) {
+ *   }
+ * }
+ * ```
  */
 export const header = Meta.decorator<IHeaderOptions | string>(HeaderDecorator);

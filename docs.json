@@ -4,6 +4,10 @@
     {
       "name": "oly",
       "type": "universal",
+      "manuals": [
+        "docs/Debug.md",
+        "docs/Providers.md"
+      ],
       "decorators": [
         "kernel/decorators/inject.ts",
         "kernel/decorators/state.ts",
@@ -21,10 +25,14 @@
     {
       "name": "oly-json",
       "type": "universal",
+      "manuals": [
+        "docs/Stringify.md"
+      ],
       "decorators": [
         "decorators/field.ts",
         "decorators/array.ts",
         "decorators/date.ts",
+        "decorators/optional.ts",
         "decorators/schema.ts"
       ],
       "services": [
@@ -49,7 +57,8 @@
       "type": "universal",
       "manuals": [
         "docs/Example.md",
-        "docs/Routing.md"
+        "docs/Routing.md",
+        "docs/Events.md"
       ],
       "decorators": [
         "core/decorators/attach.ts",
@@ -87,6 +96,8 @@
         "core/decorators/put.ts",
         "core/decorators/del.ts",
         "core/decorators/body.ts",
+        "core/decorators/header.ts",
+        "core/decorators/file.ts",
         "core/decorators/param.ts",
         "core/decorators/query.ts",
         "core/decorators/router.ts",

@@ -68,14 +68,33 @@ export class BodyDecorator implements IDecorator {
 }
 
 /**
- * Extract `request.body` from IKoaContext.
+ * Extract `request.body` from IKoaContext and convert value to the given type.
  *
  * ```ts
- * class A
+ * class Ctrl {
  *
  *   @post("/")
- *   create(@body body: object) {
- *     console.log(body);
+ *   create(@body data: object) {
+ *     console.log(data);
+ *   }
+ * }
+ *
+ * Kernel.create().with(Ctrl, ApiProvider).start();
+ * ```
+ *
+ * ### Json Validation
+ *
+ * ```ts
+ * class Data {
+ *   @field username: string;
+ *   @field password: string;
+ * }
+ *
+ * class Ctrl {
+ *
+ *   @post("/")
+ *   create(@body data: Data) { // throw ValidationException if not valid.
+ *     console.log(data);
  *   }
  * }
  * ```

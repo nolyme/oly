@@ -1,5 +1,7 @@
 # o*l*y security
 
+Secure a REST API.
+
 o*l*y security is an extension of [o*l*y api](https://nolyme.github.io/oly/#/m/oly-api).
 
 ```ts
@@ -22,13 +24,21 @@ class Api {
 
 Kernel
   .create()
-  .with(Api, ApiProvider, JwtAuth)
+  .with({provide: Auth, use: JwtAuth})
+  .with(Api, ApiProvider)
   .start()
   .catch(console.error);
 ```
 
-### Installation
+## Installation
 
 ```bash
 $ npm install oly oly-api
 ```
+
+## Dependencies
+
+|  |  |
+|--|--|
+| JSON Web Token | [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) |
+| Hashing | [bcryptjs](https://github.com/dcodeIO/bcrypt.js) |

@@ -1,6 +1,6 @@
 {
   "name": "oly-react",
-  "description": "oly-react",
+  "description": "Create an app with React and oly.",
   "version": "0.14.4",
   "license": "MIT",
   "main": "lib/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "oly-security",
-  "description": "oly-security",
+  "description": "Secure a REST API.",
   "version": "0.14.4",
   "license": "MIT",
   "main": "lib/index.js",

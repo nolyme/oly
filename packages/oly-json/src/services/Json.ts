@@ -64,7 +64,11 @@ export class Json {
    *  Result can be different (depend on ajv configuration).
    *
    *  ```ts
-   *  const validData = this.json.validate(Definition, rawData);
+   *  class Data {
+   *    @field name: string;
+   *  }
+   *
+   *  const validData = this.json.validate(Data, {name: "Jean"});
    *  ```
    *
    * @param type   Class definition with JsonSchemaReader
@@ -76,7 +80,15 @@ export class Json {
   }
 
   /**
-   * Sanitize object.
+   * Sanitize data.
+   *
+   * ```ts
+   * class Data {
+   *   @field({upper: true}) name: string;
+   * }
+   *
+   * Kernel.create().get(Json).sanitize(Data, {name: "Jean"});
+   * ```
    *
    * @param type    Class definition
    * @param data    Json data
@@ -87,7 +99,15 @@ export class Json {
   }
 
   /**
-   * Parse, sanitize, validate and map.
+   * Json#parse(), Json#validate(), Json#map() and Json#sanitize().
+   *
+   * ```ts
+   * class Data {
+   *   @field name: string;
+   * }
+   *
+   * Kernel.create().get(Json).build(Data, {name: "Jean"});
+   * ```
    *
    * @param type    Class definition
    * @param data    Raw data (string or object)
@@ -97,7 +117,15 @@ export class Json {
   }
 
   /**
-   * Extract JsonSchemaReader from class definition.
+   * Extract JsonSchemaReader from a class.
+   *
+   * ```ts
+   * class Data {
+   *   @field name: string;
+   * }
+   *
+   * Kernel.create().get(Json).schema(Data); // {properties: { ...
+   * ```
    *
    * @param type    Definition
    * @return        JsonSchema

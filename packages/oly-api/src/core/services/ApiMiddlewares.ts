@@ -6,9 +6,6 @@ import { NotFoundException } from "../exceptions/NotFoundException";
 /**
  * Collection of internal middlewares.<br/>
  *
- * There are not designed to be used outside oly-api,
- * however, you can replace one of them by your own stuff.
- *
  * ```ts
  * class MyApiMiddlewares extends ApiMiddlewares {
  *
@@ -19,7 +16,7 @@ import { NotFoundException } from "../exceptions/NotFoundException";
  *     }
  *   }
  *
- *   // or even better
+ *   // also accepted
  *   log = () => yourLoggerMiddleware;
  * }
  *

@@ -37,7 +37,7 @@ export class InjectDecorator implements IDecorator {
 }
 
 /**
- * Create or re-use a service. This is based on Kernel#inject().
+ * Inject a service. See Kernel#inject().
  *
  * ```ts
  * class B {
@@ -51,7 +51,7 @@ export class InjectDecorator implements IDecorator {
  * Kernel.create().get(A).b.c // "d"
  * ```
  *
- * Type can be passed by argument.
+ * Type by argument.
  * ```ts
  * class A {
  *   @inject(B) b;

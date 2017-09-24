@@ -16,14 +16,19 @@ export class SchemaDecorator implements IDecorator {
 }
 
 /**
- * Override/replace generated schema.
+ * Sometimes @field is not enough. <br/> @schema overrides or replaces the generated schema of a class.
  *
  * ```ts
- * &shy;@schema({name: "Toto"})
+ * &shy;@schema({
+ *   name: "Toto"
+ * })
  * class A {
  * }
  *
- * &shy;@schema((s) => ({...s, description: "test"}))
+ * &shy;@schema(s => ({
+ *   ...s,
+ *   description: "test"
+ * }))
  * class B {
  * }
  * ```

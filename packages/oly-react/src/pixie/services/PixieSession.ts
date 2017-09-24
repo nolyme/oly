@@ -9,11 +9,11 @@ import { Cookies } from "./Cookies";
  * const session = k.get(PixieSession);
  * ```
  *
- * Preferences is a object of key/value.
- * Store public MMI user preferences only.
+ * - Preferences is a object of key/value.
+ *   - Store public user preferences only.
  *
- * Identity is a string.
- * Store a token/sessionId. httpOnly is recommended when possible.
+ * - Identity is a string.
+ *   - Store a token/sessionId with httpOnly when possible (server-side only).
  */
 export class PixieSession {
 

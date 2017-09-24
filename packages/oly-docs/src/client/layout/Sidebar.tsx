@@ -5,6 +5,8 @@ import { Component } from "react";
 import { IModuleContent } from "../../shared/interfaces";
 import { Docs } from "../services/Docs";
 
+const Collapse = require("react-collapse");
+
 export interface ISidebarProps {
 }
 
@@ -59,7 +61,9 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
                   <small>({m.version})</small>
                 </a>,
                 <div>
-                  {this.state.show === m.name && this.renderModuleSidebar(m)}
+                  <Collapse isOpened={this.state.show === m.name}>
+                    {this.renderModuleSidebar(m)}
+                  </Collapse>
                 </div>,
               ],
             )}
@@ -72,7 +76,6 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
 
   renderModuleSidebar(module: IModuleContent) {
     return <div className="menu" style={{padding: "20px", paddingTop: "5px"}}>
-
       <ul className="menu-list">
         <li>
           <Go
@@ -148,7 +151,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
                 {e.methods.map((method) => (
                   <li key={method.name}>
                     <Go to="method" params={{module: module.name, service: e.name, method: method.name}}>
-                      {method.static ? "." : "#"}{method.name}()
+                      {method.static ? "." : "#"}{method.name}{method.accessor ? "" : "()"}
                     </Go>
                   </li>
                 ))}

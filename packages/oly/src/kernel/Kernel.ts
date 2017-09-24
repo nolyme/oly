@@ -178,13 +178,22 @@ export class Kernel {
    * - declarations are cloned without instances
    * - store and events are cleared
    *
-   * Parent's store is accessible.
+   * Beware, parent's store is still accessible.
    *
    * ```ts
    * const k = new Kernel({ A: "B", C: "D" });
-   * const c = k.fork({ A: "F");
+   * const c = k.fork({A: "F"});
    * c.state("A"); // F
    * c.state("C"); // D
+   * ```
+   *
+   * Fork before an invoke to be a little more safe.
+   * ```ts
+   * const k = Kernel.create();
+   * const app = new Koa();
+   * app.use((ctx, next) => {
+   *   k.fork().invoke(MyCtrl, "findUsers", [ctx]);
+   * });
    * ```
    *
    * @param store     Map of key value
@@ -465,7 +474,7 @@ export class Kernel {
    *
    * ### Keyify
    *
-   * A key is always converted to an uppercase-only \w+ "word character".
+   * A key is always converted to /[A-Z_]+/.
    * - "a" -> A
    * - "A.b" -> A_B
    * - "hello-world" -> HELLO_WORLD
@@ -516,7 +525,7 @@ export class Kernel {
   }
 
   /**
-   * Read-only Kernel#state().
+   * Read-only Kernel#state().<br/>
    *
    * Value can be converted.
    *

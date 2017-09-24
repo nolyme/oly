@@ -1,8 +1,6 @@
 # Koa
 
-http://koajs.com/
-
-o*l*y is just a wrapper of Koa.
+o*l*y is just a wrapper of [Koa](http://koajs.com/).
 
 ```ts
 import { Kernel } from "oly";

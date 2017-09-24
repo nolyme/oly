@@ -27,6 +27,15 @@ export class RouterDecorator implements IDecorator {
 }
 
 /**
- * Configure router.
+ * Prefix all routes of a class.
+ *
+ * ```ts
+ * &shy;@router("/a")
+ * class Ctrl {
+ *
+ *   @get("/b") b(ctx: IKoaContext) {
+ *   }
+ * }
+ * ```
  */
 export const router = Meta.decoratorWithOptions<IRouterOptions | string>(RouterDecorator);

@@ -9,14 +9,27 @@ import { ApiMiddlewares } from "../services/ApiMiddlewares";
 
 /**
  * ```ts
- *
  * class App {
- *   @get("/") root(ctx: IKoaContext) {
- *     return "body";
+ *
+ *   @get("/")
+ *   root(ctx: IKoaContext) {
+ *     return {ok: true}; // same as ctx.body = {ok: true}
  *   }
  * }
  *
  * Kernel.create().with(ApiProvider, App).start();
+ * ```
+ *
+ * ### Override
+ *
+ * ```ts
+ * export class MyApiProvider extends ApiProvider {
+ *   // #useMulter() {}
+ *   // #useBodyParser() {}
+ *   // #createKoaRouter() {}
+ * }
+ *
+ * Kernel.create().with(ApiProvider).start();
  * ```
  */
 export class ApiProvider implements IProvider {

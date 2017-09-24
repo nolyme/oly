@@ -75,7 +75,9 @@ export class HttpClient {
 
   /**
    * Make a GET request.
-   * GET should be use by default.
+   * ```ts
+   * await http.get("/users");
+   * ```
    *
    * @param url       Complete url
    * @param options   Request options
@@ -89,7 +91,9 @@ export class HttpClient {
 
   /**
    * Make a POST request.
-   * POST should be use when you create data.
+   * ```ts
+   * await http.post("/users", {name: "Jean"});
+   * ```
    *
    * @param url       Complete url
    * @param body      Request body
@@ -106,7 +110,9 @@ export class HttpClient {
 
   /**
    * Make a PUT request.
-   * PUT should be use when you update data.
+   * ```ts
+   * await http.put("/users/1", {name: "Jean"});
+   * ```
    *
    * @param url       Complete url
    * @param body      Request body
@@ -123,7 +129,9 @@ export class HttpClient {
 
   /**
    * Make a DEL request.
-   * DEL should be use when you remove data.
+   * ```ts
+   * await http.del("/users/1");
+   * ```
    *
    * @param url       Complete url
    * @param options   Request options

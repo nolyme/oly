@@ -69,27 +69,58 @@ export class PageDecorator implements IDecorator {
 }
 
 /**
- * Define a new page.
+ * Create a new React route.
  *
  * ```ts
- *  class A {
+ * class Pages {
  *
- *    @page("/")
- *    home() {
- *      return <div>Home</div>
- *    }
- *  }
+ *   @page("/")
+ *   home() {
+ *     return <div>Home</div>;
+ *   }
+ * }
  * ```
  *
- * Add modules.
+ * ### Transition
  *
  * ```ts
- * class ModuleA {
- *   @page("/") index = () => <h1>A:Index</h1>
- * }
- * class MainModule {
- *   @page({path: "/modA", children: [ModuleA]}) a = () => <View/>;
+ * class Pages {
+ *
+ *   @page("/")
+ *   home(tr: ITransition) {
+ *
+ *     console.log(tr.from);
+ *     console.log(tr.to);
+ *
+ *     return <div>Home</div>;
+ *   }
  * }
  * ```
+ *
+ * Do not use Router#current here but `tr.from` and `tr.to`.
+ *
+ * ### Children
+ *
+ * ```ts
+ * class ChildPages {
+ *   @page("/")      index = () => <h1>Index</h1>
+ *   @page("/about") about = () => <h1>About</h1>
+ * }
+ *
+ * class Pages {
+ *
+ *   @page({
+ *     path: "/c",
+ *     children: [ChildPages]
+ *   })
+ *   root() {
+ *     return <View/>;
+ *   }
+ * }
+ * ```
+ *
+ * ### Not Found ?
+ *
+ *
  */
 export const page = Meta.decorator<string | IPageOptions>(PageDecorator);

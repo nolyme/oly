@@ -18,10 +18,10 @@ import { Browser } from "./Browser";
  * }
  * ```
  *
- * When a component injects Router, #forceUpdate is called after each transition. **This is normal.**
+ * When a component injects Router, #forceUpdate is called after each transition.
  *
  * ```ts
- * &shy;@attach({watch: []}) // override implicit watchers
+ * &shy;@attach({watch: []}) // kill this feature
  * class MyComponent extends React.Component {
  * }
  * ```
@@ -39,6 +39,31 @@ export class Router {
 
   /**
    * Get the current route node definition.
+   *
+   * ```ts
+   * const router = k.get(Router);
+   *
+   * router.current.path;     // "/abc/def"
+   * router.current.params;   // {a: "b"}
+   * router.current.query;    // {a: "b"}
+   * router.current.route;    // IRoute
+   * ```
+   *
+   * ### Limitation
+   *
+   * Avoid Router#current inside a page function.
+   *
+   * ```ts
+   * class Pages {
+   *   @inject router: Router;
+   *
+   *   @page index(tr: ITransition) {
+   *     this.router.current.path; // bad (current=from)
+   *     tr.from.path;             // good
+   *     tr.to.path;               // good
+   *   }
+   * }
+   * ```
    */
   public get current(): IMatch {
     if (!this.routerProvider.match) {
@@ -72,6 +97,10 @@ export class Router {
    * - returns a promise of `ITransition` if everything is ok.
    * - returns a promise of `undefined` if transition has been aborted.
    * - throws an exception if transition has failed.
+   *
+   * ### Context
+   *
+   * Current context is re-used. Some params can be omitted based on the relative position.
    */
   public go(to: string | IHrefQuery): Promise<ITransition | undefined> {
     return this.routerProvider.transition(typeof to === "string" ? {to} : to);
@@ -104,6 +133,15 @@ export class Router {
   /**
    * Getter/Setter query param.
    *
+   * ```ts
+   * router.search("key"); // getter
+   * router.search("key", "value"); // setter
+   * ```
+   *
+   * ### Reload
+   *
+   * This will not reload the page.
+   *
    * @param {string} key
    * @param {string} value
    * @returns {string}
@@ -117,7 +155,7 @@ export class Router {
       const newValue = TypeParser.parseString(value);
       if (newValue) {
         query[key] = newValue;
-        this.browser.history.replace({
+        this.browser.history.replace({ // TODO: replace ( or push as option ) ?
           ...this.browser.history.location,
           search: qs.stringify(query),
         });
@@ -140,7 +178,7 @@ export class Router {
   }
 
   /**
-   * Get the path of a route node.
+   * Get the path of a route node. Interface is like Router#go().
    *
    * @param query   Path/NodeName/RouteName
    */
@@ -154,7 +192,19 @@ export class Router {
   }
 
   /**
-   * Check if a route node is active.
+   * Check if a route node is active. Interface is like Router#go().
+   *
+   * ### Strict
+   *
+   * Set strict=true to make a STRICT comparaison.
+   *
+   * ```ts
+   * // current = "/abc";
+   *
+   * router.isActive("/abc"); // true
+   * router.isActive("/abc/def"); // true
+   * router.isActive("/abc/def", true); // false
+   * ```
    *
    * @param routeName     Path/NodeName/RouteName
    * @param strict        If true, check as STRICT EQUAL not CONTAINS

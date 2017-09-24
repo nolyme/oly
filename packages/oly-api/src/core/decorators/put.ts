@@ -4,9 +4,15 @@ import { route } from "./route";
  * Create a PUT route.
  *
  * ```ts
- * class A {
- *  @put("/") update() {}
+ * class Ctrl {
+ *
+ *   @put("/")
+ *   update() {
+ *     return {ok: true};
+ *   }
  * }
+ *
+ * Kernel.create().with(Ctrl, ApiProvider).start();
  * ```
  *
  * @param path    Relative path

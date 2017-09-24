@@ -24,25 +24,43 @@ export class FieldDecorator implements IDecorator {
 }
 
 /**
- * Bind a TypeScript/JavaScript attribute to JSON Schema property.
- *
  * ```ts
- * class A {
- *   @field({
- *    // json-schema options like minLength, ...
- *    // "required" is also available
- *   })
- *   myProperty: string;
+ * class Embedded {
+ *   @field title: string;
+ * }
+ *
+ * class Data {
+ *   @field firstName: string;
+ *   @field lastName: string;
+ *   @field age: number;
+ *   @field something: Embedded;
  * }
  * ```
  *
- * Mapping requires a "Type" but most of the time TypeScript type annotations are enough.
+ * ### JSON Schema
+ *
+ * ```ts
+ * class Data {
+ *
+ *   @field({
+ *     // json-schema options like minLength, ...
+ *     // "required" is also available
+ *   })
+ *   propertyKey: string;
+ * }
+ *
+ * json.schema(Data); // {properties: {...
+ * ```
+ *
+ * ### Type
+ *
+ * Mapping requires a "Type", most of the time TypeScript type annotations are enough.
  *
  * Exceptions:
  * - array (see @array)
  * - native type (see @date)
  *
- * #### Required by default
+ * ### Required by default
  *
  * Like a Typescript property, **a @field property is required by default**.
  *

@@ -41,5 +41,21 @@ export class ParamDecorator implements IDecorator {
  *    }
  *  }
  * ```
+ *
+ * ### Pages are ordered
+ *
+ * ```ts
+ *  class A {
+ *
+ *    @page("/ok") ok() {} // this is ok
+ *
+ *    @page("/:id")
+ *    home(@param("id") id: string) {
+ *      return <div>{id}</div>
+ *    }
+ *
+ *    @page("/bad") bad() {} // this is bad
+ *  }
+ * ```
  */
 export const param = Meta.decorator<IParamOptions | string>(ParamDecorator);

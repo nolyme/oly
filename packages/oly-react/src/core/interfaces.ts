@@ -11,7 +11,14 @@ export type RouteComponent =
 /**
  *
  */
-export interface IActionResultError {
+export interface IActiveBeginEvent {
+  name: string;
+}
+
+/**
+ *
+ */
+export interface IActionErrorEvent {
   component: Function;
   action: string;
   error: Error;
@@ -20,7 +27,7 @@ export interface IActionResultError {
 /**
  *
  */
-export interface IActionResult<T> {
+export interface IActionSuccessEvent<T> {
   component: Function;
   action: string;
   data: T;

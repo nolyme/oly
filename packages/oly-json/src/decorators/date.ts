@@ -14,7 +14,21 @@ export class DateDecorator extends FieldDecorator {
 }
 
 /**
- * Like @field + {format: "date-time", type: Date}. Nothing more.
- * This is recommended for all @field date: Date as TypeScript decorators can't extract native Date type.
+ * Alias of @field.
+ *
+ * ```ts
+ * class Data {
+ *
+ *   @field({
+ *     type: Date,
+ *     format: "date-time",
+ *   })
+ *   createdAt: Date;
+ *
+ *   @date updatedAt: Date;
+ * }
+ * ```
+ *
+ * [Date#toJSON()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON)
  */
 export const date = Meta.decorator<Partial<IField>>(DateDecorator);

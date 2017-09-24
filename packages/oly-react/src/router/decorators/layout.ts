@@ -10,18 +10,28 @@ export class LayoutDecorator extends PageDecorator {
 }
 
 /**
- * It's @page with `{abstract: true, layout: true}`.
+ * Alias of @page.
  *
- * > Only one @layout by class.
+ * ```ts
+ * class Pages {
+ *   @field({
+ *     abstract: true,
+ *     layout: true,
+ *   })
+ *   root() { }
+ *   // same
+ *   @layout root2() {}
+ * }
+ * ```
  *
  * All other pages of the class will become a "child" of this method.<br/>
  * Use &lt;View/&gt; to display the child layer.
  *
  * ```ts
- * class A {
+ * class Pages {
  *
  *   @layout
- *   root() { return <View/>; }
+ *   root() { return <View/>; } // View will display home or about or nothing
  *
  *   @page("/")
  *   home() { return <div>home</div>; }
@@ -31,7 +41,7 @@ export class LayoutDecorator extends PageDecorator {
  * }
  * ```
  *
- * With modules.
+ * With "modules".
  *
  * ```ts
  * class ModuleA {

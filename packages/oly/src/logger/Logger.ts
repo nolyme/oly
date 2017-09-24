@@ -10,10 +10,10 @@ import { ILogLevel, LogLevels } from "./LogLevels";
  *
  * ### Interface
  *
- * **There are two arguments, no more.**
+ * There are two arguments:
  *
- * 1. *message* as `string`
- * 2. *[data]* as `object`
+ * 1. message as `string`
+ * 2. [data] as `object`
  *
  * ```ts
  * const logger = Kernel.create().get(Logger);
@@ -86,47 +86,40 @@ export class Logger {
   };
 
   /**
-   * Set a name to your app.
+   * Application's name. *(Api, Worker, Service-a1, ...)*
    */
   @env("APP_NAME")
   protected appName: string = "App";
 
   /**
-   * Set the level of your logger.
+   * Log level inside the app. <br/>
    * TRACE < DEBUG < INFO < WARN < ERROR
    */
   @env("LOGGER_LEVEL")
   protected logLevel: string = "INFO";
 
   /**
-   * Enable or disable color.
+   * Enable or disable ANSI/CSS color.
    */
   @env("LOGGER_COLOR")
   protected hasColor: boolean = true;
 
   /**
-   *
+   * TODO: remove @state ASAP, this is shit.
    */
   @state("KERNEL_ID")
   protected contextId: string = "";
 
-  /**
-   *
-   */
   protected componentName: string = "Component";
 
-  /**
-   *
-   */
-  public constructor(@parent
-                     protected owner?: Class) {
+  public constructor(@parent protected owner?: Class) {
     if (this.owner && this.owner.name) {
       this.as(this.owner.name);
     }
   }
 
   /**
-   * Change the componentName after instantiation.
+   * Rename component.
    *
    * ```ts
    * kernel.inject(Logger).as('MyComponent');
@@ -141,7 +134,7 @@ export class Logger {
   }
 
   /**
-   * Display trace (silly/verbose) message
+   * Display trace (silly/verbose) message.
    *
    * @param message   Message to log
    * @param data      Additional data
@@ -151,7 +144,7 @@ export class Logger {
   }
 
   /**
-   * Display debug message
+   * Display debug message.
    *
    * @param message   Message to log
    * @param data      Additional data
@@ -161,7 +154,7 @@ export class Logger {
   }
 
   /**
-   * Display info message
+   * Display info message.
    *
    * @param message   Message to log
    * @param data      Additional data
@@ -171,7 +164,7 @@ export class Logger {
   }
 
   /**
-   * Display warning message
+   * Display warning message.
    *
    * @param message   Message to log
    * @param data      Additional data
@@ -181,7 +174,7 @@ export class Logger {
   }
 
   /**
-   * Display error message
+   * Display error message.
    *
    * @param message   Message to log
    * @param data      Additional data like Error

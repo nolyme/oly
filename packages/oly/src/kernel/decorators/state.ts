@@ -27,8 +27,7 @@ export class StateDecorator implements IDecorator {
 }
 
 /**
- * Get'n'Set a value from the store.
- * This is based on Kernel#state().
+ * Get'n'Set a value from the store. See Kernel#state().
  *
  * ```ts
  * class A {

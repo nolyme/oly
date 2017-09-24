@@ -16,6 +16,9 @@ import { Crypto } from "./Crypto";
 })
 export class JwtAuth extends Auth {
 
+  /**
+   * Token life time in **second**.
+   */
   @env("SECURITY_TOKEN_EXPIRATION")
   public readonly tokenExpiration: number = 60 * 60 * 3;
 
@@ -25,9 +28,15 @@ export class JwtAuth extends Auth {
   protected crypto: Crypto;
 
   /**
+   * Create a JWT with the given payload data.
    *
-   * @param data
-   * @param options
+   * ```ts
+   * const jwt = k.get(JwtAuth);
+   * const tk = await jwt.createToken({id: "1", roles: []});
+   * ```
+   *
+   * @param data        IToken
+   * @param options     Jwt.sign options
    */
   public createToken(data: IToken, options: SignOptions = {}): Promise<string> {
 
@@ -43,9 +52,20 @@ export class JwtAuth extends Auth {
   }
 
   /**
+   * ```ts
+   * const jwt = k.get(JwtAuth);
+   * const tk = await jwt.createToken({id: "1", roles: []});
    *
-   * @param token
-   * @param options
+   * await jwt.checkToken(tk);
+   * ```
+   *
+   * ### Exceptions
+   *
+   * - TokenExpiredException: token is expired
+   * - JsonWebTokenException: invalid token, ...
+   *
+   * @param token       String jwt
+   * @param options     Jwt.verify options
    */
   public async checkToken(token: string, options: VerifyOptions = {}): Promise<void> {
 

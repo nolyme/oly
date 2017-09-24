@@ -7,6 +7,7 @@ import { Mark } from "../shared/Mark";
 import { Configuration } from "./Configuration";
 import { GithubPath } from "./GithubPath";
 import { Module } from "./Module";
+import { ModuleService } from "./ModuleService";
 
 export class ModulePages {
   @inject docs: Docs;
@@ -102,26 +103,7 @@ export class ModulePages {
     if (!m) {
       return <pre>Method Not Found</pre>;
     }
-    return <div>
-      <h2 className="title">{e.name}{m.static ? "." : "#"}{m.name}()</h2>
-      <h2 className="subtitle">
-        {e.name}{m.static ? "." : "#"}{m.name}(
-        {m.parameters.map((prop, i) => (
-          <span key={i}>
-              <span>{(i ? ", " : "")}</span>
-              <span>{prop.name + ": "}</span>
-              <strong>{prop.type}</strong>
-            </span>
-        ))}
-        )
-        {": " + m.returnType}
-      </h2>
-
-      <div className="content">
-        <h2>Description</h2>
-      </div>
-      <Mark html={m.description}/>
-    </div>;
+    return <ModuleService service={e} method={m}/>;
   }
 
   @page("/c/:component")

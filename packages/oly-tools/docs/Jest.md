@@ -1,14 +1,14 @@
-### Jest
+# Jest
 
 ```bash
 $ npm install -D jest @types/jest ts-jest
 ```
 
-### Config
+## Config
 
-https://github.com/kulshekhar/ts-jest 
+See [jest](https://github.com/facebook/jest) and [ts-jest](https://github.com/kulshekhar/ts-jest).
 
-### Files
+## Example
 
 ```ts
 describe("A", () => {
@@ -31,3 +31,5 @@ describe("A", () => {
   });
 });
 ```
+
+

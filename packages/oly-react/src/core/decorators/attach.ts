@@ -55,43 +55,55 @@ export class AttachDecorator implements IDecorator {
 }
 
 /**
- * Connect a component to an oly Kernel of the React context.
- *
- * > **(?)** @attach is automatically added when needed.
- *
- * This decorator adds some features:
- *
- * Before `componentWillMount`, kernel will process the component:
- * - process @inject
- * - process @state/@env
- * - process @on
- *
- * Before `componentWillUnmount`, kernel will `__free__` all events of the component (see @on).
+ * Connect a stateful component to an oly Kernel of the React context. This is OPTIONAL.
  *
  * ```ts
  * &shy;@attach
- * class Home extends Component<any, any> {
- *   @inject a: B;
- *
+ * class MyComponent extends React.Component {
  *   render() { }
  * }
  * ```
  *
- * > **(?)** This is not required, @inject will work without @attach.
+ * ### Auto
+ *
+ * All decorators @inject, @state, ... already use @attach.
+ *
+ * ```ts
+ * &shy;@attach
+ * class MyComponent extends React.Component {
+ *   @inject a: B;
+ *   render() { }
+ * }
+ * // same
+ * class MyComponent extends React.Component {
+ *   @inject a: B;
+ *   render() { }
+ * }
+ * ```
  *
  * ### Watchers
  *
- * Component#forceUpdate() is called after each oly state mutation if component relies on the state.
+ * Component#forceUpdate() is called after each oly-state-mutation if the component relies on the state.
  *
  * ```ts
  * class MyProvider { @state("SUPER_STATE") myState: string }
  * class MyService { @inject p: MyProvider }
  *
  * class MyComponent extends React.Component {
- *   @inject s: MyService; // component will use #forceUpdate on each "SUPER_STATE" mutation.
+ *   // component will use #forceUpdate on each "SUPER_STATE" mutation.
+ *   @inject s: MyService;
  * }
  * ```
  *
- * > **(?)** use @attach({watch: [ ...list of stateNames ]} to override the watch list.
+ * Override the watchlist with @attach.
+ *
+ * ```ts
+ * &shy;@attach({
+ *   watch: ["SUPER_STATE"],
+ * })
+ * class MyComponent extends React.Component {
+ *   render() { }
+ * }
+ * ```
  */
 export const attach = Meta.decorator<IAttachOptions>(AttachDecorator);

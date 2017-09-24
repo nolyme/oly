@@ -73,13 +73,13 @@ class MyController {
 export class MyErrorHandler {
 
   // define a route named "error" to catch transition errors
-  @page error(e: ITransitionError) {
+  @page error(tr: ITransitionError) {
     return <div>
-      <pre>Error: {e.error.message || String(e.error)}</pre>
+      <pre>Error: {tr.error.message || String(e.error)}</pre>
     </div>
   }
 
-  // use wildcare to handle "page not found"
+  // use /* to handle "page not found"
   @page("/*") notFound(e: ITransition) {
     return <pre>Page Not Found</pre>
   }

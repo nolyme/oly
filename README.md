@@ -36,6 +36,6 @@ Kernel
 
 |                                                     |                                        |
 |----------------------------------------------------:|----------------------------------------|
-| [CORE](https://nolyme.github.io/oly/#/m/oly)        | Foundations.                           | 
-| [API](https://nolyme.github.io/oly/#/m/oly-api)     | REST API, Koa.                         | 
+| [CORE](https://nolyme.github.io/oly/#/m/oly)        | Dependency injection, store and event emitter in one place.                           | 
+| [API](https://nolyme.github.io/oly/#/m/oly-api)     | REST API with koa and decorators.                         | 
 | [REACT](https://nolyme.github.io/oly/#/m/oly-react) | React, SSR and Routing.                | 

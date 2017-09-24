@@ -246,6 +246,7 @@ export class DocParser {
       returnDescription: this.getReturnsTypeDescription(data.signatures[0]),
       returnType: this.getType(data.signatures[0].type),
       static: !!data.flags.isStatic,
+      accessor: data.kindString === "Accessor",
     };
   }
 
@@ -267,8 +268,14 @@ export class DocParser {
     }
 
     return declaration.children
+      .map((c) => {
+        if (!c.signatures) {
+          c.signatures = [c.getSignature];
+        }
+        return c;
+      })
       .filter((c) =>
-        c.kindString === "Method" &&
+        (c.kindString === "Method" || c.kindString === "Accessor") &&
         c.flags.isPublic &&
         !this.isInternal(c),
       )

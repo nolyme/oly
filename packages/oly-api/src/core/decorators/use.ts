@@ -29,6 +29,19 @@ export class UseDecorator implements IDecorator {
 }
 
 /**
- * Define a middleware.
+ * Use a middleware.
+ *
+ * ```ts
+ * &shy;@use(aMiddlewareForAllRoutes)
+ * &shy;@router("/")
+ * class Ctrl {
+ *
+ *   @use(aMiddlewareForThisRoute)
+ *   @get("/")
+ *   findUsers(ctx: IKoaContext) {
+ *     return [];
+ *   }
+ * }
+ * ```
  */
 export const use = Meta.decoratorWithOptions<IUseOptions>(UseDecorator);

@@ -25,7 +25,7 @@ export class EnvDecorator implements IDecorator {
 }
 
 /**
- * Get a value from the store. This is based on Kernel#env().
+ * Get a value from the store. See Kernel#env().
  *
  * ```ts
  * class A {
@@ -44,7 +44,7 @@ export class EnvDecorator implements IDecorator {
  *   @env("B") b: string;
  * }
  *
- * Kernel.create({B: "c").with(A).b = "d"; // boom
+ * Kernel.create({B: "c").with(A).b = "d"; // boom, can't write...
  * ```
  *
  * An error will be thrown if no value was found.
@@ -54,7 +54,7 @@ export class EnvDecorator implements IDecorator {
  *   @env("B") b: string;
  * }
  *
- * Kernel.create().with(A); // boom
+ * Kernel.create().with(A); // boom, missing env key...
  * ```
  *
  * ### Syntactic sugar

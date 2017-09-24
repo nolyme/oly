@@ -20,18 +20,18 @@ export class PixieHttp extends HttpClient {
   protected kernel: Kernel;
 
   @inject
-  protected pixieStore: PixieStore;
+  protected store: PixieStore;
 
   @inject
   protected session: PixieSession;
 
   /**
-   *
+   * API Prefix. Each request starting with / will be prefixed by root. See PIXIE_HTTP_ROOT.
    */
   public get root(): string {
     if (Global.isBrowser()) {
 
-      return this.apiRoot || this.pixieStore.get<string>("API_PREFIX") || "/api";
+      return this.apiRoot || this.store.get<string>("API_PREFIX") || "/api";
 
     } else {
 
@@ -41,7 +41,7 @@ export class PixieHttp extends HttpClient {
       const prefix = this.kernel.state("API_PREFIX") || "";
 
       if (prefix) {
-        this.pixieStore.set("API_PREFIX", prefix);
+        this.store.set("API_PREFIX", prefix);
       }
 
       return `http://${host}:${port}${prefix}`;
@@ -49,10 +49,13 @@ export class PixieHttp extends HttpClient {
   }
 
   /**
-   * Create a new http request.
-   * It's like HttpClient#request(), except that result
-   * are stored into pixieStore data.
-   * This data is reused browser-side after a server-side rendering.
+   * Like HttpClient#request() with
+   *
+   * - an auto-prefix if possible (see PixieHttp#root)
+   * - auto-authorization if possible (see PixieSession#getIdentity())
+   *
+   * <br/>
+   * Response is not CACHED into PixieStore unlike PixieHttp#get() & cie.
    *
    * @param options   HttpClient request options
    */
@@ -74,19 +77,53 @@ export class PixieHttp extends HttpClient {
     return super.request<T>(options);
   }
 
+  /**
+   * Make a HTTP GET and cache response with PixieStore#fly(). </br>
+   * Based on HttpClient#get().
+   *
+   * @param {string} url
+   * @param {IHttpRequest} options
+   * @returns {Promise<T>}
+   */
   public get<T = any>(url: string, options?: IHttpRequest): Promise<T> {
-    return this.pixieStore.fly<T>(`GET_${url}`, () => super.get<T>(url, options));
+    return this.store.fly<T>(`GET_${url}`, () => super.get<T>(url, options));
   }
 
+  /**
+   * Make a HTTP POST and cache response with PixieStore#fly(). </br>
+   * Based on HttpClient#post().
+   *
+   * @param {string} url
+   * @param body
+   * @param {IHttpRequest} options
+   * @returns {Promise<T>}
+   */
   public post<T = any>(url: string, body?: any, options?: IHttpRequest): Promise<T> {
-    return this.pixieStore.fly<T>(`POST_${url}`, () => super.post<T>(url, body, options));
+    return this.store.fly<T>(`POST_${url}`, () => super.post<T>(url, body, options));
   }
 
+  /**
+   * Make a HTTP PUT and cache response with PixieStore#fly(). </br>
+   * Based on HttpClient#put().
+   *
+   * @param {string} url
+   * @param body
+   * @param {IHttpRequest} options
+   * @returns {Promise<T>}
+   */
   public put<T = any>(url: string, body?: any, options?: IHttpRequest): Promise<T> {
-    return this.pixieStore.fly<T>(`PUT_${url}`, () => super.put<T>(url, body, options));
+    return this.store.fly<T>(`PUT_${url}`, () => super.put<T>(url, body, options));
   }
 
+  /**
+   * Make a HTTP DEL and cache response with PixieStore#fly(). </br>
+   * Based on HttpClient#del().
+   *
+   * @param {string} url
+   * @param {IHttpRequest} options
+   * @returns {Promise<T>}
+   */
   public del<T = any>(url: string, options?: IHttpRequest): Promise<T> {
-    return this.pixieStore.fly<T>(`DEL_${url}`, () => super.del<T>(url, options));
+    return this.store.fly<T>(`DEL_${url}`, () => super.del<T>(url, options));
   }
 }
