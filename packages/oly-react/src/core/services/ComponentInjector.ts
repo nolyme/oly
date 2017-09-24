@@ -47,11 +47,10 @@ export class ComponentInjector {
     // pre-process states (before the real kernel#processStates())
     this.processActions(definition, instance);
 
-    const states = options.watch || this.getStates(definition);
-
+    const states = Array.isArray(options.watch) ? options.watch : this.getStates(definition);
     if (states.length > 0) {
 
-      instance["auto$$refresh"] = function refreshHandler(this: any, event: IStateMutateEvent) {
+      instance["oly$refresh"] = function refreshHandler(this: any, event: IStateMutateEvent) {
         for (const name of states) {
           if (self.kernel["started"] && event.key === Global.keyify(name) && Global.isBrowser()) {
             self.logger.trace(`forceUpdate <${this.constructor.name}/> (${event.key})`);
@@ -60,7 +59,7 @@ export class ComponentInjector {
         }
       };
 
-      Meta.of({key: olyCoreKeys.events, target: definition.prototype, propertyKey: "auto$$refresh"}).set({
+      Meta.of({key: olyCoreKeys.events, target: definition.prototype, propertyKey: "oly$refresh"}).set({
         name: olyCoreEvents.STATE_MUTATE,
       });
     }

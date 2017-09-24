@@ -23,7 +23,7 @@ export class OnDecorator implements IDecorator {
  *
  * ```ts
  * class A {
- *   @on b() {                // event name is optional, default = `${Class.name}.${propertyKey}`
+ *   @on b() { // event name is optional, default = `${Class.name}.${propertyKey}`
  *     console.log("Hey");
  *   }
  * }

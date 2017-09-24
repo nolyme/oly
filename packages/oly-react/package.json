@@ -33,7 +33,6 @@
     "@types/qs": "6.5.0",
     "@types/react": "*",
     "@types/react-dom": "*",
-    "cheerio": "0.22.0",
     "oly": "^0.14.4",
     "oly-json": "^0.14.4",
     "react": "15.6.1"
