@@ -12,7 +12,7 @@ export type RouteComponent =
  *
  */
 export interface IActiveBeginEvent {
-  name: string;
+  action: string;
 }
 
 /**
