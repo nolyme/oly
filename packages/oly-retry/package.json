@@ -1,7 +1,7 @@
 {
   "name": "oly-retry",
   "description": "oly-retry",
-  "version": "0.14.4",
+  "version": "0.15.0",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -12,10 +12,10 @@
     "retry"
   ],
   "devDependencies": {
-    "oly": "^0.14.4"
+    "oly": "^0.15.0"
   },
   "peerDependencies": {
-    "oly": "^0.14.4"
+    "oly": "^0.15.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

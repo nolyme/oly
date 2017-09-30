@@ -1,7 +1,7 @@
 {
   "name": "oly",
   "description": "Dependency injection, store and event emitter in one place.",
-  "version": "0.14.4",
+  "version": "0.15.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.js",

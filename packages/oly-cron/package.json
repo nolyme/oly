@@ -1,7 +1,7 @@
 {
   "name": "oly-cron",
   "description": "oly-cron",
-  "version": "0.14.4",
+  "version": "0.15.0",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,10 +16,10 @@
     "cron": "1.3.0"
   },
   "devDependencies": {
-    "oly": "^0.14.4"
+    "oly": "^0.15.0"
   },
   "peerDependencies": {
-    "oly": "^0.14.4"
+    "oly": "^0.15.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
