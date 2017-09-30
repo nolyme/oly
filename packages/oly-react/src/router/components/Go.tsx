@@ -1,11 +1,11 @@
 import { inject } from "oly";
 import * as React from "react";
 import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
-import { autoAttach } from "../../core/configuration";
 import { action } from "../../core/decorators/action";
 import { Router } from "../services/Router";
 
-autoAttach();
+const isModifiedEvent = (event: MouseEvent<HTMLAnchorElement>) =>
+  (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 
 /**
  *
@@ -51,8 +51,6 @@ export interface IGoState {
  *
  * ### IsActive
  *
- * Go has a className "is-active" if Router#isActive() is `true`. See Router#isActive().
- *
  * ```ts
  * <Go to="/" active="my-active-class" strict={true}>...</Go>
  * ```
@@ -80,12 +78,9 @@ export class Go extends Component<IGoProps, IGoState> {
       this.props.onClick(e);
     }
 
-    const isModifiedEvent = (event: MouseEvent<HTMLAnchorElement>) =>
-      (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
-
     if (
       !e.defaultPrevented && // onClick prevented default
-      e.button === 0 && // ignore right clicks
+      (e.button === 0 || e.button === undefined) && // ignore right clicks
       !this.props["target"] && // let browser handle "target=_blank" etc.
       !isModifiedEvent(e) // ignore clicks with modifier keys
     ) {
@@ -102,19 +97,20 @@ export class Go extends Component<IGoProps, IGoState> {
    */
   public componentWillMount() {
     const {to, params, query} = this.props;
-    this.state = {
+    this.setState({
       active: this.router.isActive({to, params, query}, this.props.strict),
-    };
+    });
   }
 
   /**
    *
    */
   public render(): JSX.Element {
-    const {to, params, query, strict, active, ...rest} = this.props;
+    const {to, params, query, active, ...rest} = this.props;
+    const activeClassName = typeof active === "string" ? ` ${active}` : "";
     return createElement("a" as any, {
       ...rest,
-      className: (this.props.className || "") + " " + ((this.isActive) ? (this.props.active || "is-active") : ""),
+      className: (this.props.className || "") + (this.isActive ? activeClassName : ""),
       href: this.router.href({to, params, query}),
       onClick: this.onClick,
     }, this.props.children);

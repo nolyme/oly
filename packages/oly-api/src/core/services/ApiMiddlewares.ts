@@ -1,4 +1,4 @@
-import { Class, env, Logger } from "oly";
+import { Class, env, Logger, Global } from "oly";
 import { HttpServerException, IKoaContext, IKoaMiddleware } from "oly-http";
 import { olyApiErrors } from "../constants/errors";
 import { NotFoundException } from "../exceptions/NotFoundException";
@@ -31,7 +31,7 @@ export class ApiMiddlewares {
    * Hide cause of HttpServerException.
    */
   @env("API_ERROR_HIDE_CAUSE")
-  public readonly hideCause: boolean = false;
+  public readonly hideCause: boolean = Global.isProduction();
 
   /**
    * Basic error handler.

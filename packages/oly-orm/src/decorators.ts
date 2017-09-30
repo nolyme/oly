@@ -9,7 +9,6 @@ import {
   Column,
   CreateDateColumn,
   DiscriminatorColumn,
-  Embedded,
   Entity,
   EventSubscriber,
   Index,
@@ -53,4 +52,3 @@ export const oneToMany = OneToMany;
 export const oneToOne = OneToOne;
 export const relationCount = RelationCount;
 export const index = Index;
-export const embedded = Embedded;

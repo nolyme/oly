@@ -7,6 +7,7 @@ export interface IActionOptions {
   loading?: boolean;
   before?: object | Function;
   after?: object | Function;
+  lock?: boolean;
 }
 
 export class ActionDecorator implements IDecorator {

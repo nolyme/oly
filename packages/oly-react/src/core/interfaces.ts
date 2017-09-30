@@ -42,6 +42,8 @@ export interface IActionsProperty {
   after?: object | Function;
   before?: object | Function;
   loading?: boolean | string;
+  lock?: boolean;
+  isLocked?: boolean;
 }
 
 /**

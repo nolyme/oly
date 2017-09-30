@@ -139,4 +139,14 @@ export class PixieStore {
 
     return `<script>window.${PixieStore.stateName}=${this.toString()}</script>`;
   }
+
+  /**
+   * Check if pixie store is empty.
+   *
+   * @internal
+   * @returns {boolean}
+   */
+  public isEmpty(): boolean {
+    return !this.data;
+  }
 }

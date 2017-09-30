@@ -1,6 +1,10 @@
 /**
  * @jest-environment jsdom
  */
+import { autoAttach } from "../../src/core/configuration";
+
+autoAttach();
+
 import { Kernel } from "oly";
 import { olyReactRouterEvents } from "../../src/router/constants/events";
 import { ReactBrowserProvider } from "../../src/router/providers/ReactBrowserProvider";

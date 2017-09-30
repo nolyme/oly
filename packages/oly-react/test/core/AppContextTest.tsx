@@ -12,7 +12,7 @@ import { autoAttach } from "../../src/core/configuration";
 import { olyReactEvents } from "../../src/core/constants/events";
 import { action } from "../../src/core/decorators/action";
 import { attach } from "../../src/core/decorators/attach";
-import { IActionSuccessEvent, IActionErrorEvent } from "../../src/core/interfaces";
+import { IActionErrorEvent, IActionSuccessEvent } from "../../src/core/interfaces";
 
 describe("AppContext", () => {
 
@@ -126,7 +126,8 @@ describe("AppContext", () => {
       setTimeout(() => {
         dom.get("#btn1").click();
       });
-      const result: IActionSuccessEvent<{ name: string }> = await kernel.on(olyReactEvents.ACTIONS_SUCCESS, _.noop).wait();
+      const result: IActionSuccessEvent<{ name: string }> = await kernel
+        .on(olyReactEvents.ACTION_SUCCESS, _.noop).wait();
       expect(dom.get("strong").textContent).toBe("Luc");
       expect(result.data.name).toEqual("Luc");
     });
@@ -158,7 +159,7 @@ describe("AppContext", () => {
       setTimeout(() => {
         dom.get("#btn2").click();
       }, 10);
-      const result: IActionErrorEvent = await kernel.on(olyReactEvents.ACTIONS_ERROR, _.noop).wait();
+      const result: IActionErrorEvent = await kernel.on(olyReactEvents.ACTION_ERROR, _.noop).wait();
       expect(result.error.message).toBe("I am Groot");
     });
 
@@ -166,7 +167,8 @@ describe("AppContext", () => {
       setTimeout(() => {
         dom.get("#btn3").click();
       }, 10);
-      const result: IActionSuccessEvent<{ name: string }> = await kernel.on(olyReactEvents.ACTIONS_SUCCESS, _.noop).wait();
+      const result: IActionSuccessEvent<{ name: string }> = await kernel
+        .on(olyReactEvents.ACTION_SUCCESS, _.noop).wait();
       expect(dom.get("strong").textContent).toBe("Luc");
       expect(result.data.name).toEqual("Luc");
     });

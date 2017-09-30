@@ -263,7 +263,7 @@ export class ReactRouterMatcher {
     // try to create chunks (map of string - jsx.element)
     if (typeof raw === "function") {
       raw = {main: createElement(raw)};
-    } else if (typeof raw === "object") {
+    } else if (typeof raw === "object" && !Array.isArray(raw)) {
       if (raw["$$typeof"]) { // tslint:disable-line
         raw = {main: raw};
       } else {
@@ -274,7 +274,7 @@ export class ReactRouterMatcher {
         }
       }
     } else {
-      raw = {main: createElement("div", {}, raw)};
+      raw = {main: raw};
     }
 
     for (const key of Object.keys(raw)) {

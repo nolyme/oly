@@ -22,24 +22,24 @@
     "js-cookie": "2.1.4",
     "oly-http": "^0.14.4",
     "path-to-regexp": "1.7.0",
-    "prop-types": "15.5.10",
+    "prop-types": "15.6.0",
     "qs": "6.5.1",
-    "react-dom": "15.6.1",
     "react-helmet": "5.2.0"
   },
   "devDependencies": {
     "@types/cheerio": "*",
     "@types/js-cookie": "*",
-    "@types/qs": "6.5.0",
+    "@types/qs": "*",
     "@types/react": "*",
     "@types/react-dom": "*",
     "oly": "^0.14.4",
     "oly-json": "^0.14.4",
-    "react": "15.6.1"
+    "react": "16.0.0"
   },
   "peerDependencies": {
     "oly": "^0.14.4",
-    "react": "15.6.1"
+    "react-dom": "*",
+    "react": "*"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

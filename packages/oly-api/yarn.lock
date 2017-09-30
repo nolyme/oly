@@ -42,9 +42,9 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
 
-"@types/koa-bodyparser@3.0.23":
-  version "3.0.23"
-  resolved "https://registry.yarnpkg.com/@types/koa-bodyparser/-/koa-bodyparser-3.0.23.tgz#0e719b708d463d1ea31a25971c485c2e4eb6ced4"
+"@types/koa-bodyparser@3.0.25":
+  version "3.0.25"
+  resolved "https://registry.yarnpkg.com/@types/koa-bodyparser/-/koa-bodyparser-3.0.25.tgz#bf66711ca01b9774fc3f1273c599e3f324c57569"
   dependencies:
     "@types/koa" "*"
 
@@ -99,18 +99,18 @@ busboy@^0.2.11:
     dicer "0.2.5"
     readable-stream "1.1.x"
 
-bytes@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/bytes/-/bytes-2.4.0.tgz#7d97196f9d5baf7f6935e25985549edd2a6c2339"
+bytes@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
 
-co-body@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/co-body/-/co-body-4.2.0.tgz#74df20fa73262125dc45482af04e342ea8db3515"
+co-body@^5.1.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/co-body/-/co-body-5.1.1.tgz#d97781d1e3344ba4a820fd1806bddf8341505236"
   dependencies:
-    inflation "~2.0.0"
-    qs "~4.0.0"
-    raw-body "~2.1.2"
-    type-is "~1.6.6"
+    inflation "^2.0.0"
+    qs "^6.4.0"
+    raw-body "^2.2.0"
+    type-is "^1.6.14"
 
 concat-stream@^1.5.0:
   version "1.6.0"
@@ -119,6 +119,10 @@ concat-stream@^1.5.0:
     inherits "^2.0.3"
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
+
+copy-to@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/copy-to/-/copy-to-2.0.1.tgz#2680fbb8068a48d08656b6098092bdafc906f4a5"
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -145,7 +149,7 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-http-errors@^1.3.1:
+http-errors@1.6.2, http-errors@^1.3.1:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.6.2.tgz#0a002cc85707192a7e7946ceedc11155f60ec736"
   dependencies:
@@ -154,11 +158,11 @@ http-errors@^1.3.1:
     setprototypeof "1.0.3"
     statuses ">= 1.3.1 < 2"
 
-iconv-lite@0.4.13:
-  version "0.4.13"
-  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
+iconv-lite@0.4.19:
+  version "0.4.19"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
 
-inflation@~2.0.0:
+inflation@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/inflation/-/inflation-2.0.0.tgz#8b417e47c28f925a45133d914ca1fd389107f30f"
 
@@ -174,11 +178,12 @@ isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
 
-koa-bodyparser@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/koa-bodyparser/-/koa-bodyparser-3.2.0.tgz#b916de17e2039fe82650481973d7c294f10b5719"
+koa-bodyparser@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/koa-bodyparser/-/koa-bodyparser-4.2.0.tgz#bce6e08bc65f8709b6d1faa9411c7f0d8938aa54"
   dependencies:
-    co-body "^4.2.0"
+    co-body "^5.1.0"
+    copy-to "^2.0.1"
 
 koa-compose@^3.0.0:
   version "3.2.1"
@@ -267,16 +272,17 @@ process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
 
-qs@~4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-4.0.0.tgz#c31d9b74ec27df75e543a86c78728ed8d4623607"
+qs@^6.4.0:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
 
-raw-body@~2.1.2:
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.1.7.tgz#adfeace2e4fb3098058014d08c072dcc59758774"
+raw-body@^2.2.0:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.3.2.tgz#bcd60c77d3eb93cde0050295c3f379389bc88f89"
   dependencies:
-    bytes "2.4.0"
-    iconv-lite "0.4.13"
+    bytes "3.0.0"
+    http-errors "1.6.2"
+    iconv-lite "0.4.19"
     unpipe "1.0.0"
 
 readable-stream@1.1.x:
@@ -326,11 +332,11 @@ string_decoder@~1.0.3:
   dependencies:
     safe-buffer "~5.1.0"
 
-swagger-ui-dist@3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.2.1.tgz#bdbae17aae017298193006a587d7237b58a875ce"
+swagger-ui-dist@3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.2.2.tgz#e7826f4afb68dd3ed8ae9d75a92ae26bd9f5e8de"
 
-type-is@^1.6.4, type-is@~1.6.6:
+type-is@^1.6.14, type-is@^1.6.4:
   version "1.6.15"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.15.tgz#cab10fb4909e441c82842eafe1ad646c81804410"
   dependencies:

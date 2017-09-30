@@ -29,7 +29,7 @@ export class DatabaseProvider implements IProvider {
   public url: string = ":memory:";
 
   @env("DATABASE_AUTO_SYNC")
-  public autoSync: boolean = true;
+  public synchronize: boolean = true;
 
   @state
   public connection: Connection;
@@ -148,7 +148,7 @@ export class DatabaseProvider implements IProvider {
   protected createConnection(entities: Function[]): Promise<Connection> {
     const driver = this.getDriver(this.url);
     return createConnection({
-      autoSchemaSync: this.autoSync,
+      synchronize: this.synchronize,
       ...driver,
       entities,
       // TODO: logger

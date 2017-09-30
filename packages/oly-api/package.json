@@ -14,15 +14,15 @@
     "koa"
   ],
   "dependencies": {
-    "koa-bodyparser": "3.2.0",
+    "koa-bodyparser": "4.2.0",
     "koa-multer": "1.0.2",
     "koa-router": "7.2.1",
     "oly-http": "^0.14.4",
     "oly-json": "^0.14.4",
-    "swagger-ui-dist": "3.2.1"
+    "swagger-ui-dist": "3.2.2"
   },
   "devDependencies": {
-    "@types/koa-bodyparser": "3.0.23",
+    "@types/koa-bodyparser": "3.0.25",
     "@types/koa-router": "7.0.23",
     "oly": "^0.14.4"
   },

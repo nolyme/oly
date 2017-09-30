@@ -81,6 +81,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
           <Go
             to="module.index"
             params={{module: module.name}}
+            active={"is-active"}
             strict={true}>
             Readme
           </Go>
@@ -90,7 +91,10 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
         </li>}
         {module.manuals.map((e) =>
           <li key={e.name}>
-            <Go to="manual" params={{module: module.name, manual: e.name}}>{e.name}</Go>
+            <Go
+              to="manual"
+              active={"is-active"}
+              params={{module: module.name, manual: e.name}}>{e.name}</Go>
           </li>,
         )}
       </ul>
@@ -102,7 +106,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
       <ul className="menu-list">
         {module.exceptions.map((e) =>
           <li key={e.name}>
-            <Go to="exception" params={{module: module.name, exception: e.name}}>{e.name}</Go>
+            <Go to="exception" active={"is-active"} params={{module: module.name, exception: e.name}}>{e.name}</Go>
           </li>,
         )}
       </ul>}
@@ -114,7 +118,13 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
       {!!module.decorators.length &&
       <ul className="menu-list">
         {module.decorators.map((e) =>
-          <li key={e.name}><Go to="decorator" params={{module: module.name, decorator: e.name}}>@{e.name}</Go></li>,
+          <li key={e.name}>
+            <Go
+              to="decorator"
+              active={"is-active"}
+              params={{module: module.name, decorator: e.name}}>@{e.name}
+            </Go>
+          </li>,
         )}
       </ul>}
 
@@ -127,6 +137,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
         {module.components.map((e) =>
           <li key={e.name}>
             <Go
+              active={"is-active"}
               to="component"
               params={{module: module.name, component: e.name}}>{"<" + e.name + "/>"}
             </Go>
@@ -142,7 +153,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
       <ul className="menu-list">
         {module.services.filter((s) => s.name.indexOf("Provider") === -1).map((e) =>
           <li key={e.name}>
-            <Go to="service" params={{module: module.name, service: e.name}}>{e.name}</Go>
+            <Go to="service" active={"is-active"} params={{module: module.name, service: e.name}}>{e.name}</Go>
             {!!e.methods.length && this.router.isActive({
               to: "service",
               params: {module: module.name, service: e.name},
@@ -150,7 +161,11 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
               <ul>
                 {e.methods.map((method) => (
                   <li key={method.name}>
-                    <Go to="method" params={{module: module.name, service: e.name, method: method.name}}>
+                    <Go
+                      to="method"
+                      active={"is-active"}
+                      params={{module: module.name, service: e.name, method: method.name}}
+                    >
                       {method.static ? "." : "#"}{method.name}{method.accessor ? "" : "()"}
                     </Go>
                   </li>
@@ -170,7 +185,12 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
       <ul className="menu-list">
         {module.services.filter((s) => s.name.indexOf("Provider") > -1).map((e) =>
           <li key={e.name}>
-            <Go to="service" params={{module: module.name, service: e.name}}>{e.name}</Go>
+            <Go
+              to="service"
+              active={"is-active"}
+              params={{module: module.name, service: e.name}}>
+              {e.name}
+            </Go>
           </li>,
         )}
       </ul>}

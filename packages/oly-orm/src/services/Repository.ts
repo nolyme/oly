@@ -77,6 +77,6 @@ export abstract class Repository<T> extends TypeRepository<T> implements IReposi
   public insert(data: Array<DeepPartial<T>>): Promise<T[]>;
   public insert(data: DeepPartial<T>): Promise<T>;
   public insert(data: any): Promise<any> {
-    return this.persist(this.create(data));
+    return this.save(this.create(data));
   }
 }

@@ -1,14 +1,14 @@
 {
   "private": true,
   "devDependencies": {
-    "@types/jest": "21.1.0",
-    "@types/node": "8.0.29",
-    "jest": "21.1.0",
+    "@types/jest": "21.1.1",
+    "@types/node": "8.0.31",
+    "jest": "21.2.1",
     "lerna": "2.2.0",
     "ts-jest": "21.0.1",
     "ts-node": "3.3.0",
     "tslint": "5.7.0",
-    "typescript": "2.5.2"
+    "typescript": "2.5.3"
   },
   "scripts": {
     "reset": "rm -rf node_modules yarn.lock packages/**/yarn.lock && yarn && yarn all",
@@ -27,6 +27,7 @@
   },
   "jest": {
     "preset": "./jest.json",
+    "setupTestFrameworkScriptFile": "<rootDir>/jest.env.js",
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },

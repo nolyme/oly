@@ -88,6 +88,8 @@ export class ReactServerProvider implements IProvider {
     const markup = renderToString(this.rootElement(ctx.kernel));
     const helmet = Helmet.renderStatic();
 
+    pixie.store.set("hydrate", true);
+
     template = template.replace(
       `<div id="${mountId}"></div>`,
       `<div id="${mountId}">${markup}</div>`);

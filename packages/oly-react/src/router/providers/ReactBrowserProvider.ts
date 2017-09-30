@@ -140,7 +140,10 @@ export class ReactBrowserProvider implements IProvider {
    * Mount the app.
    */
   protected mount(): void {
-    this.browser.render(this.rootElement, this.mountId);
+    this.browser.render(
+      this.rootElement,
+      this.mountId,
+      !this.pixie.store.isEmpty());
   }
 
   /**

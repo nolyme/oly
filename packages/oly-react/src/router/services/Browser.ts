@@ -1,5 +1,5 @@
 import { History } from "history";
-import { _, inject, Logger } from "oly";
+import { Global, inject, Logger } from "oly";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
@@ -29,8 +29,8 @@ export class Browser {
    * Ref to window.
    */
   public get window(): Window {
-    if (!this.exists()) {
-      throw new Error("There is no DOM env here");
+    if (!Global.isBrowser()) {
+      throw new Error("There is no 'window' in this environment");
     }
     return window;
   }
@@ -53,26 +53,25 @@ export class Browser {
   }
 
   /**
-   * Check if browser window is available.
-   */
-  public exists(): boolean {
-    return _.isBrowser();
-  }
-
-  /**
    * Exec ReactDOM.render and ensure that the mountId exists.
    *
    * @param element
    * @param mountId
+   * @param hydrateOnly
    */
-  public render(element: React.ReactElement<any>, mountId: string): void {
+  public render(element: React.ReactElement<any>, mountId: string, hydrateOnly = false): void {
 
     this.container = this.window.document.getElementById(mountId);
     if (!this.container) {
-      this.logger.warn(`No element with id="${mountId}" was found. You can use REACT_ID for changing the mount id.`);
+      this.logger.warn(`No element with id='${mountId}' was found. You can use REACT_ID to change the mount id.`);
       this.container = document.createElement("div");
       this.container.setAttribute("id", mountId);
-      document.body.appendChild(this.container);
+      this.document.body.appendChild(this.container);
+    }
+
+    if (hydrateOnly) {
+      ReactDOM["hydrate"](element, this.container);
+      return;
     }
 
     ReactDOM.render(element, this.container);

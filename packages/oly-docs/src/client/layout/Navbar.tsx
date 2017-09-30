@@ -32,6 +32,7 @@ export class Navbar extends Component<INavbarProps, INavbarState> {
         </div>
         <div className="Navbar__box is-hidden-mobile" style={{paddingRight: "20px"}}>
           <Go
+            active={"is-active"}
             strict={true}
             to="home"
             className="Navbar__home button is-white"

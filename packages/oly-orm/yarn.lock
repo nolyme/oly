@@ -633,7 +633,7 @@ nan@~2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.7.0.tgz#d95bf721ec877e08db276ed3fc6eb78f9083ad46"
 
-node-pre-gyp@~0.6.37:
+node-pre-gyp@~0.6.38:
   version "0.6.38"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.6.38.tgz#e92a20f83416415bb4086f6d1fb78b3da73d113d"
   dependencies:
@@ -966,12 +966,12 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
 
-sqlite3@3.1.11:
-  version "3.1.11"
-  resolved "https://registry.yarnpkg.com/sqlite3/-/sqlite3-3.1.11.tgz#84421b181b3e9f4939b7a3d712263d7946cfc96d"
+sqlite3@3.1.13:
+  version "3.1.13"
+  resolved "https://registry.yarnpkg.com/sqlite3/-/sqlite3-3.1.13.tgz#d990a05627392768de6278bafd1a31fdfe907dd9"
   dependencies:
     nan "~2.7.0"
-    node-pre-gyp "~0.6.37"
+    node-pre-gyp "~0.6.38"
 
 sshpk@^1.7.0:
   version "1.13.1"
@@ -1101,9 +1101,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-typeorm@0.1.0-alpha.45:
-  version "0.1.0-alpha.45"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.1.0-alpha.45.tgz#764f436218f0cf881622a49f4a683738dfd44ddb"
+typeorm@0.1.0-alpha.50:
+  version "0.1.0-alpha.50"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.1.0-alpha.50.tgz#558bd8477acfc3128318de2df8f98773d8c2b7bd"
   dependencies:
     app-root-path "^2.0.1"
     chalk "^2.0.1"
@@ -1115,7 +1115,7 @@ typeorm@0.1.0-alpha.45:
     reflect-metadata "^0.1.10"
     xml2js "^0.4.17"
     yargonaut "^1.1.2"
-    yargs "^8.0.2"
+    yargs "^9.0.1"
 
 uid-number@^0.0.6:
   version "0.0.6"
@@ -1238,9 +1238,9 @@ yargs@^4.8.1:
     y18n "^3.2.1"
     yargs-parser "^2.4.1"
 
-yargs@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-8.0.2.tgz#6299a9055b1cefc969ff7e79c1d918dceb22c360"
+yargs@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-9.0.1.tgz#52acc23feecac34042078ee78c0c007f5085db4c"
   dependencies:
     camelcase "^4.1.0"
     cliui "^3.2.0"

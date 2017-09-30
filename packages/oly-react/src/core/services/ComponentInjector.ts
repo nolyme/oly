@@ -119,7 +119,7 @@ export class ComponentInjector {
   public processActions(target: Class, instance: Component) {
 
     const self = this;
-    const logger = this.kernel.inject(Logger).as("Actions");
+    const logger = this.kernel.inject(Logger).as("Action");
     const actionsMetadata = Meta.of({key: olyReactKeys.actions, target}).get<IActionsMetadata>();
     if (!actionsMetadata) {
       return;
@@ -132,8 +132,26 @@ export class ComponentInjector {
       const resolve = this.actionResolveFactory(logger, target, action, instance);
       const reject = this.actionRejectFactory(logger, target, action, instance);
 
+      action.isLocked = false;
+
       instance[propertyKey + "$$copy"] = instance[propertyKey];
       instance[propertyKey] = function actionWrapper(event: any) {
+
+        if (action.isLocked) {
+          return;
+        }
+
+        /**
+         * Init lock
+         */
+
+        action.isLocked = action.lock == null
+          ? true // default value
+          : action.lock;
+
+        /**
+         * Handle prevent
+         */
 
         if (action.prevent && event) {
           if (typeof event.stopPropagation === "function") {
@@ -144,7 +162,11 @@ export class ComponentInjector {
           }
         }
 
-        self.kernel.emit(olyReactEvents.ACTIONS_BEGIN, {action: action.name} as IActiveBeginEvent);
+        self.kernel.emit(olyReactEvents.ACTION_BEGIN, {action: action.name} as IActiveBeginEvent);
+
+        /**
+         * Handle loading, before
+         */
 
         if (action.loading === true) {
           instance.setState({loading: true});
@@ -159,7 +181,7 @@ export class ComponentInjector {
         }
 
         try {
-          logger.trace(`run ${action.name}`);
+          logger.debug(`run '${action.name}'`);
 
           const data = instance[propertyKey + "$$copy"].apply(instance, arguments);
           if (!!data && !!data.then && !!data.catch) {
@@ -172,7 +194,6 @@ export class ComponentInjector {
         }
       };
 
-      // TODO: should be an option ?
       Meta.of({key: olyCoreKeys.events, target: target.prototype, propertyKey}).set({name: action.name});
     }
   }
@@ -201,7 +222,7 @@ export class ComponentInjector {
   protected actionResolveFactory(logger: Logger, definition: Function, action: IActionsProperty, instance: Component) {
     return (data: any) => {
 
-      logger.debug(`action ${action.name} is done`);
+      logger.debug(`'${action.name}' OK`);
 
       const actionResult: IActionSuccessEvent<any> = {
         action: action.name,
@@ -224,7 +245,9 @@ export class ComponentInjector {
         }
       }
 
-      this.kernel.emit(olyReactEvents.ACTIONS_SUCCESS, actionResult);
+      this.kernel.emit(olyReactEvents.ACTION_SUCCESS, actionResult);
+
+      action.isLocked = false;
 
       // you should't returns data, this is useless
       // -> catch data with emitter
@@ -243,7 +266,7 @@ export class ComponentInjector {
   protected actionRejectFactory(logger: Logger, definition: Function, action: IActionsProperty, instance: Component) {
     return (e: Error) => {
 
-      logger.warn(`action '${action.name}' has failed`, e);
+      logger.warn(`'${action.name}' FAIL`, e);
 
       const actionResult: IActionErrorEvent = {
         action: action.name,
@@ -266,7 +289,9 @@ export class ComponentInjector {
         }
       }
 
-      this.kernel.emit(olyReactEvents.ACTIONS_ERROR, actionResult);
+      this.kernel.emit(olyReactEvents.ACTION_ERROR, actionResult);
+
+      action.isLocked = false;
 
       // do not throw the error, this is useless
     };

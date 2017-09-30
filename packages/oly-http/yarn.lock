@@ -158,7 +158,7 @@ debug@2.6.7:
   dependencies:
     ms "2.0.0"
 
-debug@^2.4.5, debug@^2.6.0:
+debug@^2.4.5, debug@^2.6.1, debug@^2.6.3, debug@^2.6.8:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   dependencies:
@@ -281,7 +281,7 @@ http-assert@^1.1.0:
     deep-equal "~1.0.1"
     http-errors "~1.6.1"
 
-http-errors@^1.2.8, http-errors@~1.6.1:
+http-errors@^1.2.8, http-errors@^1.6.1, http-errors@~1.6.1:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.6.2.tgz#0a002cc85707192a7e7946ceedc11155f60ec736"
   dependencies:
@@ -326,7 +326,7 @@ keygrip@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/keygrip/-/keygrip-1.0.2.tgz#ad3297c557069dea8bcfe7a4fa491b75c5ddeb91"
 
-koa-compose@^3.0.0:
+koa-compose@^3.0.0, koa-compose@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/koa-compose/-/koa-compose-3.2.1.tgz#a85ccb40b7d986d8e5a345b3a1ace8eabcf54de7"
   dependencies:
@@ -362,28 +362,28 @@ koa-is-json@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/koa-is-json/-/koa-is-json-1.0.0.tgz#273c07edcdcb8df6a2c1ab7d59ee76491451ec14"
 
-koa-mount@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/koa-mount/-/koa-mount-2.0.0.tgz#728b7d01ab23e7e58dc588e52fc554d67ee981db"
-  dependencies:
-    debug "*"
-    koa-compose "^3.0.0"
-
-koa-send@^3.2.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/koa-send/-/koa-send-3.3.0.tgz#5a4ae245564680c6ecf6079e9275fa5173a861dc"
-  dependencies:
-    co "^4.6.0"
-    debug "^2.6.0"
-    mz "^2.3.1"
-    resolve-path "^1.3.1"
-
-koa-static@3.0.0:
+koa-mount@3.0.0:
   version "3.0.0"
-  resolved "https://registry.yarnpkg.com/koa-static/-/koa-static-3.0.0.tgz#40442233d2c0b35c225e450199c10bf8a539e416"
+  resolved "https://registry.yarnpkg.com/koa-mount/-/koa-mount-3.0.0.tgz#08cab3b83d31442ed8b7e75c54b1abeb922ec197"
   dependencies:
-    debug "*"
-    koa-send "^3.2.0"
+    debug "^2.6.1"
+    koa-compose "^3.2.1"
+
+koa-send@^4.1.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/koa-send/-/koa-send-4.1.1.tgz#bd3fa116b1f592f5fff23c9670aae69787f6cb57"
+  dependencies:
+    debug "^2.6.3"
+    http-errors "^1.6.1"
+    mz "^2.6.0"
+    resolve-path "^1.3.3"
+
+koa-static@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/koa-static/-/koa-static-4.0.1.tgz#b99521ed848d7adb79acae9c824d8d8277a8c4d5"
+  dependencies:
+    debug "^2.6.8"
+    koa-send "^4.1.0"
 
 koa@2.3.0:
   version "2.3.0"
@@ -436,7 +436,7 @@ ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
-mz@^2.3.1:
+mz@^2.6.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/mz/-/mz-2.7.0.tgz#95008057a56cafadc2bc63dde7f9ff6955948e32"
   dependencies:
@@ -482,7 +482,7 @@ referrer-policy@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/referrer-policy/-/referrer-policy-1.1.0.tgz#35774eb735bf50fb6c078e83334b472350207d79"
 
-resolve-path@^1.3.1:
+resolve-path@^1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/resolve-path/-/resolve-path-1.3.3.tgz#4d83aba6468c2b8e632a575e3f52b0fa0dbe1a5c"
   dependencies:

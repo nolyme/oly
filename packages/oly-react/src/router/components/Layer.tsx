@@ -29,6 +29,6 @@ export class Layer extends Component<ILayerProps, {}> {
    *
    */
   public render(): JSX.Element | null {
-    return Children.only(this.props.children);
+    return this.props.children as any;
   }
 }

@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "@types/cron": "1.2.1",
-    "cron": "1.2.1"
+    "cron": "1.3.0"
   },
   "devDependencies": {
     "oly": "^0.14.4"

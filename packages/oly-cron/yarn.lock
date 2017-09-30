@@ -6,9 +6,9 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@types/cron/-/cron-1.2.1.tgz#95c1e432d6106ca34c92f0743638bc786c073faa"
 
-cron@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/cron/-/cron-1.2.1.tgz#3a86c09b41b8f261ac863a7cc85ea4735857eab2"
+cron@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/cron/-/cron-1.3.0.tgz#7e459968eaf94e1a445be796ce402166c234659d"
   dependencies:
     moment-timezone "^0.5.x"
 

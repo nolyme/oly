@@ -15,6 +15,7 @@
     "html",
     "lcov"
   ],
+  "setupTestFrameworkScriptFile": "<rootDir>/../../jest.env.js",
   "mapCoverage": true,
   "testURL": "http://127.0.0.1/",
   "globals": {

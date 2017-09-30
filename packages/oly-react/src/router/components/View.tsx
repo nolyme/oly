@@ -131,9 +131,9 @@ export class View extends Component<IViewProps, { content: any }> {
       throw new Error("Can't get an index");
     }
     this.logger.trace(`init view ${this.index} (${this.name})`);
-    this.state = {
+    this.setState({
       content: this.content,
-    };
+    });
   }
 
   /**
