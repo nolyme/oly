@@ -23,7 +23,7 @@ describe("PixieServerProvider", () => {
 
   const kernel = Kernel.create({
     HTTP_SERVER_PORT: 12029,
-    REACT_SERVER_POINTS: ["default"],
+    REACT_SERVER_POINTS: ["DEFAULT"],
   }).with(App);
   const server = kernel.inject(ReactServerProvider);
   const client = kernel.inject(HttpClient).with({

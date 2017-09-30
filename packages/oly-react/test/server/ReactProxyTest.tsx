@@ -16,7 +16,7 @@ describe("ReactProxyTest", () => {
 
   const client = Kernel.create({
     HTTP_SERVER_PORT: 22048,
-    REACT_SERVER_POINTS: ["default"],
+    REACT_SERVER_POINTS: ["DEFAULT"],
   }).with(ReactServerProvider, App);
 
   const server = Kernel.create({

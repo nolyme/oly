@@ -5,7 +5,7 @@ import * as React from "react";
 import { attach } from "../../src/core/decorators/attach";
 import { View } from "../../src/router/components/View";
 import { page } from "../../src/router/decorators/page";
-import { ITransitionErrorEvent } from "../../src/router/interfaces";
+import { ITransitionError } from "../../src/router/interfaces";
 import { ReactServerProvider } from "../../src/server/providers/ReactServerProvider";
 
 interface IAppTest {
@@ -30,10 +30,11 @@ describe("ReactServerProvider", () => {
     const kernel = new Kernel({
       LOGGER_LEVEL: "ERROR",
       HTTP_SERVER_PORT: 6001 + Math.floor(Math.random() * 100),
-      REACT_SERVER_POINTS: ["default"],
+      REACT_SERVER_POINTS: ["DEFAULT"],
     }).with(appy, ReactServerProvider);
     const client = kernel.inject(HttpClient).with({
       baseURL: "http://localhost:" + kernel.env("HTTP_SERVER_PORT"),
+      validateStatus: () => true,
     });
     await kernel.start();
     return {
@@ -104,7 +105,7 @@ describe("ReactServerProvider", () => {
     }
 
     @page
-    error(t: ITransitionErrorEvent) {
+    error(t: ITransitionError) {
       return <div>{"ERROR:" + t.error.message}</div>;
     }
 

@@ -25,7 +25,7 @@ describe("HelmetTest", () => {
 
   const kernel = Kernel.create({
     HTTP_SERVER_PORT: 4059,
-    REACT_SERVER_POINTS: ["default"],
+    REACT_SERVER_POINTS: ["DEFAULT"],
   }).with(AppTest);
 
   const client = kernel.inject(HttpClient).with({
