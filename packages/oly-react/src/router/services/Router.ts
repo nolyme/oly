@@ -21,8 +21,8 @@ import { Browser } from "./Browser";
  * When a component injects Router, #forceUpdate is called after each transition.
  *
  * ```ts
- * &shy;@attach({watch: []}) // kill this feature
  * class MyComponent extends React.Component {
+ *   watchlist = []; // override watchlist
  * }
  * ```
  */
@@ -68,7 +68,7 @@ export class Router {
   public get current(): IMatch {
     if (!this.routerProvider.match) {
       throw new Exception(
-        `Using Router#current (or isActive) inside the first resolver is not allowed. Use the ITransition instead`);
+        `Using Router#current (or isActive) inside the first resolve (@page) is not allowed. Use ITransition instead`);
     }
     return this.routerProvider.match;
   }

@@ -44,7 +44,7 @@ export class ServerLogger extends Logger {
   protected format(type: string, message: string, data?: object): string {
     return ""
       + "[" + new Date().toLocaleString() + "] "
-      + AnsiColor.chalk[this.colors[type]](type) + " "
+      + AnsiColor.chalk[this.colors[type]](type.length === 4 ? (type + " ") : type) + " "
       + AnsiColor.chalk.bold(this.appName + "(") + this.contextId + AnsiColor.chalk.bold(")") + " "
       + AnsiColor.chalk.bold(this.componentName + ":") + " "
       + AnsiColor.chalk.italic("\"" + message + "\" ")

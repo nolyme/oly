@@ -2,7 +2,6 @@ import { Class, Global, inject, IStateMutateEvent, Kernel, Logger, Meta, olyCore
 import { Component } from "react";
 import { olyReactEvents } from "../constants/events";
 import { olyReactKeys } from "../constants/keys";
-import { IAttachOptions } from "../decorators/attach";
 import {
   IActionErrorEvent,
   IActionsMetadata,
@@ -47,16 +46,17 @@ export class ComponentInjector {
    * @param instance      Instance
    * @param options
    */
-  public inject(definition: Class, instance: Component, options: IAttachOptions = {}) {
+  public inject(definition: Class, instance: Component & { watchlist: any }) {
     const self = this;
 
     // pre-process states (before the real kernel#processStates())
     this.processActions(definition, instance);
 
-    const states = Array.isArray(options.watch) ? options.watch : this.getStates(definition);
-    if (states.length > 0) {
-
+    const watchlist = Array.isArray(instance.watchlist) ? instance.watchlist : this.getStates(definition);
+    if (watchlist.length > 0) {
+      instance.watchlist = watchlist;
       instance["oly$refresh"] = function refreshHandler(this: any, event: IStateMutateEvent) {
+        const states = this.watchlist || [];
         for (const name of states) {
           if (self.kernel["started"] && event.key === Global.keyify(name) && Global.isBrowser()) {
             self.logger.trace(`forceUpdate <${this.constructor.name}/> (${event.key})`);
@@ -71,7 +71,6 @@ export class ComponentInjector {
     }
 
     // just make a processing, skip registration and instantiation
-    // NEVER REGISTER A REACT COMPONENT INSIDE THE KERNEL, NEVER; gygnygguuygnkuguyn
     this.kernel.inject(definition, {instance});
   }
 

@@ -121,7 +121,7 @@ export class PixieStore {
    * @internal
    */
   public toString(): string {
-    this.logger.trace("stringify pixie data");
+    this.logger.trace("stringify pixie data", this.data);
     return JSON.stringify(this.data);
   }
 

@@ -61,7 +61,6 @@
         "docs/Events.md"
       ],
       "decorators": [
-        "core/decorators/attach.ts",
         "core/decorators/action.ts",
         "router/decorators/page.ts",
         "router/decorators/layout.ts",

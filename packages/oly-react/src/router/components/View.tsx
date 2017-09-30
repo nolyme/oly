@@ -74,9 +74,7 @@ export interface IViewProps {
  * }
  * ```
  */
-@attach({
-  watch: [], // View does not need an auto-watch
-})
+@attach
 export class View extends Component<IViewProps, { content: any }> {
 
   public static contextTypes = {
@@ -84,22 +82,24 @@ export class View extends Component<IViewProps, { content: any }> {
   };
 
   @inject
-  public logger: Logger;
+  private logger: Logger;
 
   @inject
-  public routerProvider: ReactRouterProvider;
+  private routerProvider: ReactRouterProvider;
 
-  public index: number;
+  private index: number;
 
-  public get name(): string {
+  private watchlist: string[] = [];
+
+  private get name(): string {
     return this.props.name || "main";
   }
 
-  public get layer(): ILayer | undefined {
+  private get layer(): ILayer | undefined {
     return this.routerProvider.layers[this.index];
   }
 
-  public get content(): JSX.Element | undefined {
+  private get content(): JSX.Element | undefined {
     return this.layer ? this.layer.chunks[this.name] : undefined;
   }
 

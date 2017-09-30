@@ -10,6 +10,10 @@ import { ReactServerProvider } from "../../src/server/providers/ReactServerProvi
  */
 describe("ReactProxyTest", () => {
 
+  class Empty {
+    @page noop = () => null;
+  }
+
   class App {
     @page("/") index = () => <div id="test">OK</div>;
   }
@@ -17,7 +21,7 @@ describe("ReactProxyTest", () => {
   const client = Kernel.create({
     HTTP_SERVER_PORT: 22048,
     REACT_SERVER_POINTS: ["DEFAULT"],
-  }).with(ReactServerProvider, App);
+  }).with(ReactServerProvider, Empty);
 
   const server = Kernel.create({
     HTTP_SERVER_PORT: 22049,

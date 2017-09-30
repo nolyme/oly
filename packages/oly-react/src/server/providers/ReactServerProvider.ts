@@ -61,19 +61,7 @@ export class ReactServerProvider implements IProvider {
    * @param mountId
    */
   public generateIndex(prefix: string, mountId: string) {
-    return `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="UTF-8"/>
-          <title>${this.kernel.env("APP_NAME")}</title>
-          <base href="${prefix}"/>
-        </head>
-        <body>
-          <div id="${mountId}"></div>
-        </body>
-      </html>
-    `;
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body><div id="${mountId}"></div></body></html>`;
   }
 
   /**
@@ -86,28 +74,43 @@ export class ReactServerProvider implements IProvider {
   public render(ctx: IKoaContext, template: string, mountId: string): string {
 
     const pixie: Pixie = ctx.kernel.inject(Pixie);
+    const now = Date.now();
     const markup = renderToString(this.rootElement(ctx.kernel));
+    ctx.kernel.get(Logger).as("ReactServer").trace(`rendering - ${Date.now() - now}ms`);
     const helmet = Helmet.renderStatic();
 
-    pixie.store.set("hydrate", true);
+    const html = helmet.htmlAttributes.toString();
+    if (html) {
+      template = template.replace(/<html(.*?)>/, `<html$1 ${html}>`);
+    }
 
-    template = template.replace(
-      `<div id="${mountId}"></div>`,
-      `<div id="${mountId}">${markup}</div>`);
+    const body = helmet.bodyAttributes.toString();
+    if (body) {
+      template = template.replace(/<body(.*?)>/, `<body ${body}>`);
+    }
 
-    template = template
-      .replace(
-        /<html(.*?)>/, `<html $1 ${helmet.htmlAttributes.toString()}>`)
-      .replace(
-        /<title>.*<\/title>/, `${helmet.title.toString()}`)
-      .replace(
-        /<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}</head>`)
-      .replace(
-        /<body(.*?)>/, `<body $1 ${helmet.bodyAttributes.toString()}>`);
+    const $ = cheerio.load(template);
 
-    template = template.replace(/<body(.*)>/, `<body$1>${pixie.store.toHTML()}`);
+    $("#" + mountId).append(markup);
 
-    return template;
+    const title = helmet.title.toString();
+    if (title) {
+      $("head").remove("title").append(title);
+    }
+
+    const meta = helmet.meta.toString();
+    if (meta) {
+      $("head").append(meta);
+    }
+
+    const link = helmet.link.toString();
+    if (link) {
+      $("head").append(link);
+    }
+
+    $("body").prepend(pixie.store.toHTML());
+
+    return $.html();
   }
 
   /**
@@ -211,10 +214,8 @@ export class ReactServerProvider implements IProvider {
       }
 
       const kernel: Kernel = ctx.kernel;
-      const logger: Logger = kernel.inject(Logger).as("ReactRouter");
+      const logger: Logger = kernel.inject(Logger).as("ReactServer");
       const router: ReactRouterProvider = kernel.inject(ReactRouterProvider);
-
-      logger.trace("request", ctx.request.toJSON());
 
       try {
         // find route + resolve
@@ -234,7 +235,7 @@ export class ReactServerProvider implements IProvider {
         ctx.body = this.render(ctx, this.template, this.mountId);
 
       } catch (e) {
-        logger.debug("server rendering has failed", e);
+        logger.error("server rendering has failed", e);
         ctx.status = e.status || 500;
         ctx.body = this.renderError(ctx, this.template, this.mountId, e);
       }

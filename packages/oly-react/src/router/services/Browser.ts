@@ -57,9 +57,9 @@ export class Browser {
    *
    * @param element
    * @param mountId
-   * @param hydrateOnly
+   * @param hydrate
    */
-  public render(element: React.ReactElement<any>, mountId: string, hydrateOnly = false): void {
+  public render(element: React.ReactElement<any>, mountId: string, hydrate = false): void {
 
     this.container = this.window.document.getElementById(mountId);
     if (!this.container) {
@@ -69,7 +69,7 @@ export class Browser {
       this.document.body.appendChild(this.container);
     }
 
-    if (hydrateOnly && typeof ReactDOM["hydrate"] === "function") {
+    if (hydrate && typeof ReactDOM["hydrate"] === "function") {
       ReactDOM["hydrate"](element, this.container);
       return;
     }

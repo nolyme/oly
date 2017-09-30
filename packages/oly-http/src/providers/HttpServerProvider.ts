@@ -23,12 +23,6 @@ export class HttpServerProvider implements IProvider {
   protected readonly port: number = 3000;
 
   /**
-   * Log request/response as json.
-   */
-  @env("HTTP_LOG_CONTEXT")
-  protected readonly logContext: boolean = false;
-
-  /**
    * Kernel.
    * We use kernel here to fork context on each request.
    */
@@ -130,20 +124,18 @@ export class HttpServerProvider implements IProvider {
 
       const logger = ctx.kernel.get(Logger).as("HttpServer");
       const now = Date.now();
+      logger.trace("incoming request", ctx.request.toJSON());
 
       return next().then(() => {
 
-        const responseTime = Date.now() - now;
+        const time = Date.now() - now;
 
         if (ctx.status === 500 && typeof ctx.body === "object") {
           logger.error("internal error", ctx.body);
         }
 
-        logger.info(`${ctx.method} ${ctx.path} ${ctx.status} - ${responseTime}ms`, this.logContext ? {
-          request: ctx.request.toJSON(),
-          response: ctx.response.toJSON(),
-          responseTime: `${responseTime}ms`,
-        } : undefined);
+        logger.info(`${ctx.method} ${ctx.path} ${ctx.status} - ${time}ms`);
+        logger.trace("response", ctx.response.toJSON());
       });
     });
     return this;

@@ -23,7 +23,7 @@ export class PixieSession {
   @env("PIXIE_SESSION_PREFERENCES")
   public readonly preferencesCookieName: string = "PREF";
 
-  @env("PIXIE_SESSION_COOKIE")
+  @env("PIXIE_SESSION_COOKIE_OPTIONS")
   public readonly cookieOptions: ICookieOptions = {};
 
   @state

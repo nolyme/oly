@@ -64,6 +64,8 @@ export class Go extends Component<IGoProps, IGoState> {
   @inject
   private router: Router;
 
+  private watchlist: string[];
+
   public get isActive() {
     return this.router.isActive(this.props, this.props.strict);
   }
@@ -97,20 +99,24 @@ export class Go extends Component<IGoProps, IGoState> {
    */
   public componentWillMount() {
     const {to, params, query} = this.props;
-    this.setState({
-      active: this.router.isActive({to, params, query}, this.props.strict),
-    });
+    if (this.props.active) {
+      this.setState({
+        active: this.router.isActive({to, params, query}, this.props.strict),
+      });
+    } else {
+      this.watchlist = [];
+    }
   }
 
   /**
    *
    */
   public render(): JSX.Element {
-    const {to, params, query, active, ...rest} = this.props;
+    const {to, params, query, active, ...others} = this.props;
     const activeClassName = typeof active === "string" ? ` ${active}` : "";
     return createElement("a" as any, {
-      ...rest,
-      className: (this.props.className || "") + (this.isActive ? activeClassName : ""),
+      ...others,
+      className: ((this.props.className || "") + (this.isActive ? activeClassName : "")) || undefined,
       href: this.router.href({to, params, query}),
       onClick: this.onClick,
     }, this.props.children);

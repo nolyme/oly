@@ -175,6 +175,36 @@ describe("AppContext", () => {
   });
 
   describe("fixes", () => {
+    it("should override watchlist", () => {
+      class C {
+        @state d: string = "D";
+      }
+
+      class B {
+        @inject c: C;
+      }
+
+      class A extends Component {
+        @inject b: B;
+        watchlist: string[] = [];
+
+        render() {
+          return <span>{this.watchlist}</span>;
+        }
+      }
+
+      class A2 extends Component {
+        @inject b: B;
+        watchlist: string[];
+
+        render() {
+          return <span>{this.watchlist}</span>;
+        }
+      }
+
+      expect(renderToStaticMarkup(<AppContext kernel={Kernel.create()}><A/><A2/></AppContext>))
+        .toBe("<div><span></span><span>C.d</span></div>");
+    });
     it("should works with extends", () => {
 
       class D1 {
