@@ -34,6 +34,7 @@
     "@types/react-dom": "*",
     "oly": "^0.14.4",
     "oly-json": "^0.14.4",
+    "react-dom": "16.0.0",
     "react": "16.0.0"
   },
   "peerDependencies": {

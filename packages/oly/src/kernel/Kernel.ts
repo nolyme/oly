@@ -1,4 +1,4 @@
-import { IArgumentsMetadata, IInjectionsMetadata, olyCoreKeys } from "../index";
+import { IArgumentsMetadata, IInjectionsMetadata, JsonLogger, olyCoreKeys } from "../index";
 import { BrowserLogger } from "../logger/BrowserLogger";
 import { Logger } from "../logger/Logger";
 import { ServerLogger } from "../logger/ServerLogger";
@@ -259,14 +259,14 @@ export class Kernel {
 
       for (const declaration of declarations) {
         if (declaration.instance && !declaration.started && declaration.instance.onConfigure) {
-          this.getLogger().debug("configure " + declaration.definition.name);
+          this.getLogger().trace("configure " + declaration.definition.name);
           await declaration.instance.onConfigure(this.declarations);
         }
       }
 
       for (const declaration of declarations) {
         if (declaration.instance && !declaration.started && declaration.instance.onStart) {
-          this.getLogger().debug("start " + declaration.definition.name);
+          this.getLogger().trace("start " + declaration.definition.name);
           await declaration.instance.onStart(this.declarations);
           declaration.started = true;
         }
@@ -306,7 +306,7 @@ export class Kernel {
 
     for (const declaration of declarations) {
       if (declaration.instance && declaration.started && declaration.instance.onStop) {
-        this.getLogger().debug("stop " + declaration.definition.name);
+        this.getLogger().trace("stop " + declaration.definition.name);
         await declaration.instance.onStop(this.declarations);
       }
     }

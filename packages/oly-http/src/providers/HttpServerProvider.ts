@@ -2,7 +2,7 @@ import { createServer, Server } from "http";
 import * as Koa from "koa";
 import { env, inject, IProvider, Kernel, Logger, state } from "oly";
 import { helmet } from "../";
-import { IKoaMiddleware } from "../interfaces";
+import { IKoaContext, IKoaMiddleware } from "../interfaces";
 import { context } from "../middlewares";
 
 /**
@@ -21,6 +21,12 @@ export class HttpServerProvider implements IProvider {
    */
   @env("HTTP_SERVER_PORT")
   protected readonly port: number = 3000;
+
+  /**
+   * Log request/response as json.
+   */
+  @env("HTTP_LOG_CONTEXT")
+  protected readonly logContext: boolean = false;
 
   /**
    * Kernel.
@@ -74,8 +80,9 @@ export class HttpServerProvider implements IProvider {
     // override koa context with our forked kernel
     // we fork kernel to protect the main layer
     this
-      .useHelmet()
-      .use(context(this.kernel));
+      .use(context(this.kernel))
+      .useLogger()
+      .useHelmet();
 
     // start server
     return new Promise<void>((resolve, reject) => {
@@ -84,7 +91,7 @@ export class HttpServerProvider implements IProvider {
         if (err) {
           return reject(err);
         }
-        this.logger.info(`server is listening on ${this.hostname}`);
+        this.logger.info(`listening on ${this.hostname}`);
         resolve();
       });
     });
@@ -96,7 +103,7 @@ export class HttpServerProvider implements IProvider {
    */
   public onStop(): Promise<void> {
     // stop server
-    this.logger.info("kill server");
+    this.logger.info("stop server");
     return new Promise<void>((resolve, reject) =>
       this.http.shutdown((err: Error) => {
         err ? reject(err) : resolve();
@@ -104,12 +111,46 @@ export class HttpServerProvider implements IProvider {
     );
   }
 
+  /**
+   * Use helmet middleware.
+   *
+   * @overridable
+   */
   protected useHelmet(): HttpServerProvider {
     return this.use(helmet());
   }
 
   /**
+   * Use a http logger middleware.
    *
+   * @overridable
+   */
+  protected useLogger(): HttpServerProvider {
+    this.use((ctx: IKoaContext, next: Function) => {
+
+      const logger = ctx.kernel.get(Logger).as("HttpServer");
+      const now = Date.now();
+
+      return next().then(() => {
+
+        const responseTime = Date.now() - now;
+
+        if (ctx.status === 500 && typeof ctx.body === "object") {
+          logger.error("internal error", ctx.body);
+        }
+
+        logger.info(`${ctx.method} ${ctx.path} ${ctx.status} - ${responseTime}ms`, this.logContext ? {
+          request: ctx.request.toJSON(),
+          response: ctx.response.toJSON(),
+          responseTime: `${responseTime}ms`,
+        } : undefined);
+      });
+    });
+    return this;
+  }
+
+  /**
+   * @overridable
    */
   protected createServer(): Server {
     return require("http-shutdown")(createServer(this.app.callback()));

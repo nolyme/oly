@@ -29,7 +29,7 @@ export class DatabaseProvider implements IProvider {
 
     this.db = await MongoClient.connect(url);
 
-    this.logger.info(`Connected to ${this.url}`);
+    this.logger.info(`connected to ${this.url}`);
 
     for (const dep of deps) {
       if (dep.instance

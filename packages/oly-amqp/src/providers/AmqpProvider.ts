@@ -25,9 +25,9 @@ export class AmqpProvider implements IProvider {
    *
    */
   public async onStart() {
-    this.logger.info(`connect to ${this.url}`);
     this.connection = await connect(this.url);
     this.channel = await this.connection.createChannel();
+    this.logger.info(`connected to ${this.url}`);
   }
 
   /**

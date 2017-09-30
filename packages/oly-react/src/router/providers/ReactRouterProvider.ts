@@ -126,7 +126,7 @@ export class ReactRouterProvider implements IProvider {
     };
 
     // now, we are safe, TRANSITION CAN BEGIN!
-    this.logger.info(`begin 'to:${match.route.name}' (${transition.type})`);
+    this.logger.debug(`begin 'to:${match.route.name}' (${transition.type})`);
 
     // TODO: #abort()
     await this.kernel.emit(olyReactRouterEvents.TRANSITION_BEGIN, {transition} as ITransitionBeginEvent);
@@ -173,7 +173,7 @@ export class ReactRouterProvider implements IProvider {
             const redirection = result as ITransition;
             const chunks = result as IChunks;
             if (redirection.to && redirection.to.path) {
-              this.logger.info(
+              this.logger.debug(
                 `transition 'to:${match.route.name}' is replaced by another one -> layer ${i} created a redirection`);
               await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
               return redirection;
@@ -190,7 +190,7 @@ export class ReactRouterProvider implements IProvider {
             }
           } else {
             // if nothing was returned
-            this.logger.info(
+            this.logger.debug(
               `transition 'to:${match.route.name}' is aborted -> layer ${i} did not return chunk`);
             await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
             return;
@@ -199,7 +199,7 @@ export class ReactRouterProvider implements IProvider {
       }
 
       if (newLevel === -1) {
-        this.logger.info(`transition 'to:${match.route.name}' is aborted -> nothing to update`);
+        this.logger.debug(`transition 'to:${match.route.name}' is aborted -> nothing to update`);
         await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
         return;
       }
@@ -233,13 +233,13 @@ export class ReactRouterProvider implements IProvider {
 
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition} as ITransitionEndEvent);
 
-      this.logger.info(`transition 'to:${match.route.name}' is done`);
+      this.logger.debug(`transition 'to:${match.route.name}' is done`);
 
       return transition;
 
     } catch (error) {
 
-      this.logger.warn(`transition 'to:${match.route.name}' has failed`);
+      this.logger.debug(`transition 'to:${match.route.name}' has failed`);
 
       // find an error handler
       const errorHandler = this.routes.filter((r) => r.name === "error")[0] as IRoute;
@@ -251,7 +251,6 @@ export class ReactRouterProvider implements IProvider {
           ...transition.to,
           route: errorHandler,
         },
-        type: "REPLACE",
         error,
       };
 
@@ -282,6 +281,8 @@ export class ReactRouterProvider implements IProvider {
       }
 
       await this.kernel.emit(olyReactRouterEvents.TRANSITION_END, {transition: errorTransition} as ITransitionEndEvent);
+
+      return errorTransition;
     }
   }
 
@@ -302,8 +303,14 @@ export class ReactRouterProvider implements IProvider {
     }
 
     this.routes = this.matcher.createRoutes(nodes.concat(...this.createNodes(DefaultErrorHandler)));
+
+    const already: string[] = [];
     this.routes.filter((route) => route.regexp).forEach((route) => {
-      this.logger.debug(`create route ${route.node.name} -> ${route.path} (${route.stack.length})`);
+      const name = route.path || "error";
+      if (already.indexOf(name) === -1) {
+        this.logger.debug(`${name} -> ${route.node.target.name}#${route.node.propertyKey}()`);
+        already.push(name);
+      }
     });
   }
 

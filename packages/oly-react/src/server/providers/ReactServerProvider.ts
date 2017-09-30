@@ -5,6 +5,7 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { AppContext } from "../../core/components/AppContext";
+import { ITransitionError } from "../../index";
 import { Pixie } from "../../pixie/services/Pixie";
 import { View } from "../../router/components/View";
 import { ReactRouterProvider } from "../../router/providers/ReactRouterProvider";
@@ -29,7 +30,7 @@ export class ReactServerProvider implements IProvider {
   public points: string[] | string = [
     "www",
     "http://localhost:8080",
-    "default",
+    "DEFAULT",
   ];
 
   @state
@@ -173,8 +174,6 @@ export class ReactServerProvider implements IProvider {
     });
 
     this.use(this.requestHandlerMiddleware());
-
-    this.logger.info("template is ready");
   }
 
   /**
@@ -213,10 +212,9 @@ export class ReactServerProvider implements IProvider {
 
       const kernel: Kernel = ctx.kernel;
       const logger: Logger = kernel.inject(Logger).as("ReactRouter");
-      const router = kernel.inject(ReactRouterProvider);
+      const router: ReactRouterProvider = kernel.inject(ReactRouterProvider);
 
-      logger.info(`incoming request ${ctx.method} ${ctx.path}`);
-      logger.trace("page data", ctx.request.toJSON());
+      logger.trace("request", ctx.request.toJSON());
 
       try {
         // find route + resolve
@@ -228,11 +226,15 @@ export class ReactServerProvider implements IProvider {
           return;
         }
 
+        if (tr && (tr as ITransitionError).error) {
+          ctx.status = 500;
+        }
+
         // build page
         ctx.body = this.render(ctx, this.template, this.mountId);
 
       } catch (e) {
-        logger.error("server rendering has failed", e);
+        logger.debug("server rendering has failed", e);
         ctx.status = e.status || 500;
         ctx.body = this.renderError(ctx, this.template, this.mountId, e);
       }
@@ -254,7 +256,7 @@ export class ReactServerProvider implements IProvider {
         if (point.indexOf("http") === 0) {
           this.template = await this.reactProxy.getTemplate(point);
           this.use(this.reactProxy.useProxy(point));
-        } else if (point === "default") {
+        } else if (point === "DEFAULT") {
           this.template = await this.getDefaultTemplate();
         } else if (point[0] === "<" && point[point.length - 1] === ">") {
           this.template = point;
@@ -262,10 +264,10 @@ export class ReactServerProvider implements IProvider {
           this.template = await this.reactStatic.getTemplate(point);
           this.use(this.reactStatic.useStatic(point));
         }
-        this.logger.info(`use ${point} point`);
+        this.logger.info(`use point ${point}`);
         break;
       } catch (e) {
-        this.logger.warn(`point ${point} is rejected`);
+        this.logger.debug(`point ${point} is rejected`);
       }
     }
 

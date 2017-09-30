@@ -1,16 +1,10 @@
 import { Class, IMetadata } from "oly";
 import { PathRegExp } from "path-to-regexp";
-import { ComponentClass } from "react";
 
 /**
  * Layer object.
  */
 export type IChunks = { [key: string]: JSX.Element }; // tslint:disable-line
-
-/**
- * Result of page controller.
- */
-export type IRawChunk = JSX.Element | ComponentClass<any> | IChunks;
 
 export type ITransitionType = "PUSH" | "POP" | "REPLACE" | "NONE";
 

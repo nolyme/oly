@@ -29,7 +29,7 @@ export class WorkerProvider implements IProvider {
         for (const propertyKey of keys) {
           const task = tasksMetadata.properties[propertyKey];
 
-          this.logger.debug(`consume ${task.name} -> ${target.name}#${propertyKey}()`);
+          this.logger.debug(`${task.name} -> ${target.name}#${propertyKey}()`);
           await this.amqp.channel.assertQueue(task.name, task.assert);
           await this.amqp.channel.prefetch(4);
           await this.amqp.channel.consume(task.name,

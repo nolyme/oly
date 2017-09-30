@@ -103,10 +103,9 @@ export class ApiProvider implements IProvider {
    * @param declarations
    */
   public async onStart(declarations: IDeclarations): Promise<void> {
-    this.use(this.apiMiddlewares.log());
     this.use(this.apiMiddlewares.errorHandler());
     this.useBodyParser();
-    this.logger.info(`prefix api with ${this.prefix}`);
+    this.logger.debug(`prefix API with ${this.prefix}`);
     this.scan(declarations);
   }
 
@@ -150,11 +149,10 @@ export class ApiProvider implements IProvider {
    * @param definition     Dependency definition used with this router
    */
   protected logRouter(router: any, definition: Function): this {
-    this.logger.trace(`prepare ${definition.name}`);
     for (const layer of router.stack) {
       const method = layer.methods[layer.methods.length - 1];
       const path = (this.prefix + layer.path).replace(/\/\//, "/");
-      this.logger.debug(`mount ${method} ${path} -> ${definition.name}#${(layer as any).propertyKey}()`);
+      this.logger.debug(`${method} ${path} -> ${definition.name}#${(layer as any).propertyKey}()`);
     }
     return this;
   }

@@ -1,4 +1,4 @@
-import { Class, env, Logger, Global } from "oly";
+import { Class, env, Global } from "oly";
 import { HttpServerException, IKoaContext, IKoaMiddleware } from "oly-http";
 import { olyApiErrors } from "../constants/errors";
 import { NotFoundException } from "../exceptions/NotFoundException";
@@ -63,36 +63,6 @@ export class ApiMiddlewares {
 
         ctx.status = exception.status;
         ctx.body = exception;
-      });
-    };
-  }
-
-  /**
-   * Simple request logger.
-   */
-  public log(): IKoaMiddleware {
-    return (ctx: IKoaContext, next: Function) => {
-
-      const logger = ctx.kernel.inject(Logger).as("ApiRouter");
-
-      logger.info(`incoming request ${ctx.method} ${ctx.path}`);
-      logger.debug("request data", ctx.request.toJSON());
-
-      return next().then(() => {
-        if (ctx.status < 400) {
-
-          logger.info(`request ending successfully (${ctx.status})`);
-          logger.debug("response data", ctx.response.toJSON());
-
-        } else {
-
-          if (ctx.status === 500) {
-            logger.error("internal error", ctx.body);
-          }
-
-          logger.info(`request has been rejected (${ctx.status})`);
-          logger.debug("response error data", ctx.response.toJSON());
-        }
       });
     };
   }
