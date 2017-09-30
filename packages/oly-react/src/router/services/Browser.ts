@@ -69,7 +69,7 @@ export class Browser {
       this.document.body.appendChild(this.container);
     }
 
-    if (hydrateOnly) {
+    if (hydrateOnly && typeof ReactDOM["hydrate"] === "function") {
       ReactDOM["hydrate"](element, this.container);
       return;
     }

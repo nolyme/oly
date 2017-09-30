@@ -188,6 +188,10 @@ describe("AppContext", () => {
       class AC extends Component {
         @inject d1: D1;
 
+        componentWillMount() {
+          this.d1.data += "1";
+        }
+
         render(): JSX.Element | null {
           return null;
         }
@@ -195,12 +199,18 @@ describe("AppContext", () => {
 
       class Aie extends AC {
         componentWillMount() {
-          // noop
+          super.componentWillMount();
+          this.d1.data += "2";
         }
       }
 
       class BC extends Aie {
         @inject d2: D2;
+
+        componentWillMount() {
+          super.componentWillMount();
+          this.d2.data += "1";
+        }
 
         render() {
           return <div>{this.d1.data + this.d2.data}</div>;
@@ -210,7 +220,7 @@ describe("AppContext", () => {
       const k1 = Kernel.create();
 
       expect(renderToStaticMarkup(<AppContext kernel={k1}><BC/></AppContext>))
-        .toBe("<div>OK</div>");
+        .toBe("<div>O12K1</div>");
     });
   });
 });

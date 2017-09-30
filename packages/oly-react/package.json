@@ -15,7 +15,6 @@
   ],
   "dependencies": {
     "@types/history": "*",
-    "@types/prop-types": "*",
     "@types/react-helmet": "*",
     "cheerio": "1.0.0-rc.2",
     "history": "4.7.2",
@@ -29,6 +28,7 @@
   "devDependencies": {
     "@types/cheerio": "*",
     "@types/js-cookie": "*",
+    "@types/prop-types": "*",
     "@types/qs": "*",
     "@types/react": "*",
     "@types/react-dom": "*",
@@ -38,8 +38,8 @@
   },
   "peerDependencies": {
     "oly": "^0.14.4",
-    "react-dom": "*",
-    "react": "*"
+    "react": "*",
+    "react-dom": "*"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

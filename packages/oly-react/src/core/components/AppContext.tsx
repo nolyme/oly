@@ -1,7 +1,8 @@
 import { Kernel } from "oly";
-import * as PropTypes from "prop-types";
 import * as React from "react";
 import { Children } from "react";
+
+const PropTypes = require("prop-types");
 
 /**
  *

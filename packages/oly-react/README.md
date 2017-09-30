@@ -27,7 +27,7 @@ Kernel
 ## Installation
 
 ```bash
-$ npm install oly oly-react react @types/react
+$ npm install oly oly-react react @types/react react-dom
 ```
 
 ## Features

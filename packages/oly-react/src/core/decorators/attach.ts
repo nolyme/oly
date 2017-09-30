@@ -18,7 +18,7 @@ export class AttachDecorator implements IDecorator {
   public asClass(target: { contextTypes?: any; prototype?: any }): void {
     const self = this;
 
-    if (target.contextTypes) {
+    if (!!target.contextTypes) {
       target.contextTypes.kernel = PropTypes.object;
     } else {
       target.contextTypes = {kernel: PropTypes.object};
@@ -28,16 +28,15 @@ export class AttachDecorator implements IDecorator {
     if (!!target.prototype) {
 
       if (!!target.prototype.componentWillMount$$) {
-        target.prototype.componentWillMount = target.prototype.componentWillMount$$;
-        target.prototype.componentWillUnmount = target.prototype.componentWillUnmount$$;
+        return;
       }
 
       // force Kernel#inject() before #componentWillMount()
+      target.prototype.inject = true;
       target.prototype.componentWillMount$$ = target.prototype.componentWillMount || Global.noop;
       target.prototype.componentWillMount = function componentWillMount(this: InjectableComponent) {
-        if (!this.injected$$ && this.context.kernel) { // you can call #componentWillMount more than once now
+        if (this.context.kernel) { // you can call #componentWillMount more than once now
           this.context.kernel.inject(ComponentInjector).inject(this.constructor, this, self.options);
-          this.injected$$ = true;
         }
         return target.prototype.componentWillMount$$.apply(this, arguments);
       };
