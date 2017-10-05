@@ -57,14 +57,14 @@ export class WorkerProvider implements IProvider {
     return async (message: Message) => {
       const kernel = this.kernel.fork();
       kernel.state("Amqp.message", message);
-      const logger = kernel.inject(Logger).as("ConsumerProvider");
+      const logger = kernel.inject(Logger).as("Worker");
       try {
-        logger.info(`begin task "${name}"`);
+        logger.info(`begin ${name}`);
         await kernel.invoke(target, propertyKey, [message]);
-        logger.info(`end task successfully`);
+        logger.info(`${name} OK`);
         this.amqp.channel.ack(message);
       } catch (e) {
-        logger.warn("task has failed", e);
+        logger.warn(`${name} has failed`, e);
         this.amqp.channel.ack(message);
       }
     };

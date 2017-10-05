@@ -57,12 +57,13 @@ export class ApiMiddlewares {
           ? e
           : new HttpServerException(e);
 
+        const exceptionAsJson = exception.toJSON();
         if (this.hideCause) {
-          delete exception.cause;
+          delete exceptionAsJson.cause;
         }
 
-        ctx.status = exception.status;
-        ctx.body = exception;
+        ctx.status = exceptionAsJson.status;
+        ctx.body = exceptionAsJson;
       });
     };
   }

@@ -1,0 +1,38 @@
+{
+  "name": "oly-queue",
+  "description": "oly-queue",
+  "version": "0.15.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "oly",
+    "typescript",
+    "kue"
+  ],
+  "dependencies": {
+    "@types/kue": "0.11.6",
+    "kue": "0.11.6"
+  },
+  "devDependencies": {
+    "oly": "^0.15.0",
+    "oly-retry": "^0.15.0"
+  },
+  "peerDependencies": {
+    "oly": "^0.15.0"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules coverage lib",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nolyme/oly.git"
+  }
+}

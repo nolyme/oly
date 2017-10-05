@@ -87,7 +87,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
           </Go>
         </li>
         {!!module.env.length && <li>
-          <Go to="configuration" params={{module: module.name}}>Configuration</Go>
+          <Go to="configuration" active={"is-active"} params={{module: module.name}}>Configuration</Go>
         </li>}
         {module.manuals.map((e) =>
           <li key={e.name}>

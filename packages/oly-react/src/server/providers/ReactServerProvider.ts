@@ -56,9 +56,6 @@ export class ReactServerProvider implements IProvider {
 
   /**
    * This is useless if you use ReactStatic or ReactProxy.
-   *
-   * @param prefix
-   * @param mountId
    */
   public generateIndex(prefix: string, mountId: string) {
     return `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body><div id="${mountId}"></div></body></html>`;
@@ -202,8 +199,7 @@ export class ReactServerProvider implements IProvider {
       }
 
       // - check if body is empty (default behavior with koa)
-      // - check if url is not a file / assets
-      if (!!ctx.body || ctx.url.indexOf(".") > -1) {
+      if (!!ctx.body) {
         return;
       }
 
