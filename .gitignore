@@ -6,6 +6,7 @@
 /packages/*/out
 /packages/*/www
 /packages/*/coverage
+/packages/*/yarn.lock
 .idea
 *.log
 *.iml

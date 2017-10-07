@@ -124,6 +124,7 @@ export class HttpServerProvider implements IProvider {
 
       const logger = ctx.kernel.get(Logger).as("HttpServer");
       const now = Date.now();
+      logger.info(`--> ${ctx.method} ${ctx.path}`);
       logger.trace("incoming request", ctx.request.toJSON());
 
       return next().then(() => {
@@ -134,7 +135,7 @@ export class HttpServerProvider implements IProvider {
           logger.error("internal error", ctx.body);
         }
 
-        logger.info(`${ctx.method} ${ctx.path} ${ctx.status} - ${time}ms`);
+        logger.info(`<-- ${ctx.method} ${ctx.path} ${ctx.status} - ${time}ms`);
         logger.trace("response", ctx.response.toJSON());
       });
     });

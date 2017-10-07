@@ -13,10 +13,19 @@ describe("HelmetTest", () => {
       <div>
         top
         <Helmet>
-          <html lang="en"/>
+          <html lang="en" dir="ltr"/>
           <title>Hello</title>
           <meta name="description" content="This is cool"/>
           <body className="root"/>
+        </Helmet>
+        bottom
+      </div>
+    )
+
+    @page("/empty") empty = () => (
+      <div>
+        top
+        <Helmet>
         </Helmet>
         bottom
       </div>
@@ -42,5 +51,17 @@ describe("HelmetTest", () => {
     expect($("title").text()).toBe("Hello");
     expect($("meta[name=\"description\"]").attr("content")).toBe("This is cool");
     expect($("div[id=\"app\"] div").text()).toBe("topbottom");
+  });
+
+  it("should insert nothing", async () => {
+
+    const data = await client.get<string>("/empty");
+    const $ = cheerio.load(data);
+
+    expect(data).toBe("<!DOCTYPE html>" +
+      "<html>" +
+      "<head><meta charset=\"UTF-8\"><title data-react-helmet=\"true\"></title></head>" +
+      "<body><div id=\"app\"><div data-reactroot=\"\">top<!-- -->bottom</div></div></body>" +
+      "</html>");
   });
 });

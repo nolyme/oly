@@ -34,6 +34,9 @@ export class ReactServerProvider implements IProvider {
   ];
 
   @state
+  public transforms: Array<($: CheerioStatic, ctx: IKoaContext) => any> = [];
+
+  @state
   protected template: string;
 
   @inject
@@ -66,29 +69,51 @@ export class ReactServerProvider implements IProvider {
    *
    * @param ctx             IKoaContext
    * @param template        index.html
-   * @param mountId
    */
-  public render(ctx: IKoaContext, template: string, mountId: string): string {
-
-    const pixie: Pixie = ctx.kernel.inject(Pixie);
-    const now = Date.now();
-    const markup = renderToString(this.rootElement(ctx.kernel));
-    ctx.kernel.get(Logger).as("ReactServer").trace(`rendering - ${Date.now() - now}ms`);
-    const helmet = Helmet.renderStatic();
-
-    const html = helmet.htmlAttributes.toString();
-    if (html) {
-      template = template.replace(/<html(.*?)>/, `<html$1 ${html}>`);
-    }
-
-    const body = helmet.bodyAttributes.toString();
-    if (body) {
-      template = template.replace(/<body(.*?)>/, `<body ${body}>`);
-    }
+  public render(ctx: IKoaContext, template: string): string {
 
     const $ = cheerio.load(template);
 
-    $("#" + mountId).append(markup);
+    this.renderReact($, ctx);
+    this.renderHelmet($, ctx);
+    this.renderPixie($, ctx);
+    this.transforms.forEach((tt) => tt($, ctx));
+
+    return $.html();
+  }
+
+  public renderReact($: CheerioStatic, ctx: IKoaContext) {
+    const markup = renderToString(this.rootElement(ctx.kernel));
+    $("#" + this.mountId).append(markup);
+  }
+
+  public renderPixie($: CheerioStatic, ctx: IKoaContext) {
+    const pixie: Pixie = ctx.kernel.inject(Pixie);
+    $("body").prepend(pixie.store.toHTML());
+  }
+
+  public renderHelmet($: CheerioStatic, ctx: IKoaContext) {
+    const helmet = Helmet.renderStatic();
+
+    const htmlAttrs = helmet.htmlAttributes
+      .toString()
+      .split(" ")
+      .map((el) => el.trim())
+      .filter((el) => !!el);
+    for (const attr of htmlAttrs) {
+      const [key, value] = attr.split("=");
+      $("html").attr(key, value.replace(/"/g, ""));
+    }
+
+    const bodyAttrs = helmet.bodyAttributes
+      .toString()
+      .split(" ")
+      .map((el) => el.trim())
+      .filter((el) => !!el);
+    for (const attr of bodyAttrs) {
+      const [key, value] = attr.split("=");
+      $("body").attr(key, value.replace(/"/g, ""));
+    }
 
     const title = helmet.title.toString();
     if (title) {
@@ -104,22 +129,17 @@ export class ReactServerProvider implements IProvider {
     if (link) {
       $("head").append(link);
     }
-
-    $("body").prepend(pixie.store.toHTML());
-
-    return $.html();
   }
 
   /**
    * In very few cases, SSR can failed.
    *
    * @param ctx         Koa Context with Kernel
-   * @param mountId
    * @param template    App template with styles + scripts
    * @param error       The holy error
    * @returns {string}
    */
-  public renderError(ctx: IKoaContext, template: string, mountId: string, error: Error): string {
+  public renderError(ctx: IKoaContext, template: string, error: Error): string {
     return template.replace(/<body(.*)>[\s\S]*<\/body>/igm, `
         <body$1>
         <div style="padding: 50px">
@@ -187,7 +207,7 @@ export class ReactServerProvider implements IProvider {
    * Default behavior for the react server.
    */
   protected requestHandlerMiddleware(): IKoaMiddleware {
-    return async (ctx, next) => {
+    return async (ctx: IKoaContext, next) => {
 
       // await the end
       await next();
@@ -228,12 +248,12 @@ export class ReactServerProvider implements IProvider {
         }
 
         // build page
-        ctx.body = this.render(ctx, this.template, this.mountId);
+        ctx.body = this.render(ctx, this.template);
 
       } catch (e) {
         logger.error("server rendering has failed", e);
         ctx.status = e.status || 500;
-        ctx.body = this.renderError(ctx, this.template, this.mountId, e);
+        ctx.body = this.renderError(ctx, this.template, e);
       }
     };
   }
