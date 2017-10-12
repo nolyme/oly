@@ -1,7 +1,7 @@
-import { createQueue, Queue } from "kue";
+import * as Bull from "bull";
 import { env, IDeclarations, inject, Logger, Meta, state } from "oly";
 import { olyQueueKeys } from "../";
-import { ITask } from "../interfaces";
+import { ITask, ITaskMetadata } from "../interfaces";
 
 /**
  * Queue.
@@ -11,11 +11,8 @@ export class QueueProvider {
   @env("OLY_QUEUE_REDIS_URL")
   public readonly connectionUrl: string = "redis://localhost:6379";
 
-  @env("OLY_QUEUE_SHUTDOWN_TIMEOUT")
-  public readonly shutdownTimeout: number = 5000;
-
-  @state
-  public queue: Queue;
+  @env("OLY_QUEUE_REDIS_PREFIX")
+  public readonly prefix: string = "oly";
 
   @state
   public tasks: ITask[];
@@ -26,48 +23,45 @@ export class QueueProvider {
   /**
    * Hook.
    */
-  public onStart(declarations: IDeclarations) {
+  public async onStart(declarations: IDeclarations) {
 
     this.tasks = [];
-    this.queue = this.createQueue();
-
     for (const declaration of declarations) {
-      const meta = Meta.of({key: olyQueueKeys.tasks, target: declaration.definition}).deep();
+
+      const meta = Meta.of({key: olyQueueKeys.tasks, target: declaration.definition}).deep<ITaskMetadata>();
       if (meta) {
+
         const keys = Object.keys(meta.properties);
         for (const key of keys) {
-          this.tasks.push({propertyKey: key, target: declaration.definition, options: meta.properties[key]});
+          this.tasks.push({
+            queue: this.createQueue(meta.properties[key].name, this.connectionUrl),
+            propertyKey: key,
+            target: declaration.definition,
+            options: meta.properties[key],
+          });
         }
       }
     }
 
-    return new Promise((resolve) => {
-      this.logger.info(`connected to ${this.connectionUrl}`);
-      resolve();
-    });
+    for (const task of this.tasks) {
+      await task.queue.getJobCounts();
+    }
   }
 
   /**
    * Hook.
    */
-  public onStop() {
+  public async onStop() {
     this.logger.info(`close ${this.connectionUrl}`);
-    return new Promise((resolve, reject) => {
-      this.queue.shutdown(this.shutdownTimeout, (err: Error) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve();
-      });
-    });
+    for (const task of this.tasks) {
+      await task.queue.close();
+    }
   }
 
   /**
    * @overridable
    */
-  protected createQueue() {
-    const queue = createQueue({redis: this.connectionUrl});
-    queue.watchStuckJobs(10000);
-    return queue;
+  protected createQueue(name: string, url: string) {
+    return new Bull(name, url);
   }
 }

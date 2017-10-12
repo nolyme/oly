@@ -36,7 +36,7 @@ export abstract class Repository<T> extends TypeRepository<T> implements IReposi
   }
 
   get target() {
-    return this.databaseProvider.connection.getRepository(this.entityType)["target"];
+    return this.entityType;
   }
 
   //

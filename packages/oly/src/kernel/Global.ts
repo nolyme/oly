@@ -1,11 +1,10 @@
-import * as merge from "deepmerge";
-
 export class Global {
 
   public static noop: any = () => undefined;
 
   public static merge(...obj: object[]): any {
-    return merge.all(obj);
+    const dm = require("deepmerge");
+    return (dm.default || dm).all(obj);
   }
 
   public static isProduction(): boolean {

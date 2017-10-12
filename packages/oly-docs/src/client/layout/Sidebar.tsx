@@ -21,9 +21,9 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
 
   componentWillMount() {
     const active = this.docs.modules.find((m) => this.router.isActive({to: "module", params: {module: m.name}}));
-    this.state = {
+    this.setState({
       show: active ? active.name : "",
-    };
+    });
   }
 
   @on(olyReactRouterEvents.TRANSITION_END)
@@ -60,7 +60,7 @@ export class Sidebar extends Component<ISidebarProps, ISidebarState> {
                   {m.name}
                   <small>({m.version})</small>
                 </a>,
-                <div>
+                <div key={m.name + "div"}>
                   <Collapse isOpened={this.state.show === m.name}>
                     {this.renderModuleSidebar(m)}
                   </Collapse>

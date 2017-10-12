@@ -13,8 +13,8 @@
     "socket.io"
   ],
   "dependencies": {
-    "@types/socket.io": "1.4.30",
-    "@types/socket.io-client": "1.4.30",
+    "@types/socket.io": "1.4.31",
+    "@types/socket.io-client": "1.4.31",
     "oly-http": "^0.15.0",
     "socket.io": "2.0.3",
     "socket.io-client": "2.0.3"

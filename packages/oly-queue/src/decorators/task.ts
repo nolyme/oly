@@ -10,10 +10,9 @@ export class TaskDecorator implements IDecorator {
     Meta.of({key: olyQueueKeys.tasks, target, propertyKey}).set({
       ...this.options,
       name: this.options.name || `${target.constructor.name}.${propertyKey}`,
-      priority: this.options.priority || "normal",
-      unique: !!this.options.unique,
-      delay: this.options.delay || 0,
-      concurrency: this.options.concurrency || 1,
+      concurrency: this.options.concurrency,
+      priority: this.options.priority,
+      unique: this.options.unique,
     });
   }
 }

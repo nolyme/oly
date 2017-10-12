@@ -49,10 +49,10 @@
     color: inherit;
     text-decoration: none !important;
     transition: all 300ms ease;
-    box-shadow: inset 0 -3px rgba($secondary, 0.4);
+    box-shadow: inset 0 -3px rgba($primary, 0.4);
     &:hover {
       color: inherit;
-      box-shadow: inset 0 -3px rgba($secondary, 0.8);
+      box-shadow: inset 0 -3px rgba($primary, 0.8);
     }
   }
 }

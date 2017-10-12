@@ -1,11 +1,11 @@
 {
   "private": true,
   "devDependencies": {
-    "@types/jest": "21.1.1",
-    "@types/node": "8.0.31",
+    "@types/jest": "21.1.2",
+    "@types/node": "8.0.34",
     "jest": "21.2.1",
-    "lerna": "2.2.0",
-    "ts-jest": "21.0.1",
+    "lerna": "2.4.0",
+    "ts-jest": "21.1.2",
     "ts-node": "3.3.0",
     "tslint": "5.7.0",
     "typescript": "2.5.3"

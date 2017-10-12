@@ -112,7 +112,7 @@ export class Go extends Component<IGoProps, IGoState> {
    *
    */
   public render(): JSX.Element {
-    const {to, params, query, active, ...others} = this.props;
+    const {to, params, query, active, strict, ...others} = this.props;
     const activeClassName = typeof active === "string" ? ` ${active}` : "";
     return createElement("a" as any, {
       ...others,

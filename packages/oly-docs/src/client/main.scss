@@ -1,10 +1,6 @@
-
-$primary: hsl(171, 100%, 41%);
-
-
+@import "variables";
 @import "~bulma/sass/utilities/_all";
 @import "~bulma/sass/base/_all";
-@import "variables";
 @import "~bulma/sass/elements/form";
 @import "~bulma/sass/elements/container";
 @import "~bulma/sass/elements/button";

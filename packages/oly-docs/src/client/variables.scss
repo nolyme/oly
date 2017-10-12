@@ -1,6 +1,7 @@
-@import "~bulma/sass/utilities/variables";
+@import "~bulma/sass/utilities/initial-variables";
 
-$secondary: $turquoise;
+$primary: hsl(171, 100%, 37%);
+$link: $primary;
 $mobile: 800px;
 $sidebar-width: 260px;
 $navbar-height: 54px;

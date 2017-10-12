@@ -26,12 +26,12 @@
     "react-helmet": "5.2.0"
   },
   "devDependencies": {
-    "@types/cheerio": "*",
+    "@types/cheerio": "0.22.3",
     "@types/js-cookie": "*",
     "@types/prop-types": "*",
     "@types/qs": "*",
-    "@types/react": "*",
-    "@types/react-dom": "*",
+    "@types/react": "16.0.10",
+    "@types/react-dom": "16.0.1",
     "oly": "^0.15.0",
     "oly-json": "^0.15.0",
     "react": "16.0.0",

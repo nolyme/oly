@@ -121,9 +121,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   // resolve provides options to navigate into node_modules/sources
   config.resolve = {
 
-    extensions: [".webpack.js", ".js", ".web.js", ".ts", ".tsx", ".json"],
-
-    mainFields: ["webpack", "browser", "module", "main"],
+    extensions: [".js", ".ts", ".tsx", ".json"],
 
     modules: [
       "node_modules",
@@ -197,7 +195,8 @@ export function createConfiguration(options: IToolsOptions): Configuration {
   if (options.assets) {
     config.plugins.push(
       new CopyPlugin([{
-        from: options.assets, to: "./",
+        from: options.assets,
+        to: "./",
       }]),
     );
   }
@@ -216,9 +215,6 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         root,
         verbose: false,
       }),
-    );
-
-    config.plugins.push(
       new UglifyJsPlugin({
         comments: false,
         mangle: {
