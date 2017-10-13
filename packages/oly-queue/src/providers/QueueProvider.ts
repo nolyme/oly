@@ -46,6 +46,8 @@ export class QueueProvider {
     for (const task of this.tasks) {
       await task.queue.getJobCounts();
     }
+
+    this.logger.info(`connected to ${this.connectionUrl}`);
   }
 
   /**

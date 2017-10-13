@@ -146,6 +146,13 @@ export abstract class Repository<T extends IDocument> {
   }
 
   /**
+   * Find one document by id and replace it.
+   */
+  public async replaceById(id: string, data: Partial<T>): Promise<void> {
+    await this.collection.findOneAndReplace({_id: this.castId(id)}, this.in(data));
+  }
+
+  /**
    * Count number of matching documents in the db to a query.
    *
    * @param {Object} mongoQuery

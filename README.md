@@ -29,7 +29,7 @@ Kernel
   .create(/* store */)
   .with(/* services & providers */)
   .start()
-  .catch(console.error)
+  .catch(console.error);
 ```
 
 ### Getting started

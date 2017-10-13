@@ -112,7 +112,7 @@ export class Json {
    * @param type    Class definition
    * @param data    Raw data (string or object)
    */
-  public build<T extends object>(type: Class<T>, data: string | object): T {
+  public build<T extends object>(type: Class<T>, data: any): T {
     return this.sanitize(type, this.map(type, this.validate(type, this.parse(data))));
   }
 
