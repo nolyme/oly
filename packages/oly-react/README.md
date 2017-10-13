@@ -62,8 +62,8 @@ import { layout, View, page, Go } from "oly-react";
 class App {
   @layout root() {
     return <div>
-      <Go to="/"/>Home</Go>
-      <Go to="about"/>About</Go>
+      <Go to="/">Home</Go>
+      <Go to="about">About</Go>
       <View/>
     </div>
   }

@@ -24,6 +24,10 @@ export class Auth {
    */
   public async parseToken(ctx: IKoaContext) {
 
+    if (!!this.token) {
+      return;
+    }
+
     const authorization = ctx.request.header.authorization;
     if (typeof authorization === "string") {
 

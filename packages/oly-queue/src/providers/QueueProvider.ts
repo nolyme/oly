@@ -8,10 +8,16 @@ import { ITask, ITaskMetadata } from "../interfaces";
  */
 export class QueueProvider {
 
-  @env("OLY_QUEUE_REDIS_URL")
+  /**
+   *
+   */
+  @env("QUEUE_REDIS_URL")
   public readonly connectionUrl: string = "redis://localhost:6379";
 
-  @env("OLY_QUEUE_REDIS_PREFIX")
+  /**
+   *
+   */
+  @env("QUEUE_REDIS_PREFIX")
   public readonly prefix: string = "oly";
 
   @state

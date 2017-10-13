@@ -8,6 +8,7 @@ export class AuthDecorator implements IDecorator {
   }
 
   public asMethod(target: object, propertyKey: string, i: TypedPropertyDescriptor<any>) {
+
     const roles = typeof this.roles === "string" ? [this.roles] : this.roles;
     use(hasRole(...roles))(target, propertyKey);
     Meta.of({key: olyApiKeys.router, target, propertyKey}).set({

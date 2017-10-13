@@ -3,6 +3,7 @@ import { ApiProvider, body, ForbiddenException, get, post, UnauthorizedException
 import { HttpClient, IKoaContext } from "oly-http";
 import { IToken } from "../src";
 import { auth } from "../src/decorators/auth";
+import { token } from "../src/decorators/token";
 import { Auth } from "../src/services/Auth";
 
 describe("CustomAuth", () => {
@@ -34,10 +35,9 @@ describe("CustomAuth", () => {
       return this.auth.createToken(payload);
     }
 
-    @auth
     @get("/auth")
-    authOnly() {
-      return {ok: true, token: this.auth.token};
+    authOnly(@token() tk: IToken) {
+      return {ok: true, token: tk};
     }
 
     @auth("ADMIN")
@@ -69,17 +69,17 @@ describe("CustomAuth", () => {
 
   it("should accept auth", async () => {
     const id = Math.random();
-    const token = await client.post("/token", {id});
+    const tk = await client.post("/token", {id});
 
-    expect(await client.get("/auth", authorize(token))).toEqual({ok: true, token: {id}});
-    expect(await client.get("/admin", authorize(token))).toEqual(error(ForbiddenException));
+    expect(await client.get("/auth", authorize(tk))).toEqual({ok: true, token: {id}});
+    expect(await client.get("/admin", authorize(tk))).toEqual(error(ForbiddenException));
   });
 
   it("should accept auth/role", async () => {
     const id = Math.random();
-    const token = await client.post("/token", {id, roles: ["ADMIN"]});
+    const tk = await client.post("/token", {id, roles: ["ADMIN"]});
 
-    expect(await client.get("/auth", authorize(token))).toEqual({ok: true, token: {id, roles: ["ADMIN"]}});
-    expect(await client.get("/admin", authorize(token))).toEqual({ok: true, token: {id, roles: ["ADMIN"]}});
+    expect(await client.get("/auth", authorize(tk))).toEqual({ok: true, token: {id, roles: ["ADMIN"]}});
+    expect(await client.get("/admin", authorize(tk))).toEqual({ok: true, token: {id, roles: ["ADMIN"]}});
   });
 });
