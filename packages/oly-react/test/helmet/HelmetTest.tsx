@@ -60,7 +60,7 @@ describe("HelmetTest", () => {
 
     expect(data).toBe("<!DOCTYPE html>" +
       "<html>" +
-      "<head><meta charset=\"UTF-8\"><title data-react-helmet=\"true\"></title></head>" +
+      "<head><meta charset=\"UTF-8\"></head>" +
       "<body><div id=\"app\"><div data-reactroot=\"\">top<!-- -->bottom</div></div></body>" +
       "</html>");
   });

@@ -116,7 +116,7 @@ export class ReactServerProvider implements IProvider {
     }
 
     const title = helmet.title.toString();
-    if (title) {
+    if (title && title !== "<title data-react-helmet=\"true\"></title>") {
       $("head").remove("title").append(title);
     }
 
