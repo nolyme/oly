@@ -119,5 +119,5 @@ Kernel
 |--|--|
 | Routing | [path-to-regexp](https://github.com/pillarjs/path-to-regexp) |
 | History | [history](https://github.com/ReactTraining/history) |
-| Meta | [react-meta](https://github.com/nfl/react-helmet) |
+| Meta | [react-helmet](https://github.com/nfl/react-helmet) |
 

@@ -4,7 +4,7 @@ import { Component, createElement, HTMLAttributes, MouseEvent } from "react";
 import { action } from "../../core/decorators/action";
 import { Router } from "../services/Router";
 
-const isModifiedEvent = (event: MouseEvent<HTMLAnchorElement>) =>
+export const isModifiedEvent = (event: MouseEvent<HTMLAnchorElement>) =>
   (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 
 /**

@@ -130,8 +130,8 @@ export class Exception extends Error {
       // show real stack trace on Node
       // this breaks sourcemaps on browsers
 
-      // [DISABLED] performance [DISABLED]
-      // Object.defineProperty(this, "stack", {get: () => this.getLongStackTrace()});
+      // /!\ perf ? /!\
+      Object.defineProperty(this, "stack", {get: () => this.getLongStackTrace()});
     }
   }
 
