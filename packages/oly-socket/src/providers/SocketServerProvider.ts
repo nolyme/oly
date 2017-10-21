@@ -40,20 +40,13 @@ export class SocketServerProvider {
 
     for (const e of this.kernel["events"]) {
       if (typeof e.action !== "function") {
-        socket.kernel["events"].push({
-          ...e,
-          action: {
-            // skip instance
-            target: e.action.target,
-            propertyKey: e.action.propertyKey,
-          },
-        });
+        socket.kernel.get(e.action.target);
       }
     }
 
     socket.kernel.state("socket", socket);
 
-    const logger = socket.kernel.inject(Logger).as("SocketConnection");
+    const logger = socket.kernel.inject(Logger).as("Socket");
     logger.debug(`create new connection`);
 
     socket.kernel.emit("connect");
