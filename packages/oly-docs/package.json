@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/prismjs": "*",
-    "@types/react": "16.0.10",
+    "@types/react": "*",
     "bulma": "0.6.0",
     "highlight.js": "9.12.0",
     "marked": "0.3.6",
