@@ -16,7 +16,7 @@
     "docs:dev": "HTML=false OUT=packages/oly-docs/src/client/assets yarn docs --verbose",
     "all": "lerna run clean && lerna bootstrap --hoist && lerna run build && yarn test:ci && yarn docs",
     "clean": "lerna run clean",
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --hoist",
     "watch": "lerna exec --parallel -- npm run watch",
     "build": "lerna run build",
     "lint": "tslint --fix packages/**/src/**/*.ts",
