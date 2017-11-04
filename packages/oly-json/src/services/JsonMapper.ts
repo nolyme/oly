@@ -115,6 +115,10 @@ export class JsonMapper {
       return value;
     }
 
+    if (field.type === Object) {
+      return value;
+    }
+
     throw new Error(
       `Can't cast '${field.name}' into object. Value is not an object and field is '${typeof field.type}'`);
   }

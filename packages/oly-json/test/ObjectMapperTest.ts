@@ -5,6 +5,10 @@ import { ValidationException } from "../src/exceptions/ValidationException";
 import { Json } from "../src/services/Json";
 import { JsonValidator } from "../src/services/JsonValidator";
 
+interface IPerson {
+  name: string;
+}
+
 describe("ObjectMapper", () => {
   it("should parse an object", () => {
 
@@ -25,6 +29,7 @@ describe("ObjectMapper", () => {
       @field() num: number;
       @field str: A;
       @field sub: SubData;
+      @field p: IPerson;
 
       get msg() {
         return "hello " + this.sub.hello + " " + this.str + this.num + this.bo;
@@ -40,6 +45,9 @@ describe("ObjectMapper", () => {
       sub: {
         hello: "world",
       },
+      p: {
+        name: "ok",
+      },
     };
 
     const json = Kernel.create().inject(Json);
@@ -48,6 +56,7 @@ describe("ObjectMapper", () => {
     expect(obj.msg).toBe("hello world a1true");
     expect(obj.arr1.join("")).toBe("ab");
     expect(obj.arr2[0].upper).toBe("TEST");
+    expect(obj.p.name).toBe("ok");
 
     expect(json.schema(Data)).toEqual({
       name: "Data",
@@ -89,6 +98,9 @@ describe("ObjectMapper", () => {
           ],
           type: "object",
         },
+        p: {
+          type: "object",
+        },
       },
       required: [
         "arr1",
@@ -97,6 +109,7 @@ describe("ObjectMapper", () => {
         "num",
         "str",
         "sub",
+        "p",
       ],
       type: "object",
     });
