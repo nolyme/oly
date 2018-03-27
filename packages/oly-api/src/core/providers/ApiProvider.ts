@@ -119,12 +119,12 @@ export class ApiProvider implements IProvider {
   /**
    * Default multipart parser.
    */
-  protected useMulter(file: string): IKoaMiddleware {
+  protected useMulter(files: any[]): IKoaMiddleware {
     const multer: any = require("koa-multer"); // tslint:disable-line
     return multer({
       storage: multer.memoryStorage(),
       limit: {fileSize: 5000000},
-    }).single(file) as any;
+    }).fields(files.map((f) => ({name: f.name, maxCount: 1})));
   }
 
   /**
@@ -177,9 +177,9 @@ export class ApiProvider implements IProvider {
       const mountFunction = koaRouter[route.method.toLowerCase()];
       const middlewares = route.middlewares.concat([]);
       if (routerMetadata.args[propertyKey]) {
-        const isMultipart = routerMetadata.args[propertyKey].filter((arg) => arg.kind === "file")[0];
-        if (isMultipart) {
-          middlewares.push(this.useMulter(isMultipart.name));
+        const multipartFiles = routerMetadata.args[propertyKey].filter((arg) => arg.kind === "file");
+        if (multipartFiles) {
+          middlewares.push(this.useMulter(multipartFiles));
         }
       }
 

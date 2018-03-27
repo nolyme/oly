@@ -34,7 +34,7 @@ export class FileDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const blob = ctx.req[fileName];
+          const blob = (ctx.req as any).files[fileName][0];
           if (this.options.required !== false && !blob) {
             throw new BadRequestException(olyApiErrors.missing("file", fileName));
           }
