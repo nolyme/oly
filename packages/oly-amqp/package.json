@@ -12,8 +12,8 @@
     "amqp"
   ],
   "dependencies": {
-    "@types/amqplib": "0.5.4",
-    "amqplib": "0.5.1",
+    "@types/amqplib": "0.5.7",
+    "amqplib": "0.5.2",
     "oly-json": "^0.15.1"
   },
   "devDependencies": {

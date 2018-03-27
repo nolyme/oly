@@ -1,4 +1,4 @@
-import { IArgumentsMetadata, IInjectionsMetadata, JsonLogger, olyCoreKeys } from "../index";
+import { IArgumentsMetadata, IInjectionsMetadata, olyCoreKeys } from "../index";
 import { BrowserLogger } from "../logger/BrowserLogger";
 import { Logger } from "../logger/Logger";
 import { ServerLogger } from "../logger/ServerLogger";
@@ -130,7 +130,10 @@ export class Kernel {
    */
   private parent?: Kernel;
 
-  private logger: Logger;
+  /**
+   *
+   */
+  private logger: Logger|null = null;
 
   /**
    * Create a new kernel. Use Kernel.create instead.

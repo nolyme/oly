@@ -31,7 +31,7 @@ export class JsonValidator {
     const valid = validate(target);
 
     if (!valid) {
-      throw new ValidationException(this.ajv.errorsText(validate.errors), validate.errors || []);
+      throw new ValidationException(this.ajv.errorsText(validate.errors as any), validate.errors || []);
     }
 
     return target;
@@ -49,7 +49,7 @@ export class JsonValidator {
     const valid = validate(source);
 
     if (!valid) {
-      throw new ValidationException(this.ajv.errorsText(validate.errors), validate.errors || []);
+      throw new ValidationException(this.ajv.errorsText(validate.errors as any), validate.errors || []);
     }
 
     return source;

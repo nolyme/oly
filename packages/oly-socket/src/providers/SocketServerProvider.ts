@@ -5,7 +5,7 @@ import { ISocket, ISocketServer } from "../interfaces";
 
 export class SocketServerProvider {
 
-  public static readonly io = io;
+  public static readonly io: any = io;
 
   @state
   public sockets: ISocket[] = [];

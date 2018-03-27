@@ -11,6 +11,8 @@
     "jsx": "react",
     "importHelpers": true,
     "noEmitHelpers": true,
+    "skipLibCheck": true,
+    "strictPropertyInitialization": false,
     "lib": [
       "dom",
       "es5",

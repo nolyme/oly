@@ -68,15 +68,4 @@ export abstract class Repository<T> extends TypeRepository<T> implements IReposi
       .setParameter("value", value)
       .getOne();
   }
-
-  /**
-   * Create entity and persist.
-   *
-   * @param data    Json data
-   */
-  public insert(data: Array<DeepPartial<T>>): Promise<T[]>;
-  public insert(data: DeepPartial<T>): Promise<T>;
-  public insert(data: any): Promise<any> {
-    return this.save(this.create(data));
-  }
 }

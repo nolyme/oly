@@ -100,7 +100,7 @@ export class Meta {
       beforeAsMethod: [],
       beforeAsParameter: [],
     };
-    return decorator;
+    return decorator as any;
   }
 
   /**

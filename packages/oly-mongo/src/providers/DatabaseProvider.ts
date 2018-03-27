@@ -12,6 +12,9 @@ export class DatabaseProvider implements IProvider {
   public readonly url: string = "mongodb://localhost/test";
 
   @state
+  public client: MongoClient;
+
+  @state
   public db: Db;
 
   @inject
@@ -27,7 +30,8 @@ export class DatabaseProvider implements IProvider {
         ? this.url
         : "mongodb://" + this.url;
 
-    this.db = await MongoClient.connect(url);
+    this.client = await MongoClient.connect(url);
+    this.db = this.client.db();
 
     this.logger.info(`connected to ${this.url}`);
 
@@ -42,7 +46,7 @@ export class DatabaseProvider implements IProvider {
   }
 
   public async onStop() {
-    await this.db.close();
+    await this.client.close();
   }
 
   public async index(collectionName: string, type: Class) {

@@ -43,8 +43,8 @@ export class Publisher {
     }
   }
 
-  public wait(job: IJob) {
-    return job.finished();
+  public async wait(job: IJob) {
+    return await job.finished();
   }
 
   /**

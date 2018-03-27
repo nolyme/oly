@@ -12,8 +12,8 @@
     "bull"
   ],
   "dependencies": {
-    "@types/bull": "^3.0.1",
-    "bull": "^3.3.1"
+    "@types/bull": "^3.3.9",
+    "bull": "^3.3.10"
   },
   "devDependencies": {
     "oly": "^0.15.1",

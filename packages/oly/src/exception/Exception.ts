@@ -76,7 +76,7 @@ export class Exception extends Error {
    * It's not virtual, it's mutable.
    * By default, `name = constructor.name`.
    */
-  public readonly name: string;
+  // public readonly name: string;
 
   /**
    * Error cause.
@@ -114,6 +114,7 @@ export class Exception extends Error {
     const name = (this.constructor as any).name || "Error";
     const source = new Error();
 
+    this.source = source;
     Object.defineProperty(this, "source", {get: () => source});
     Object.defineProperty(this, "name", {get: () => name});
 

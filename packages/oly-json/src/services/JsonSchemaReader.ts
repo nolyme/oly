@@ -96,7 +96,7 @@ export class JsonSchemaReader {
       const array = field as IMetaArray;
       const item: IField = typeof array.of === "function"
         ? {name: "", type: array.of}
-        : {name: "", type: Object, ...field.of};
+        : {name: "", type: Object, ...field.of} as any;
 
       if (item) {
         jsonSchema.items = this.extractProperty(item);

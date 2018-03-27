@@ -54,18 +54,20 @@ export class WorkerProvider implements IProvider {
    * @param name
    */
   protected createHandler(target: Class<any>, propertyKey: string, name: string) {
-    return async (message: Message) => {
+    return async (message: Message | null) => {
       const kernel = this.kernel.fork();
-      kernel.state("Amqp.message", message);
-      const logger = kernel.inject(Logger).as("Worker");
-      try {
-        logger.info(`begin ${name}`);
-        await kernel.invoke(target, propertyKey, [message]);
-        logger.info(`${name} OK`);
-        this.amqp.channel.ack(message);
-      } catch (e) {
-        logger.warn(`${name} has failed`, e);
-        this.amqp.channel.ack(message);
+      if (message != null) {
+        kernel.state("Amqp.message", message);
+        const logger = kernel.inject(Logger).as("Worker");
+        try {
+          logger.info(`begin ${name}`);
+          await kernel.invoke(target, propertyKey, [message]);
+          logger.info(`${name} OK`);
+          this.amqp.channel.ack(message);
+        } catch (e) {
+          logger.warn(`${name} has failed`, e);
+          this.amqp.channel.ack(message);
+        }
       }
     };
   }

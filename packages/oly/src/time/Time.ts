@@ -40,7 +40,7 @@ export class Time {
   /**
    * Time cursor.
    */
-  private cursor: number | null;
+  private cursor: number | null = null;
 
   /**
    * Timer registry.

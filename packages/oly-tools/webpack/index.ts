@@ -18,7 +18,7 @@ const {
   },
 } = _webpack;
 
-export { Configuration, NewModule } from "webpack";
+export { Configuration } from "webpack";
 export * from "./synchronize";
 export * from "./node";
 export * from "./interfaces";

@@ -8,7 +8,7 @@ export const SAVE_STATE = (...states: string[]) => (kernel: Kernel) => {
     kernel.state(key, config[key]);
   }
 
-  kernel.on(olyCoreEvents.STATE_MUTATE, (ev: IStateMutateEvent) => {
+  kernel.on(olyCoreEvents.STATE_MUTATE, (ev: any) => {
     if (states.indexOf(ev.key) > -1) {
       config[ev.key] = ev.newValue;
       localStorage.setItem("prefs", JSON.stringify(config));

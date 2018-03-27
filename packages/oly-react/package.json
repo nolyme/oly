@@ -14,14 +14,14 @@
     "router"
   ],
   "dependencies": {
-    "@types/history": "*",
-    "@types/react-helmet": "*",
+    "@types/history": "4.6.2",
+    "@types/react-helmet": "5.0.5",
     "cheerio": "1.0.0-rc.2",
     "history": "4.7.2",
-    "js-cookie": "2.1.4",
+    "js-cookie": "2.2.0",
     "oly-http": "^0.15.1",
     "path-to-regexp": "1.7.0",
-    "prop-types": "15.6.0",
+    "prop-types": "15.6.1",
     "qs": "6.5.1",
     "react-helmet": "5.2.0"
   },
@@ -34,8 +34,8 @@
     "@types/react-dom": "*",
     "oly": "^0.15.1",
     "oly-json": "^0.15.1",
-    "react": "16.0.0",
-    "react-dom": "16.0.0"
+    "react": "16.2.0",
+    "react-dom": "16.2.0"
   },
   "peerDependencies": {
     "oly": "^0.15.1",

@@ -1,4 +1,5 @@
 import { Kernel } from "oly";
+import * as SocketIO from "socket.io";
 
 export interface ISocket extends SocketIO.Socket {
   kernel: Kernel;
