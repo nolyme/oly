@@ -4,6 +4,7 @@ import * as CopyPlugin from "copy-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import { join, resolve } from "path";
+import * as UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import * as _webpack from "webpack";
 import { Configuration } from "webpack";
 import { IToolsOptions } from "./interfaces";
@@ -13,9 +14,6 @@ import { cssLoaderFactory, fontLoaderFactory, imageLoaderFactory, typescriptLoad
 const {
   LoaderOptionsPlugin,
   DefinePlugin,
-  optimize: {
-    UglifyJsPlugin,
-  },
 } = _webpack;
 
 export { Configuration } from "webpack";
@@ -205,6 +203,20 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
     config.bail = true;
 
+    config.optimization = {
+      minimize: true,
+      minimizer: [
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            comments: false,
+            mangle: {
+              keep_fnames: true,
+            },
+          },
+        }),
+      ],
+    };
+
     config.plugins.push(
       new LoaderOptionsPlugin({
         debug: false,
@@ -214,12 +226,6 @@ export function createConfiguration(options: IToolsOptions): Configuration {
       new CleanWebpackPlugin([options.dist], {
         root,
         verbose: false,
-      }),
-      new UglifyJsPlugin({
-        comments: false,
-        mangle: {
-          keep_fnames: true,
-        },
       }),
     );
   }
