@@ -1,7 +1,7 @@
 {
   "name": "oly-retry",
   "description": "oly-retry",
-  "version": "0.15.1",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -12,7 +12,7 @@
     "retry"
   ],
   "devDependencies": {
-    "oly": "^0.15.1"
+    "oly": "^1.0.0"
   },
   "peerDependencies": {
     "oly": "^0.15.1"

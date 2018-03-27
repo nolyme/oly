@@ -1,7 +1,7 @@
 {
   "name": "oly-http",
   "description": "HTTP Server and Client.",
-  "version": "0.15.1",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -25,7 +25,7 @@
     "koa-static": "4.0.2"
   },
   "devDependencies": {
-    "oly": "^0.15.1"
+    "oly": "^1.0.0"
   },
   "peerDependencies": {
     "oly": "^0.15.1"

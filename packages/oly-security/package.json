@@ -1,7 +1,7 @@
 {
   "name": "oly-security",
   "description": "Secure a REST API.",
-  "version": "0.15.1",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.browser.js",
@@ -18,11 +18,11 @@
     "@types/jsonwebtoken": "7.2.3",
     "bcryptjs": "2.4.3",
     "jsonwebtoken": "8.1.0",
-    "oly-http": "^0.15.1"
+    "oly-http": "^1.0.0"
   },
   "devDependencies": {
-    "oly": "^0.15.1",
-    "oly-api": "^0.15.1"
+    "oly": "^1.0.0",
+    "oly-api": "^1.0.0"
   },
   "peerDependencies": {
     "oly": "^0.15.1",

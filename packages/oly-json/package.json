@@ -1,7 +1,7 @@
 {
   "name": "oly-json",
   "description": "JSON Schema with decorators to map and validate data.",
-  "version": "0.15.1",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "lib/index.js",
   "browser": "lib/index.js",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "ajv-i18n": "3.0.0",
-    "oly": "^0.15.1"
+    "oly": "^1.0.0"
   },
   "peerDependencies": {
     "oly": "^0.15.1"
