@@ -4,7 +4,7 @@ import { IField, IType } from "../interfaces";
 
 export class FieldDecorator implements IDecorator {
 
-  private options: Partial<IField>;
+  private readonly options: Partial<IField>;
 
   public constructor(options: Partial<IField> | IType = {}) {
     this.options = typeof options === "function" ? {type: options} : options;
@@ -20,6 +20,21 @@ export class FieldDecorator implements IDecorator {
       type,
       ...this.options,
     });
+  }
+
+  public asParameter(target: object, propertyKey: string, index: number) {
+    if (propertyKey === "$constructor") {
+
+      const type = this.options.type || Meta.designParamTypes(target, propertyKey)[index];
+      const name = Meta.getParamNames(target.constructor as any)[index];
+
+      Meta.of({key: olyMapperKeys.fields, target, propertyKey: name}).set({
+        name: this.options.name || name,
+        required: this.options.required !== false,
+        type,
+        ...this.options,
+      });
+    }
   }
 }
 

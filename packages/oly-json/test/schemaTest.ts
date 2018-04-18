@@ -1,4 +1,5 @@
 import { Kernel } from "oly";
+import { optional } from "../src";
 import { choice } from "../src/decorators/choice";
 import { field } from "../src/decorators/field";
 import { schema } from "../src/decorators/schema";
@@ -27,6 +28,14 @@ describe("@schema", () => {
     @field a: A;
     @field b: B;
     @field c: string;
+
+    constructor(
+      public d: boolean,
+      @optional({
+        description: "e",
+      }) public e: boolean,
+    ) {
+    }
   }
 
   const kernel = Kernel.create();
@@ -41,7 +50,7 @@ describe("@schema", () => {
       }, {
         required: ["b"],
       }],
-      required: ["c"],
+      required: ["c", "d"],
       properties: {
         a: {
           name: "A",
@@ -66,14 +75,21 @@ describe("@schema", () => {
         c: {
           type: "string",
         },
+        d: {
+          type: "boolean",
+        },
+        e: {
+          description: "e",
+          type: "boolean",
+        },
       },
       type: "object",
     });
   });
 
   it("should add custom jsonschema", () => {
-    json.validate(Data, {a: {c: "ok"}, c: "ok"});
-    json.validate(Data, {b: {d: "ok"}, c: "ok"});
+    json.validate(Data, {a: {c: "ok"}, c: "ok", d: true});
+    json.validate(Data, {b: {d: "ok"}, c: "ok", d: true});
     expect(() => json.validate(Data, {a: {c: "ok"}, b: {d: "ok"}, c: "ok"})).toThrow(ValidationException);
     expect(() => json.validate(Data, {c: "ok"})).toThrow(ValidationException);
   });
