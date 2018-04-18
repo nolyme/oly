@@ -28,7 +28,7 @@
     "oly": "^1.0.0"
   },
   "peerDependencies": {
-    "oly": "^0.15.1"
+    "oly": "^1.0.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",
