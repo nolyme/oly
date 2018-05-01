@@ -48,9 +48,15 @@ export class Active extends Component<IActiveProps, IActiveState> {
    *
    */
   public render(): ReactNode {
-    if (!this.isActive || !this.props.children) {
+
+    if (!this.isActive) {
       return null;
     }
+
+    if (this.props.children == null) {
+      return null;
+    }
+
     return this.props.children;
   }
 }

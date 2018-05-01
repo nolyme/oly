@@ -47,6 +47,11 @@ export class AppContext extends React.Component<IAppContextProps, {}> {
    * Render children
    */
   public render(): ReactNode {
+
+    if (this.props.children == null) {
+      return null;
+    }
+
     return this.props.children;
   }
 }

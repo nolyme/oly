@@ -21,6 +21,10 @@ export class Layer extends Component<ILayerProps, {}> {
   }
 
   public render(): ReactNode {
+    if (this.props.children == null) {
+      return null;
+    }
+
     return this.props.children;
   }
 }

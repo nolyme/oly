@@ -151,6 +151,11 @@ export class View extends Component<IViewProps, { content: any }> {
       this.logger.trace(`render view ${this.index} (${this.name})`);
       return this.content;
     }
+
+    if (this.props.children == null) {
+      return null;
+    }
+
     return this.props.children;
   }
 }
