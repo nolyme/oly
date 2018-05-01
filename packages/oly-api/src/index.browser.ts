@@ -22,3 +22,5 @@ export * from "./core/exceptions/ConflictException";
 
 export * from "./swagger/decorators/api";
 export * from "./swagger/interfaces";
+
+export * from "./security/index.browser";

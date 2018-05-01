@@ -1,6 +1,6 @@
 import { Kernel } from "oly";
 import * as React from "react";
-import { Children } from "react";
+import { ReactNode } from "react";
 
 const PropTypes = require("prop-types");
 
@@ -46,13 +46,7 @@ export class AppContext extends React.Component<IAppContextProps, {}> {
   /**
    * Render children
    */
-  public render(): JSX.Element | null {
-    if (!this.props.children) {
-      return null;
-    }
-    if (Array.isArray(this.props.children)) {
-      return <div>{this.props.children}</div>;
-    }
-    return Children.only(this.props.children);
+  public render(): ReactNode {
+    return this.props.children;
   }
 }

@@ -44,7 +44,6 @@ export class ComponentInjector {
    *
    * @param definition    Component definition
    * @param instance      Instance
-   * @param options
    */
   public inject(definition: Class, instance: Component & { watchlist: any }) {
     const self = this;

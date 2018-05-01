@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Component } from "react";
+import { Component, ReactNode } from "react";
 
 const PropTypes = require("prop-types");
 
@@ -20,7 +20,7 @@ export class Layer extends Component<ILayerProps, {}> {
     return {layer: this.props.id};
   }
 
-  public render(): JSX.Element | null {
-    return this.props.children as any;
+  public render(): ReactNode {
+    return this.props.children;
   }
 }

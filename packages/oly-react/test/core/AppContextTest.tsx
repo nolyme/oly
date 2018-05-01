@@ -203,8 +203,9 @@ describe("AppContext", () => {
       }
 
       expect(renderToStaticMarkup(<AppContext kernel={Kernel.create()}><A/><A2/></AppContext>))
-        .toBe("<div><span></span><span>C.d</span></div>");
+        .toBe("<span></span><span>C.d</span>");
     });
+
     it("should works with extends", () => {
 
       class D1 {

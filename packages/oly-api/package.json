@@ -19,6 +19,10 @@
     "koa-router": "7.4.0",
     "oly-http": "^1.0.0",
     "oly-json": "^1.0.0",
+    "@types/bcryptjs": "2.4.1",
+    "@types/jsonwebtoken": "7.2.3",
+    "bcryptjs": "2.4.3",
+    "jsonwebtoken": "8.1.0",
     "swagger-ui-dist": "3.13.1"
   },
   "devDependencies": {

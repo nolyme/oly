@@ -128,6 +128,11 @@ export function createConfiguration(options: IToolsOptions): Configuration {
     ],
   };
 
+  config.performance = {
+    maxAssetSize: 1000000,
+    maxEntrypointSize: 1000000,
+  };
+
   config.resolveLoader = {
     modules: config.resolve.modules,
   };
@@ -201,6 +206,7 @@ export function createConfiguration(options: IToolsOptions): Configuration {
 
   if (isProduction) {
 
+    config.mode = "production";
     config.bail = true;
 
     config.optimization = {
@@ -228,6 +234,8 @@ export function createConfiguration(options: IToolsOptions): Configuration {
         verbose: false,
       }),
     );
+  } else {
+    config.mode = "development";
   }
 
   // Axios & some universal libs use Buffer in their code

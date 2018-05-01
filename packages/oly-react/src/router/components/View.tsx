@@ -1,7 +1,7 @@
 import { inject, Logger, on } from "oly";
 import * as PropTypes from "prop-types";
 import * as React from "react";
-import { Children, Component } from "react";
+import { Component, ReactNode } from "react";
 import { attach } from "../../core/decorators/attach";
 import { olyReactRouterEvents } from "../constants/events";
 import { ILayer, ITransitionRenderEvent } from "../interfaces";
@@ -146,14 +146,11 @@ export class View extends Component<IViewProps, { content: any }> {
   /**
    *
    */
-  public render(): JSX.Element | null {
+  public render(): ReactNode {
     if (this.content) {
       this.logger.trace(`render view ${this.index} (${this.name})`);
       return this.content;
     }
-    if (this.props.children) {
-      return Children.only(this.props.children);
-    }
-    return null;
+    return this.props.children;
   }
 }

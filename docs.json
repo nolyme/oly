@@ -109,17 +109,6 @@
       ]
     },
     {
-      "name": "oly-security",
-      "type": "server",
-      "decorators": [
-        "decorators/auth.ts"
-      ],
-      "services": [
-        "services/Crypto.ts",
-        "services/JwtAuth.ts"
-      ]
-    },
-    {
       "name": "oly-tools",
       "type": "dev",
       "manuals": [

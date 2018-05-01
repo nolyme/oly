@@ -1,6 +1,6 @@
 import { inject } from "oly";
 import * as React from "react";
-import { Children, Component } from "react";
+import { Component, ReactNode } from "react";
 import { IHrefQuery } from "../interfaces";
 import { Router } from "../services/Router";
 
@@ -47,13 +47,10 @@ export class Active extends Component<IActiveProps, IActiveState> {
   /**
    *
    */
-  public render(): JSX.Element | null {
+  public render(): ReactNode {
     if (!this.isActive || !this.props.children) {
       return null;
     }
-    if (Array.isArray(this.props.children)) {
-      return <div>{this.props.children}</div>;
-    }
-    return Children.only(this.props.children);
+    return this.props.children;
   }
 }
