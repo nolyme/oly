@@ -8,6 +8,7 @@ import { Json } from "../src/services/Json";
 
 describe("@schema", () => {
 
+  @schema((s) => s)
   class A {
     @field c: string;
   }

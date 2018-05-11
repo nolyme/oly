@@ -17,10 +17,12 @@ export class SchemaDecorator implements IDecorator {
 
     //
     const types = Meta.designParamTypes(target, "$constructor");
-    const names = Meta.getParamNames(target.prototype.constructor);
-    for (let i = 0; i < types.length; i++) {
-      if (!fields || !fields.properties[names[i]]) {
-        field({type: types[i]})(target.prototype, names[i]);
+    if (types) {
+      const names = Meta.getParamNames(target.prototype.constructor);
+      for (let i = 0; i < types.length; i++) {
+        if (!fields || !fields.properties[names[i]]) {
+          field({type: types[i]})(target.prototype, names[i]);
+        }
       }
     }
   }
