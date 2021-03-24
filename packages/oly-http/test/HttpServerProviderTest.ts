@@ -1,4 +1,4 @@
-import { Kernel } from "oly";
+import {Kernel} from "oly";
 import { IKoaContext } from "../src";
 import { olyHttpErrors } from "../src/constants/errors";
 import { HttpClientException } from "../src/exceptions/HttpClientException";
@@ -9,7 +9,9 @@ import { HttpClient } from "../src/services/HttpClient";
 describe("HttpServerProvider", () => {
 
   class BoomException extends HttpServerException {
-    message = "Boom";
+    constructor(message = "Boom") {
+      super(message);
+    }
     status = 409;
   }
 
@@ -31,7 +33,7 @@ describe("HttpServerProvider", () => {
     .use((ctx: IKoaContext) => {
       // imitate a random web service
       if (ctx.method === "DELETE") {
-        throw new BoomException(new Error("Outch!"), "MegaBoom");
+        throw new BoomException("MegaBoom").because(new Error("Outch!"));
       }
       ctx.body = "OK";
     });

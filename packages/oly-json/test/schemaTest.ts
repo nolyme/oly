@@ -44,7 +44,7 @@ describe("@schema", () => {
 
   it("should merge jsonschema", () => {
     expect(json.schema(Data)).toEqual({
-      name: "Toto",
+      title: "Toto",
       description: "Hi!",
       oneOf: [{
         required: ["a"],
@@ -54,7 +54,7 @@ describe("@schema", () => {
       required: ["c", "d"],
       properties: {
         a: {
-          name: "A",
+          title: "A",
           properties: {
             c: {
               type: "string",
@@ -64,7 +64,7 @@ describe("@schema", () => {
           type: "object",
         },
         b: {
-          name: "B",
+          title: "B",
           properties: {
             d: {
               type: "string",

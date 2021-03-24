@@ -45,7 +45,7 @@ export class Auth {
 
       this.logger.trace("cookie token detected");
 
-      await this.checkToken(ctx.cookies.get(cookieName));
+      await this.checkToken(ctx.cookies.get(cookieName) || "");
     }
   }
 

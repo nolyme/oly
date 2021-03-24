@@ -38,7 +38,7 @@ export class Active extends Component<IActiveProps, IActiveState> {
   /**
    *
    */
-  public componentWillMount(): void {
+  public UNSAFE_componentWillMount(): void {
     this.state = {
       active: this.router.isActive(this.props.href, this.props.strict),
     };

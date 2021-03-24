@@ -38,17 +38,17 @@ export class A1 {
 
 export class A2 {
   @get("/query")
-  query(@query a: string = "default") {
+  query(@query() a: string = "default") {
     return {a};
   }
 
   @get("/query/list")
-  queryList(@query a: string[]) {
+  queryList(@query() a: string[]) {
     return {a};
   }
 
   @get("/query/number")
-  queryNumber(@query a: number) {
+  queryNumber(@query() a: number) {
     return {a};
   }
 
@@ -68,22 +68,22 @@ export class A2 {
   }
 
   @get("/pathAsNumber/:id")
-  pathAsNumber(@param id: number) {
+  pathAsNumber(@param() id: number) {
     return {a: id};
   }
 
   @post("/body")
-  body(@body a: object) {
+  body(@body() a: object) {
     return {a};
   }
 
   @post("/body/parse")
-  bodyParse(@build @body a: Data) {
+  bodyParse(@build @body() a: Data) {
     return {a};
   }
 
   @post("/upload")
-  upload(@body a: IUploadedFile) {
+  upload(@body() a: IUploadedFile) {
     return {a};
   }
 }

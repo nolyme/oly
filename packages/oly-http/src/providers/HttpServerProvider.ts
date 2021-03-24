@@ -81,10 +81,7 @@ export class HttpServerProvider implements IProvider {
     // start server
     return new Promise<void>((resolve, reject) => {
       this.http = this.createServer();
-      this.http.listen(this.port, this.host, (err: Error) => {
-        if (err) {
-          return reject(err);
-        }
+      this.http.listen(this.port, this.host, () => {
         this.logger.info(`listening on ${this.hostname}`);
         resolve();
       });
@@ -132,7 +129,7 @@ export class HttpServerProvider implements IProvider {
         const time = Date.now() - now;
 
         if (ctx.status === 500 && typeof ctx.body === "object") {
-          logger.error("internal error", ctx.body);
+          logger.error("internal error", ctx.body ?? undefined);
         }
 
         logger.info(`<-- ${ctx.method} ${ctx.path} ${ctx.status} - ${time}ms`);

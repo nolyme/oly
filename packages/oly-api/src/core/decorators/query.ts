@@ -36,7 +36,7 @@ export class QueryDecorator implements IDecorator {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
 
-          const value: string = ctx.query[name] == null
+          const value: string|string[]|undefined = ctx.query[name] == null
             ? ctx.query[name + "[]"]
             : ctx.query[name];
 

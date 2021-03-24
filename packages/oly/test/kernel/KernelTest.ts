@@ -590,23 +590,23 @@ describe("Kernel", () => {
     });
 
     it("should init state once", () => {
-      class A {
+      class A33 {
         @state()
         b = "c";
       }
 
       const kernel = createKernel();
-      const a = kernel.inject(A);
+      const a = kernel.inject(A33);
       expect(a.b).toBe("c");
       a.b = "d";
       expect(a.b).toBe("d");
-      expect(kernel.state(_.identity(A, "b"))).toBe(a.b);
+      expect(kernel.state(_.identity(A33, "b"))).toBe(a.b);
       const child = kernel.fork();
-      const a2 = child.inject(A);
+      const a2 = child.inject(A33);
       expect(a2.b).toBe("d");
       expect(a.b).toBe(a2.b);
-      expect(kernel.state(_.identity(A, "b"))).toBe(a.b);
-      expect(child.state(_.identity(A, "b"))).toBe(a.b);
+      expect(kernel.state(_.identity(A33, "b"))).toBe(a.b);
+      expect(child.state(_.identity(A33, "b"))).toBe(a.b);
     });
 
     it("should keep :use", () => {
@@ -621,7 +621,7 @@ describe("Kernel", () => {
 
     it("should wait event", async () => {
       const k = createKernel();
-      _.timeout(10).then((_) => k.emit("test:lol", {OK: true}));
+      _.timeout(10).then((v) => k.emit("test:lol", {OK: true}));
       expect(await k.on("test:lol").wait())
         .toEqual({OK: true});
     });
@@ -705,7 +705,7 @@ describe("Kernel", () => {
         constructor(@state("F") public a: string) {
         }
 
-        c(@inject a: A) {
+        c(@inject() a: A) {
           this.e = a.b;
           return this.e;
         }

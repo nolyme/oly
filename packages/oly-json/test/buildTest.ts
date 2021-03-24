@@ -19,7 +19,7 @@ describe("@build", () => {
   }
 
   class Foo {
-    @field name: string;
+    @field() name: string;
     @array({of: Bar})
     bars: Bar[];
   }

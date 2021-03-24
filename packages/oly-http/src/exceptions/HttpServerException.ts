@@ -26,7 +26,9 @@ import { olyHttpErrors } from "../constants/errors";
  */
 export class HttpServerException extends Exception {
 
-  public message: string = olyHttpErrors.internalError();
+  constructor(message: string = olyHttpErrors.internalError()) {
+    super(message);
+  }
 
   public status: number = 500;
 

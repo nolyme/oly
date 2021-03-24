@@ -4,7 +4,7 @@ import { Kernel } from "../Kernel";
 /**
  * How to define a declaration.
  */
-export interface IDeclaration<T = any> {
+export interface IDeclaration<T extends object = any> {
   // each or once ?
   singleton: boolean;
   // the definition
@@ -16,10 +16,10 @@ export interface IDeclaration<T = any> {
   // how to create our instance
   use: Class<T> | IFactory<T>;
   // who rely on it
-  children: Array<{
+  children: {
     // definition
     type: Function;
-  }>;
+  }[];
 }
 
 /**
@@ -31,7 +31,7 @@ export type IDeclarations = IDeclaration[];
 /**
  * Inline complex definition.
  */
-export interface IDefinition<T = any> {
+export interface IDefinition<T extends object = any> {
   // definition identifier
   provide: Class<T>;
   // the used definition/factory. default is value of `provide`
@@ -94,9 +94,7 @@ export type IFactory<T = any> = (kernel: Kernel, parent?: Class) => T;
 /**
  *
  */
-export interface Class<T = any> extends Function { // tslint:disable-line
-  new(...args: any[]): T;
-}
+export type Class<T extends object = any> = new(...args: any[]) => T;
 
 /**
  * This is how we see a provider.

@@ -55,7 +55,7 @@ export class ApiMiddlewares {
             && e.status > -1
           ))
           ? e
-          : new HttpServerException(e);
+          : new HttpServerException().because(e);
 
         const exceptionAsJson = exception.toJSON();
         if (this.hideCause) {

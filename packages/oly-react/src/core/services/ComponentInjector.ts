@@ -59,7 +59,7 @@ export class ComponentInjector {
         for (const name of states) {
           if (self.kernel["started"] && event.key === Global.keyify(name) && Global.isBrowser()) {
             self.logger.trace(`forceUpdate <${this.constructor.name}/> (${event.key})`);
-            return new Promise((resolve) => instance.forceUpdate(resolve));
+            return new Promise<void>((resolve) => instance.forceUpdate(resolve));
           }
         }
       };

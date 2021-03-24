@@ -155,6 +155,15 @@ export class Exception extends Error {
   }
 
   /**
+   *
+   * @param cause
+   */
+  public because(cause?: Throwable): this {
+    Object.defineProperty(this, "cause", {get: () => cause});
+    return this;
+  }
+
+  /**
    * Get the long stack trace.
    *
    * ```ts

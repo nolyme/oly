@@ -11,7 +11,7 @@ export class JsonSanitizer {
    * @param definition      Class definition
    * @param source          Json object data
    */
-  public sanitizeClass<T>(definition: Class<T>, source: T): T {
+  public sanitizeClass<T extends object>(definition: Class<T>, source: T): T {
 
     const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).deep<IFieldsMetadata>();
     if (fieldsMetadata) {

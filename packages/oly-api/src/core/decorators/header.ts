@@ -35,7 +35,8 @@ export class HeaderDecorator implements IDecorator {
       handler: (k: Kernel) => {
         const ctx: IKoaContext = k.state("Koa.context");
         if (ctx) {
-          const value: string = ctx.header[name.toLowerCase()];
+          const rawValue = ctx.header[name.toLowerCase()] || "";
+          const value: string = Array.isArray(rawValue) ? rawValue.join(",") : rawValue;
           const result = TypeParser.parse(type, value);
 
           if (result == null && this.options.required === true) {

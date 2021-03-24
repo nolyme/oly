@@ -31,7 +31,7 @@ export class Person {
     upper: true,
   }) name: string;
 
-  @date birthdate: Date;
+  @date() birthdate: Date;
 
   @field({
     map: (value: any) => new Date(value),
@@ -39,7 +39,7 @@ export class Person {
 
   @field() size: number;
 
-  @field verified: boolean;
+  @field() verified: boolean;
 
   @field() status: number;
 

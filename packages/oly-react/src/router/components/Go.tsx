@@ -97,7 +97,7 @@ export class Go extends Component<IGoProps, IGoState> {
   /**
    *
    */
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     const {to, params, query} = this.props;
     if (this.props.active) {
       this.setState({

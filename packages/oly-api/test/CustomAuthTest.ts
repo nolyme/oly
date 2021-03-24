@@ -31,7 +31,7 @@ describe("CustomAuth", () => {
     @inject auth: Auth;
 
     @post("/token")
-    token(@body payload: IToken) {
+    token(@body() payload: IToken) {
       return this.auth.createToken(payload);
     }
 

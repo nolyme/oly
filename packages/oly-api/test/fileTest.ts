@@ -7,13 +7,13 @@ import { ApiProvider, file, IUploadedFile, post } from "../src";
 describe("@file", () => {
 
   class DummyUploadController {
-    @post("/mono") mono(@file f1: IUploadedFile) {
+    @post("/mono") mono(@file() f1: IUploadedFile) {
       return {
         f1: f1.size,
       };
     }
 
-    @post("/duo") duo(@file f1: IUploadedFile, @file f2: IUploadedFile) {
+    @post("/duo") duo(@file() f1: IUploadedFile, @file() f2: IUploadedFile) {
       return {
         f1: f1.size,
         f2: f2.size,

@@ -15,15 +15,15 @@
     "axios"
   ],
   "dependencies": {
-    "@types/koa": "2.0.44",
-    "axios": "0.18.0",
-    "http-shutdown": "1.2.0",
-    "kcors": "2.2.1",
-    "koa": "2.5.0",
-    "koa-compress": "2.0.0",
-    "koa-helmet": "3.3.0",
-    "koa-mount": "3.0.0",
-    "koa-static": "4.0.2"
+    "@types/koa": "^2.13.1",
+    "axios": "^0.21.1",
+    "http-shutdown": "^1.2.2",
+    "kcors": "^2.2.2",
+    "koa": "^2.13.1",
+    "koa-compress": "^5.0.1",
+    "koa-helmet": "^6.1.0",
+    "koa-mount": "^4.0.0",
+    "koa-static": "^5.0.0"
   },
   "devDependencies": {
     "oly": "^1.1.0"

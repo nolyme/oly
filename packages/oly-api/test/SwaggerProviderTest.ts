@@ -27,7 +27,7 @@ describe("SwaggerProvider", () => {
     @api({
       description: "Toto",
     })
-    index(@body data: Data) {
+    index(@body() data: Data) {
       return {ok: true};
     }
   }

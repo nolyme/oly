@@ -71,7 +71,7 @@ describe("ApiProviderLegacy", () => {
       }
 
       @post("/check")
-      check(@build @body data: DataCheck) {
+      check(@build @body() data: DataCheck) {
         return data.username;
       }
 

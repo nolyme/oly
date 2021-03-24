@@ -167,14 +167,14 @@ export class Router {
    * Call browser-history goForward.
    */
   public forward(): void {
-    this.browser.history.goForward();
+    this.browser.history.forward();
   }
 
   /**
    * Call browser-history goBack.
    */
   public back(): void {
-    this.browser.history.goBack();
+    this.browser.history.back();
   }
 
   /**

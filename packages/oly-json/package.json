@@ -15,10 +15,10 @@
     "ajv"
   ],
   "dependencies": {
-    "ajv": "6.4.0"
+    "ajv": "^7.2.3"
   },
   "devDependencies": {
-    "ajv-i18n": "3.0.0",
+    "ajv-i18n": "^3.6.0",
     "oly": "^1.1.0"
   },
   "peerDependencies": {

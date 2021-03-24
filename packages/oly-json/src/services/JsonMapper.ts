@@ -14,7 +14,7 @@ export class JsonMapper {
    * @param definition      Class definition
    * @param source          Json object data
    */
-  public mapClass<T>(definition: Class<T>, source: object): T {
+  public mapClass<T extends object>(definition: Class<T>, source: object): T {
 
     const obj = source instanceof definition
       ? this.kernel.inject(definition, {instance: source as any})

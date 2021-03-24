@@ -1,4 +1,3 @@
-import { Helmet as _Helmet } from "react-helmet";
 import { autoAttach } from "./core/configuration";
 
 autoAttach();
@@ -34,5 +33,3 @@ export * from "./pixie/services/PixieStore";
 export * from "./pixie/services/PixieHttp";
 export * from "./pixie/services/PixieSession";
 export * from "./pixie/services/Cookies";
-
-export const Helmet = _Helmet;

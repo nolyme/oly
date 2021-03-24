@@ -28,3 +28,5 @@ export class Layer extends Component<ILayerProps, {}> {
     return this.props.children;
   }
 }
+
+export const LayerContext = React.createContext(0);

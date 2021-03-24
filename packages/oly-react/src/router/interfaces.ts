@@ -1,5 +1,5 @@
 import { Class, IMetadata } from "oly";
-import { PathRegExp } from "path-to-regexp";
+import {Key} from "path-to-regexp";
 
 /**
  * Layer object.
@@ -65,7 +65,8 @@ export interface IRoute {
   node: INode;
   name: string;
   stack: INode[];
-  regexp?: PathRegExp;
+  regexp?: RegExp;
+  regexpkeys: Key[];
   path: string;
 }
 

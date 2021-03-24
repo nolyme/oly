@@ -6,6 +6,7 @@ import { attach } from "../../core/decorators/attach";
 import { olyReactRouterEvents } from "../constants/events";
 import { ILayer, ITransitionRenderEvent } from "../interfaces";
 import { ReactRouterProvider } from "../providers/ReactRouterProvider";
+import {LayerContext} from "./Layer";
 
 /**
  *
@@ -77,10 +78,6 @@ export interface IViewProps {
 @attach
 export class View extends Component<IViewProps, { content: any }> {
 
-  public static contextTypes = {
-    layer: PropTypes.number,
-  };
-
   @inject
   private logger: Logger;
 
@@ -90,6 +87,8 @@ export class View extends Component<IViewProps, { content: any }> {
   private index: number;
 
   private watchlist: string[] = [];
+
+  private contextLayer: number = 0;
 
   private get name(): string {
     return this.props.name || "main";
@@ -125,8 +124,8 @@ export class View extends Component<IViewProps, { content: any }> {
   /**
    *
    */
-  public componentWillMount(): void {
-    this.index = (this.props.index != null ? this.props.index : this.context.layer);
+  public componentDidMount(): void {
+    this.index = (this.props.index != null ? this.props.index : this.contextLayer);
     if (typeof this.index === "undefined") {
       throw new Error("Can't get an index");
     }
@@ -146,7 +145,7 @@ export class View extends Component<IViewProps, { content: any }> {
   /**
    *
    */
-  public render(): ReactNode {
+  public render_old(): ReactNode {
     if (this.content) {
       this.logger.trace(`render view ${this.index} (${this.name})`);
       return this.content;
@@ -157,5 +156,27 @@ export class View extends Component<IViewProps, { content: any }> {
     }
 
     return this.props.children;
+  }
+
+  public render(): ReactNode {
+    if (this.content) {
+      this.logger.trace(`render view ${this.index} (${this.name})`);
+      return this.content;
+    }
+
+    if (this.props.children == null) {
+      return null;
+    }
+
+    return (
+        <LayerContext.Consumer>
+        {
+          layer => {
+            this.contextLayer = layer;
+            return this.render_old();
+          }
+        }
+        </LayerContext.Consumer>
+    );
   }
 }

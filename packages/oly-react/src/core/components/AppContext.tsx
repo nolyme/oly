@@ -25,7 +25,7 @@ export interface IAppContextProps {
  *  );
  * ```
  */
-export class AppContext extends React.Component<IAppContextProps, {}> {
+export class AppContextOld extends React.Component<IAppContextProps, {}> {
 
   /**
    * Declare kernel to React Context
@@ -53,5 +53,20 @@ export class AppContext extends React.Component<IAppContextProps, {}> {
     }
 
     return this.props.children;
+  }
+}
+
+export const InternalAppContext = React.createContext(new Kernel());
+
+export class AppContext extends React.Component<IAppContextProps, {}> {
+
+  /**
+   * Render children
+   */
+  public render(): ReactNode {
+    return <InternalAppContext.Provider
+        value={this.props.kernel}
+        children={this.props.children}
+    />;
   }
 }

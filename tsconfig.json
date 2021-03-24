@@ -9,8 +9,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "strict": true,
     "jsx": "react",
-    "importHelpers": true,
-    "noEmitHelpers": true,
     "skipLibCheck": true,
     "strictPropertyInitialization": false,
     "lib": [

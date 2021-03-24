@@ -344,7 +344,7 @@ export class Kernel {
    * @param definitions   List of definitions.
    * @return              Kernel instance.
    */
-  public with(...definitions: Array<Class | IDefinition>): Kernel {
+  public with(...definitions: (Class | IDefinition)[]): Kernel {
 
     for (const definition of definitions) {
       if (!definition) {
@@ -363,7 +363,7 @@ export class Kernel {
    * const s = Kernel.create().get(Service);
    * ```
    */
-  public get<T>(definition: Class<T>): T {
+  public get<T extends object>(definition: Class<T>): T {
     return this.inject(definition);
   }
 
@@ -393,7 +393,7 @@ export class Kernel {
    * @param definition          Class or {provide: Class, use: Class}
    * @param options             Injection options
    */
-  public inject<T>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
+  public inject<T extends object>(definition: Class<T> | IDefinition<T>, options: IKernelGetOptions<T> = {}): T {
 
     // skip declaration, just inject
     if (typeof definition === "function" && (options.register === false || !!options.instance)) {
@@ -711,7 +711,7 @@ export class Kernel {
    * @param propertyKey           Name of the method.
    * @param additionalArguments   Add more arguments.
    */
-  public invoke<T>(definition: Class<T> | T, propertyKey: keyof T, additionalArguments: any[] = []): any {
+  public invoke<T extends object>(definition: Class<T> | T, propertyKey: keyof T, additionalArguments: any[] = []): any {
 
     // target is captured only for extracting metadata
     const target = typeof definition === "object" ? definition.constructor as Class<T> : definition;
@@ -722,16 +722,16 @@ export class Kernel {
     // instance.propertyKey MUST BE a function
     const action: any = instance[propertyKey];
     if (typeof action !== "function") {
-      throw new KernelException(olyCoreErrors.isNotFunction(propertyKey, typeof action));
+      throw new KernelException(olyCoreErrors.isNotFunction(String(propertyKey), typeof action));
     }
 
     // metadata will tell us arguments to inject in the call
     const meta = Meta.of({key: olyCoreKeys.arguments, target}).deep<IArgumentsMetadata>();
-    const args: any[] = meta && meta.args[propertyKey]
-      ? meta.args[propertyKey].map((data) => data && data.handler(this, additionalArguments))
+    const args: any[] = meta && meta.args[propertyKey as string]
+      ? meta.args[propertyKey as string].map((data) => data && data.handler(this, additionalArguments))
       : [];
 
-    this.getLogger().trace(`invoke ${_.identity(definition, propertyKey)}(${args.length})`);
+    this.getLogger().trace(`invoke ${_.identity(definition, propertyKey as string)}(${args.length})`);
 
     return action.apply(instance, args.concat(additionalArguments));
   }
@@ -745,7 +745,7 @@ export class Kernel {
    *
    * @param target  IDeclaration candidate
    */
-  private createDependency<T>(target: IDefinition<T>): IDeclaration<T> {
+  private createDependency<T extends object>(target: IDefinition<T>): IDeclaration<T> {
 
     if (typeof target.use !== "undefined" && typeof target.use !== "function") {
       throw new KernelException(olyCoreErrors.isNotFunction("use", typeof target.use));
@@ -830,7 +830,7 @@ export class Kernel {
    * @param dependency  Kernel dependency
    * @param parent      Instance who requires this instance
    */
-  private createInstance<T>(dependency: IDeclaration<T>, parent?: Class) {
+  private createInstance<T extends object>(dependency: IDeclaration<T>, parent?: Class) {
 
     const func = dependency.use as any;
 
@@ -892,7 +892,7 @@ export class Kernel {
    * @param definition   Function/Class/Definition with IInjectionsMetadata
    * @param instance     Instance which will be processed
    */
-  private processInjections<T>(definition: Class<T>, instance: T): T {
+  private processInjections<T extends object>(definition: Class<T>, instance: T): T {
 
     const injections = Meta.of({key: olyCoreKeys.injections, target: definition}).deep<IInjectionsMetadata>();
     if (injections) {
@@ -938,7 +938,7 @@ export class Kernel {
    * @param definition   IDefinition with @state / @env
    * @param instance     Instance to processed
    */
-  private processStates<T>(definition: Class<T>, instance: T): T {
+  private processStates<T extends object>(definition: Class<T>, instance: T): T {
 
     const statesMetadata = Meta.of({key: olyCoreKeys.states, target: definition}).deep<IStatesMetadata>();
     if (statesMetadata) {
@@ -987,7 +987,7 @@ export class Kernel {
    * @param definition    IDefinition with event metadata
    * @param instance      Instance to decorate
    */
-  private processEvents<T>(definition: Class<T>, instance: T): T {
+  private processEvents<T extends object>(definition: Class<T>, instance: T): T {
 
     const eventsMetadata = Meta.of({key: olyCoreKeys.events, target: definition}).deep<IEventsMetadata>();
     if (eventsMetadata) {

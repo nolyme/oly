@@ -39,9 +39,10 @@ export class JsonSchemaReader {
 
     let jsonSchema: IJsonSchema = {
       ...rootSchema,
-      name: definition.name,
+      title: rootSchema.title || rootSchema.name || definition.name,
       type: "object",
     };
+
     jsonSchema.properties = {};
 
     const fieldsMetadata = Meta.of({key: olyMapperKeys.fields, target: definition}).deep<IFieldsMetadata>();
@@ -70,6 +71,10 @@ export class JsonSchemaReader {
       }
     }
 
+    jsonSchema.title = jsonSchema["name"] || jsonSchema.title;
+
+    delete jsonSchema["name"];
+
     return jsonSchema;
   }
 
@@ -95,8 +100,8 @@ export class JsonSchemaReader {
     if (jsonSchema.type === "array") {
       const array = field as IMetaArray;
       const item: IField = typeof array.of === "function"
-        ? {name: "", type: array.of}
-        : {name: "", type: Object, ...field.of} as any;
+        ? {title: "", type: array.of}
+        : {title: "", type: Object, ...field.of} as any;
 
       if (item) {
         jsonSchema.items = this.extractProperty(item);

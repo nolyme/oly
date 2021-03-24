@@ -1,9 +1,8 @@
 import { Global, inject, Kernel, Logger } from "oly";
-import * as pathToRegexp from "path-to-regexp";
-import { compile } from "path-to-regexp";
+import {compile, Key, pathToRegexp} from "path-to-regexp";
 import * as qs from "qs";
 import { createElement } from "react";
-import { Layer } from "../components/Layer";
+import {Layer, LayerContext} from "../components/Layer";
 import { MatcherException } from "../exceptions/MatcherException";
 import { IChunks, IHrefQuery, IMatch, INode, IRoute, ITransition } from "../interfaces";
 
@@ -101,7 +100,12 @@ export class ReactRouterMatcher {
     try {
       const [, raw] = url.split("?");
       if (raw) {
-        return qs.parse(raw);
+        const a = qs.parse(raw);
+        const v = {};
+        for (const k of Object.keys(a)) {
+          v[k] = String(a[k]);
+        }
+        return v;
       }
     } catch (e) {
       this.logger.warn(`Query parsing of '${url}' has failed`, e);
@@ -129,7 +133,7 @@ export class ReactRouterMatcher {
           path,
           route,
           query: this.query(path),
-          params: route.regexp.keys.reduce((p, key, i) => {
+          params: route.regexpkeys.reduce((p, key, i) => {
             p[key.name] = result[i + 1];
             return p;
           }, {}),
@@ -157,9 +161,12 @@ export class ReactRouterMatcher {
         name: parents.map((s) => s.name).join("."),
         stack: parents,
         path,
+        regexpkeys: []
       };
       if (!node.abstract) {
-        route.regexp = pathToRegexp(path);
+        const keys: Key[] = [];
+        route.regexp = pathToRegexp(path,keys);
+        route.regexpkeys = keys;
       } else {
         route.abstract = true;
       }
@@ -278,7 +285,7 @@ export class ReactRouterMatcher {
     }
 
     for (const key of Object.keys(raw)) {
-      raw[key] = createElement(Layer, {id: index + 1}, raw[key]);
+      raw[key] = createElement(LayerContext.Provider, {value: index + 1}, raw[key]);
     }
 
     return raw;

@@ -34,7 +34,7 @@ export class ReactServerProvider implements IProvider {
   ];
 
   @state
-  public transforms: Array<($: CheerioStatic, ctx: IKoaContext) => any> = [];
+  public transforms: (($: cheerio.Root, ctx: IKoaContext) => any)[] = [];
 
   @state
   protected template: string;
@@ -82,17 +82,17 @@ export class ReactServerProvider implements IProvider {
     return $.html();
   }
 
-  public renderReact($: CheerioStatic, ctx: IKoaContext) {
+  public renderReact($: cheerio.Root, ctx: IKoaContext) {
     const markup = renderToString(this.rootElement(ctx.kernel));
     $("#" + this.mountId).append(markup);
   }
 
-  public renderPixie($: CheerioStatic, ctx: IKoaContext) {
+  public renderPixie($: cheerio.Root, ctx: IKoaContext) {
     const pixie: Pixie = ctx.kernel.inject(Pixie);
     $("body").prepend(pixie.store.toHTML());
   }
 
-  public renderHelmet($: CheerioStatic, ctx: IKoaContext) {
+  public renderHelmet($: cheerio.Root, ctx: IKoaContext) {
     const helmet = Helmet.renderStatic();
 
     const htmlAttrs = helmet.htmlAttributes

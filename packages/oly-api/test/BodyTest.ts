@@ -7,15 +7,15 @@ import { ApiProvider } from "../src/core/providers/ApiProvider";
 describe("BodyTest", () => {
 
   class A {
-    @post("/string") xstring(@body data: string) {
+    @post("/string") xstring(@body() data: string) {
       return {data};
     }
 
-    @post("/number") xnumber(@body data: number) {
+    @post("/number") xnumber(@body() data: number) {
       return {data};
     }
 
-    @post("/boolean") xboolean(@body data: boolean) {
+    @post("/boolean") xboolean(@body() data: boolean) {
       return {data};
     }
   }

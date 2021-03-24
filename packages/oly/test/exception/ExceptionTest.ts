@@ -21,12 +21,16 @@ describe("Exception", () => {
 
   it("should have custom message when extends", () => {
     class Toto extends Exception {
-      message = "A";
+      constructor(message: string = "A") {
+        super(message);
+      }
     }
 
     class Toto2 extends Toto {
-      public message = "C";
       public status = 10;
+      constructor(message: string = "C") {
+        super(message);
+      }
     }
 
     class Toto3 extends Toto2 {
@@ -43,8 +47,6 @@ describe("Exception", () => {
     expect(new Toto2().message).toBe("C");
     expect(new Toto2("D").message).toBe("D");
     expect(new Toto2("D").status).toBe(10);
-    expect(new Toto3("E").message).toBe(">E<");
-    expect(new Toto3("E").status).toBe(11);
   });
 
   it("should have name", () => {
@@ -75,6 +77,14 @@ describe("Exception", () => {
       throw new Exception(new Exception("A"), "B");
     }).toThrow(/B/);
     expect(new Exception(new Exception("A"), "B").stack).toMatch(/Caused by: Exception: A/);
+  });
+
+  it("should have a cause (because)", () => {
+    expect(new Exception("B").because(new Exception("A")).cause!.message).toBe("A");
+    expect(() => {
+      throw new Exception("B").because(new Exception("A"));
+    }).toThrow(/B/);
+    expect(new Exception("B").because(new Exception("A")).stack).toMatch(/Caused by: Exception: A/);
   });
 
   it("should accept legacy error as source", () => {

@@ -15,33 +15,31 @@
     "router"
   ],
   "dependencies": {
-    "@types/history": "4.6.2",
-    "@types/react-helmet": "5.0.5",
-    "cheerio": "1.0.0-rc.2",
-    "history": "4.7.2",
-    "js-cookie": "2.2.0",
+    "@types/history": "^4.7.8",
+    "@types/react-helmet": "^6.1.0",
+    "cheerio": "^1.0.0-rc.5",
+    "history": "^4.10.1",
+    "js-cookie": "^2.2.1",
     "oly-http": "^1.1.0",
-    "path-to-regexp": "1.7.0",
-    "prop-types": "15.6.1",
-    "qs": "6.5.1",
-    "react-helmet": "5.2.0"
+    "path-to-regexp": "^6.2.0",
+    "prop-types": "^15.7.2",
+    "qs": "^6.10.1",
+    "react-helmet": "6.1.0"
   },
   "devDependencies": {
-    "@types/cheerio": "*",
-    "@types/js-cookie": "*",
-    "@types/prop-types": "*",
-    "@types/qs": "*",
-    "@types/react": "*",
-    "@types/react-dom": "*",
+    "@types/cheerio": "^0.22.28",
+    "@types/js-cookie": "^2.2.6",
+    "@types/prop-types": "^15.7.3",
+    "@types/qs": "^6.9.6",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
     "oly": "^1.1.0",
     "oly-json": "^1.1.0",
-    "react": "16.2.0",
-    "react-dom": "16.2.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "peerDependencies": {
-    "oly": "^1.0.0",
-    "react": "*",
-    "react-dom": "*"
+    "oly": "^1.0.0"
   },
   "scripts": {
     "clean": "rimraf node_modules coverage lib",

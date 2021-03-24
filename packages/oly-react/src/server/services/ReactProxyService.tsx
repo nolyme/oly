@@ -34,7 +34,7 @@ export class ReactProxyService {
         return next();
       }
 
-      return new Promise((resolve) => {
+      return new Promise<void>((resolve) => {
         request({
           headers: ctx.req.headers,
           hostname: url.hostname,

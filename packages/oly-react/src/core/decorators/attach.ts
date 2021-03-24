@@ -1,6 +1,7 @@
 import { Global, IDecorator, Kernel, Meta } from "oly";
 import * as PropTypes from "prop-types";
 import * as React from "react";
+import {InternalAppContext} from "../components/AppContext";
 import { ComponentInjector } from "../services/ComponentInjector";
 
 export type InjectableComponent = React.Component<{}, {}> & { injected$$: boolean, context: { kernel: Kernel } };
@@ -18,36 +19,32 @@ export interface IAttachOptions {
 
 export class AttachDecorator implements IDecorator {
 
-  public asClass(target: { contextTypes?: any; prototype?: any }): void {
+  public asClass(target: { contextType?: any; prototype?: any }): void {
     const self = this;
 
-    if (!!target.contextTypes) {
-      target.contextTypes.kernel = PropTypes.object;
-    } else {
-      target.contextTypes = {kernel: PropTypes.object};
-    }
+    target.contextType = InternalAppContext;
 
     // patch react component hooks (stateful only)
     if (!!target.prototype) {
 
-      if (!!target.prototype.componentWillMount$$) {
+      if (!!target.prototype.UNSAFE_componentWillMount$$) {
         return;
       }
 
-      // force Kernel#inject() before #componentWillMount()
-      target.prototype.componentWillMount$$ = target.prototype.componentWillMount || Global.noop;
-      target.prototype.componentWillMount = function componentWillMount(this: InjectableComponent) {
-        if (this.context.kernel) {
-          this.context.kernel.inject(ComponentInjector).inject(this.constructor, this);
+      // force Kernel#inject() before #UNSAFE_componentWillMount()
+      target.prototype.UNSAFE_componentWillMount$$ = target.prototype.UNSAFE_componentWillMount || Global.noop;
+      target.prototype.UNSAFE_componentWillMount = function UNSAFE_componentWillMount(this: InjectableComponent) {
+        if (this.context) {
+          this.context.inject(ComponentInjector).inject(this.constructor, this);
         }
-        return target.prototype.componentWillMount$$.apply(this, arguments);
+        return target.prototype.UNSAFE_componentWillMount$$.apply(this, arguments);
       };
 
       // try to clean event-listeners before componentWillUnmount
       target.prototype.componentWillUnmount$$ = target.prototype.componentWillUnmount || Global.noop;
       target.prototype.componentWillUnmount = function componentWillUnmount(this: InjectableComponent) {
-        if (this.context.kernel) {
-          this.context.kernel.inject(ComponentInjector).free(this);
+        if (this.context) {
+          this.context.inject(ComponentInjector).free(this);
         }
         return target.prototype.componentWillUnmount$$.apply(this, arguments);
       };

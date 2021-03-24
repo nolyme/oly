@@ -59,12 +59,12 @@ describe("ObjectMapper", () => {
     expect(obj.p.name).toBe("ok");
 
     expect(json.schema(Data)).toEqual({
-      name: "Data",
+      title: "Data",
       properties: {
         arr1: {items: {type: "string"}, type: "array"},
         arr2: {
           items: {
-            name: "SubData",
+            title: "SubData",
             properties: {
               hello: {
                 type: "string",
@@ -87,7 +87,7 @@ describe("ObjectMapper", () => {
           type: "string",
         },
         sub: {
-          name: "SubData",
+          title: "SubData",
           properties: {
             hello: {
               type: "string",
@@ -137,8 +137,8 @@ describe("ObjectMapper", () => {
       expect(e).toBeInstanceOf(ValidationException);
       const ev: ValidationException = e;
       localize.fr(ev.errors);
-      expect(json.ajv.errorsText(ev.errors)).toBe("data.username doit être de type string");
-      expect(ev.message).toBe("Validation has failed (data.username should be string)");
+      expect(json.ajv.errorsText(ev.errors)).toBe("data requiert la propriété password");
+      expect(ev.message).toBe("Validation has failed (data should have required property 'password')");
     }
 
     try {

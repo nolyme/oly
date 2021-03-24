@@ -1,4 +1,4 @@
-import * as Ajv from "ajv";
+import Ajv from "ajv";
 import { ValidateFunction } from "ajv";
 import { inject, state } from "oly";
 import { ValidationException } from "../exceptions/ValidationException";
@@ -8,12 +8,12 @@ import { JsonSchemaReader } from "./JsonSchemaReader";
 export class JsonValidator {
 
   @state
-  public ajv: Ajv.Ajv = new Ajv({
+  public ajv: Ajv = new Ajv({
     useDefaults: true,
   });
 
   @state
-  protected cache: Array<[Function, ValidateFunction]> = [];
+  protected cache: [Function, ValidateFunction][] = [];
 
   @inject
   protected readonly schemaReader: JsonSchemaReader;
